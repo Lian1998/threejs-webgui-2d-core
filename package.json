@@ -7,8 +7,8 @@
         "dev": "vite",
         "build": "vue-tsc && vite build",
         "preview": "vite preview",
-        "format": "prettier . --config .prettierrc.cjs --write",
-        "githook:install": "husky install"
+        "format": "npx prettier . --config .prettierrc.cjs --write",
+        "githook:install": "npx husky install"
     },
     "devDependencies": {
         "@commitlint/cli": "^18.6.0",
@@ -28,7 +28,8 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "lint-statged"
+            "pre-commit": "npx lint-staged",
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
         }
     },
     "lint-staged": {

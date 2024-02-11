@@ -17,5 +17,5 @@ module.exports = {
     htmlWhitespaceSensitivity: "strict",
     vueIndentScriptAndStyle: true,
     jsxSingleQuote: false,
-    singleAttributePerLine: false
-}
+    singleAttributePerLine: false,
+};

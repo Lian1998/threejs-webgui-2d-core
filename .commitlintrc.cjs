@@ -1,25 +1,44 @@
 // commitlint 等级
-// 关闭: "off"
-// 警告: "warn"
-// 错误: "error"
+// 关闭: "off"      0
+// 警告: "warn"     1
+// 错误: "error"    2
 
 module.exports = {
     extends: ["@commitlint/config-conventional"],
     rules: {
-        "body-leading-blank": ["error", "always"], // body上面有换行
-        "footer-leading-blank": ["error", "always"], // footer上面有换行
+        "type-case": ["off"],
+        "type-empty": ["off"],
+        "scope-empty": ["off"],
+        "scope-case": ["off"],
+        "subject-full-stop": ["off", "never"],
+        "subject-case": ["off", "never"],
+        "body-leading-blank": ["warn", "always"],
+        "footer-leading-blank": ["warn", "always"],
         "header-max-length": ["error", "always", 108], // header上最大108字符
         "type-enum": [
             "error",
             "always",
             [
-                // 新增特性, 修补代码, 文档注释
+
+                // 新增特性
                 "feat",
+
+                // 修补代码
                 "fix",
+
+                // 性能优化
+                "perf",
+
+                // 其他修改
+                "chore",
+
+                // 文档注释
                 "docs",
 
-                // 性能优化, 代码重构
-                "perf",
+                // 回退版本
+                "revert",
+
+                // 代码重构
                 "refactor",
 
                 // 测试用例
@@ -28,10 +47,10 @@ module.exports = {
                 // 线上热修
                 "hotfix",
 
-                // 构建管线配置
+                // 构建管线
                 "build",
 
-                // 持续集成配置
+                // 持续集成
                 "ci",
             ],
         ],
