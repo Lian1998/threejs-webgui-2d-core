@@ -1,9 +1,3 @@
 {
-    "recommendations": [
-        "Vue.volar",
-        "Vue.vscode-typescript-vue-plugin",
-        "esbenp.prettier-vscode",
-        "raczzalan.webgl-glsl-editor",
-        "jock.svg"
-    ]
+    "recommendations": ["Vue.volar", "Vue.vscode-typescript-vue-plugin", "esbenp.prettier-vscode", "raczzalan.webgl-glsl-editor", "jock.svg"]
 }

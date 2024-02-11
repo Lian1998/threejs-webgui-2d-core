@@ -15,7 +15,7 @@ module.exports = {
     useTabs: false,
     embeddedLanguageFormatting: "auto",
     htmlWhitespaceSensitivity: "ignore",
-    vueIndentScriptAndStyle: true,
+    vueIndentScriptAndStyle: false,
     jsxSingleQuote: false,
     singleAttributePerLine: false,
 };
