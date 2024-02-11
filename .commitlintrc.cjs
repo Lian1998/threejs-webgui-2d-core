@@ -19,17 +19,17 @@ module.exports = {
             "error",
             "always",
             [
-                "feat", // 新增特性
-                "fix", // 修补代码
-                "perf", // 性能优化
-                "chore", // 其他修改
-                "docs", // 文档注释
-                "revert", // 回退版本
+                "feat",     // 新增特性
+                "fix",      // 修补代码
+                "perf",     // 性能优化
+                "chore",    // 其他修改
+                "docs",     // 文档注释
+                "revert",   // 回退版本
                 "refactor", // 代码重构
-                "test", // 测试用例
-                "hotfix", // 线上热修
-                "build", // 构建管线
-                "ci", // 持续集成
+                "test",     // 测试用例
+                "hotfix",   // 线上热修
+                "build",    // 构建管线
+                "ci",       // 持续集成
             ],
         ],
     },
