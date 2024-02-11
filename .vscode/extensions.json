@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "Vue.volar",
+        "Vue.vscode-typescript-vue-plugin",
+        "crazyurus.miniprogram-vscode-extension",
+        "jock.svg",
+        "yzhang.markdown-all-in-one",
+        "raczzalan.webgl-glsl-editor"
+    ]
+}
