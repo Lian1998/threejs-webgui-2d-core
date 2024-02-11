@@ -14,7 +14,7 @@ module.exports = {
     trailingComma: "all",
     useTabs: false,
     embeddedLanguageFormatting: "auto",
-    htmlWhitespaceSensitivity: "strict",
+    htmlWhitespaceSensitivity: "ignore",
     vueIndentScriptAndStyle: true,
     jsxSingleQuote: false,
     singleAttributePerLine: false,
