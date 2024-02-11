@@ -29,7 +29,7 @@
     "husky": {
         "hooks": {
             "pre-commit": "npx lint-staged",
-            "commit-msg": "npx commitlint -E HUSKY_GIT_PARAMS"
+            "commit-msg": "npx commitlint --config .commitlintrc.cjs --env HUSKY_GIT_PARAMS"
         }
     },
     "lint-staged": {
