@@ -4,7 +4,8 @@
 3. `git->pre-commit` 使用 `npx lint-staged` 对 `Staged Changes` 使用 `.lintstagedrc.cjs` 脚本
 4. `git->commit-msg` 使用 `commitlint` 继承 `config-conventional`配置包 对 `Commit Message` 进行格式化校验
 5. `.vscode/extensions.json` 提供 `vscode extensions` 推荐
-6. `.vscode/settings.json` 提供 `vscode worksapce settings`
+6. `.vscode/settings.json` 提供 `vscode worksapce settings` 常规设置
+7. `.vscode/typescriptreact.code-snippets` 提供 `typescriptreact`语言环境 下的代码快捷方式
 
 
 # 链接
