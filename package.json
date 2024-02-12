@@ -7,7 +7,7 @@
         "dev": "vite",
         "build": "vue-tsc && vite build",
         "preview": "vite preview",
-        "format": "npx prettier . --config .prettierrc.cjs --ignore-path .prettierignore --write",
+        "format": "npx prettier . --write",
         "githook:install": "npx husky install"
     },
     "devDependencies": {
@@ -17,6 +17,7 @@
         "@vitejs/plugin-vue": "^5.0.3",
         "@vitejs/plugin-vue-jsx": "^3.1.0",
         "husky": "^9.0.10",
+        "ignore": "^5.3.1",
         "lint-staged": "^15.2.2",
         "prettier": "^3.2.5",
         "typescript": "^5.2.2",
@@ -31,11 +32,5 @@
             "pre-commit": "npx lint-staged",
             "commit-msg": "npx commitlint --config .commitlintrc.cjs --env HUSKY_GIT_PARAMS"
         }
-    },
-    "lint-staged": {
-        "*.{js,jsx,vue,ts,tsx,json,css,scss,less}": [
-            "npx prettier --write",
-            "git add"
-        ]
     }
 }
