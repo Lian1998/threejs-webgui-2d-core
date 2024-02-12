@@ -1,0 +1,145 @@
+{
+    /** 默认配置 */
+
+    // 代码对齐
+    "editor.detectIndentation": false,
+    "editor.tabSize": 4,
+    "editor.indentSize": "tabSize",
+    "editor.formatOnSave": false,
+    "editor.formatOnType": false,
+
+    // 左侧文件树
+    "files.exclude": { // explorer 显示屏蔽
+        ".git": true,
+        // ".husky": true,
+        "**/node_modules": true,
+    },
+
+    // 代码查看
+    "diffEditor.ignoreTrimWhitespace": false, // 对比窗忽略文字行前后空格差异
+
+    // 将编辑器设置配置为覆盖某一语言模式 esbenp.prettier-vscode
+    "[jsonc]": { "editor.defaultFormatter": "vscode.json-language-features" }, // JSON with Comments 比如 vscode的settings.json
+    "[jsonl]": { "editor.defaultFormatter": "vscode.json-language-features" }, // JSON Lines newlin-delimitedJson(ndjson)
+    "[json]": { "editor.defaultFormatter": "vscode.json-language-features" }, // JSON
+    "[vue]": { "editor.defaultFormatter": "Vue.volar" },
+    "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[scss]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[less]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+    "[svg]": { "editor.defaultFormatter": "jock.svg" }, // JockSVG
+    "[glsl]": { "editor.defaultFormatter": "raczzalan.webgl-glsl-editor" }, // WebGL GLSL Editor
+    // 文件后缀与语言映射
+    "files.associations": {
+        "*.vs": "glsl",
+        "*.fs": "glsl",
+        "*.glsl": "glsl",
+        "*.shader": "glsl",
+        "*.vert": "glsl",
+        "*.frag": "glsl",
+        "*.uxml": "xml",
+        "*.uss": "css",
+        "*.wxml": "wx_miniprogram",
+        "*.wxss": "wx_miniprogram",
+        "*.svg": "svg"
+    },
+
+    // 搜索屏蔽 https://code.visualstudio.com/docs/editor/codebasics#_advanced-search-options
+    "search.exclude": {
+        // 通用配置文件结尾
+        "*.config.js": true,
+        "*config.json": true,
+        "*config.js": true,
+        "*.config.json": true,
+        ".*rc": true,
+        "*rc.js": true,
+        ".*ignore": true,
+
+        "**/node_modules": true, // npm, pnpm, yarn 包存储
+        "**/bower_components": true, // bower 包存储
+        "**/public": true, // 服务器资源
+        "**/static": true, // 静态资源
+        "package.json": true, // 包管理工具依赖配置
+        "*-lock.json": true, // 依赖版本锁定配置
+        "Jenkinsfile": true,
+        "Dockerfile": true
+    },
+
+    /** vscode前端基础功能 */
+
+    "html.format.wrapLineLength": 2000,
+    "json.format.enable": true,
+    "json.schemaDownload.enable": true,
+    "json.validate.enable": false, // 不要自动校验并且修正json文件
+    "json.format.keepLines": true, // 保持源文件格式
+
+    /** Prettier */
+
+    "prettier.enable": true,
+    "prettier.requireConfig": true, // 读取配置文件
+    "prettier.requirePragma": false, // 是否只校验包含头注释文件
+    "prettier.insertPragma": false, // 是否只校验包含头注释文件
+
+    "prettier.tabWidth": 4, // tabSize
+    "prettier.printWidth": 160, // 行长度
+    "prettier.semi": true, // 句子结尾使用分号
+    "prettier.singleQuote": false, // 使用单引号
+    "prettier.bracketSpacing": true, // 闭合标签前后插入空格
+    "prettier.bracketSameLine": true, // 闭合标签的后一个不换行
+    "prettier.arrowParens": "always", // 箭头函数参数强制加括号
+    "prettier.proseWrap": "never", // 处理非代码段落的方式
+    "prettier.experimentalTernaries": false, // 优化三元表达式
+    "prettier.quoteProps": "as-needed", // 属性名是否需要添加引号
+    "prettier.trailingComma": "all", // 行尾逗号
+    "prettier.useTabs": false, // tab时使用tabs还是空格
+    "prettier.embeddedLanguageFormatting": "auto", // 嵌入式语言策略
+    "prettier.htmlWhitespaceSensitivity": "ignore", // 对空格进行严格检查
+    "prettier.vueIndentScriptAndStyle": false, // Vue文件的script和style标签缩进
+    "prettier.jsxSingleQuote": false, // jsx使用单引号
+    "prettier.singleAttributePerLine": false, // jsx属性是否独占一行
+
+    /** vscode Typescript/Javascript Features */
+
+    "typescript.updateImportsOnFileMove.enabled": "never",
+    "typescript.preferences.quoteStyle": "double",
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "typescript.autoClosingTags": false,
+    "javascript.updateImportsOnFileMove.enabled": "never",
+    "javascript.preferences.quoteStyle": "double",
+    "javascript.preferences.importModuleSpecifier": "relative",
+    "javascript.autoClosingTags": false,
+
+    /** Volar Vue 3.0+ */
+
+    "vue.updateImportsOnFileMove.enabled": false,
+    "vue.codeLens.enabled": true,
+    "vue.complete.casing.props": "camel",
+    "vue.complete.casing.tags": "pascal",
+
+    /** WebGL GLSL Editor */
+
+    "webgl-glsl-editor.diagnostics": false, // 不要校验错误了
+    "webgl-glsl-editor.alwaysOpenOfflineDocInNewTab": true,
+    "webgl-glsl-editor.format.placeBracesOnSeparateLine": false,
+    "webgl-glsl-editor.format.favorFloatingSuffix": false,
+    "webgl-glsl-editor.format.placeSpaceAfterCommas": true,
+    "webgl-glsl-editor.format.placeSpaceAfterFunctionNames": false,
+    "webgl-glsl-editor.format.placeSpaceAfterKeywords": true,
+    "webgl-glsl-editor.format.placeSpaceAfterSemicolonsInFor": false,
+    "webgl-glsl-editor.format.placeSpaceAroundUnaryOperators": false,
+    "webgl-glsl-editor.format.placeSpaceBeforeCaseColons": false,
+    "webgl-glsl-editor.format.placeSpaceBeforeCommas": false,
+    "webgl-glsl-editor.format.placeSpaceBeforeOpeningBrackets": false,
+    "webgl-glsl-editor.format.placeSpaceBeforeSemicolonsInFor": false,
+    "webgl-glsl-editor.format.placeSpacesAroundAssignmentOperators": true,
+    "webgl-glsl-editor.format.placeSpacesAroundBinaryOperators": true,
+    "webgl-glsl-editor.format.placeSpacesAroundBraces": true,
+    "webgl-glsl-editor.format.placeSpacesAroundDots": false,
+    "webgl-glsl-editor.format.placeSpacesAroundTernaryOperators": true,
+    "webgl-glsl-editor.format.placeSpacesInsideBrackets": false,
+    "webgl-glsl-editor.format.placeSpacesInsideParentheses": false,
+    "webgl-glsl-editor.strictRename": false,
+    "webgl-glsl-editor.alwaysOpenOnlineDoc": false,
+}
