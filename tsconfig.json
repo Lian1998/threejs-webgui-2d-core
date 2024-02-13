@@ -29,9 +29,15 @@
         "noUnusedLocals": false,            // 允许未使用的局部变量
         "noUnusedParameters": false,        // 允许未使用的函数参数
         "noFallthroughCasesInSwitch": true, // switch语句条件不能超出字面量
+
+        "paths": {
+            "@source/*": [ "./source/*" ],
+            "@assets/*": [ "./assets/*" ],
+            "@libs/*": [ "./libs/*" ],
+        }
     },
 
     // 此配置打包编译的范围
-    "include": [ "src/**/*.ts", "src/**/*.tsx", "src/**/*.vue" ],
+    "include": [ "source/**/*.ts", "source/**/*.tsx", "source/**/*.vue", ".env/vite-env.d.ts" ],
     "references": [ { "path": "./tsconfig.node.json" } ]
 }

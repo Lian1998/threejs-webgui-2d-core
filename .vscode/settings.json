@@ -11,17 +11,16 @@
     // 左侧文件树
     "files.exclude": { // explorer 显示屏蔽
         ".git": true,
-        ".husky": true,
         "**/node_modules": true,
     },
 
     // 代码查看
     "diffEditor.ignoreTrimWhitespace": false, // 对比窗忽略文字行前后空格差异
 
-    // 将编辑器设置配置为覆盖某一语言模式 esbenp.prettier-vscode
+    // 将编辑器设置配置为覆盖某一语言模式
     "[jsonc]": { "editor.defaultFormatter": "vscode.json-language-features" }, // JSON with Comments 比如 vscode的settings.json
-    "[jsonl]": { "editor.defaultFormatter": "vscode.json-language-features" }, // JSON Lines newlin-delimitedJson(ndjson)
-    "[json]": { "editor.defaultFormatter": "vscode.json-language-features" }, // JSON
+    "[jsonl]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }, // JSON Lines newlin-delimitedJson(ndjson)
+    "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }, // JSON
     "[vue]": { "editor.defaultFormatter": "Vue.volar" },
     "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
     "[scss]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
@@ -44,7 +43,13 @@
         "*.uss": "css",
         "*.wxml": "wx_miniprogram",
         "*.wxss": "wx_miniprogram",
-        "*.svg": "svg"
+        "*.svg": "svg",
+
+        // jsonc 配置使用vscode自带的json格式化, json 使用prettier进行格式化(ignore掉)
+        ".vscode/settings.json": "jsonc",
+        "tsconfig.json": "json",
+        "tsconfig.node.json": "json",
+        "package.json": "json",
     },
 
     // 搜索屏蔽 https://code.visualstudio.com/docs/editor/codebasics#_advanced-search-options
@@ -80,26 +85,8 @@
 
     "prettier.enable": true,
     "prettier.requireConfig": true, // 读取配置文件
-    "prettier.requirePragma": false, // 是否只校验包含头注释文件
-    "prettier.insertPragma": false, // 是否只校验包含头注释文件
-
-    "prettier.tabWidth": 4, // tabSize
-    "prettier.printWidth": 160, // 行长度
-    "prettier.semi": true, // 句子结尾使用分号
-    "prettier.singleQuote": false, // 使用单引号
-    "prettier.bracketSpacing": true, // 闭合标签前后插入空格
-    "prettier.bracketSameLine": true, // 闭合标签的后一个不换行
-    "prettier.arrowParens": "always", // 箭头函数参数强制加括号
-    "prettier.proseWrap": "never", // 处理非代码段落的方式
-    "prettier.experimentalTernaries": false, // 优化三元表达式
-    "prettier.quoteProps": "as-needed", // 属性名是否需要添加引号
-    "prettier.trailingComma": "all", // 行尾逗号
-    "prettier.useTabs": false, // tab时使用tabs还是空格
-    "prettier.embeddedLanguageFormatting": "auto", // 嵌入式语言策略
-    "prettier.htmlWhitespaceSensitivity": "ignore", // 对空格进行严格检查
-    "prettier.vueIndentScriptAndStyle": false, // Vue文件的script和style标签缩进
-    "prettier.jsxSingleQuote": false, // jsx使用单引号
-    "prettier.singleAttributePerLine": false, // jsx属性是否独占一行
+    "prettier.configPath": ".prettierrc.cjs",
+    "prettier.ignorePath": ".prettierignore",
 
     /** vscode Typescript/Javascript Features */
 
