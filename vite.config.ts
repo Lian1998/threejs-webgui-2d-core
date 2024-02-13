@@ -75,7 +75,7 @@ export default defineConfig(({command, mode}) => {
                 // https://vitejs.dev/guide/build.html#multi-page-app
                 input: {
                     index: path.resolve(__dirname, "./multi-pages/index.html"),
-                    hello: path.resolve(__dirname, "./multi-pages/hello/index.html")
+                    child: path.resolve(__dirname, "./multi-pages/child/index.html")
                 },
                 output: {
                     // https://vitejs.dev/config/build-options.html#build-rollupoptions
