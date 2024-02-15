@@ -1,12 +1,12 @@
-import 'normalize.css';
+import "normalize.css";
 
-import * as THREE from 'three';
-import { OrbitControls } from 'three_addons/controls/OrbitControls.js';
+import * as THREE from "three";
+import { OrbitControls } from "three_addons/controls/OrbitControls.js";
 
 const width = window.innerWidth;
 const height = window.innerHeight;
 const pixelRatio = window.pixelRatio;
-const el = document.getElementById('viewport');
+const el = document.getElementById("viewport");
 
 const scene = new THREE.Scene();
 const clock = new THREE.Clock();
@@ -29,7 +29,6 @@ scene.add(mesh);
 
 ///////////////////////////////
 
-
 const animate = () => {
     requestAnimationFrame(animate);
     const deltaTime = clock.getDelta();
@@ -41,6 +40,6 @@ const animate = () => {
     renderer.render(scene, camera);
 
     orbitcontrols.update();
-}
+};
 
 animate();
