@@ -34,6 +34,8 @@
             "@source/*": [ "./source/*" ],
             "@assets/*": [ "./assets/*" ],
             "@libs/*": [ "./libs/*" ],
+            "three": [ "./lib/three.js-r161/src/Three.js" ],
+            "three_addons/*": [ "./lib/three.js-r161/examples/jsm/*" ]
         }
     },
 

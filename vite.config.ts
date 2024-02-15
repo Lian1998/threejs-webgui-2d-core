@@ -36,6 +36,8 @@ export default defineConfig(({command, mode}) => {
                 "@source": path.resolve(__dirname, "./source"),
                 "@assets": path.resolve(__dirname, "./assets"),
                 "@libs": path.resolve(__dirname, "./libs"),
+                'three': path.resolve(__dirname, './libs/three.js-r161/src/Three.js'),
+                'three_addons': path.resolve(__dirname, './libs/three.js-r161/examples/jsm'),
             }
         },
         
@@ -74,8 +76,9 @@ export default defineConfig(({command, mode}) => {
             rollupOptions: {
                 // https://vitejs.dev/guide/build.html#multi-page-app
                 input: {
-                    index: path.resolve(__dirname, "./multi-pages/index.html"),
-                    child: path.resolve(__dirname, "./multi-pages/child/index.html")
+                    "index": path.resolve(__dirname, "./multi-pages/index.html"),
+                    "tsx": path.resolve(__dirname, "./multi-pages/tsx/index.html"),
+                    "threejs": path.resolve(__dirname, "./multi-pages/threejs/index.html")
                 },
                 output: {
                     // https://vitejs.dev/config/build-options.html#build-rollupoptions

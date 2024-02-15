@@ -1,5 +1,5 @@
 {
-    "vue3-tsx": {
+    "Vue3 tsx Template": {
         "prefix": "vue3-tsx",
         "body": [
             "import { defineComponent } from \"vue\";",
@@ -31,6 +31,6 @@
             "",
             "export { ${TM_FILENAME_BASE} };",
         ],
-        "description": "通过文件名创建一个Vue3的tsx组件模板"
+        "description": "通过文件名创建一个Vue3的tsx单文件组件模板"
     }
 }
