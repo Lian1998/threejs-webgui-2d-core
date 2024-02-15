@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import { ref } from "vue";
-
-defineProps<{ msg: string }>();
+import { ref, useAttrs } from "vue";
 
 const count = ref(0);
+const attrs = useAttrs();
+
+defineProps<{ msg: string }>();
+defineExpose({
+    getCounterValue: () => {
+        return count.value;
+    },
+});
 </script>
 
 <template>
+    <!-- <h1>{{ msg }}{{ attrs.info }}</h1> -->
     <h1>{{ msg }}</h1>
 
     <div class="card">

@@ -1,9 +1,20 @@
 <script setup lang="ts">
+import { ref, onMounted } from "vue";
+import type { Ref, VNodeRef } from "vue";
 // import { HelloWorld } from "./components/HelloWorld";
 import { HelloWorld } from "./components/HelloWorld.tsx";
+import type { HelloWorldExposed } from "./components/HelloWorld.tsx";
 import VueLogoUrl from "@assets/vue.svg"; // 测试`import语法`导入`assets静态资源`(以url方式解析)
 
 console.warn("import.meta.env 抛出前缀为 `CLIENT_` 配置项", import.meta.env.CLIENT_VERSION);
+
+const helloWorldComponent = ref<VNodeRef>(null);
+onMounted(() => {
+    window.addEventListener("keydown", (e) => {
+        const cref = helloWorldComponent as Ref<HelloWorldExposed>;
+        console.log(cref.value.getCounterValue());
+    });
+});
 </script>
 
 <template>
@@ -15,7 +26,7 @@ console.warn("import.meta.env 抛出前缀为 `CLIENT_` 配置项", import.meta.
             <img :src="VueLogoUrl" class="logo vue" alt="Vue logo" />
         </a>
     </div>
-    <HelloWorld msg="Vite + Vue" info="(in TSX)" />
+    <HelloWorld ref="helloWorldComponent" msg="Vite + Vue" info="(in TSX)" />
 </template>
 
 <style scoped>
