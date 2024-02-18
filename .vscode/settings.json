@@ -102,9 +102,6 @@
     /** Volar Vue 3.0+ */
 
     "vue.updateImportsOnFileMove.enabled": false,
-    "vue.codeLens.enabled": true,
-    "vue.complete.casing.props": "camel",
-    "vue.complete.casing.tags": "pascal",
 
     /** WebGL GLSL Editor */
 
