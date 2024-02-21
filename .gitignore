@@ -2,6 +2,12 @@
 .husky/_
 .vite
 
+# ESlint
+.eslintcache
+.eslintignore
+.eslintrc
+.eslintrc.*
+
 # Logs
 logs
 *.log
