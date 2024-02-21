@@ -6,7 +6,7 @@ console.log(VueLogoUrl);
 // 测试 import.meta.env
 console.log(import.meta.env.CLIENT_VERSION);
 
-import { ref, defineProps, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import HelloWorld from "./components/HelloWorld.vue";
 import { HelloWorld as HalloWorldTsx } from "./components/HelloWorld.tsx";
 
