@@ -1,18 +1,21 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import type { Ref, VNodeRef } from "vue";
-// import { HelloWorld } from "./components/HelloWorld";
-import { HelloWorld } from "./components/HelloWorld.tsx";
-import type { HelloWorldExposed } from "./components/HelloWorld.tsx";
-import VueLogoUrl from "@assets/vue.svg"; // 测试`import语法`导入`assets静态资源`(以url方式解析)
+// 测试 import assets
+import VueLogoUrl from "@assets/vue.svg";
+console.log(VueLogoUrl);
 
-console.warn("import.meta.env 抛出前缀为 `CLIENT_` 配置项", import.meta.env.CLIENT_VERSION);
+// 测试 import.meta.env
+console.log(import.meta.env.CLIENT_VERSION);
 
-const helloWorldComponent = ref<VNodeRef>(null);
+import { ref, defineProps, onMounted } from "vue";
+import HelloWorld from "./components/HelloWorld.vue";
+import { HelloWorld as HalloWorldTsx } from "./components/HelloWorld.tsx";
+
+const props = defineProps(["applicationName"]);
+
+const helloWorldComponent = ref<typeof HelloWorld | typeof HalloWorldTsx>(null);
 onMounted(() => {
     window.addEventListener("keydown", (e) => {
-        const cref = helloWorldComponent as Ref<HelloWorldExposed>;
-        console.log(cref.value.getCounterValue());
+        console.log(helloWorldComponent.value.getCounterValue());
     });
 });
 </script>
@@ -26,7 +29,8 @@ onMounted(() => {
             <img :src="VueLogoUrl" class="logo vue" alt="Vue logo" />
         </a>
     </div>
-    <HelloWorld ref="helloWorldComponent" msg="Vite + Vue" info="(in TSX)" />
+    <HalloWorldTsx v-if="props.applicationName === 'vue-tsx'" ref="helloWorldComponent" msg="Vite + Vue" info="(in TSX)" />
+    <HelloWorld v-else ref="helloWorldComponent" msg="Vite + Vue" />
 </template>
 
 <style scoped>
