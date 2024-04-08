@@ -29,6 +29,7 @@
         "noUnusedLocals": false,            // 允许未使用的局部变量
         "noUnusedParameters": false,        // 允许未使用的函数参数
         "noFallthroughCasesInSwitch": true, // switch语句条件不能超出字面量
+        "strictFunctionTypes": false,       // 函数返回类型和参数类型的的协变与逆变
 
         "paths": {
             "@source/*": [ "./source/*" ],

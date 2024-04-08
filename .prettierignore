@@ -10,6 +10,7 @@ tsconfig.node.json
 vite.config.ts
 libs
 assets
+public
 
 # Suffix
 *.json
