@@ -1,46 +1,46 @@
 {
-    "compilerOptions": {
+  "compilerOptions": {
 
-        /* Language & Env */
-        "target": "ES2020",                         // 目标标准 chrome://flags/ "JavaScript features"
-        "lib": [ "ES2020", "DOM", "DOM.Iterable" ], // 添加额外的库来描述target标准
-        "useDefineForClassFields": true,            // 对象实例字段的处理方式 Object.defineProperty/class field
+    /* Language & Env */
+    "target": "ES2020",                         // 目标标准 chrome://flags/ "JavaScript features"
+    "lib": [ "ES2020", "DOM", "DOM.Iterable" ], // 添加额外的库来描述target标准
+    "useDefineForClassFields": true,            // 对象实例字段的处理方式 Object.defineProperty/class field
 
-        /* Modulization Strategy */
-        "module": "ESNext",                         // 此项目选择的模块化标准
-        "moduleResolution": "bundler",              // 模块解析策略
-        "skipLibCheck": true,                       // 跳过声明文件的类型检查
-        "allowSyntheticDefaultImports": true,       // 允许导入模块语法
-        "allowUmdGlobalAccess": true,               // 允许全局访问导入UMD模块
-        "allowImportingTsExtensions": true,         // 允许将ts相关类型文件作为代码块导入
-        "forceConsistentCasingInFileNames": true,   // 检验模块路径大小写 
-        "resolveJsonModule": true,                  // 是否自动解析JSON为模块文件
-        "isolatedModules": false,                   // 单文件模块隔离
-        "noEmit": true,                             // 不输出任何文件
-        "jsx": "preserve",                          // 保留jsx(交给vite插件处理)
+    /* Modulization Strategy */
+    "module": "ESNext",                         // 此项目选择的模块化标准
+    "moduleResolution": "bundler",              // 模块解析策略
+    "skipLibCheck": true,                       // 跳过声明文件的类型检查
+    "allowSyntheticDefaultImports": true,       // 允许导入模块语法
+    "allowUmdGlobalAccess": true,               // 允许全局访问导入UMD模块
+    "allowImportingTsExtensions": true,         // 允许将ts相关类型文件作为代码块导入
+    "forceConsistentCasingInFileNames": true,   // 检验模块路径大小写 
+    "resolveJsonModule": true,                  // 是否自动解析JSON为模块文件
+    "isolatedModules": false,                   // 单文件模块隔离
+    "noEmit": true,                             // 不输出任何文件
+    "jsx": "preserve",                          // 保留jsx(交给vite插件处理)
 
-        /* Linting Rules */
-        "strict": false,                    // 类型严格检查
-        "alwaysStrict": false,              // 强严格检查(提高性能)
-        "noImplicitThis": false,            // 必须为this关键字显示声明类型
-        "noImplicitAny": false,             // 必须为推断为any声明类型
-        "noImplicitReturns": false,         // 必须为函数添加返回值
-        "noImplicitOverride": true,         // 必须使用overide关键词以重写来自父类的函数
-        "noUnusedLocals": false,            // 允许未使用的局部变量
-        "noUnusedParameters": false,        // 允许未使用的函数参数
-        "noFallthroughCasesInSwitch": true, // switch语句条件不能超出字面量
-        "strictFunctionTypes": false,       // 函数返回类型和参数类型的的协变与逆变
+    /* Linting Rules */
+    "strict": false,                    // 类型严格检查
+    "alwaysStrict": false,              // 强严格检查(提高性能)
+    "noImplicitThis": false,            // 必须为this关键字显示声明类型
+    "noImplicitAny": false,             // 必须为推断为any声明类型
+    "noImplicitReturns": false,         // 必须为函数添加返回值
+    "noImplicitOverride": true,         // 必须使用overide关键词以重写来自父类的函数
+    "noUnusedLocals": false,            // 允许未使用的局部变量
+    "noUnusedParameters": false,        // 允许未使用的函数参数
+    "noFallthroughCasesInSwitch": true, // switch语句条件不能超出字面量
+    "strictFunctionTypes": false,       // 函数返回类型和参数类型的的协变与逆变
 
-        "paths": {
-            "@source/*": [ "./source/*" ],
-            "@assets/*": [ "./assets/*" ],
-            "@libs/*": [ "./libs/*" ],
-            "three": [ "./lib/three.js-r161/src/Three.js" ],
-            "three_addons/*": [ "./lib/three.js-r161/examples/jsm/*" ]
-        }
-    },
+    "paths": {
+      "@source/*": [ "./source/*" ],
+      "@assets/*": [ "./assets/*" ],
+      "@libs/*": [ "./libs/*" ],
+      "three": [ "./lib/three.js-r161/src/Three.js" ],
+      "three_addons/*": [ "./lib/three.js-r161/examples/jsm/*" ]
+    }
+  },
 
-    // 此配置打包编译的范围
-    "include": [ "source/**/*.ts", "source/**/*.tsx", "source/**/*.vue", ".env/vite-env.d.ts" ],
-    "references": [ { "path": "./tsconfig.node.json" } ]
+  // 此配置打包编译的范围
+  "include": [ "source/**/*.ts", "source/**/*.tsx", "source/**/*.vue", ".env/vite-env.d.ts" ],
+  "references": [ { "path": "./tsconfig.node.json" } ]
 }
