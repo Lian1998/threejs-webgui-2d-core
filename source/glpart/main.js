@@ -30,16 +30,16 @@ scene.add(mesh);
 ///////////////////////////////
 
 const animate = () => {
-    requestAnimationFrame(animate);
-    const deltaTime = clock.getDelta();
-    const elapsedTime = clock.getElapsedTime();
+  requestAnimationFrame(animate);
+  const deltaTime = clock.getDelta();
+  const elapsedTime = clock.getElapsedTime();
 
-    mesh.rotation.x += 0.01;
-    mesh.rotation.y += 0.01;
+  mesh.rotation.x += 0.01;
+  mesh.rotation.y += 0.01;
 
-    renderer.render(scene, camera);
+  renderer.render(scene, camera);
 
-    orbitcontrols.update();
+  orbitcontrols.update();
 };
 
 animate();
