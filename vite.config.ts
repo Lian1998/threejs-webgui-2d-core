@@ -35,10 +35,8 @@ export default defineConfig(({ command, mode }) => {
         "@source": path.resolve(__dirname, "./source"),
         "@assets": path.resolve(__dirname, "./assets"),
         "@libs": path.resolve(__dirname, "./libs"),
-        three: path.resolve(__dirname, "./libs/three.js-r161/src/Three.js"),
-        three_addons: path.resolve(__dirname, "./libs/three.js-r161/examples/jsm"),
-        "gl-matrix": path.resolve(__dirname, "./libs/toji-gl-matrix-v3.3.0-73-g02bb0b7/toji-gl-matrix-02bb0b7/dist"),
-        "@WebGL2YT": path.resolve(__dirname, "./source/WebGL2-YouTube"),
+        "three": path.resolve(__dirname, "./libs/three.js-r161/src/Three.js"),
+        "three_addons": path.resolve(__dirname, "./libs/three.js-r161/examples/jsm"),
       },
     },
 
