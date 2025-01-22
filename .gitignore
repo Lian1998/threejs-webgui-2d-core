@@ -37,3 +37,6 @@ pnpm-lock.yaml
 *.njsproj
 *.sln
 *.sw?
+
+# Packages
+pnpm-lock.yaml

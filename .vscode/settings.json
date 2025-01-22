@@ -1,130 +1,130 @@
 {
-    /** 默认配置 */
+  /** 默认配置 */
 
-    // 代码对齐
-    "editor.detectIndentation": false,
-    "editor.tabSize": 4,
-    "editor.indentSize": "tabSize",
-    "editor.formatOnSave": false,
-    "editor.formatOnType": false,
+  // 代码对齐
+  "editor.detectIndentation": false,
+  "editor.tabSize": 2,
+  "editor.indentSize": "tabSize",
+  "editor.formatOnSave": false,
+  "editor.formatOnType": false,
 
-    // 左侧文件树
-    "files.exclude": { // explorer 显示屏蔽
-        ".git": true,
-        "**/node_modules": true,
-    },
+  // 左侧文件树
+  "files.exclude": { // explorer 显示屏蔽
+    ".git": true,
+    "**/node_modules": true,
+  },
 
-    // 代码查看
-    "diffEditor.ignoreTrimWhitespace": false, // 对比窗忽略文字行前后空格差异
+  // 代码查看
+  "diffEditor.ignoreTrimWhitespace": false, // 对比窗忽略文字行前后空格差异
 
-    // 将编辑器设置配置为覆盖某一语言模式
-    "[jsonc]": { "editor.defaultFormatter": "vscode.json-language-features" }, // JSON with Comments 比如 vscode的settings.json
-    "[jsonl]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }, // JSON Lines newlin-delimitedJson(ndjson)
-    "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }, // JSON
-    "[vue]": { "editor.defaultFormatter": "Vue.volar" },
-    "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-    "[scss]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-    "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-    "[less]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-    "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-    "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-    "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-    "[svg]": { "editor.defaultFormatter": "jock.svg" }, // JockSVG
-    "[glsl]": { "editor.defaultFormatter": "raczzalan.webgl-glsl-editor" }, // WebGL GLSL Editor
-    // 文件后缀与语言映射
-    "files.associations": {
-        "*.vs": "glsl",
-        "*.fs": "glsl",
-        "*.glsl": "glsl",
-        "*.shader": "glsl",
-        "*.vert": "glsl",
-        "*.frag": "glsl",
-        "*.uxml": "xml",
-        "*.uss": "css",
-        "*.wxml": "wx_miniprogram",
-        "*.wxss": "wx_miniprogram",
-        "*.svg": "svg",
+  // 将编辑器设置配置为覆盖某一语言模式
+  "[jsonc]": { "editor.defaultFormatter": "vscode.json-language-features" }, // JSON with Comments 比如 vscode的settings.json
+  "[jsonl]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }, // JSON Lines newlin-delimitedJson(ndjson)
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }, // JSON
+  "[vue]": { "editor.defaultFormatter": "Vue.volar" },
+  "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[scss]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[less]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescriptreact]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[svg]": { "editor.defaultFormatter": "jock.svg" }, // JockSVG
+  "[glsl]": { "editor.defaultFormatter": "raczzalan.webgl-glsl-editor" }, // WebGL GLSL Editor
+  // 文件后缀与语言映射
+  "files.associations": {
+    "*.vs": "glsl",
+    "*.fs": "glsl",
+    "*.glsl": "glsl",
+    "*.shader": "glsl",
+    "*.vert": "glsl",
+    "*.frag": "glsl",
+    "*.uxml": "xml",
+    "*.uss": "css",
+    "*.wxml": "wx_miniprogram",
+    "*.wxss": "wx_miniprogram",
+    "*.svg": "svg",
 
-        // jsonc 配置使用vscode自带的json格式化, json 使用prettier进行格式化(ignore掉)
-        ".vscode/settings.json": "jsonc",
-        "tsconfig.json": "json",
-        "tsconfig.node.json": "json",
-        "package.json": "json",
-    },
+    // jsonc 配置使用vscode自带的json格式化, json 使用prettier进行格式化(ignore掉)
+    ".vscode/settings.json": "jsonc",
+    "tsconfig.json": "json",
+    "tsconfig.node.json": "json",
+    "package.json": "json",
+  },
 
-    // 搜索屏蔽 https://code.visualstudio.com/docs/editor/codebasics#_advanced-search-options
-    "search.exclude": {
-        // 通用配置文件结尾
-        "*.config.js": true,
-        "*config.json": true,
-        "*config.js": true,
-        "*.config.json": true,
-        ".*rc": true,
-        "*rc.js": true,
-        ".*ignore": true,
+  // 搜索屏蔽 https://code.visualstudio.com/docs/editor/codebasics#_advanced-search-options
+  "search.exclude": {
+    // 通用配置文件结尾
+    "*.config.js": true,
+    "*config.json": true,
+    "*config.js": true,
+    "*.config.json": true,
+    ".*rc": true,
+    "*rc.js": true,
+    ".*ignore": true,
 
-        "**/node_modules": true, // npm, pnpm, yarn 包存储
-        "**/bower_components": true, // bower 包存储
-        "**/public": true, // 服务器资源
-        "**/static": true, // 静态资源
-        "package.json": true, // 包管理工具依赖配置
-        "*-lock.json": true, // 依赖版本锁定配置
-        "Jenkinsfile": true,
-        "Dockerfile": true
-    },
+    "**/node_modules": true, // npm, pnpm, yarn 包存储
+    "**/bower_components": true, // bower 包存储
+    "**/public": true, // 服务器资源
+    "**/static": true, // 静态资源
+    "package.json": true, // 包管理工具依赖配置
+    "*-lock.json": true, // 依赖版本锁定配置
+    "Jenkinsfile": true,
+    "Dockerfile": true
+  },
 
-    /** vscode前端基础功能 */
+  /** vscode前端基础功能 */
 
-    "html.format.wrapLineLength": 2000,
-    "json.format.enable": true,
-    "json.schemaDownload.enable": true,
-    "json.validate.enable": false, // 不要自动校验并且修正json文件
-    "json.format.keepLines": true, // 保持源文件格式
+  "html.format.wrapLineLength": 2000,
+  "json.format.enable": true,
+  "json.schemaDownload.enable": true,
+  "json.validate.enable": false, // 不要自动校验并且修正json文件
+  "json.format.keepLines": true, // 保持源文件格式
 
-    /** Prettier */
+  /** Prettier */
 
-    "prettier.enable": true,
-    "prettier.requireConfig": true, // 读取配置文件
-    "prettier.configPath": ".prettierrc.cjs",
-    "prettier.ignorePath": ".prettierignore",
+  "prettier.enable": true,
+  "prettier.requireConfig": true, // 读取配置文件
+  "prettier.configPath": ".prettierrc.cjs",
+  "prettier.ignorePath": ".prettierignore",
 
-    /** vscode Typescript/Javascript Features */
+  /** vscode Typescript/Javascript Features */
 
-    "typescript.updateImportsOnFileMove.enabled": "never",
-    "typescript.preferences.quoteStyle": "double",
-    "typescript.preferences.importModuleSpecifier": "relative",
-    "typescript.autoClosingTags": false,
-    "javascript.updateImportsOnFileMove.enabled": "never",
-    "javascript.preferences.quoteStyle": "double",
-    "javascript.preferences.importModuleSpecifier": "relative",
-    "javascript.autoClosingTags": false,
+  "typescript.updateImportsOnFileMove.enabled": "never",
+  "typescript.preferences.quoteStyle": "double",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.autoClosingTags": false,
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "javascript.preferences.quoteStyle": "double",
+  "javascript.preferences.importModuleSpecifier": "relative",
+  "javascript.autoClosingTags": false,
 
-    /** Volar Vue 3.0+ */
+  /** Volar Vue 3.0+ */
 
-    "vue.updateImportsOnFileMove.enabled": false,
+  "vue.updateImportsOnFileMove.enabled": false,
 
-    /** WebGL GLSL Editor */
+  /** WebGL GLSL Editor */
 
-    "webgl-glsl-editor.diagnostics": false, // 不要校验错误了
-    "webgl-glsl-editor.alwaysOpenOfflineDocInNewTab": true,
-    "webgl-glsl-editor.format.placeBracesOnSeparateLine": false,
-    "webgl-glsl-editor.format.favorFloatingSuffix": false,
-    "webgl-glsl-editor.format.placeSpaceAfterCommas": true,
-    "webgl-glsl-editor.format.placeSpaceAfterFunctionNames": false,
-    "webgl-glsl-editor.format.placeSpaceAfterKeywords": true,
-    "webgl-glsl-editor.format.placeSpaceAfterSemicolonsInFor": false,
-    "webgl-glsl-editor.format.placeSpaceAroundUnaryOperators": false,
-    "webgl-glsl-editor.format.placeSpaceBeforeCaseColons": false,
-    "webgl-glsl-editor.format.placeSpaceBeforeCommas": false,
-    "webgl-glsl-editor.format.placeSpaceBeforeOpeningBrackets": false,
-    "webgl-glsl-editor.format.placeSpaceBeforeSemicolonsInFor": false,
-    "webgl-glsl-editor.format.placeSpacesAroundAssignmentOperators": true,
-    "webgl-glsl-editor.format.placeSpacesAroundBinaryOperators": true,
-    "webgl-glsl-editor.format.placeSpacesAroundBraces": true,
-    "webgl-glsl-editor.format.placeSpacesAroundDots": false,
-    "webgl-glsl-editor.format.placeSpacesAroundTernaryOperators": true,
-    "webgl-glsl-editor.format.placeSpacesInsideBrackets": false,
-    "webgl-glsl-editor.format.placeSpacesInsideParentheses": false,
-    "webgl-glsl-editor.strictRename": false,
-    "webgl-glsl-editor.alwaysOpenOnlineDoc": false,
+  "webgl-glsl-editor.diagnostics": false, // 不要校验错误了
+  "webgl-glsl-editor.alwaysOpenOfflineDocInNewTab": true,
+  "webgl-glsl-editor.format.placeBracesOnSeparateLine": false,
+  "webgl-glsl-editor.format.favorFloatingSuffix": false,
+  "webgl-glsl-editor.format.placeSpaceAfterCommas": true,
+  "webgl-glsl-editor.format.placeSpaceAfterFunctionNames": false,
+  "webgl-glsl-editor.format.placeSpaceAfterKeywords": true,
+  "webgl-glsl-editor.format.placeSpaceAfterSemicolonsInFor": false,
+  "webgl-glsl-editor.format.placeSpaceAroundUnaryOperators": false,
+  "webgl-glsl-editor.format.placeSpaceBeforeCaseColons": false,
+  "webgl-glsl-editor.format.placeSpaceBeforeCommas": false,
+  "webgl-glsl-editor.format.placeSpaceBeforeOpeningBrackets": false,
+  "webgl-glsl-editor.format.placeSpaceBeforeSemicolonsInFor": false,
+  "webgl-glsl-editor.format.placeSpacesAroundAssignmentOperators": true,
+  "webgl-glsl-editor.format.placeSpacesAroundBinaryOperators": true,
+  "webgl-glsl-editor.format.placeSpacesAroundBraces": true,
+  "webgl-glsl-editor.format.placeSpacesAroundDots": false,
+  "webgl-glsl-editor.format.placeSpacesAroundTernaryOperators": true,
+  "webgl-glsl-editor.format.placeSpacesInsideBrackets": false,
+  "webgl-glsl-editor.format.placeSpacesInsideParentheses": false,
+  "webgl-glsl-editor.strictRename": false,
+  "webgl-glsl-editor.alwaysOpenOnlineDoc": false,
 }
