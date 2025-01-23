@@ -35,8 +35,8 @@ export default defineConfig(({ command, mode }) => {
         "@source": path.resolve(__dirname, "./source"),
         "@assets": path.resolve(__dirname, "./assets"),
         "@libs": path.resolve(__dirname, "./libs"),
-        "three": path.resolve(__dirname, "./libs/three.js-r161/src/Three.js"),
-        "three_addons": path.resolve(__dirname, "./libs/three.js-r161/examples/jsm"),
+        "three": path.resolve(__dirname, "./libs/three.js-r170/src/Three.js"),
+        "three_addons": path.resolve(__dirname, "./libs/three.js-r170/examples/jsm"),
       },
     },
 
