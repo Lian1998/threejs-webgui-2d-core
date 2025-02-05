@@ -5,7 +5,7 @@ module.exports = {
         const commandsRes = []; // 存储指令集
 
         // 自动格式化文件
-        commandsRes.push(`npx prettier --write .`);
+        commandsRes.push(`npx prettier --write`);
         
         return commandsRes;
     }
