@@ -5,7 +5,7 @@ import { OrbitControls } from "three_addons/controls/OrbitControls.js";
 
 const width = window.innerWidth;
 const height = window.innerHeight;
-const pixelRatio = window.pixelRatio;
+const pixelRatio = window.devicePixelRatio;
 const el = document.getElementById("viewport");
 
 const scene = new THREE.Scene();
