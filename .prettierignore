@@ -1,16 +1,15 @@
 # PipeLine
+.vite
 .env
 .husky
-.scripts
-.vite
+assets
+libs
+public
 pnpm-*.yaml
 tsconfig.json
 tsconfig.node.json
 *rc.cjs
 vite.config.ts
-libs
-assets
-public
 
 # Suffix
 *.json
