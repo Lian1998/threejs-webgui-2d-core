@@ -1,23 +1,20 @@
 import { defineConfig } from "vite";
 import { loadEnv } from "vite";
-import vuePlugin from "@vitejs/plugin-vue";
-import vueJsxPlugin from "@vitejs/plugin-vue-jsx";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const _dir = (relativePath: string) => path.resolve(__dirname, relativePath)
+const _p = (relativePath: string) => path.resolve(__dirname, relativePath)
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
-  const env = loadEnv(mode, _dir("./.env/"), ""); // 加载额外的env环境文件
+  const env = loadEnv(mode, _p("./.env/"), ""); // 加载额外的env环境文件
 
   return {
-    root: _dir("./multi-pages/"), // 多页面打包模式更改入口
-    envDir: _dir( "./.env/"),
-    envPrefix: "CLIENT_",
-    publicDir: _dir("./public/"),
+    root: _p("./multi-pages/"), // 多页面打包模式更改入口
+    envDir: _p( "./.env/"),
+    publicDir: _p("./public/"),
     clearScreen: true,
 
     // 以 `micromatch/picomatch` 规则匹配到的`import`语句 https://github.com/micromatch/picomatch#globbing-features
@@ -32,20 +29,27 @@ export default defineConfig(({ command, mode }) => {
 
     resolve: {
       alias: {
-        "@source": _dir("./source"),
-        "@assets": _dir("./assets"),
-        "@libs": _dir("./libs"),
+        "@source": _p("./source"),
+        "@assets": _p("./assets"),
+        "@libs": _p("./libs"),
+        "three": _p("./libs/three.js-r170/src/Three.js"),
+        "three_addons": _p("./libs/three.js-r170/examples/jsm"),
       },
     },
+    
+    optimizeDeps: {
+      include: ["three", "three_addons"],
+    },
 
-    plugins: [
-      vuePlugin(),                  // Vue3 SFC(Single-File Component) 解析器
-      vueJsxPlugin(),               // Vue3 SFC 支持 JSX/TSX 解析器
-    ],
+    plugins: [],
 
     server: {
       port: 13261,
       strictPort: true,           // 固定端口(不会由于占用而自动顺延端口)
+
+      watch: {
+        ignored: ['!**/libs/**']
+      },
 
       build: {
         target: "modules", //  native ES Modules, native ESM dynamic import, import.meta
@@ -54,14 +58,14 @@ export default defineConfig(({ command, mode }) => {
         chunkSizeWarningLimit: 1024, // 块大小(单位kB)(主要影响javascript包下载/CPU执行时间)
         assetsDir: "assets", // 静态的资产(打包模式作为静态资产处理, 并将结果直接输出到public/assets)
         assetsInlineLimit: 10240, // 静态资源如果小于 10mB 会被解析成 base64
-        outDir: _dir("./dist/"), // 打包输出路径
+        outDir: _p("./dist/"), // 打包输出路径
         emptyOutDir: true, // 打包清空目录
         rollupOptions: { external: [], output: {}, },
-        lib: {
-          entry: _dir("./source/main.ts"),
-          name: "webgui2d",
-          formats: ["es", "cjs", "iife"], // 输出格式
-        }
+        // lib: {
+        //   entry: _p("./source/main.ts"),
+        //   name: "webgui2d",
+        //   formats: ["es", "cjs", "iife"], // 输出格式
+        // }
       },
     },
   };

@@ -35,6 +35,8 @@
       "@source/*": [ "./source/*" ],
       "@assets/*": [ "./assets/*" ],
       "@libs/*": [ "./libs/*" ],
+      "three": [ "./libs/three-ts-types-r170/types/three/index.d.ts", "./lib/three.js-r170/src/Three.js" ],
+      "three_addons/*": [  "./libs/three-ts-types-r170/types/three/examples/jsm/*", "./lib/three.js-r170/examples/jsm/*" ]
     }
   },
 
@@ -43,5 +45,7 @@
     "vite.config.ts",
     "source/**/*.ts",
     ".env/vite-env.d.ts",
+    "libs/three.js-r170/**/*.js",
+    "libs/three-ts-types-r170/**/*.d.ts"
   ]
 }
