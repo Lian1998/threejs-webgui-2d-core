@@ -5,15 +5,18 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + Vue + TS</title>
+
+    <style>
+      #viewport {
+        width: 500px;
+        height: 500px;
+      }
+    </style>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="viewport"></div>
     <script type="module">
-      window["applicationName"] = "vue";
-      import add from "@libs/lodash/src/add.ts"; // 测试`lodash`作为manualChunks打包
       import "@source/main.ts";
-
-      console.log(add(6, 4));
     </script>
   </body>
 </html>
