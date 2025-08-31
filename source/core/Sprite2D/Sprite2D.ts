@@ -13,11 +13,21 @@ export const calculatePP = (targetRealLength: number, targetImgPixelLength: numb
   return targetRealLength / targetImgPixelLength;
 };
 
+/**
+ * 目前用于二维平面贴图中可用的属性
+ */
 export interface Sprite2DOptions {
+  /** threejs纹理 */
   texture: THREE.Texture;
+
+  /** threejs纹理 shader叠加算法颜色 */
+  uColor?: THREE.Color;
+
+  /** 真实比例 */
   pp: ReturnType<typeof calculatePP>;
+
+  /** 偏移量 */
   offset?: number[];
-  color?: THREE.Color;
 }
 
 export class Sprite2D extends THREE.Object3D {
@@ -36,9 +46,9 @@ export class Sprite2D extends THREE.Object3D {
     this.options = options;
 
     const texture = options.texture;
-    console.log(texture, THREE.SRGBColorSpace);
+    texture.colorSpace = THREE.LinearSRGBColorSpace;
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(1, 1);
+    texture.repeat.set(1, 1); // 设置纹理左右不重复
 
     const { naturalWidth, naturalHeight } = texture.image;
     const geometry = new THREE.PlaneGeometry(options.pp * naturalWidth, options.pp * naturalHeight);
@@ -47,7 +57,8 @@ export class Sprite2D extends THREE.Object3D {
       fragmentShader: fs,
       uniforms: {
         uTexture: { value: options.texture },
-        uColor: { value: options.color },
+        ...(options.uColor ? { uUseMultipleColor: { value: true } } : {}), // 通过是否传入uColor判断是否启用颜色混合
+        ...(options.uColor ? { uColor: { value: options.uColor } } : {}), // 混合色
       },
     });
 

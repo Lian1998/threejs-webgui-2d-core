@@ -10,6 +10,7 @@ const viewport = document.querySelector("#viewport");
 if (!viewport) throw new Error();
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setClearColor(0xffffff);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 const onResize = () => {
   const { width, height } = viewport.getBoundingClientRect();
@@ -47,14 +48,13 @@ controls.enableDamping = false;
 
 import { calculatePP } from "./core/Sprite2D/";
 import { Sprite2D } from "./core/Sprite2D/";
-const qc = new Sprite2D({
+const spr = new Sprite2D({
   texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Gantry.png"),
   pp: calculatePP(35, 2230),
-  color: new THREE.Color(0x498cff),
+  uColor: new THREE.Color(0x498cff),
 });
 
-scene.add(qc.mesh);
-console.log(scene);
+scene.add(spr.mesh);
 
 function animate() {
   requestAnimationFrame(animate);
