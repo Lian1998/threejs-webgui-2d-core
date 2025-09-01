@@ -1,7 +1,6 @@
 uniform sampler2D uTexture;
-uniform bool uUseMultipleColor;
+uniform bool uUseMultipleColor; // 是否客户端自定义混色模式
 uniform vec3 uColor;
-uniform bool uUseLinear;
 
 varying vec2 vUv;
 
@@ -19,7 +18,7 @@ void main() {
   vec3 color = tColor.rgb;
 
   if (uUseMultipleColor) {
-    color = tColor.a * uColor;
+    color = vec3(tColor.r * uColor.r, tColor.g * uColor.g, tColor.b * uColor.b);
   }
 
   gl_FragColor = vec4(toSrgb(color), tColor.a);
