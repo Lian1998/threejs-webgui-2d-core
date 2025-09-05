@@ -7,18 +7,10 @@ import { MapControls } from "three_addons/controls/MapControls.js";
 
 if (!WebGL.isWebGL2Available()) throw new Error();
 const viewport = document.querySelector("#viewport");
-if (!viewport) throw new Error();
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setClearColor(0xffffff);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 viewport.appendChild(renderer.domElement);
-
-// https://developer.mozilla.org/zh-CN/docs/Web/API/ResizeObserver
-const resizeObserver = new window.ResizeObserver((entries) => {
-  const { width, height } = entries[0].contentRect;
-  renderer.setSize(width, height);
-});
-resizeObserver.observe(viewport);
 
 const { width, height } = viewport.getBoundingClientRect();
 const camera = new THREE.OrthographicCamera(width / -2, width / 2, height / 2, height / -2, 0.01, 1000);
@@ -46,34 +38,40 @@ controls.enableDamping = false;
   controls.update();
 }
 
-import { calculatePP } from "@source/core";
 import { Sprite2D } from "@source/core";
-const qcGantry = new Sprite2D({
-  texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Gantry.png"),
-  pp: calculatePP(35, 2230),
-  uColor: new THREE.Color(0x498cff),
-});
+import { calculatePP } from "@source/core";
 
-const qcTrolley = new Sprite2D({
-  texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png"),
-  pp: calculatePP(6, 87),
-  uColor: new THREE.Color(0x498cff),
-});
+{
+  const qcGantry = new Sprite2D({
+    texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Gantry.png"),
+    pp: calculatePP(35, 2230),
+    uColor: new THREE.Color(0x498cff),
+  });
 
-qcTrolley.mesh.position.y = 1;
-qcGantry.mesh.add(qcTrolley.mesh);
+  const qcTrolley = new Sprite2D({
+    texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png"),
+    pp: calculatePP(6, 87),
+    uColor: new THREE.Color(0x498cff),
+  });
 
-scene.add(qcGantry.mesh);
+  qcTrolley.mesh.position.y = 1;
+  qcGantry.mesh.add(qcTrolley.mesh);
+  scene.add(qcGantry.mesh);
+}
 
-// import { GpuPickManager } from "@source/core";
-// const picker = new GpuPickManager({ renderer: renderer, samples: 4 });
-// picker.register(spr.mesh); // assigns a unique object id
-// renderer.domElement.addEventListener("pointerdown", (e) => {
-//   const pickInfomation = picker.pick(scene, camera, e.clientX, e.clientY, renderer.domElement);
-//   if (pickInfomation) {
-//     console.log("pickInfomation:", pickInfomation);
-//   }
-// });
+import { ViewportResizeDispatcher } from "@source/core";
+{
+  const resizeEventDispatcher = new ViewportResizeDispatcher(viewport as HTMLElement);
+  resizeEventDispatcher.addEventListener("resize", ({ message: { width, height } }) => renderer.setSize(width, height));
+  window.addEventListener("keydown", () => {
+    (viewport as HTMLDivElement).style.width = `1024px`;
+    (viewport as HTMLDivElement).style.height = `768px`;
+  });
+
+  console.log(ViewportResizeDispatcher.classInstanceMap.get("default"));
+}
+
+// import "./core/Mixins/ClassInstanceMap";
 
 function animate() {
   requestAnimationFrame(animate);

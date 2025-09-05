@@ -15,27 +15,27 @@ export const calculatePP = (targetRealLength: number, targetImgPixelLength: numb
   return targetRealLength / targetImgPixelLength;
 };
 
-export interface Sprite2DOptions {
+export interface Sprite2DParameters {
   /** threejs纹理 */
-  texture?: THREE.Texture;
-
-  /** threejs纹理 shader叠加算法颜色 */
-  uColor?: THREE.Color;
+  texture: THREE.Texture;
 
   /** 真实比例 */
-  pp?: ReturnType<typeof calculatePP>;
+  pp: number;
 
   /** 偏移量 */
   offset?: number[];
+
+  /** threejs纹理 shader叠加算法颜色 */
+  uColor?: THREE.Color;
 }
 
-export class Sprite2D extends THREE.Object3D implements Sprite2DOptions {
+export class Sprite2D implements Sprite2DParameters {
   mesh: THREE.Mesh;
 
   texture: THREE.Texture;
-  uColor: THREE.Color;
   pp: number;
-  offset: number[];
+  offset: number[] = [0.0, 0.0];
+  uColor?: THREE.Color;
 
   /**
    * 构造一个二维平面贴图精灵
@@ -43,34 +43,41 @@ export class Sprite2D extends THREE.Object3D implements Sprite2DOptions {
    * @param height 精灵在三维空间坐标系中实际的高度
    * @param textureUrl 纹理的路径
    */
-  constructor(opts: Sprite2DOptions = {}) {
-    super();
+  constructor({ texture, pp, offset = [0.0, 0.0], uColor }: Sprite2DParameters) {
+    if (texture === undefined) throw new Error("请指定 Sprite2D 的纹理贴图");
+    this.texture = texture;
+    texture.flipY = false;
+    texture.colorSpace = THREE.LinearSRGBColorSpace;
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(1, 1); // 设置纹理左右不重复
 
-    this.texture = opts.texture;
-    if (this.texture === undefined) throw new Error("请指定 Sprite2D 的纹理贴图");
-    this.texture.flipY = false;
-    this.texture.colorSpace = THREE.LinearSRGBColorSpace;
-    this.texture.wrapS = this.texture.wrapT = THREE.RepeatWrapping;
-    this.texture.repeat.set(1, 1); // 设置纹理左右不重复
+    if (pp === undefined) throw new Error("请指定 Sprite2D 的真实比例");
+    this.pp = pp;
+    const { naturalWidth, naturalHeight } = texture.image;
 
-    this.pp = opts.pp;
-    if (this.pp === undefined) throw new Error("请指定 Sprite2D 的真实比例");
-    const { naturalWidth, naturalHeight } = this.texture.image;
-    const geometry = new Sprite2DGeometry(this.pp * naturalWidth, this.pp * naturalHeight); // 生成几何
+    if (offset) this.offset = offset;
+    this.uColor = uColor;
 
-    this.uColor = opts.uColor; // 从客户端传来的参数, 是否需要对图标进行shader的颜色混合
-    this.offset = opts.offset; // 此图标在二维情况下的偏移量
+    // 生成几何
+    const geometry = new Sprite2DGeometry(pp * naturalWidth, pp * naturalHeight);
+
+    // 生成材质
     const material = new THREE.ShaderMaterial({
       side: THREE.FrontSide,
       transparent: true,
       uniforms: {
-        uTexture: { value: this.texture },
-        ...(this.uColor ? { uUseMultipleColor: { value: true } } : {}), // 通过是否传入uColor判断是否启用颜色混合
-        ...(this.uColor ? { uColor: { value: this.uColor } } : {}), // 混合色
+        uTexture: { value: texture },
+        uOffset: { value: new THREE.Vector2(offset[0], offset[1]) },
+        ...(uColor ? { uUseMultipleColor: { value: true } } : {}), // 通过是否传入uColor判断是否启用颜色混合
+        ...(uColor ? { uColor: { value: uColor } } : {}), // 混合色
       },
       vertexShader: vs,
       fragmentShader: fs,
-    }); // 生成材质
+    });
+
+    material.onBeforeCompile = (shaderObject) => {
+      // console.log(shaderObject);
+    };
 
     this.mesh = new THREE.Mesh(geometry, material); // 生成网格
   }
