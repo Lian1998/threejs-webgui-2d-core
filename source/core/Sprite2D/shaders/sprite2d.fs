@@ -4,6 +4,8 @@ uniform vec3 uColor;
 
 varying vec2 vUv;
 
+#include <dithering_pars_fragment>
+
 vec3 toLinear(vec3 srgb) {
   return pow(srgb, vec3(2.2));
 }
@@ -22,4 +24,6 @@ void main() {
   }
 
   gl_FragColor = vec4(toSrgb(color), tColor.a);
+
+	#include <dithering_fragment>
 }

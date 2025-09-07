@@ -1,36 +1,38 @@
 import * as THREE from "three";
 
-type ClassInstanceMap<T> = Map<any | "default", T>;
-
-type Constructor<T = {}> = new (...args: any[]) => T;
+type Constructor<T = object> = abstract new (...args: any[]) => T;
 
 export const WithClassInstanceMap = <TBase extends Constructor>(Base: TBase) => {
-  return class extends Base {
-    static classInstanceMap: ClassInstanceMap<TBase> = new Map();
+  abstract class WithInstanceMap extends Base {
+    static classInstanceMap: Map<any | "default", WithInstanceMap> = new Map();
 
     constructor(...args: any[]) {
       super(...args);
 
-      const ctor = this.constructor as typeof Base & { classInstanceMap: ClassInstanceMap<TBase> };
+      const ctor = this.constructor as typeof Base & {
+        classInstanceMap: Map<any | "default", WithInstanceMap>;
+      };
 
       if (!ctor.classInstanceMap.has("default")) {
-        ctor.classInstanceMap.set("default", this as unknown as TBase);
+        ctor.classInstanceMap.set("default", this as unknown as ThisType<WithInstanceMap>);
       }
     }
-  };
+  }
+
+  return WithInstanceMap;
 };
 
-class ViewportDisPatcher extends WithClassInstanceMap(THREE.Object3D) {
-  customName: string;
+// class ViewportDispatcher extends WithClassInstanceMap(THREE.Object3D) {
+//   customName: string;
 
-  constructor(customName: string) {
-    super();
-    this.customName = customName;
-  }
-}
+//   constructor(customName: string) {
+//     super();
+//     this.customName = customName;
+//   }
+// }
 
-const vd1 = new ViewportDisPatcher("QC01");
-const vd2 = new ViewportDisPatcher("QC02");
-const _vd = ViewportDisPatcher.classInstanceMap.get("default");
+// const vd1 = new ViewportDispatcher("QC01");
+// const vd2 = new ViewportDispatcher("QC02");
+// const _vd = ViewportDispatcher.classInstanceMap.get("default");
 
-console.log(vd1, vd2, _vd);
+// console.log(vd1, vd2, _vd);

@@ -1,13 +1,14 @@
 import * as THREE from "three";
-import { WithClassInstanceMap } from "./Mixins/ClassInstanceMap";
+import { WithClassInstanceMap } from "@source/core/Mixins/ClassInstanceMap";
 
 type TEventMap = {
   resize: { type: "resize"; message: { viewportElement: HTMLElement; width: number; height: number } };
 };
 
 /**
+ * ViewportResizeDispatcher:
+ * 注册viewport视口变化的回调函数(且注册时刻即触发一次)
  * [window.ResizeObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/ResizeObserver)
- * 注册viewport视口变化的回调函数(注册时刻即触发一次)
  */
 export class ViewportResizeDispatcher extends WithClassInstanceMap(THREE.EventDispatcher<TEventMap>) {
   viewportElement: HTMLElement;
@@ -33,28 +34,15 @@ export class ViewportResizeDispatcher extends WithClassInstanceMap(THREE.EventDi
   }
 
   /**
-   * 需要重写一下此函数, 在注册回到函数的时刻立刻进行调用
-   * @param type 事件类型
-   * @param listener 事件回调
+   * 当视口窗口被重置大小时出发函数
+   * @param listener
    */
-  override addEventListener<T extends Extract<keyof TEventMap, string>>(type: T, listener: THREE.EventListener<TEventMap[T], T, this>): void {
-    if (this["_listeners"] === undefined) this["_listeners"] = {};
+  addResizeEventListener(listener: THREE.EventListener<TEventMap["resize"], "resize", this>): void {
+    this.addEventListener("resize", listener);
 
-    const listeners = this["_listeners"];
-
-    if (listeners[type] === undefined) {
-      listeners[type] = [];
-    }
-
-    if (listeners[type].indexOf(listener) === -1) {
-      listeners[type].push(listener);
-
-      if (type === "resize") {
-        this.dispatchEvent({
-          type: "resize",
-          message: { viewportElement: this.viewportElement, width: this.width, height: this.height },
-        });
-      }
-    }
+    this.dispatchEvent({
+      type: "resize",
+      message: { viewportElement: this.viewportElement, width: this.width, height: this.height },
+    });
   }
 }

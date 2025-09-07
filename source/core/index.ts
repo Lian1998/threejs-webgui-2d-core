@@ -1,3 +1,2 @@
-export * from "./Sprite2D/index";
-
-export * from "./ViewportResizeDispatcher";
+export * from "./EventDispathcers/";
+export * from "./Sprite2D/";

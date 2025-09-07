@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { Sprite2DGeometry } from "./Sprite2DGeometry";
+import { Sprite2DGeometry } from "@source/core";
 
 import vs from "./shaders/sprite2d.vs?raw";
 import fs from "./shaders/sprite2d.fs?raw";
@@ -29,7 +29,7 @@ export interface Sprite2DParameters {
   uColor?: THREE.Color;
 }
 
-export class Sprite2D implements Sprite2DParameters {
+export class Sprite2D extends THREE.Object3D implements Sprite2DParameters {
   mesh: THREE.Mesh;
 
   texture: THREE.Texture;
@@ -44,6 +44,8 @@ export class Sprite2D implements Sprite2DParameters {
    * @param textureUrl 纹理的路径
    */
   constructor({ texture, pp, offset = [0.0, 0.0], uColor }: Sprite2DParameters) {
+    super();
+
     if (texture === undefined) throw new Error("请指定 Sprite2D 的纹理贴图");
     this.texture = texture;
     texture.flipY = false;

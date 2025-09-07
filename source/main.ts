@@ -22,6 +22,9 @@ const controls = new MapControls(camera, renderer.domElement);
 controls.enableRotate = false;
 controls.enableDamping = false;
 
+const resizeEventDispatcher = new ViewportResizeDispatcher(viewport as HTMLElement);
+resizeEventDispatcher.addResizeEventListener(({ message: { width, height } }) => renderer.setSize(width, height));
+
 // {
 //   const geometry = new THREE.BoxGeometry(1, 1, 1);
 //   const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
@@ -41,37 +44,47 @@ controls.enableDamping = false;
 import { Sprite2D } from "@source/core";
 import { calculatePP } from "@source/core";
 
+import { GpuPickManager } from "@source/core/GpuPickManager";
 {
   const qcGantry = new Sprite2D({
     texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Gantry.png"),
     pp: calculatePP(35, 2230),
     uColor: new THREE.Color(0x498cff),
   });
+  qcGantry.mesh.name = "qcGantry";
 
   const qcTrolley = new Sprite2D({
     texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png"),
     pp: calculatePP(6, 87),
     uColor: new THREE.Color(0x498cff),
   });
+  qcTrolley.mesh.name = "qcTrolley";
 
   qcTrolley.mesh.position.y = 1;
   qcGantry.mesh.add(qcTrolley.mesh);
   scene.add(qcGantry.mesh);
-}
 
-import { ViewportResizeDispatcher } from "@source/core";
-{
-  const resizeEventDispatcher = new ViewportResizeDispatcher(viewport as HTMLElement);
-  resizeEventDispatcher.addEventListener("resize", ({ message: { width, height } }) => renderer.setSize(width, height));
-  window.addEventListener("keydown", () => {
-    (viewport as HTMLDivElement).style.width = `1024px`;
-    (viewport as HTMLDivElement).style.height = `768px`;
+  const picker = new GpuPickManager(renderer);
+  resizeEventDispatcher.addResizeEventListener(({ message: { width, height } }) => picker._onResize());
+  picker.register(qcGantry.mesh); // assigns a unique object id
+  picker.register(qcTrolley.mesh); // assigns a unique object id
+  // picker.register(instancedMeshB, { instances: instancedMeshB.count });
+  renderer.domElement.addEventListener("pointerdown", (e) => {
+    const hit = picker.pick(scene, camera, e.clientX, e.clientY, renderer.domElement);
+    if (hit) {
+      console.log("hit:", hit.object, hit.instanceId, hit.id);
+    }
   });
-
-  console.log(ViewportResizeDispatcher.classInstanceMap.get("default"));
 }
 
-// import "./core/Mixins/ClassInstanceMap";
+import { ViewportResizeDispatcher } from "@source/core/";
+{
+  window.addEventListener("keydown", () => {
+    (viewport as HTMLDivElement).style.width = `800px`;
+    (viewport as HTMLDivElement).style.height = `600px`;
+  });
+  // console.log(ViewportResizeDispatcher.classInstanceMap.get("default"));
+}
 
 function animate() {
   requestAnimationFrame(animate);
