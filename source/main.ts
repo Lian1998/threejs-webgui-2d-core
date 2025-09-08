@@ -59,9 +59,9 @@ import { GpuPickManager } from "@source/core/GpuPickManager";
     uColor: new THREE.Color(0x498cff),
   });
   qcTrolley.mesh.name = "qcTrolley";
-
   qcTrolley.mesh.position.y = 1;
   qcGantry.mesh.add(qcTrolley.mesh);
+
   scene.add(qcGantry.mesh);
 
   const picker = new GpuPickManager(renderer);
@@ -78,13 +78,13 @@ import { GpuPickManager } from "@source/core/GpuPickManager";
 }
 
 import { ViewportResizeDispatcher } from "@source/core/";
-{
-  window.addEventListener("keydown", () => {
-    (viewport as HTMLDivElement).style.width = `800px`;
-    (viewport as HTMLDivElement).style.height = `600px`;
-  });
-  // console.log(ViewportResizeDispatcher.classInstanceMap.get("default"));
-}
+// {
+//   window.addEventListener("keydown", () => {
+//     (viewport as HTMLDivElement).style.width = `800px`;
+//     (viewport as HTMLDivElement).style.height = `600px`;
+//   });
+//   console.log(ViewportResizeDispatcher.classInstanceMap.get("default"));
+// }
 
 function animate() {
   requestAnimationFrame(animate);

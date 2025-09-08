@@ -39,7 +39,7 @@
       "three_addons/*": [  "./libs/three-ts-types-r170/types/three/examples/jsm/*", "./lib/three.js-r170/examples/jsm/*" ]
     },
 
-      "types": [ "./source/core/index.d.ts" ],
+    "types": [ "./source/core/index.d.ts" ],
   },
 
   // 此配置打包编译的范围

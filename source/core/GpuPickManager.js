@@ -20,17 +20,15 @@
 import * as THREE from "three";
 
 function encodeIdToRGBA(id) {
-  // id: 1..2^32-1 (0 is reserved for "no hit")
+  // id: 1..2^24-1 (0 is reserved for "no hit")
   const r = (id & 0xff) / 255;
   const g = ((id >>> 8) & 0xff) / 255;
   const b = ((id >>> 16) & 0xff) / 255;
-  const a = ((id >>> 24) & 0xff) / 255; // keep alpha too (useful if needed)
   return new THREE.Color(r, g, b); // We set a separately in material if needed
 }
 
 function decodeRGBAtoId(r, g, b, a) {
-  // r,g,b,a are 0..255 integers
-  return r | (g << 8) | (b << 16) | (a << 24);
+  return r | (g << 8) | (b << 16); // 1..2^24-1
 }
 
 export class GpuPickManager {
@@ -55,12 +53,11 @@ export class GpuPickManager {
 
     // One shared pick material for regular Mesh (non-instanced)
     this.sharedPickMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    this.sharedPickMaterial.defines = { USE_PICK_COLOR: 1 };
-    this.sharedPickMaterial.onBeforeCompile = (shader) => {
-      shader.uniforms.pickColor = { value: new THREE.Color(0, 0, 0) };
-      shader.fragmentShader = shader.fragmentShader.replace("#include <dithering_fragment>", `#include <dithering_fragment>\n#ifdef USE_PICK_COLOR\n  gl_FragColor = vec4(pickColor, 1.0);\n#endif\n`);
-      this._meshPickShader = shader; // keep ref to set uniform each draw
-    };
+    // this.sharedPickMaterial.defines = { USE_PICK_COLOR: 1 };
+    // this.sharedPickMaterial.onBeforeCompile = (shader, renderer) => {
+    //   shader.uniforms.uPickColor = { value: new THREE.Color(0, 0, 0) };
+    //   shader.fragmentShader = shader.fragmentShader.replace("#include <dithering_fragment>", `#include <dithering_fragment>\n#ifdef USE_PICK_COLOR\n  gl_FragColor = vec4(uPickColor, 1.0);\n#endif\n`);
+    // };
 
     // Instanced pick material (custom shader) — uses gl_InstanceID
     this.instancedPickMaterial = new THREE.ShaderMaterial({
@@ -143,6 +140,7 @@ export class GpuPickManager {
 
     // allocate a contiguous id range: baseId .. baseId + instances-1
     const baseId = this._allocIdRange(requestedInstances);
+    console.log(object, baseId);
 
     this.objectIdMap.set(object, baseId);
     this.idObjectMap.set(baseId, object);
@@ -160,7 +158,7 @@ export class GpuPickManager {
     return base;
   }
 
-  output = undefined;
+  outputElement = undefined;
 
   pick(scene, camera, clientX, clientY, domElement) {
     if (!domElement) domElement = this.renderer.domElement;
@@ -177,28 +175,29 @@ export class GpuPickManager {
     this.renderer.clear();
     this.renderer.render(scene, camera);
     this.renderer.readRenderTargetPixels(this.rt, x, y, 1, 1, this._pixel);
+    console.log(this._pixel);
 
     {
       // 将idBuffer输出到画布上
-      if (!this.output) {
-        this.output = document.createElement("canvas");
-        document.body.appendChild(this.output);
+      if (!this.outputElement) {
+        this.outputElement = document.createElement("canvas");
+        document.body.appendChild(this.outputElement);
       }
       const width = this.rt.width;
       const height = this.rt.height;
       const buffer = new Uint8Array(width * height * 4);
-      this.output.width = width;
-      this.output.height = height;
-      const ctx = this.output.getContext("2d");
+      this.outputElement.width = width;
+      this.outputElement.height = height;
+      const ctx = this.outputElement.getContext("2d");
       const imageData = ctx.createImageData(width, height);
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          const src = ((height - y - 1) * width + x) * 4;
-          const dst = (y * width + x) * 4;
-          imageData.data[dst] = buffer[src];
-          imageData.data[dst + 1] = buffer[src + 1];
-          imageData.data[dst + 2] = buffer[src + 2];
-          imageData.data[dst + 3] = buffer[src + 3];
+          const i = (y * width + x) * 4;
+          const j = ((height - y - 1) * width + x) * 4;
+          imageData.data[j] = buffer[i];
+          imageData.data[j + 1] = buffer[i + 1];
+          imageData.data[j + 2] = buffer[i + 2];
+          imageData.data[j + 3] = buffer[i + 3];
         }
       }
       ctx.putImageData(imageData, 0, 0);
@@ -257,7 +256,7 @@ export class GpuPickManager {
 
   _endPickPass(scene) {
     // Restore materials
-    // this._restoreMaterials(scene);
+    this._restoreMaterials(scene);
 
     // Restore renderer state
     this.renderer.toneMapping = this._prev.toneMapping;
@@ -276,7 +275,6 @@ export class GpuPickManager {
       if (!obj.visible) return;
       if (!obj.isMesh) return;
 
-      // console.log(obj);
       const baseId = this.objectIdMap.get(obj) ?? obj.userData.__pickBaseId;
       if (!baseId) {
         // Not registered: make invisible for pick pass
@@ -287,33 +285,48 @@ export class GpuPickManager {
 
       obj.userData.__origMaterial = obj.material;
 
+      // InstancedMesh: we render one color = encode(baseId). We'll disambiguate instance by id - baseId.
       if (obj.isInstancedMesh) {
-        // For InstancedMesh, we render one color = encode(baseId). We'll disambiguate instance by id - baseId.
         const col = encodeIdToRGBA(baseId);
         const mat = this.instancedPickMaterial.clone();
-        obj.material = mat;
         mat.uniforms.baseColor.value.copy(col);
         mat.uniforms.baseId.value = baseId;
-      } else {
-        // Regular Mesh: shared material, but we must set color per draw.
-        // Clone to keep unique uniform per object (safe & simple).
-        const mat = this.sharedPickMaterial.clone();
         obj.material = mat;
+      }
+      // Regular Mesh: shared material, but we must set color per draw.
+      else {
+        // Clone to keep unique uniform per object (safe & simple).
+        let mat = obj.userData.__shaderPickMaterial;
+        if (!mat) {
+          mat = this.sharedPickMaterial.clone();
+          mat.defines = { USE_PICK_COLOR: 1 };
+          // console.log(mat);
+          mat.onBeforeRender = (renderer, scene, camera, geometry, object, group) => {
+            const shader = mat._meshPickShader;
+            if (!shader) return;
+            shader.uniforms.uPickColor.value.copy(mat.userData.uPickColor);
+          };
+          mat.onBeforeCompile = (shader, renderer) => {
+            mat._meshPickShader = shader; // keep ref to set uniform each draw
+            shader.uniforms.uPickColor = { value: mat.userData.uPickColor ?? new THREE.Color(0, 0, 0) };
+            shader.fragmentShader = shader.fragmentShader.replace("#include <common>", `#include <common>\nuniform vec3 uPickColor;\n`);
+            shader.fragmentShader = shader.fragmentShader.replace("#include <dithering_fragment>", `#include <dithering_fragment>\n\t#ifdef USE_PICK_COLOR\n\t\tgl_FragColor = vec4(uPickColor, 1.0);\n\t#endif\n`);
+            // console.log(shader.fragmentShader);
+          };
+          obj.userData.__shaderPickMaterial = mat;
+
+          window.addEventListener("keydown", (e) => {
+            const gl = this.renderer.getContext();
+            const program = this.renderer.properties.get(mat).currentProgram;
+            console.log(gl.getShaderSource(program.fragmentShader));
+          });
+        }
+
         const col = encodeIdToRGBA(baseId);
-        // onBeforeCompile already injected pickColor uniform
-        mat.userData.pickColor = col;
-        // mat.onBeforeRender = (renderer, scene, camera, geometry, material, group) => {
-        //   if (material && material.uniforms && material.uniforms.pickColor) {
-        //     material.uniforms.pickColor.value.copy(material.userData.pickColor);
-        //   }
-        // };
-        mat.onBeforeRender = (renderer, scene, camera, geometry, object3d) => {
-          console.log(object3d.material);
-          if (!object3d.material) return;
-          if (!object3d.material.uniforms) return;
-          if (!object3d.material.uniforms.pickColor) return;
-          object3d.material.uniforms.pickColor.value.copy(material.userData.pickColor);
-        };
+        // mat.userData.uPickColor = new THREE.Color(0xff0000);
+        mat.userData.uPickColor = col;
+        // console.log(col);
+        obj.material = mat;
       }
     });
   }
