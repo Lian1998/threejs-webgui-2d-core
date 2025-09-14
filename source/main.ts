@@ -5,6 +5,11 @@ import WebGL from "three_addons/capabilities/WebGL";
 
 import { MapControls } from "three_addons/controls/MapControls.js";
 
+export enum Layers {
+  QC_Gantry,
+  QC_Trolley,
+}
+
 if (!WebGL.isWebGL2Available()) throw new Error();
 const viewport = document.querySelector("#viewport");
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -42,35 +47,37 @@ resizeEventDispatcher.addResizeEventListener(({ message: { width, height } }) =>
 }
 
 import { Sprite2D } from "@source/core";
-import { calculatePP } from "@source/core";
+import { calculateMPP } from "@source/core";
+
+const qcGantry = new Sprite2D({
+  texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Gantry.png"),
+  mpp: calculateMPP(35, 2230),
+  depth: Layers.QC_Gantry,
+  color: new THREE.Color(0x498cff),
+});
+qcGantry.name = "qcGantry";
+
+const qcTrolley = new Sprite2D({
+  texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png"),
+  mpp: calculateMPP(6, 87),
+  depth: Layers.QC_Trolley,
+  color: new THREE.Color(0x498cff),
+});
+qcTrolley.name = "qcTrolley";
+qcTrolley.position.y = 1;
+qcGantry.add(qcTrolley);
+
+scene.add(qcGantry);
 
 import { GpuPickManager } from "@source/core/GpuPickManager";
 {
-  const qcGantry = new Sprite2D({
-    texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Gantry.png"),
-    pp: calculatePP(35, 2230),
-    uColor: new THREE.Color(0x498cff),
-  });
-  qcGantry.mesh.name = "qcGantry";
-
-  const qcTrolley = new Sprite2D({
-    texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png"),
-    pp: calculatePP(6, 87),
-    uColor: new THREE.Color(0x498cff),
-  });
-  qcTrolley.mesh.name = "qcTrolley";
-  qcTrolley.mesh.position.y = 1;
-  qcGantry.mesh.add(qcTrolley.mesh);
-
-  scene.add(qcGantry.mesh);
-
   const picker = new GpuPickManager(renderer);
   resizeEventDispatcher.addResizeEventListener(({ message: { width, height } }) => picker._onResize());
-  picker.register(qcGantry.mesh); // assigns a unique object id
-  picker.register(qcTrolley.mesh); // assigns a unique object id
+  picker.register(qcGantry); // assigns a unique object id
+  picker.register(qcTrolley); // assigns a unique object id
   // picker.register(instancedMeshB, { instances: instancedMeshB.count });
   renderer.domElement.addEventListener("pointerdown", (e) => {
-    const hit = picker.pick(scene, camera, e.clientX, e.clientY, renderer.domElement);
+    const hit = picker.pick(scene, camera, e.clientX, e.clientY);
     if (hit) {
       console.log("hit:", hit.object, hit.instanceId, hit.id);
     }
@@ -89,7 +96,7 @@ import { ViewportResizeDispatcher } from "@source/core/";
 function animate() {
   requestAnimationFrame(animate);
 
-  // qcGantry.mesh.position.x += 0.01;
+  // qcGantry.rotation.y += 0.01;
   renderer.render(scene, camera);
 }
 

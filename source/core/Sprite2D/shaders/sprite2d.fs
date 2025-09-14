@@ -1,6 +1,10 @@
 uniform sampler2D uTexture;
-uniform bool uUseMultipleColor; // 是否客户端自定义混色模式
+
+uniform bool uUseMultipleColor;
 uniform vec3 uColor;
+
+uniform bool uUseWirteDepthBuffer;
+uniform float uDepth;
 
 varying vec2 vUv;
 
@@ -16,14 +20,19 @@ vec3 toSrgb(vec3 linear) {
 
 void main() {
 
-  vec4 tColor = texture2D(uTexture, vUv);
-  vec3 color = tColor.rgb;
+  gl_FragColor = texture2D(uTexture, vUv);
 
   if (uUseMultipleColor) {
-    color = vec3(tColor.r * uColor.r, tColor.g * uColor.g, tColor.b * uColor.b);
+    gl_FragColor.r = gl_FragColor.r * uColor.r;
+    gl_FragColor.g = gl_FragColor.g * uColor.g;
+    gl_FragColor.b = gl_FragColor.b * uColor.b;
   }
 
-  gl_FragColor = vec4(toSrgb(color), tColor.a);
+  gl_FragColor = vec4(toSrgb(gl_FragColor.rgb), gl_FragColor.a);
+
+  if (uUseWirteDepthBuffer) {
+    gl_FragDepth = (uDepth - 100.0) / 100.0;
+  }
 
 	#include <dithering_fragment>
 }

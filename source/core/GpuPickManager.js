@@ -140,7 +140,7 @@ export class GpuPickManager {
 
     // allocate a contiguous id range: baseId .. baseId + instances-1
     const baseId = this._allocIdRange(requestedInstances);
-    console.log(object, baseId);
+    // console.log(object, baseId);
 
     this.objectIdMap.set(object, baseId);
     this.idObjectMap.set(baseId, object);
@@ -160,7 +160,7 @@ export class GpuPickManager {
 
   outputElement = undefined;
 
-  pick(scene, camera, clientX, clientY, domElement) {
+  pick(scene, camera, clientX, clientY, domElement = undefined) {
     if (!domElement) domElement = this.renderer.domElement;
 
     // Convert client coords to RT pixel coords (note: y flipped)
