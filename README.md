@@ -19,4 +19,47 @@ https://benchmarks.slaylines.io/webgl.html
 3. 批量渲染的优化, 比如所有岸桥大车批量渲染
 5. 业务层面的拓展性, 更好的API帮助实现业务功能
 6. 可读取geojson格式(或其他模型格式)并指定样式以在二维平面更好的绘制底图
-7. 
+
+
+# 修改日志
+1. TypeScript继承 Mixins
+2. 平面贴图精灵 Sprite2D
+   1. mpp: (meter per pixel)固定几何与自动计算投影(实际)大小
+   2. texture: 贴图
+   3. color: 贴图混合色
+   4. offset: 偏移量, 左上角为正方向
+   5. depth: 深度值写入(枚举固定值)
+3. 基于GPU拾取 GpuPickManager
+   1. 注册 将Object3D注册到类内部 是否InstancedMesh, 是否继承透明度
+   2. 内部自定义一个自增 pickBaseId 的分配管理函数
+   3. 渲染一个场景的 pickBuffer
+      1. 保存/恢复 Renderer的上下文环境
+      2. 遍历Object3D (在原来的材质基础上)生成pickShaderMaterial
+      > 难点: 怎么保证 自定义材质 和 原生材质 在字符串替换这件事上的一致性?
+         1. 注册状态 和 object3D的visible 决定是否渲染到 pickBuffer
+         2. pickShaderMaterial保留透明度通道, 替换rgb通道为 userData.__pickBaseId 计算的color
+      3. 点击事件触发后 从pickBuffer和定义的threshold取x个像素
+   4. Buffer通过一种机制映射可见色后输出到指定画布(用于debug)
+4. 文字系统 这个找个第三方框架 并在改造的过程中兼容上面的 (或者我看源码后吸收)
+   1. Canvas2D烘焙 / SVGAPI转path转Shape
+   2. HTML
+   3. SDF
+   4. FontLoader => Geometry
+   5. BitMap GPU取块
+5. 支持按钮后从二维升级成三维
+   1. 简易集装箱优化 https://threejs.org/manual/?q=Geometry#en/voxel-geometry
+6. GoeJson解析与底图绘制
+   1. 实线
+   2. 虚线
+   3. 实心/挖心
+
+
+```javascript
+Object3D.userData = {
+  __pickBaseId: Math.max(1, this.maxId + 1), // 注册了就会被分配pickId
+  __origVisible: boolean, // 遍历过程中记录object3D传入时的显示状态
+  __origMaterial: THREE.Material, // object3D传入时的材质
+  __shaderPickMaterial: THREE.Material, // 第一次遍历时 创建新的用于渲染pickBuffer的材质 (这个材质注册onBeforeCompile以完成编译前shader程序字符串替换)
+  uPickColor: THREE.Color
+}
+```
