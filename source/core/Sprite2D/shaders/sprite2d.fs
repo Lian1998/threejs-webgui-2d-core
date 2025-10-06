@@ -3,36 +3,26 @@ uniform sampler2D uTexture;
 uniform bool uUseMultipleColor;
 uniform vec3 uColor;
 
-uniform bool uUseWirteDepthBuffer;
 uniform float uDepth;
 
 varying vec2 vUv;
 
-#include <dithering_pars_fragment>
+// ./libs/three.js-r170/src/renderers/shaders/ShaderChunk/colorspace_pars_fragment.glsl.js
 
-vec3 toLinear(vec3 srgb) {
-  return pow(srgb, vec3(2.2));
-}
-
-vec3 toSrgb(vec3 linear) {
-  return pow(linear, vec3(1.0 / 2.2));
+vec3 useMultipleColor(vec3 base, vec3 color) {
+  return base * color;
 }
 
 void main() {
+  gl_FragColor = texture2D(uTexture, vUv); // 从贴图中拿到贴图色
 
-  gl_FragColor = texture2D(uTexture, vUv);
+#ifdef USE_CUSTOM_MULTICOLOR 
+  gl_FragColor = vec4(useMultipleColor(gl_FragColor.rgb, uColor), gl_FragColor.a);
+#endif
 
-  if (uUseMultipleColor) {
-    gl_FragColor.r = gl_FragColor.r * uColor.r;
-    gl_FragColor.g = gl_FragColor.g * uColor.g;
-    gl_FragColor.b = gl_FragColor.b * uColor.b;
-  }
+  gl_FragColor = vec4(sRGBTransferOETF(gl_FragColor)); // 转化为SRGB
 
-  gl_FragColor = vec4(toSrgb(gl_FragColor.rgb), gl_FragColor.a);
-
-  if (uUseWirteDepthBuffer) {
-    gl_FragDepth = (uDepth - 100.0) / 100.0;
-  }
-
-	#include <dithering_fragment>
+#ifdef USE_CUSTOM_DEPTH 
+  gl_FragDepth = (uDepth - 100.0) / 100.0;
+#endif
 }

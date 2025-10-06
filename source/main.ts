@@ -66,21 +66,15 @@ const qcTrolley = new Sprite2D({
 qcTrolley.name = "qcTrolley";
 qcTrolley.position.y = 1;
 qcGantry.add(qcTrolley);
-
 scene.add(qcGantry);
 
-import { GpuPickManager } from "@source/core/GpuPickManager";
+import { GpuPickManager } from "@source/core/GpuPickManager/GpuPickManager";
+const picker = new GpuPickManager(renderer);
 {
-  const picker = new GpuPickManager(renderer);
-  resizeEventDispatcher.addResizeEventListener(({ message: { width, height } }) => picker._onResize());
-  picker.register(qcGantry); // assigns a unique object id
-  picker.register(qcTrolley); // assigns a unique object id
-  // picker.register(instancedMeshB, { instances: instancedMeshB.count });
+  picker.register(qcGantry);
+  picker.register(qcTrolley);
   renderer.domElement.addEventListener("pointerdown", (e) => {
-    const hit = picker.pick(scene, camera, e.clientX, e.clientY);
-    if (hit) {
-      console.log("hit:", hit.object, hit.instanceId, hit.id);
-    }
+    picker.pick(scene, camera, e.clientX, e.clientY);
   });
 }
 

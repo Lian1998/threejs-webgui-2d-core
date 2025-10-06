@@ -20,6 +20,15 @@ https://benchmarks.slaylines.io/webgl.html
 5. 业务层面的拓展性, 更好的API帮助实现业务功能
 6. 可读取geojson格式(或其他模型格式)并指定样式以在二维平面更好的绘制底图
 
+# 所有需要支持的图元
+1. 由 png 或 svg 图片转化出来的贴图 (sprite2D) 
+2. 设备号 (text)
+3. 禁行区 (几何转三角面)
+4. 锁闭区 (几何转三角面或多个面)
+5. 路径 (线)
+7. 底图 LineString/MultiLineString
+8. 底图 Polygon/MultiPolygon
+
 
 # 修改日志
 1. TypeScript继承 Mixins

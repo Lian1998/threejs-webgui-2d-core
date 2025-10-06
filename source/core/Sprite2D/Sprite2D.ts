@@ -50,7 +50,7 @@ export class Sprite2D extends THREE.Object3D implements Sprite2DParameters {
    * @param height 精灵在三维空间坐标系中实际的高度
    * @param textureUrl 纹理的路径
    */
-  constructor({ texture, mpp, depth, offset = [0.0, 0.0], color }: Sprite2DParameters) {
+  constructor({ texture, mpp, depth = 1, offset = [0, 0], color = new THREE.Color(1, 1, 1) }: Sprite2DParameters) {
     super();
 
     // @ts-ignore
@@ -70,8 +70,8 @@ export class Sprite2D extends THREE.Object3D implements Sprite2DParameters {
     this.mpp = mpp; // 米/像素
     const { naturalWidth, naturalHeight } = texture.image; // 贴图像素大小
 
-    if (depth !== undefined) this.depth = depth; // 深度
-    if (offset !== undefined) this.offset = offset; // 偏移
+    this.depth = depth; // 深度
+    this.offset = offset; // 偏移
     this.color = color; // 混合
 
     // 生成几何
@@ -82,21 +82,17 @@ export class Sprite2D extends THREE.Object3D implements Sprite2DParameters {
       side: THREE.FrontSide,
       transparent: true,
       uniforms: {
-        // 贴图
-        uTexture: { value: texture },
-
-        // 偏移
-        uOffset: { value: new THREE.Vector2(offset[0], offset[1]) },
-
-        // 混合
-        ...(color !== undefined ? { uUseMultipleColor: { value: true }, uColor: { value: color } } : {}), // 通过是否传入uColor判断是否启用颜色混合
-
-        // 深度
-        ...(depth !== undefined ? { uUseWirteDepthBuffer: { value: true }, uDepth: { value: depth } } : {}),
+        uTexture: { value: texture }, // 贴图
+        uOffset: { value: new THREE.Vector2(offset[0], offset[1]) }, // 偏移
+        uColor: { value: color }, // 混合
+        uDepth: { value: depth }, // 深度
       },
       vertexShader: vs,
       fragmentShader: fs,
     });
+
+    material.defines["USE_CUSTOM_MULTICOLOR"] = color !== undefined ? 1 : 0;
+    material.defines["USE_CUSTOM_DEPTH"] = depth !== undefined ? 1 : 0;
 
     // @ts-ignore
     this.geometry = geometry;
