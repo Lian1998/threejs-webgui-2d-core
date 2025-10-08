@@ -1,11 +1,11 @@
 import * as THREE from "three";
 
-import { encodeIdToRGBA } from "./encodeColorId";
-import { decodeRGBAToId } from "./encodeColorId";
-import { encodeIdToRGB } from "./encodeColorId";
-import { decodeRGBToId } from "./encodeColorId";
+import { encodeIdToRGB } from "./pickid";
+import { decodeRGBToId } from "./pickid";
 
 import { trans2PickBufferMaterial } from "./trans2PickBufferMaterial";
+
+import { channel } from "./debug";
 
 export type GpuPickManagerUserData = {
   originMaterial: THREE.Material | THREE.Material[];
@@ -122,6 +122,7 @@ export class GpuPickManager {
     this.renderer.setRenderTarget(this.rt);
     this.renderer.clear();
     this.renderer.render(scene, camera);
+    if (import.meta.env.MODE === "development") this._sendDebugFrame();
     this.renderer.setRenderTarget(null);
     this.renderer.readRenderTargetPixels(this.rt, x, y, 1, 1, this._pixel);
 
@@ -129,9 +130,12 @@ export class GpuPickManager {
     this._restoreState(); // 恢复渲染器状态
 
     // 拾取提取的颜色转化为id
-    const id = decodeRGBToId(Array.from(this._pixel));
-    console.log(id);
+    const _colors = Array.from(this._pixel);
+    console.log(_colors);
+    const pickid = decodeRGBToId(_colors);
+
     // 通过映射表找到提取的object3d
+    return { pickid: pickid, object3d: this.PosMap.get(pickid) };
   }
 
   /////////////////// 视口状态 //////////////////
@@ -201,5 +205,18 @@ export class GpuPickManager {
       const userData = meshLike.userData[USER_DATA_KEY] as GpuPickManagerUserData;
       meshLike.material = userData.originMaterial;
     });
+  }
+
+  /////////////////// 调试 //////////////////
+
+  /** 向brodcastChannel发送消息 */
+  private async _sendDebugFrame() {
+    const width = this.rendererStatus.size.width;
+    const height = this.rendererStatus.size.height;
+    const buffer = new Uint8Array(width * height * 4);
+    this.renderer.readRenderTargetPixels(this.rt, 0, 0, width, height, buffer);
+    const imageData = new ImageData(new Uint8ClampedArray(buffer), width, height);
+    const bitmap = await createImageBitmap(imageData, { imageOrientation: "flipY" });
+    channel.postMessage({ type: "frame", width, height, bitmap });
   }
 }

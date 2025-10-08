@@ -57,24 +57,37 @@ const qcGantry = new Sprite2D({
 });
 qcGantry.name = "qcGantry";
 
-const qcTrolley = new Sprite2D({
+const qcMT = new Sprite2D({
   texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png"),
   mpp: calculateMPP(6, 87),
   depth: Layers.QC_Trolley,
   color: new THREE.Color(0x498cff),
+  offset: [0, 18],
 });
-qcTrolley.name = "qcTrolley";
-qcTrolley.position.y = 1;
-qcGantry.add(qcTrolley);
+qcMT.name = "qcMT";
+qcGantry.add(qcMT);
+
+const qcPT = new Sprite2D({
+  texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png"),
+  mpp: calculateMPP(6, 87),
+  depth: Layers.QC_Trolley,
+  color: new THREE.Color(0x498cff),
+  offset: [0, 20],
+});
+qcPT.name = "qcPT";
+qcGantry.add(qcPT);
+
 scene.add(qcGantry);
 
 import { GpuPickManager } from "@source/core/GpuPickManager/GpuPickManager";
 const picker = new GpuPickManager(renderer);
 {
   picker.register(qcGantry);
-  picker.register(qcTrolley);
+  picker.register(qcMT);
+  picker.register(qcPT);
   renderer.domElement.addEventListener("pointerdown", (e) => {
-    picker.pick(scene, camera, e.clientX, e.clientY);
+    const { pickid, object3d } = picker.pick(scene, camera, e.clientX, e.clientY);
+    console.log(pickid, object3d?.name);
   });
 }
 

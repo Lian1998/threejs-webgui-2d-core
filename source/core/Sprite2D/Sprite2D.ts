@@ -62,8 +62,8 @@ export class Sprite2D extends THREE.Object3D implements Sprite2DParameters {
     if (texture === undefined) throw new Error("请指定 Sprite2D 的纹理贴图");
     this.texture = texture;
     texture.flipY = false;
-    texture.colorSpace = THREE.LinearSRGBColorSpace;
-    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.colorSpace = THREE.NoColorSpace;
+    texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
     texture.repeat.set(1, 1); // 设置纹理左右不重复
 
     if (mpp === undefined) throw new Error("请指定 Sprite2D 的真实比例");
@@ -79,6 +79,7 @@ export class Sprite2D extends THREE.Object3D implements Sprite2DParameters {
 
     // 生成材质
     const material = new THREE.ShaderMaterial({
+      name: "Sprite2DShaderMaterial",
       side: THREE.FrontSide,
       transparent: true,
       uniforms: {
