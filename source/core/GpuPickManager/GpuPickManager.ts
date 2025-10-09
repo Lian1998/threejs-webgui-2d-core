@@ -5,7 +5,7 @@ import { decodeRGBToId } from "./pickid";
 
 import { trans2PickBufferMaterial } from "./trans2PickBufferMaterial";
 
-import { channel } from "./debug";
+import { channel } from "./debug/";
 
 export type GpuPickManagerUserData = {
   originMaterial: THREE.Material | THREE.Material[];
@@ -131,7 +131,6 @@ export class GpuPickManager {
 
     // 拾取提取的颜色转化为id
     const _colors = Array.from(this._pixel);
-    console.log(_colors);
     const pickid = decodeRGBToId(_colors);
 
     // 通过映射表找到提取的object3d

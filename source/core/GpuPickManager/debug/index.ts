@@ -1,6 +1,6 @@
-import { channel } from "@source/core/GpuPickManager/debug";
+export const channel = new BroadcastChannel("render-share");
 
-window.onload = () => {
+export const initialization = () => {
   const canvas: HTMLCanvasElement = document.querySelector("#viewport");
   const ctx = canvas.getContext("bitmaprenderer"); // 支持直接渲染 ImageBitmap
 
