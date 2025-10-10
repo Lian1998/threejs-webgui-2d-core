@@ -1,4 +1,6 @@
 // https://blog.csdn.net/qq_21476953/article/details/112991864
+// https://github.com/mapbox/tiny-sdf
+// https://github.com/mapbox/tiny-sdf/blob/main/index.js
 
 import * as THREE from "three";
 
