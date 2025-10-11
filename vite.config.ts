@@ -34,6 +34,7 @@ export default defineConfig(({ command, mode }) => {
         "@libs": _p("./libs"),
         "three": _p("./libs/three.js-r170/src/Three.js"),
         "three_addons": _p("./libs/three.js-r170/examples/jsm"),
+        "tiny-sdf": _p("./libs/tiny-sdf-2.0.7/index.js"),
       },
     },
     
