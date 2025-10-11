@@ -7,6 +7,8 @@ import { trans2PickBufferMaterial } from "./trans2PickBufferMaterial";
 
 import { channel } from "./debug/";
 
+export const USER_DATA_KEY = "gpuPickManager";
+
 export type GpuPickManagerUserData = {
   originMaterial: THREE.Material | THREE.Material[];
   pickBufferMaterial: THREE.Material | THREE.Material[];
@@ -26,8 +28,6 @@ const genUserData = (): GpuPickManagerUserData => {
     },
   };
 };
-
-export const USER_DATA_KEY = "gpuPickManager";
 
 export class GpuPickManager {
   renderer: THREE.WebGLRenderer;
@@ -146,12 +146,13 @@ export class GpuPickManager {
   };
 
   /** 视口发生变化时调用, 用于重算监听渲染画布的变化 */
-  syncRendererStatus() {
+  syncRendererStatus(width?: number, height?: number) {
+    const size = this.rendererStatus.size;
     if (!this.renderer) throw new Error("请指定 GpuPickManager 的 renderer");
-    this.renderer.getSize(this.rendererStatus.size);
+    if (!width || !height) this.renderer.getSize(size);
+    else size.set(width, height);
     this.rendererStatus.dpr = this.renderer.getPixelRatio();
 
-    const size = this.rendererStatus.size;
     const dpr = this.rendererStatus.dpr;
     this.rendererStatus.rt.width = Math.max(1, Math.floor(size.x * dpr));
     this.rendererStatus.rt.height = Math.max(1, Math.floor(size.y * dpr));
