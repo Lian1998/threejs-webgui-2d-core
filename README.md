@@ -1,4 +1,6 @@
-# 当前瓶颈与限制
+# 需求分析
+
+**当前的不满足:**
 1. 以钦州项目为例
    1. QC `号码,大车,主小车,门架小车,平台,集装箱槽4,循环方向,任务计时器,状态栏` 11*12
    2. IGV `标签,号码,车头,车身,集装箱槽1,电池,状态栏` 7*72
@@ -11,16 +13,16 @@
    3. openlayers 的GIS封装API导致了很多需求实现困难 
    4. 选择和缩放管线无法自控的问题
 
-https://benchmarks.slaylines.io/webgl.html
+[性能测试](https://benchmarks.slaylines.io/webgl.html)
 
-# 功能要求
+**(新框架)功能需求罗列:**
 1. 稳定的图形编码测试环境
 2. 一定的缓存机制, 不被标记updated的图元不调用api渲染
 3. 批量渲染的优化, 比如所有岸桥大车批量渲染
-5. 业务层面的拓展性, 更好的API帮助实现业务功能
-6. 可读取geojson格式(或其他模型格式)并指定样式以在二维平面更好的绘制底图
+4. 业务层面的拓展性, 更好的API帮助实现业务功能
+5. 可读取geojson格式(或其他模型格式)并指定样式以在二维平面更好的绘制底图
 
-# 所有需要支持的图元
+**所有需要支持的图元:**
 1. 由 png 或 svg 图片转化出来的贴图 (sprite2D) 
 2. 设备号 (text)
 3. 禁行区 (几何转三角面)
@@ -29,8 +31,7 @@ https://benchmarks.slaylines.io/webgl.html
 7. 底图 LineString/MultiLineString
 8. 底图 Polygon/MultiPolygon
 
-
-# 修改日志
+# 框架建设步骤思路
 1. TypeScript继承 Mixins
 2. 平面贴图精灵 Sprite2D
    1. mpp: (meter per pixel)固定几何与自动计算投影(实际)大小
@@ -63,6 +64,7 @@ https://benchmarks.slaylines.io/webgl.html
    3. 实心/挖心
 
 
+# GPUPick相关UserData字段设计(可能)
 ```javascript
 Object3D.userData = {
   __pickBaseId: Math.max(1, this.maxId + 1), // 注册了就会被分配pickId
@@ -74,6 +76,7 @@ Object3D.userData = {
 ```
 
 
+# 关于SDF文字的文档和库
 ```javascript
 // https://github.com/dy/bitmap-sdf/tree/master
 // https://github.com/dy/bitmap-sdf/blob/master/index.js
@@ -87,3 +90,8 @@ Object3D.userData = {
 // https://github.com/Experience-Monks/three-bmfont-text
 // https://github.com/soadzoor/MSDF-text
 ```
+
+# BUG历史
+1. 如果不是注册到 GpuPickManager 里的mesh, 那么不加入 pickBuffer 渲染
+2. threejs 渲染到 canvas 后, 再用 readPixel 拾取, 发现黑色+透明度, 被读取成数字时变成灰色
+3. Sprite2D 的 fragmentShader 简单的透明度不合格 discard 片元, 效果不是很好

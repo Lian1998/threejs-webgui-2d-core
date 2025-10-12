@@ -46,6 +46,7 @@ import { LayerSequence } from "./LayerSequence";
 import { ViewportResizeDispatcher } from "@source/core/";
 import { GpuPickManager } from "@source/core/GpuPickManager/GpuPickManager";
 
+import { SDFText2D } from "@source/core/SDFText2D";
 import { Sprite2D } from "@source/core";
 import { calculateMPP } from "@source/core";
 
@@ -78,6 +79,9 @@ qcPT.name = "qcPT";
 qcGantry.add(qcPT);
 qcGantry.add(qcMT);
 scene.add(qcGantry);
+
+const text = new SDFText2D();
+scene.add(text);
 
 const picker = new GpuPickManager(renderer);
 picker.register(qcGantry);

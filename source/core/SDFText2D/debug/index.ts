@@ -22,16 +22,15 @@ export const initialization = () => {
   });
 
   const glyph = tinySdf.draw("你"); // draw a single character
-
   const { data, width, height, glyphWidth, glyphHeight, glyphTop, glyphLeft, glyphAdvance } = glyph;
 
-  const canvasEl = document.querySelector("#viewport") as HTMLCanvasElement;
-  canvasEl.width = width;
-  canvasEl.height = height;
+  const canvas = document.querySelector("#viewport") as HTMLCanvasElement;
+  canvas.width = width;
+  canvas.height = height;
 
-  const ctx = canvasEl.getContext("2d");
+  const ctx = canvas.getContext("2d");
   // data is a Uint8ClampedArray array of alpha values (0–255) for a width x height grid.
-  const imageData = new ImageData(expandAlphaToRGBA(data, width, height), width, height);
+  const imageData = new ImageData(makeRGBAImageData(data, width, height), width, height);
   ctx.putImageData(imageData, 0, 0);
 };
 
@@ -43,7 +42,7 @@ export const initialization = () => {
  * @param {Array|Uint8ClampedArray} [rgb=[0,0,0]] - 可选的底色 (RGB)
  * @returns {Uint8ClampedArray} RGBA 格式像素数据
  */
-const expandAlphaToRGBA = (alphaBuffer: Uint8ClampedArray, width: number, height: number, rgb = [0, 0, 0]) => {
+const makeRGBAImageData = (alphaBuffer: Uint8ClampedArray, width: number, height: number, rgb = [0, 0, 0]) => {
   if (alphaBuffer.length !== width * height) {
     throw new Error("alphaBuffer length does not match width * height");
   }
