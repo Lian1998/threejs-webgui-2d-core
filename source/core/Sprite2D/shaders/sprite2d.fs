@@ -16,17 +16,17 @@ vec3 useMultipleColor(vec3 base, vec3 color) {
 void main() {
   vec4 tColor = texture2D(uTexture, vUv); // 从贴图中拿到贴图色
 
+#ifdef USE_CUSTOM_MULTICOLOR 
+  tColor.rgb = useMultipleColor(tColor.rgb, uColor);
+#endif
+
   if (tColor.a == 0.0) {
     discard;
   }
 
-#ifdef USE_CUSTOM_MULTICOLOR 
-  gl_FragColor = vec4(useMultipleColor(tColor.rgb, uColor), tColor.a);
-#endif
-
-  gl_FragColor = sRGBTransferOETF(gl_FragColor); // 转化为SRGB
+  gl_FragColor = vec4(sRGBTransferOETF(tColor).rgb, tColor.a);
 
 #ifdef USE_CUSTOM_DEPTH 
-  gl_FragDepth = (uDepth - 100.0) / 100.0;
+  gl_FragDepth = (9999.0 - uDepth) / 10000.0;
 #endif
 }

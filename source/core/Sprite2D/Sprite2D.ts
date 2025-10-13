@@ -63,6 +63,7 @@ export class Sprite2D extends THREE.Object3D implements Sprite2DParameters {
     this.texture = texture;
     texture.flipY = false;
     texture.colorSpace = THREE.NoColorSpace;
+    texture.premultiplyAlpha = false;
     texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
     texture.repeat.set(1, 1); // 设置纹理左右不重复
 
