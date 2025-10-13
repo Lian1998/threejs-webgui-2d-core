@@ -14,22 +14,23 @@ export class Sprite2DGeometry extends BufferGeometry {
 
     //
 
-    const indices = [];
-    const vertices = [];
-    const normals = [0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0];
-    const uvs = [0, 0, 0, 1, 1, 1, 1, 0];
+    // prettier-ignore
+    this.setAttribute("position", new Float32BufferAttribute([
+      -width_half, 0, -height_half,
+      -width_half, 0, +height_half,
+      +width_half, 0, +height_half,
+      +width_half, 0, -height_half,
+    ], 3));
 
-    vertices.push(-width_half, 0, -height_half);
-    vertices.push(-width_half, 0, height_half);
-    vertices.push(width_half, 0, height_half);
-    vertices.push(width_half, 0, -height_half);
-    indices.push(0, 1, 2);
-    indices.push(2, 3, 0);
+    // prettier-ignore
+    this.setAttribute("uv", new Float32BufferAttribute([
+      0, 0,
+      0, 1,
+      1, 1,
+      1, 0,
+    ], 2));
 
-    this.setIndex(indices);
-    this.setAttribute("position", new Float32BufferAttribute(vertices, 3));
-    this.setAttribute("normal", new Float32BufferAttribute(normals, 3));
-    this.setAttribute("uv", new Float32BufferAttribute(uvs, 2));
+    this.setIndex([0, 1, 2, 2, 3, 0]);
   }
 
   override copy(source: Sprite2DGeometry) {

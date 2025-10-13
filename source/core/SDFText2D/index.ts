@@ -4,30 +4,7 @@ import vs from "./shaders/sdfText2d.vs?raw";
 import fs from "./shaders/sdfText2d.fs?raw";
 import TinySDF from "tiny-sdf";
 
-/**
- * 将仅包含 alpha 通道的 Uint8ClampedArray 转为 RGBA 四通道
- * @param {Uint8ClampedArray} alphaBuffer - 仅包含 alpha 通道的像素数据
- * @param {number} width - 图像宽度
- * @param {number} height - 图像高度
- * @param {Array|Uint8ClampedArray} [rgb=[0,0,0]] - 可选的底色 (RGB)
- * @returns {Uint8ClampedArray} RGBA 格式像素数据
- */
-const makeRGBAImageData = (alphaBuffer: Uint8ClampedArray, width: number, height: number, rgb = [0, 0, 0]) => {
-  if (alphaBuffer.length !== width * height) {
-    throw new Error("alphaBuffer length does not match width * height");
-  }
-
-  const rgba = new Uint8ClampedArray(width * height * 4);
-
-  for (let i = 0, j = 0; i < alphaBuffer.length; i++, j += 4) {
-    rgba[j + 0] = rgb[0]; // R
-    rgba[j + 1] = rgb[1]; // G
-    rgba[j + 2] = rgb[2]; // B
-    rgba[j + 3] = alphaBuffer[i]; // A
-  }
-
-  return rgba;
-};
+import { makeRGBAImageData } from "@source/utils/canvas2d_buffers";
 
 export class SDFText2D extends THREE.Object3D {
   mesh: THREE.Mesh = undefined;
@@ -65,22 +42,26 @@ export class SDFText2D extends THREE.Object3D {
     const imageData = new ImageData(makeRGBAImageData(data, width, height), width, height);
     ctx.putImageData(imageData, 0, 0);
     const texture = new THREE.Texture(canvas);
-    texture.needsUpdate = true;
     texture.flipY = false;
+    texture.needsUpdate = true;
 
     const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.Float32BufferAttribute([0, 0, height, 0, 0, 0, width, 0, 0, width, 0, height], 3));
-    geometry.setAttribute("a_texcoord", new THREE.BufferAttribute(new Float32Array([0, 1, 0, 0, 1, 0, 1, 1]), 2));
+    const width_half = width / 2;
+    const height_half = height / 2;
+    geometry.setAttribute("position", new THREE.Float32BufferAttribute([-width_half, 0, -height_half, -width_half, 0, +height_half, +width_half, 0, +height_half, +width_half, 0, -height_half], 3));
+    geometry.setAttribute("aTextCoord", new THREE.BufferAttribute(new Float32Array([0, 0, 0, 1, 1, 1, 1, 0]), 2));
     geometry.setIndex([1, 2, 0, 2, 3, 0]);
 
     const material = new THREE.ShaderMaterial({
-      side: THREE.DoubleSide,
+      side: THREE.FrontSide,
       transparent: true,
+      depthWrite: false,
+      depthTest: true,
       uniforms: {
-        u_color: { value: new THREE.Color(0x000000) },
-        u_texsize: { value: new THREE.Vector2(width, height) },
-        u_texture: { value: texture },
-        u_weigth: { value: 0.1 },
+        uColor: { value: new THREE.Color(0x000000) },
+        uTexture: { value: texture },
+        uTextureSize: { value: new THREE.Vector2(width, height) },
+        uWeight: { value: 0.1 },
       },
       vertexShader: vs,
       fragmentShader: fs,
@@ -92,6 +73,6 @@ export class SDFText2D extends THREE.Object3D {
     // @ts-ignore
     this.material = material;
 
-    this.scale.multiplyScalar(12.0 / 256.0); // 米/fontSize
+    this.scale.multiplyScalar(10.0 / 256.0); // 米 per fontSize
   }
 }

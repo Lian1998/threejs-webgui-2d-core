@@ -3,8 +3,8 @@ import * as THREE from "three";
 import { USER_DATA_KEY } from "./GpuPickManager";
 import type { GpuPickManagerUserData } from "./GpuPickManager";
 
-import { insertUniformBeforeMain } from "./shader_insertUniformBeforeMain";
-import { appendAfterLastFragColor } from "./shader_appendAfterLastFragColor";
+import { insertUniformBeforeMain } from "@source/utils/shader_insertUniformBeforeMain";
+import { appendAfterLastFragColor } from "@source/utils/shader_appendAfterLastFragColor";
 
 const shaderCache: Record<string, { vertexShader?: string; fragmentShader?: string }> = {};
 

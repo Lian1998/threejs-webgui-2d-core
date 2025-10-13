@@ -7,8 +7,8 @@ if (!WebGL.isWebGL2Available()) throw new Error("浏览器不支持WebGL");
 const viewport = document.querySelector("#viewport");
 const { width, height } = viewport.getBoundingClientRect();
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setClearColor(0xffffff);
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: false });
+renderer.setClearColor(0xffffff, 0.0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 viewport.appendChild(renderer.domElement);
 
@@ -50,6 +50,9 @@ import { SDFText2D } from "@source/core/SDFText2D";
 import { Sprite2D } from "@source/core";
 import { calculateMPP } from "@source/core";
 
+const text = new SDFText2D();
+scene.add(text);
+
 const qcGantry = new Sprite2D({
   texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Gantry.png"),
   mpp: calculateMPP(35, 2230),
@@ -79,9 +82,6 @@ qcPT.name = "qcPT";
 qcGantry.add(qcPT);
 qcGantry.add(qcMT);
 scene.add(qcGantry);
-
-const text = new SDFText2D();
-scene.add(text);
 
 const picker = new GpuPickManager(renderer);
 picker.register(qcGantry);

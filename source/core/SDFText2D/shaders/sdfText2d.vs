@@ -1,7 +1,8 @@
-attribute vec2 a_texcoord;
-varying vec2 v_texcoord;
+attribute vec2 aTextCoord;
+varying vec2 vTextCoord;
 
 void main() {
-  v_texcoord = a_texcoord;
+  vTextCoord = aTextCoord;
+
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }

@@ -1,8 +1,11 @@
-uniform sampler2D u_texture;
-uniform vec4 u_color;
-uniform float u_weigth;
+uniform sampler2D uTexture;
+uniform vec4 uColor;
+uniform float uWeight;
 
-varying vec2 v_texcoord;
+varying vec2 vTextCoord;
+
+const vec3 glyphcolor = vec3(1.0, 0.0, 0.0);
+const float glyphDistDelta = 0.5;
 
 void main() {
   // float dist = texture2D(u_texture, v_texcoord).r; // 有字形的地方是0
@@ -24,14 +27,12 @@ void main() {
   // }
 
   // gl_FragColor = clr;
-  float dist = texture2D(u_texture, v_texcoord).a;
-  const vec3 glyphcolor = vec3(1.0, 0.0, 0.0);
-  const float glyphDelta = 0.5;
-  float alpha = smoothstep(1.0 - glyphDelta, 1.0, dist);
+  float dist = texture2D(uTexture, vTextCoord).r;
+  float alpha = smoothstep(0.0, glyphDistDelta, dist);
   gl_FragColor = vec4(glyphcolor, alpha);
 
   // vec4 tColor = texture2D(u_texture, v_texcoord);
   // gl_FragColor = tColor;
 
-  // gl_FragDepth = 1.0;
+  gl_FragDepth = 1.0;
 }
