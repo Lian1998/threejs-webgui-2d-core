@@ -1,0 +1,120 @@
+<canvas id="glCanvas" width="800" height="300"></canvas>
+<script>
+  const canvas = document.getElementById("glCanvas");
+  const gl = canvas.getContext("webgl"); // WebGL1即可
+
+  // 顶点数据：位置 + 纹理坐标
+  // prettier-ignore
+  const vertices = new Float32Array([
+    // x, y, u, v
+    -0.5, -0.5, 0, 0,
+    +0.5, -0.5, 1, 0,
+    +0.5, +0.5, 1, 1,
+    -0.5, +0.5, 0, 1,
+  ]);
+
+  const indices = new Uint16Array([0, 1, 2, 0, 2, 3]);
+
+  // 顶点着色器
+  const vsSource = `
+attribute vec2 aPosition;
+attribute vec2 aTexCoord;
+uniform vec2 uOffset;
+uniform vec2 uScale;
+varying vec2 vTexCoord;
+void main() {
+    vec2 pos = aPosition * uScale + uOffset;
+    gl_Position = vec4(pos, 0.0, 1.0);
+    vTexCoord = aTexCoord;
+}`;
+
+  // 片段着色器
+  const fsSource = `
+precision mediump float;
+varying vec2 vTexCoord;
+uniform sampler2D uTexture;
+void main() {
+    float alpha = texture2D(uTexture, vTexCoord).r;
+    gl_FragColor = vec4(vec3(alpha), 1.0);
+}`;
+
+  // 创建 shader/program
+  function createShader(gl, type, source) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, source);
+    gl.compileShader(s);
+    if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+      console.error(gl.getShaderInfoLog(s));
+    }
+    return s;
+  }
+  function createProgram(gl, vs, fs) {
+    const p = gl.createProgram();
+    gl.attachShader(p, createShader(gl, gl.VERTEX_SHADER, vs));
+    gl.attachShader(p, createShader(gl, gl.FRAGMENT_SHADER, fs));
+    gl.linkProgram(p);
+    if (!gl.getProgramParameter(p, gl.LINK_STATUS)) {
+      console.error(gl.getProgramInfoLog(p));
+    }
+    return p;
+  }
+
+  const program = createProgram(gl, vsSource, fsSource);
+  gl.useProgram(program);
+
+  // 创建 VAO / VBO
+  const aPositionLoc = gl.getAttribLocation(program, "aPosition");
+  const aTexCoordLoc = gl.getAttribLocation(program, "aTexCoord");
+  const uOffsetLoc = gl.getUniformLocation(program, "uOffset");
+  const uScaleLoc = gl.getUniformLocation(program, "uScale");
+  const uTextureLoc = gl.getUniformLocation(program, "uTexture");
+
+  const vbo = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+  gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+  gl.enableVertexAttribArray(aPositionLoc);
+  gl.vertexAttribPointer(aPositionLoc, 2, gl.FLOAT, false, 16, 0);
+  gl.enableVertexAttribArray(aTexCoordLoc);
+  gl.vertexAttribPointer(aTexCoordLoc, 2, gl.FLOAT, false, 16, 8);
+
+  const ebo = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ebo);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
+
+  // 创建单通道 alpha 纹理 (LUMINANCE)
+  // prettier-ignore
+  const alphaData = new Uint8Array([
+    64, 64, 64, 255,
+    128, 128, 128, 255,
+    196, 196, 196, 255,
+    255, 255, 255, 255,
+  ]);
+  const texture = gl.createTexture();
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 2, 2, 0, gl.RGBA, gl.UNSIGNED_BYTE, alphaData);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+  // 清屏
+  gl.viewport(0, 0, canvas.width, canvas.height);
+  gl.clearColor(0, 0, 0, 1);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  // 多矩形示例
+  const quads = [
+    { offset: [-0.5, 0.0], scale: [0.4, 0.4] },
+    { offset: [0.5, 0.0], scale: [0.3, 0.3] },
+  ];
+
+  gl.activeTexture(gl.TEXTURE0);
+  gl.bindTexture(gl.TEXTURE_2D, texture);
+  gl.uniform1i(uTextureLoc, 0);
+
+  for (const q of quads) {
+    gl.uniform2fv(uOffsetLoc, q.offset);
+    gl.uniform2fv(uScaleLoc, q.scale);
+    gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+  }
+</script>

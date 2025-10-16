@@ -1,10 +1,3 @@
-// https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API
-
-// vitejs 引入 worker
-// import TestWorker from "./testWorker?worker";
-const testWorker = new Worker(new URL("./TestWorker.ts", import.meta.url), { type: "module" });
-testWorker.postMessage(10);
-
 import TinySDF from "tiny-sdf";
 import { makeRGBAImageData } from "@source/utils/canvas2d_buffers";
 
@@ -32,35 +25,54 @@ const tinySdf = new TinySDF({
 export const initialization = () => {
   // const text = "你好 世界!";
   const text = "Hello World!";
+  const chars = Array.from(text);
 
   let canvasWidth = 0;
   let canvasHeight = 0;
 
-  for (const char of text) {
+  for (let i = 0; i < chars.length; i++) {
+    const char = chars[i];
     const glyph = glyphs.get(char) || tinySdf.draw(char);
     glyphs.set(char, glyph);
 
     const { data, width, height, glyphWidth, glyphHeight, glyphTop, glyphLeft, glyphAdvance } = glyph;
-    canvasWidth += glyphAdvance;
+    if (i + 1 !== chars.length) {
+      canvasWidth += glyphAdvance;
+    } else {
+      canvasWidth += width;
+    }
     canvasHeight = Math.max(canvasHeight, height);
   }
 
   // 将字形出来的单通道纹理转化为4通道的, 并且输出到canvas上
   const canvas = document.querySelector("#viewport") as HTMLCanvasElement;
-  const ctx = canvas.getContext("2d");
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
   canvas.width = Math.ceil(canvasWidth);
   canvas.height = Math.ceil(canvasHeight);
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#000000";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.globalCompositeOperation = "source-out";
+
+  const offscreen = document.createElement("canvas");
+  const offctx = offscreen.getContext("2d");
 
   let x = 0;
-  for (const char of text) {
+  for (let i = 0; i < chars.length; i++) {
+    const char = chars[i];
     const glyph = glyphs.get(char);
-    const { data, width, height, glyphWidth, glyphHeight, glyphTop, glyphLeft, glyphAdvance } = glyph;
     console.log(char, glyph);
+    const { data, width, height, glyphWidth, glyphHeight, glyphTop, glyphLeft, glyphAdvance } = glyph;
     if (char !== " ") {
+      offscreen.width = width;
+      offscreen.height = height;
       // data is a Uint8ClampedArray array of alpha values (0–255) for a width x height grid.
       const imageData = new ImageData(makeRGBAImageData(data, width, height), width, height);
-      ctx.putImageData(imageData, x, canvasHeight - height + (glyphHeight - glyphTop));
+
+      offctx.putImageData(imageData, 0, 0);
+      ctx.globalCompositeOperation = "lighten";
+      const dx = x;
+      const dy = canvasHeight - height + (glyphHeight - glyphTop);
+      ctx.drawImage(offscreen, dx, dy);
     }
     x += glyphAdvance;
   }
