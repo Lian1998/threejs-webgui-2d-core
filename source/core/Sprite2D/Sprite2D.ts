@@ -83,6 +83,8 @@ export class Sprite2D extends THREE.Object3D implements Sprite2DParameters {
       name: "Sprite2DShaderMaterial",
       side: THREE.FrontSide,
       transparent: true,
+      depthWrite: false,
+      depthTest: true,
       uniforms: {
         uTexture: { value: texture }, // 贴图
         uOffset: { value: new THREE.Vector2(offset[0], offset[1]) }, // 偏移
@@ -101,6 +103,8 @@ export class Sprite2D extends THREE.Object3D implements Sprite2DParameters {
 
     // @ts-ignore
     this.material = material;
+
+    this.renderOrder = depth; // 给 threejs 的 opaque render list 排序
   }
 
   /** 注销原生的基于cpu判断拾取的方法 */

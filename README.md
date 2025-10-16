@@ -100,3 +100,13 @@ Object3D.userData = {
 > 关闭 depthWrite, 保留 depthTest + gl_FragDepth, 依靠渲染顺序
 > 或者分两次渲染: 先写 depth, 再写颜色
 > 必要时使用 premultipliedAlpha 并乘 alpha 修复 blending
+
+transparent: true,
+depthWrite: false,
+depthTest: true,
+全用renderOrder控制
+
+layer
+zIndex => renderOrder
+
+

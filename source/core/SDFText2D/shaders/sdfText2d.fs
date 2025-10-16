@@ -34,5 +34,5 @@ void main() {
   // vec4 tColor = texture2D(u_texture, v_texcoord);
   // gl_FragColor = tColor;
 
-  gl_FragDepth = 1.0;
+  gl_FragDepth = 0.0;
 }
