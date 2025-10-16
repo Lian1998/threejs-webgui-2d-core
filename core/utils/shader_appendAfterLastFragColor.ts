@@ -4,7 +4,7 @@
  * @param {string} newAssignment 要插入的行
  * @returns {string} 输出的代码字符串
  */
-export const appendAfterLastFragColor = (shaderCode: string, newAssignment: string) => {
+export const appendAfterLastFragColor = (shaderCode: string, newAssignment: string): string => {
   // 支持 gl_FragColor = xxx; 后面可带注释和空格
   const regex = /([ \t]*)gl_FragColor\s*=\s*[^;]+;\s*(?:\/\/[^\n]*)?/g;
 

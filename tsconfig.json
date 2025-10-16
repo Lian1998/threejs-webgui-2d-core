@@ -33,19 +33,19 @@
 
     "paths": {
       "@source/*": [ "./source/*" ],
+      "@core/*": [ "./core/*" ],
       "@assets/*": [ "./assets/*" ],
       "@libs/*": [ "./libs/*" ],
       "three": [ "./libs/three-ts-types-r170/types/three/index.d.ts", "./lib/three.js-r170/src/Three.js" ],
       "three_addons/*": [  "./libs/three-ts-types-r170/types/three/examples/jsm/*", "./lib/three.js-r170/examples/jsm/*" ],
-      "tiny-sdf": [ "./libs/tiny-sdf-2.0.7/index.d.ts", "./libs/tiny-sdf-2.0.7/index.js" ],
+      "tiny-sdf": [ "./libs/tiny-sdf-2.0.7/index.d.ts", "./libs/tiny-sdf-2.0.7/index.js" ]
     },
-
-    "types": [ "./source/core/index.d.ts" ],
   },
 
   // 此配置打包编译的范围
   "include": [ 
     "vite.config.ts",
+    "core/**/*.ts",
     "source/**/*.ts",
     ".env/vite-env.d.ts",
     "libs/three.js-r170/**/*.js",

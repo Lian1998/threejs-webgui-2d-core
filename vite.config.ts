@@ -30,6 +30,7 @@ export default defineConfig(({ command, mode }) => {
     resolve: {
       alias: {
         "@source": _p("./source"),
+        "@core": _p("./core"),
         "@assets": _p("./assets"),
         "@libs": _p("./libs"),
         "three": _p("./libs/three.js-r170/src/Three.js"),

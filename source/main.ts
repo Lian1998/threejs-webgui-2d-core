@@ -43,12 +43,12 @@ controls.enableDamping = false;
 }
 
 import { LayerSequence } from "./LayerSequence";
-import { ViewportResizeDispatcher } from "@source/core/";
-import { GpuPickManager } from "@source/core/GpuPickManager/GpuPickManager";
+import { ViewportResizeDispatcher } from "@core/index";
+import { GpuPickManager } from "@core/GpuPickManager/GpuPickManager";
 
-import { SDFText2D } from "@source/core/SDFText2D/";
-import { Sprite2D } from "@source/core";
-import { calculateMPP } from "@source/core";
+import { SDFText2D } from "@core/index";
+import { Sprite2D } from "@core/index";
+import { calculateMPP } from "@source/utils/ratio";
 
 const qcGantry = new Sprite2D({
   texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Gantry.png"),

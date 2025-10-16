@@ -1,7 +1,7 @@
 import TinySDF from "tiny-sdf";
-import { makeRGBAImageData } from "@source/utils/canvas2d_buffers";
-import vs from "@source/core/SDFText2D/shaders/glyphs.vs?raw";
-import fs from "@source/core/SDFText2D/shaders/glyphs.fs?raw";
+import { makeRGBAImageData } from "@core/utils/canvas2d_buffers";
+import vs from "@core/SDFText2D/shaders/glyphs.vs?raw";
+import fs from "@core/SDFText2D/shaders/glyphs.fs?raw";
 
 const fontSize = 128;
 const buffer = Math.ceil(fontSize / 8);

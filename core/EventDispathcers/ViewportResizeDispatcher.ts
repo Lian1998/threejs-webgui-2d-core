@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { WithClassInstanceMap } from "@source/core/Mixins/ClassInstanceMap";
+import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
 
 type TEventMap = {
   resize: { type: "resize"; message: { viewportElement: HTMLElement; width: number; height: number } };

@@ -4,7 +4,7 @@ import vs from "./shaders/sdfText2d.vs?raw";
 import fs from "./shaders/sdfText2d.fs?raw";
 import TinySDF from "tiny-sdf";
 
-import { makeRGBAImageData } from "@source/utils/canvas2d_buffers";
+import { makeRGBAImageData } from "@core/utils/canvas2d_buffers";
 
 export class SDFText2D extends THREE.Object3D {
   mesh: THREE.Mesh = undefined;
