@@ -40,12 +40,16 @@ export class GpuPickManager {
     this.syncRendererStatus();
 
     this.rt = new THREE.WebGLRenderTarget(this.rendererStatus.rt.width, this.rendererStatus.rt.height, {
+      wrapS: THREE.ClampToEdgeWrapping,
+      wrapT: THREE.ClampToEdgeWrapping,
       minFilter: THREE.NearestFilter,
       magFilter: THREE.NearestFilter,
+      format: THREE.RGBAFormat,
+      type: THREE.UnsignedByteType,
+      samples: 4,
       depthBuffer: true,
       stencilBuffer: false,
-      type: THREE.UnsignedByteType,
-      format: THREE.RGBAFormat,
+      colorSpace: THREE.NoColorSpace,
     });
   }
 
@@ -185,11 +189,19 @@ export class GpuPickManager {
 
   /////////////////// 材质替换 //////////////////
 
+  private _originVisiableSet = new Set<THREE.Object3D>();
+
   /** 遍历场景树将所有注册的物体的材质替换为pickBuffer渲染所需要的材质 */
   private _swapMaterials(root: THREE.Object3D) {
+    this._originVisiableSet.clear();
     root.traverseVisible((child) => {
+      if (!child.type.toLowerCase().includes("mesh")) return;
       const pickid = this.NegMap.get(child);
-      if (!pickid) return; // 如果没有被GpuPickManager注册过, 说明不需要渲染到pickBuffer
+      if (!pickid) {
+        this._originVisiableSet.add(child);
+        child.visible = false; // 标记为未注册, 不需要渲染到pickBuffer
+        return;
+      }
       const meshLike = child as THREE.Mesh | THREE.InstancedMesh;
       const userData = meshLike.userData[USER_DATA_KEY] as GpuPickManagerUserData;
       meshLike.material = userData.pickBufferMaterial;
@@ -198,13 +210,18 @@ export class GpuPickManager {
 
   /** 遍历场景树将所有注册的物体的材质替换回pickBuffer渲染所需要的材质 */
   private _restoreMaterial(root: THREE.Object3D) {
-    root.traverseVisible((child) => {
+    root.traverse((child) => {
+      if (!child.type.toLowerCase().includes("mesh")) return;
       const pickid = this.NegMap.get(child);
-      if (!pickid) return; // 如果没有被GpuPickManager注册过, 说明不需要渲染到pickBuffer
+      if (!pickid) return;
       const meshLike = child as THREE.Mesh | THREE.InstancedMesh;
       const userData = meshLike.userData[USER_DATA_KEY] as GpuPickManagerUserData;
       meshLike.material = userData.originMaterial;
     });
+
+    for (const child of this._originVisiableSet) {
+      child.visible = true; // 如果在上次渲染pickBuffer时被标记为未注册, 恢复其visible状态
+    }
   }
 
   /////////////////// 调试 //////////////////
