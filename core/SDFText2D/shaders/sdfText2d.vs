@@ -1,8 +1,6 @@
-attribute vec2 aTextCoord;
-varying vec2 vTextCoord;
+varying vec2 vUv;
 
 void main() {
-  vTextCoord = aTextCoord;
-
+  vUv = uv;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }

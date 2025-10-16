@@ -51,7 +51,6 @@ export const initialization = () => {
   const ctx = canvas.getContext("2d");
   ctx.fillStyle = "#000000";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.globalCompositeOperation = "source-out";
 
   const offscreen = document.createElement("canvas");
   const offctx = offscreen.getContext("2d");
@@ -68,8 +67,8 @@ export const initialization = () => {
       // data is a Uint8ClampedArray array of alpha values (0–255) for a width x height grid.
       const imageData = new ImageData(makeRGBAImageData(data, width, height), width, height);
 
-      offctx.putImageData(imageData, 0, 0);
       ctx.globalCompositeOperation = "lighten";
+      offctx.putImageData(imageData, 0, 0);
       const dx = x;
       const dy = canvasHeight - height + (glyphHeight - glyphTop);
       ctx.drawImage(offscreen, dx, dy);

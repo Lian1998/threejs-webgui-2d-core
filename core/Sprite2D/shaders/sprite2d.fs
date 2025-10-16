@@ -22,7 +22,4 @@ void main() {
 
   gl_FragColor = vec4(sRGBTransferOETF(tColor).rgb, tColor.a); // linear转srgb色彩空间
 
-#ifdef USE_CUSTOM_DEPTH 
-  gl_FragDepth = (9999.0 - uDepth) / 10000.0;
-#endif
 }

@@ -80,7 +80,10 @@ qcGantry.add(qcMT);
 qcGantry.add(qcPT);
 scene.add(qcGantry);
 
-const text = new SDFText2D("Hello World!");
+const text = new SDFText2D({
+  text: "Hello World!",
+  depth: LayerSequence.TEXT,
+});
 scene.add(text);
 
 const picker = new GpuPickManager(renderer);
