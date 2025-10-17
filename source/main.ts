@@ -2,12 +2,12 @@ import "normalize.css";
 import * as THREE from "three";
 
 import WebGL from "three_addons/capabilities/WebGL";
-if (!WebGL.isWebGL2Available()) throw new Error("浏览器不支持WebGL");
+if (!WebGL.isWebGL2Available()) throw new Error("浏览器不支持WebGL2");
 
 const viewport = document.querySelector("#viewport");
 const { width, height } = viewport.getBoundingClientRect();
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: false });
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setClearColor(0xffffff, 0.0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 viewport.appendChild(renderer.domElement);
@@ -81,7 +81,7 @@ qcGantry.add(qcPT);
 scene.add(qcGantry);
 
 const text = new SDFText2D({
-  text: "Hello World!",
+  text: "你好 世界!",
   depth: LayerSequence.TEXT,
 });
 scene.add(text);

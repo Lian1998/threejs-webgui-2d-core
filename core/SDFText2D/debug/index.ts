@@ -1,11 +1,13 @@
 import TinySDF from "tiny-sdf";
+
 import { makeRGBAImageData } from "@core/utils/canvas2d_buffers";
+import { gen as genTinySDFCanvas2D, glyphs } from "../gen/TinySDF.Canvas2D";
+import { gen as genTinySDFWebGL2 } from "../gen/TinySDF.WebGL2";
 
-const fontSize = 128;
-const buffer = Math.ceil(fontSize / 8);
-const radius = Math.ceil(fontSize / 3);
-
-const glyphs = new Map<string, ReturnType<TinySDF["draw"]>>();
+const fontSize = 64; // 字号
+const buffer = Math.ceil(fontSize / 8); // 字符周围空白区域, 值过小可能导致渲染不全
+const radius = Math.max(Math.ceil(fontSize / 3), 8); // 影响距离计算的像素范围, 值过大会导致边缘模糊
+const cutoff = 0.25; // 内部区域占比, 值过大会削弱边缘对比度
 
 // 通过 tiny-sdf 获取字形相关信息
 // repo: https://github.com/mapbox/tiny-sdf
@@ -13,66 +15,36 @@ const glyphs = new Map<string, ReturnType<TinySDF["draw"]>>();
 // demo-page: https://mapbox.github.io/tiny-sdf/
 // sdf in webgl: https://cs.brown.edu/people/pfelzens/papers/dt-final.pdf
 const tinySdf = new TinySDF({
-  fontSize: fontSize, // Font size in pixels
   fontFamily: "sans-serif", // CSS font-family
   fontWeight: "normal", // CSS font-weight
   fontStyle: "normal", // CSS font-style
-  buffer: buffer, // Whitespace buffer around a glyph in pixels
-  radius: radius, // How many pixels around the glyph shape to use for encoding distance
-  cutoff: 0.25, // How much of the radius (relative) is used for the inside part of the glyph
+  fontSize: fontSize,
+  buffer: buffer,
+  radius: radius,
+  cutoff: cutoff,
 });
 
 export const initialization = () => {
-  // const text = "你好 世界!";
-  const text = "Hello World!";
-  const chars = Array.from(text);
+  const TinySDFCanvas2DCanvas = genTinySDFCanvas2D(tinySdf, "Hello World!");
+  const e1 = document.createElement("div");
+  e1.appendChild(TinySDFCanvas2DCanvas);
+  document.body.appendChild(e1);
 
-  let canvasWidth = 0;
-  let canvasHeight = 0;
+  const TinySDFWebGL2Canvas = genTinySDFWebGL2(tinySdf, "Hello World!");
+  const e2 = document.createElement("div");
+  e2.appendChild(TinySDFWebGL2Canvas);
+  document.body.appendChild(e2);
 
-  for (let i = 0; i < chars.length; i++) {
-    const char = chars[i];
-    const glyph = glyphs.get(char) || tinySdf.draw(char);
-    glyphs.set(char, glyph);
-
+  const divEl = document.createElement("div");
+  document.body.appendChild(divEl);
+  for (const [key, glyph] of glyphs) {
     const { data, width, height, glyphWidth, glyphHeight, glyphTop, glyphLeft, glyphAdvance } = glyph;
-    if (i + 1 !== chars.length) {
-      canvasWidth += glyphAdvance;
-    } else {
-      canvasWidth += width;
-    }
-    canvasHeight = Math.max(canvasHeight, height);
-  }
-
-  // 将字形出来的单通道纹理转化为4通道的, 并且输出到canvas上
-  const canvas = document.querySelector("#viewport") as HTMLCanvasElement;
-  canvas.width = Math.ceil(canvasWidth);
-  canvas.height = Math.ceil(canvasHeight);
-  const ctx = canvas.getContext("2d");
-  ctx.fillStyle = "#000000";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  const offscreen = document.createElement("canvas");
-  const offctx = offscreen.getContext("2d");
-
-  let x = 0;
-  for (let i = 0; i < chars.length; i++) {
-    const char = chars[i];
-    const glyph = glyphs.get(char);
-    console.log(char, glyph);
-    const { data, width, height, glyphWidth, glyphHeight, glyphTop, glyphLeft, glyphAdvance } = glyph;
-    if (char !== " ") {
-      offscreen.width = width;
-      offscreen.height = height;
-      // data is a Uint8ClampedArray array of alpha values (0–255) for a width x height grid.
-      const imageData = new ImageData(makeRGBAImageData(data, width, height), width, height);
-
-      ctx.globalCompositeOperation = "lighten";
-      offctx.putImageData(imageData, 0, 0);
-      const dx = x;
-      const dy = canvasHeight - height + (glyphHeight - glyphTop);
-      ctx.drawImage(offscreen, dx, dy);
-    }
-    x += glyphAdvance;
+    const canvasEl = document.createElement("canvas");
+    const ctx = canvasEl.getContext("2d");
+    canvasEl.width = width;
+    canvasEl.height = height;
+    const imageData = new ImageData(makeRGBAImageData(data, width, height), width, height);
+    ctx.putImageData(imageData, 0, 0);
+    divEl.appendChild(canvasEl);
   }
 };

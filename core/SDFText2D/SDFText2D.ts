@@ -7,11 +7,12 @@ import TinySDF from "tiny-sdf";
 import { makeRGBAImageData } from "@core/utils/canvas2d_buffers";
 import { Sprite2DGeometry } from "@core/Sprite2D/index";
 
-const fontSize = 64;
-const buffer = Math.ceil(fontSize / 8);
-const radius = Math.ceil(fontSize / 3);
+import { gen as genTinySDFCanvas2D, glyphs } from "./gen/TinySDF.Canvas2D";
 
-const glyphs = new Map<string, ReturnType<TinySDF["draw"]>>();
+const fontSize = 64; // 字号
+const buffer = Math.ceil(fontSize / 8); // 字符周围空白区域, 值过小可能导致渲染不全
+const radius = Math.max(Math.ceil(fontSize / 3), 8); // 影响距离计算的像素范围, 值过大会导致边缘模糊
+const cutoff = 0.25; // 内部区域占比, 值过大会削弱边缘对比度
 
 // 通过 tiny-sdf 获取字形相关信息
 // repo: https://github.com/mapbox/tiny-sdf
@@ -19,13 +20,13 @@ const glyphs = new Map<string, ReturnType<TinySDF["draw"]>>();
 // demo-page: https://mapbox.github.io/tiny-sdf/
 // sdf in webgl: https://cs.brown.edu/people/pfelzens/papers/dt-final.pdf
 const tinySdf = new TinySDF({
-  fontSize: fontSize, // Font size in pixels
   fontFamily: "sans-serif", // CSS font-family
   fontWeight: "normal", // CSS font-weight
   fontStyle: "normal", // CSS font-style
-  buffer: buffer, // Whitespace buffer around a glyph in pixels
-  radius: radius, // How many pixels around the glyph shape to use for encoding distance
-  cutoff: 0.25, // How much of the radius (relative) is used for the inside part of the glyph
+  fontSize: fontSize,
+  buffer: buffer,
+  radius: radius,
+  cutoff: cutoff,
 });
 
 export interface SDFText2DParameters {
@@ -48,61 +49,13 @@ export class SDFText2D extends THREE.Object3D {
     // @ts-ignore
     this.type = "Mesh";
 
-    const chars = Array.from(text);
-
-    let canvasWidth = 0;
-    let canvasHeight = 0;
-
-    for (let i = 0; i < chars.length; i++) {
-      const char = chars[i];
-      const glyph = glyphs.get(char) || tinySdf.draw(char);
-      glyphs.set(char, glyph);
-
-      const { data, width, height, glyphWidth, glyphHeight, glyphTop, glyphLeft, glyphAdvance } = glyph;
-      if (i + 1 !== chars.length) {
-        canvasWidth += glyphAdvance;
-      } else {
-        canvasWidth += width;
-      }
-      canvasHeight = Math.max(canvasHeight, height);
-    }
-
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.ceil(canvasWidth);
-    canvas.height = Math.ceil(canvasHeight);
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    const offscreen = document.createElement("canvas");
-    const offctx = offscreen.getContext("2d");
-
-    let x = 0;
-    for (let i = 0; i < chars.length; i++) {
-      const char = chars[i];
-      const glyph = glyphs.get(char);
-      console.log(char, glyph);
-      const { data, width, height, glyphWidth, glyphHeight, glyphTop, glyphLeft, glyphAdvance } = glyph;
-      if (char !== " ") {
-        offscreen.width = width;
-        offscreen.height = height;
-        // data is a Uint8ClampedArray array of alpha values (0–255) for a width x height grid.
-        const imageData = new ImageData(makeRGBAImageData(data, width, height), width, height);
-
-        offctx.putImageData(imageData, 0, 0);
-        ctx.globalCompositeOperation = "lighten";
-        const dx = x;
-        const dy = canvasHeight - height + (glyphHeight - glyphTop);
-        ctx.drawImage(offscreen, dx, dy);
-      }
-      x += glyphAdvance;
-    }
+    const canvas = genTinySDFCanvas2D(tinySdf, "Hello World!");
 
     const texture = new THREE.Texture(canvas);
     texture.needsUpdate = true;
     texture.flipY = false;
 
-    const geometry = new Sprite2DGeometry(canvasWidth, canvasHeight);
+    const geometry = new Sprite2DGeometry(canvas.width, canvas.height);
 
     const material = new THREE.ShaderMaterial({
       side: THREE.FrontSide,
@@ -112,7 +65,7 @@ export class SDFText2D extends THREE.Object3D {
       uniforms: {
         uColor: { value: new THREE.Color(0x000000) },
         uTexture: { value: texture },
-        uTextureSize: { value: new THREE.Vector2(canvasWidth, canvasHeight) },
+        uTextureSize: { value: new THREE.Vector2(canvas.width, canvas.height) },
         uWeight: { value: 0.1 },
       },
       vertexShader: vs,

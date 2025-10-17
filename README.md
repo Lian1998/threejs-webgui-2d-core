@@ -89,24 +89,14 @@ Object3D.userData = {
 
 // https://github.com/Experience-Monks/three-bmfont-text
 // https://github.com/soadzoor/MSDF-text
+// https://github.com/davidlyons/text-sdf-bitmap
+// https://github.com/trinketmage/three-glyph
+// https://github.com/Chlumsky/msdf-atlas-gen
 ```
 
-# BUG历史
+# 问题修复历史
 1. 如果不是注册到 GpuPickManager 里的mesh, 那么不加入 pickBuffer 渲染
-2. threejs 渲染到 canvas 后, 再用 readPixel 拾取, 发现黑色+透明度, 被读取成数字时变成灰色
+2. threejs 渲染到 canvas 后, 再用 readPixel 拾取, 发现 rgba(0, 0, 0, x), 被读取成数字时变成灰色
 3. Sprite2D 的 fragmentShader 简单的透明度不合格 discard 片元, 效果不是很好
-
-> threejs 透明物渲染 先走constructor的order在先 (而非先加入场景的)
-> 关闭 depthWrite, 保留 depthTest + gl_FragDepth, 依靠渲染顺序
-> 或者分两次渲染: 先写 depth, 再写颜色
-> 必要时使用 premultipliedAlpha 并乘 alpha 修复 blending
-
-transparent: true,
-depthWrite: false,
-depthTest: true,
-全用renderOrder控制
-
-layer
-zIndex => renderOrder
 
 
