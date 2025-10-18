@@ -1,10 +1,10 @@
 /**
  * 在传入的代码字符串最终输出行`gl_FragColor=`后添加一行
  * @param {string} shaderCode 输入的代码字符串
- * @param {string} newAssignment 要插入的行
+ * @param {string} newAssignments 要插入的行
  * @returns {string} 输出的代码字符串
  */
-export const appendAfterLastFragColor = (shaderCode: string, newAssignment: string): string => {
+export const appendAfterLastFragColor = (shaderCode: string, ...newAssignments: string[]): string => {
   // 支持 gl_FragColor = xxx; 后面可带注释和空格
   const regex = /([ \t]*)gl_FragColor\s*=\s*[^;]+;\s*(?:\/\/[^\n]*)?/g;
 
@@ -25,7 +25,12 @@ export const appendAfterLastFragColor = (shaderCode: string, newAssignment: stri
   const insertPos = lastMatch.index + lastMatch[0].length;
 
   // 保持相同缩进
-  const newLine = `\n${indent}${newAssignment}\n`;
+
+  for (let i = 0; i < newAssignments.length; i++) {
+    const newAssignment = newAssignments[i];
+    newAssignments[i] = `${indent}${newAssignment}`;
+  }
+  const newLine = `\n${newAssignments.join("\n")}\n`;
 
   return shaderCode.slice(0, insertPos) + newLine + shaderCode.slice(insertPos);
 };

@@ -4,7 +4,7 @@ import { Float32BufferAttribute } from "three";
 export class Sprite2DGeometry extends BufferGeometry {
   declare parameters: { width: number; height: number };
 
-  constructor(width = 1, height = 1) {
+  constructor(width: number = 1, height: number = 1, offset: [number, number] = [0.0, 0.0]) {
     super();
 
     this.parameters = { width: width, height: height };
@@ -16,10 +16,10 @@ export class Sprite2DGeometry extends BufferGeometry {
 
     // prettier-ignore
     this.setAttribute("position", new Float32BufferAttribute([
-      -width_half, 0, -height_half,
-      -width_half, 0, +height_half,
-      +width_half, 0, +height_half,
-      +width_half, 0, -height_half,
+      -width_half + offset[0], 0, -height_half + offset[1],
+      -width_half + offset[0], 0, +height_half + offset[1],
+      +width_half + offset[0], 0, +height_half + offset[1],
+      +width_half + offset[0], 0, -height_half + offset[1],
     ], 3));
 
     // prettier-ignore

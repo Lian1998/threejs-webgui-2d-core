@@ -7,7 +7,7 @@ if (!WebGL.isWebGL2Available()) throw new Error("浏览器不支持WebGL2");
 const viewport = document.querySelector("#viewport");
 const { width, height } = viewport.getBoundingClientRect();
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: true });
 renderer.setClearColor(0xffffff, 0.0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 viewport.appendChild(renderer.domElement);
@@ -42,19 +42,21 @@ controls.enableDamping = false;
   controls.update();
 }
 
-import { LayerSequence } from "./LayerSequence";
+import ColorDefine from "./ColorDefine";
+import LayerSequence from "./LayerSequence";
 import { ViewportResizeDispatcher } from "@core/index";
 import { GpuPickManager } from "@core/GpuPickManager/GpuPickManager";
 
 import { SDFText2D } from "@core/index";
 import { Sprite2D } from "@core/index";
 import { calculateMPP } from "@source/utils/ratio";
+import { darkenHex } from "@source/utils/color";
 
 const qcGantry = new Sprite2D({
   texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Gantry.png"),
   mpp: calculateMPP(35, 2230),
   depth: LayerSequence.QC_Gantry,
-  color: new THREE.Color(0x498cff),
+  color: new THREE.Color(ColorDefine.DEVICE.DEFAULT),
 });
 qcGantry.name = "qcGantry";
 
@@ -62,7 +64,7 @@ const qcMT = new Sprite2D({
   texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png"),
   mpp: calculateMPP(6, 87),
   depth: LayerSequence.QC_Trolley,
-  color: new THREE.Color(0x498cff),
+  color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
   offset: [0, 18],
 });
 qcMT.name = "qcMT";
@@ -71,20 +73,24 @@ const qcPT = new Sprite2D({
   texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png"),
   mpp: calculateMPP(6, 87),
   depth: LayerSequence.QC_Trolley,
-  color: new THREE.Color(0x498cff),
+  color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
   offset: [0, 20],
 });
 qcPT.name = "qcPT";
 
 qcGantry.add(qcMT);
 qcGantry.add(qcPT);
+qcGantry.geometry.computeBoundingBox();
+qcMT.geometry.boundingBox = qcGantry.geometry.boundingBox.clone();
+qcPT.geometry.boundingBox = qcGantry.geometry.boundingBox.clone();
 scene.add(qcGantry);
 
 const text = new SDFText2D({
-  text: "你好 世界!",
+  text: "QC101",
   depth: LayerSequence.TEXT,
 });
-scene.add(text);
+text.position.z = -10;
+qcGantry.add(text);
 
 const picker = new GpuPickManager(renderer);
 picker.register(qcGantry);
@@ -122,3 +128,12 @@ function animate() {
 }
 
 animate();
+
+import { getXZPosition } from "@source/utils/pointerCoordinates";
+{
+  const coordinatesEl = document.querySelector("#coordinates");
+  window.addEventListener("mousemove", (e) => {
+    const pos = getXZPosition(e, camera, renderer);
+    coordinatesEl.innerHTML = `${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`;
+  });
+}

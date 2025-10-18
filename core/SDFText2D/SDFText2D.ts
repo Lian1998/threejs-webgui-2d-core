@@ -10,7 +10,7 @@ import { Sprite2DGeometry } from "@core/Sprite2D/index";
 import { gen as genTinySDFCanvas2D, glyphs } from "./gen/TinySDF.Canvas2D";
 
 const fontSize = 64; // 字号
-const buffer = Math.ceil(fontSize / 8); // 字符周围空白区域, 值过小可能导致渲染不全
+const buffer = Math.ceil(fontSize / 4); // 字符周围空白区域, 值过小可能导致渲染不全
 const radius = Math.max(Math.ceil(fontSize / 3), 8); // 影响距离计算的像素范围, 值过大会导致边缘模糊
 const cutoff = 0.25; // 内部区域占比, 值过大会削弱边缘对比度
 
@@ -49,7 +49,7 @@ export class SDFText2D extends THREE.Object3D {
     // @ts-ignore
     this.type = "Mesh";
 
-    const canvas = genTinySDFCanvas2D(tinySdf, "Hello World!");
+    const canvas = genTinySDFCanvas2D(tinySdf, text);
 
     const texture = new THREE.Texture(canvas);
     texture.needsUpdate = true;
@@ -63,10 +63,13 @@ export class SDFText2D extends THREE.Object3D {
       depthWrite: false,
       depthTest: true,
       uniforms: {
-        uColor: { value: new THREE.Color(0x000000) },
         uTexture: { value: texture },
-        uTextureSize: { value: new THREE.Vector2(canvas.width, canvas.height) },
-        uWeight: { value: 0.1 },
+        uColor: { value: new THREE.Color(0xff0000) },
+        smoothing: { value: 0.05 },
+        threshold: { value: 0.7 }, // 描边内边
+        outlineDistance: { value: 0.6 }, // 描边外边
+        outlineColor: { value: new THREE.Color(0x000000) },
+        opacity: { value: 1.0 },
       },
       vertexShader: vs,
       fragmentShader: fs,
@@ -79,6 +82,7 @@ export class SDFText2D extends THREE.Object3D {
     this.material = material;
 
     this.renderOrder = depth; // 给 threejs 的 opaque render list 排序
-    this.scale.multiplyScalar(1.0 / 64.0); // 米 per fontSize
+
+    this.scale.multiplyScalar(2.0 / 64.0); // 米 per fontSize
   }
 }

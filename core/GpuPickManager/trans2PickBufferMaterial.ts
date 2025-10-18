@@ -27,7 +27,14 @@ export const trans2PickBufferMaterial = (meshLike: THREE.Object3D, materialIn: T
       if (!shaderCacheE.fragmentShader) {
         let _fragmentShader = shaderObject.fragmentShader;
         _fragmentShader = insertUniformBeforeMain(_fragmentShader, "uniform vec3 uPickColor;");
-        _fragmentShader = appendAfterLastFragColor(_fragmentShader, "gl_FragColor = vec4(uPickColor, gl_FragColor.a);");
+        _fragmentShader = appendAfterLastFragColor(
+          _fragmentShader,
+          // prettier-ignore
+          "if (gl_FragColor.a == 0.0) {",
+          "  discard;",
+          "}",
+          "gl_FragColor = vec4(uPickColor, 1.0);",
+        );
         shaderCacheE.fragmentShader = _fragmentShader;
       }
       shaderObject.fragmentShader = shaderCacheE.fragmentShader;

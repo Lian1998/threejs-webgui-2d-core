@@ -96,7 +96,13 @@ Object3D.userData = {
 
 # 问题修复历史
 1. 如果不是注册到 GpuPickManager 里的mesh, 那么不加入 pickBuffer 渲染
-2. threejs 渲染到 canvas 后, 再用 readPixel 拾取, 发现 rgba(0, 0, 0, x), 被读取成数字时变成灰色
-3. Sprite2D 的 fragmentShader 简单的透明度不合格 discard 片元, 效果不是很好
+   1. 添加缓存容器, 统计所有在渲染 pickBuffer 前可见并未注册的 mesh, 渲染完 pickBuffer 恢复之
+2. Sprite2D 的 fragmentShader 简单的透明度不合格 discard 片元, 效果不是很好
+   1. 渲染透明度, 用 threejs Opaqueue 特性设置 renderOrder 代替 gl_FragDepth 写入
+3. Shader中定义偏移量导致的 boundingbox 错位问题
+   1. 放弃在 shader 中做偏移的想法, 在生成几何时做
+4. threejs 渲染到 canvas 后, 再用 readPixel 拾取, 发现 rgba(0, 0, 0, x), 被读取成数字时变成灰色
+   1. 开启混合后导致的问题
+   2. Sprite2DShaderMaterial 替换材质 过程优化, 即便物体透明, 在上层的点击事件也不应该穿透下去
 
 

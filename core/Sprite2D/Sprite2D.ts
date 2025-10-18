@@ -19,19 +19,17 @@ export interface Sprite2DParameters {
   depth: number;
 
   /** 偏移量 */
-  offset?: number[];
+  offset?: [number, number];
 
   /** threejs纹理 shader叠加算法颜色 */
   color?: THREE.Color;
 }
 
-export class Sprite2D extends THREE.Object3D implements Sprite2DParameters {
-  mesh: THREE.Mesh;
-
+export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
   texture: THREE.Texture;
   mpp: number;
   depth: number;
-  offset: number[] = [0.0, 0.0];
+  offset: [number, number] = [0.0, 0.0];
   color?: THREE.Color;
 
   /**
@@ -40,14 +38,8 @@ export class Sprite2D extends THREE.Object3D implements Sprite2DParameters {
    * @param height 精灵在三维空间坐标系中实际的高度
    * @param textureUrl 纹理的路径
    */
-  constructor({ texture, mpp, depth = 1, offset = [0, 0], color = new THREE.Color(1, 1, 1) }: Sprite2DParameters) {
+  constructor({ texture, mpp, depth = 1, offset = [0.0, 0.0], color = new THREE.Color(1, 1, 1) }: Sprite2DParameters) {
     super();
-
-    // @ts-ignore
-    this.isMesh = true;
-
-    // @ts-ignore
-    this.type = "Mesh";
 
     if (texture === undefined) throw new Error("请指定 Sprite2D 的纹理贴图");
     this.texture = texture;
@@ -66,7 +58,7 @@ export class Sprite2D extends THREE.Object3D implements Sprite2DParameters {
     this.color = color; // 混合
 
     // 生成几何
-    const geometry = new Sprite2DGeometry(mpp * naturalWidth, mpp * naturalHeight);
+    const geometry = new Sprite2DGeometry(mpp * naturalWidth, mpp * naturalHeight, this.offset);
 
     // 生成材质
     const material = new THREE.ShaderMaterial({
@@ -77,7 +69,6 @@ export class Sprite2D extends THREE.Object3D implements Sprite2DParameters {
       depthTest: true,
       uniforms: {
         uTexture: { value: texture }, // 贴图
-        uOffset: { value: new THREE.Vector2(offset[0], offset[1]) }, // 偏移
         uColor: { value: color }, // 混合
         uDepth: { value: depth }, // 深度
       },
@@ -88,12 +79,8 @@ export class Sprite2D extends THREE.Object3D implements Sprite2DParameters {
     material.defines["USE_CUSTOM_MULTICOLOR"] = color !== undefined ? 1 : 0;
     material.defines["USE_CUSTOM_DEPTH"] = depth !== undefined ? 1 : 0;
 
-    // @ts-ignore
     this.geometry = geometry;
-
-    // @ts-ignore
     this.material = material;
-
     this.renderOrder = depth; // 给 threejs 的 opaque render list 排序
   }
 

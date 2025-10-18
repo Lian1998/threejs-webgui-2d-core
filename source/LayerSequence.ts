@@ -1,4 +1,4 @@
-export enum LayerSequence {
+enum LayerSequence {
   XX,
   XX1,
   XX2,
@@ -6,3 +6,5 @@ export enum LayerSequence {
   QC_Trolley,
   TEXT,
 }
+
+export default LayerSequence;

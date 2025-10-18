@@ -110,8 +110,9 @@ export class GpuPickManager {
     return pickid;
   }
 
-  private _pixel: Uint8Array = new Uint8Array(4);
   pick(scene: THREE.Object3D, camera: THREE.Camera, clientX: number, clientY: number) {
+    const start = performance.now();
+
     const rect = this.renderer.domElement.getBoundingClientRect();
     const dpr = this.renderer.getPixelRatio();
     const x = Math.floor((clientX - rect.left) * dpr);
@@ -121,22 +122,28 @@ export class GpuPickManager {
     this._swapMaterials(scene); // 切换材质并渲染pickBuffer
 
     // 切换渲染器状态为pickBuffer渲染状态
+    this.renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
     this.renderer.toneMapping = THREE.NoToneMapping;
-    this.renderer.setClearColor(0x000000, 0); // 设置清空颜色为透明色, 对应映射id的0
+    this.renderer.setClearColor(0x000000, 0.0); // 设置清空颜色为透明色, 对应映射id的0
     this.renderer.setRenderTarget(this.rt);
     this.renderer.clear();
     this.renderer.render(scene, camera);
     if (import.meta.env.MODE === "development") this._sendDebugFrame();
     this.renderer.setRenderTarget(null);
-    this.renderer.readRenderTargetPixels(this.rt, x, y, 1, 1, this._pixel);
 
     this._restoreMaterial(scene); // 恢复材质
     this._restoreState(); // 恢复渲染器状态
 
+    const pixel = new Uint8Array(1 * 1 * 4);
+    this.renderer.readRenderTargetPixels(this.rt, x, y, 1, 1, pixel);
+
     // 拾取提取的颜色转化为id
-    const _colors = Array.from(this._pixel);
+    const _colors = Array.from(pixel);
     const pickid = decodeRGBToId(_colors);
 
+    const end = performance.now();
+
+    console.warn(`GPUPickManager.pick render pickBuffer in ${end - start} ms`);
     // 通过映射表找到提取的object3d
     return { pickid: pickid, object3d: this.PosMap.get(pickid) };
   }
@@ -166,6 +173,7 @@ export class GpuPickManager {
   /////////////////// 渲染器状态 //////////////////
 
   private _prevState: Record<string, any> = {
+    outputColorSpace: THREE.LinearSRGBColorSpace,
     toneMapping: THREE.NoToneMapping,
     autoClear: true,
     clearColor: new THREE.Color(),
@@ -174,6 +182,7 @@ export class GpuPickManager {
 
   /** 保存渲染器状态 */
   private _saveState() {
+    this._prevState.outputColorSpace = this.renderer.outputColorSpace;
     this._prevState.toneMapping = this.renderer.toneMapping;
     this._prevState.autoClear = this.renderer.autoClear;
     this.renderer.getClearColor(this._prevState.clearColor);
@@ -182,6 +191,7 @@ export class GpuPickManager {
 
   /** 恢复渲染器状态 */
   private _restoreState() {
+    this.renderer.outputColorSpace = this._prevState.outputColorSpace;
     this.renderer.toneMapping = this._prevState.toneMapping;
     this.renderer.autoClear = this._prevState.autoClear;
     this.renderer.setClearColor(this._prevState.clearColor, this._prevState.clearAlpha);
@@ -233,7 +243,7 @@ export class GpuPickManager {
     const buffer = new Uint8Array(width * height * 4);
     this.renderer.readRenderTargetPixels(this.rt, 0, 0, width, height, buffer);
     const imageData = new ImageData(new Uint8ClampedArray(buffer), width, height);
-    const bitmap = await createImageBitmap(imageData, { imageOrientation: "flipY" });
+    const bitmap = await createImageBitmap(imageData, { colorSpaceConversion: "none", imageOrientation: "flipY", premultiplyAlpha: "none" });
     channel.postMessage({ type: "frame", width, height, bitmap });
   }
 }

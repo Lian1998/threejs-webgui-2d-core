@@ -14,10 +14,16 @@
         border: 1px solid black;
         overflow: clip;
       }
+
+      #coordinates {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
     </style>
   </head>
   <body>
-    <div id="viewport"></div>
+    <div id="viewport"> <div id="coordinates"></div></div>
     <script type="module">
       import "@source/main.ts";
     </script>
