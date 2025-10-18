@@ -24,18 +24,6 @@ controls.enableDamping = false;
 
 //////////////////////////////////////// 业务代码逻辑 ////////////////////////////////////////
 
-// {
-//   const geometry = new THREE.BoxGeometry(1, 1, 1);
-//   const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-//   const cube = new THREE.Mesh(geometry, material);
-//   scene.add(cube);
-// }
-
-// {
-//   const axesHelper = new THREE.AxesHelper(100);
-//   scene.add(axesHelper);
-// }
-
 {
   camera.position.y = 2.0; // 让相机从y轴看向地面
   controls["_dollyIn"](1 / 5.0); // 略微调整视角以使得视口方便调试
@@ -65,37 +53,45 @@ const qcMT = new Sprite2D({
   mpp: calculateMPP(6, 87),
   depth: LayerSequence.QC_Trolley,
   color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
-  offset: [0, 18],
 });
 qcMT.name = "qcMT";
+const qcMtPviot = new THREE.Object3D();
+qcMtPviot.position.z = 18;
+qcMtPviot.add(qcMT);
 
 const qcPT = new Sprite2D({
   texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png"),
   mpp: calculateMPP(6, 87),
   depth: LayerSequence.QC_Trolley,
   color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
-  offset: [0, 20],
 });
 qcPT.name = "qcPT";
+const qcPTPviot = new THREE.Object3D();
+qcPTPviot.position.z = 20;
+qcPTPviot.add(qcPT);
 
-qcGantry.add(qcMT);
-qcGantry.add(qcPT);
+const qcLabel = new SDFText2D({
+  text: "QC101",
+  depth: LayerSequence.TEXT,
+});
+qcLabel.name = "qcLabel";
+const qcLabelPviot = new THREE.Object3D();
+qcLabelPviot.position.z = -10;
+qcLabelPviot.add(qcLabel);
+
+qcGantry.add(qcMtPviot);
+qcGantry.add(qcPTPviot);
+qcGantry.add(qcLabelPviot);
 qcGantry.geometry.computeBoundingBox();
 qcMT.geometry.boundingBox = qcGantry.geometry.boundingBox.clone();
 qcPT.geometry.boundingBox = qcGantry.geometry.boundingBox.clone();
 scene.add(qcGantry);
 
-const text = new SDFText2D({
-  text: "QC101",
-  depth: LayerSequence.TEXT,
-});
-text.position.z = -10;
-qcGantry.add(text);
-
 const picker = new GpuPickManager(renderer);
 picker.register(qcGantry);
 picker.register(qcMT);
 picker.register(qcPT);
+picker.register(qcLabel);
 renderer.domElement.addEventListener("pointerdown", (e) => {
   const { pickid, object3d } = picker.pick(scene, camera, e.clientX, e.clientY);
   console.log(pickid, object3d?.name);
@@ -123,7 +119,6 @@ resizeEventDispatcher.addResizeEventListener(({ message: { width, height } }) =>
 function animate() {
   requestAnimationFrame(animate);
 
-  // qcGantry.rotation.y += 0.01;
   renderer.render(scene, camera);
 }
 

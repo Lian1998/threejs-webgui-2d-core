@@ -37,17 +37,12 @@ export interface SDFText2DParameters {
   depth: number;
 }
 
-export class SDFText2D extends THREE.Object3D {
-  mesh: THREE.Mesh = undefined;
+export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
+  text: string;
+  depth: number;
 
   constructor({ text = "?", depth = 1 }: SDFText2DParameters) {
     super();
-
-    // @ts-ignore
-    this.isMesh = true;
-
-    // @ts-ignore
-    this.type = "Mesh";
 
     const canvas = genTinySDFCanvas2D(tinySdf, text);
 
@@ -55,9 +50,12 @@ export class SDFText2D extends THREE.Object3D {
     texture.needsUpdate = true;
     texture.flipY = false;
 
+    // 生成几何
     const geometry = new Sprite2DGeometry(canvas.width, canvas.height);
 
+    // 生成材质
     const material = new THREE.ShaderMaterial({
+      name: "SDFText2DShaderMaterial",
       side: THREE.FrontSide,
       transparent: true,
       depthWrite: false,
@@ -65,6 +63,7 @@ export class SDFText2D extends THREE.Object3D {
       uniforms: {
         uTexture: { value: texture },
         uColor: { value: new THREE.Color(0xff0000) },
+        uScale: { value: 3.0 / fontSize }, // 米/像素
         smoothing: { value: 0.05 },
         threshold: { value: 0.7 }, // 描边内边
         outlineDistance: { value: 0.6 }, // 描边外边
@@ -75,14 +74,8 @@ export class SDFText2D extends THREE.Object3D {
       fragmentShader: fs,
     });
 
-    // @ts-ignore
     this.geometry = geometry;
-
-    // @ts-ignore
     this.material = material;
-
     this.renderOrder = depth; // 给 threejs 的 opaque render list 排序
-
-    this.scale.multiplyScalar(2.0 / 64.0); // 米 per fontSize
   }
 }

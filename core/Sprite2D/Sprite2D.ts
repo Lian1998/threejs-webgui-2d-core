@@ -18,9 +18,6 @@ export interface Sprite2DParameters {
   /** 写入深度图的值 */
   depth: number;
 
-  /** 偏移量 */
-  offset?: [number, number];
-
   /** threejs纹理 shader叠加算法颜色 */
   color?: THREE.Color;
 }
@@ -29,7 +26,6 @@ export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
   texture: THREE.Texture;
   mpp: number;
   depth: number;
-  offset: [number, number] = [0.0, 0.0];
   color?: THREE.Color;
 
   /**
@@ -38,27 +34,25 @@ export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
    * @param height 精灵在三维空间坐标系中实际的高度
    * @param textureUrl 纹理的路径
    */
-  constructor({ texture, mpp, depth = 1, offset = [0.0, 0.0], color = new THREE.Color(1, 1, 1) }: Sprite2DParameters) {
+  constructor({ texture, mpp, depth = 1, color = new THREE.Color(1, 1, 1) }: Sprite2DParameters) {
     super();
 
     if (texture === undefined) throw new Error("请指定 Sprite2D 的纹理贴图");
-    this.texture = texture;
     texture.flipY = false;
     texture.colorSpace = THREE.NoColorSpace;
     texture.premultiplyAlpha = false;
     texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
     texture.repeat.set(1, 1); // 设置纹理左右不重复
-
     if (mpp === undefined) throw new Error("请指定 Sprite2D 的真实比例");
-    this.mpp = mpp; // 米/像素
     const { naturalWidth, naturalHeight } = texture.image; // 贴图像素大小
 
+    this.texture = texture;
+    this.mpp = mpp; // 米/像素
     this.depth = depth; // 深度
-    this.offset = offset; // 偏移
     this.color = color; // 混合
 
     // 生成几何
-    const geometry = new Sprite2DGeometry(mpp * naturalWidth, mpp * naturalHeight, this.offset);
+    const geometry = new Sprite2DGeometry(mpp * naturalWidth, mpp * naturalHeight);
 
     // 生成材质
     const material = new THREE.ShaderMaterial({

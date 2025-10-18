@@ -21,7 +21,7 @@ export const trans2PickBufferMaterial = (meshLike: THREE.Object3D, materialIn: T
     shaderObject.uniforms["uPickColor"] = userData.uniforms.uPickColor;
 
     // 自定义shader
-    if (materialOut.name === "Sprite2DShaderMaterial") {
+    if (materialIn.name === "Sprite2DShaderMaterial") {
       if (!shaderCache["Sprite2DShaderMaterial"]) shaderCache["Sprite2DShaderMaterial"] = {};
       const shaderCacheE = shaderCache["Sprite2DShaderMaterial"];
       if (!shaderCacheE.fragmentShader) {
@@ -35,6 +35,16 @@ export const trans2PickBufferMaterial = (meshLike: THREE.Object3D, materialIn: T
           "}",
           "gl_FragColor = vec4(uPickColor, 1.0);",
         );
+        shaderCacheE.fragmentShader = _fragmentShader;
+      }
+      shaderObject.fragmentShader = shaderCacheE.fragmentShader;
+    } else if (materialIn.name === "SDFText2DShaderMaterial") {
+      if (!shaderCache["SDFText2DShaderMaterial"]) shaderCache["SDFText2DShaderMaterial"] = {};
+      const shaderCacheE = shaderCache["SDFText2DShaderMaterial"];
+      if (!shaderCacheE.fragmentShader) {
+        let _fragmentShader = shaderObject.fragmentShader;
+        _fragmentShader = insertUniformBeforeMain(_fragmentShader, "uniform vec3 uPickColor;");
+        _fragmentShader = appendAfterLastFragColor(_fragmentShader, "gl_FragColor = vec4(uPickColor, 1.0);");
         shaderCacheE.fragmentShader = _fragmentShader;
       }
       shaderObject.fragmentShader = shaderCacheE.fragmentShader;

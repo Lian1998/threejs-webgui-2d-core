@@ -18,6 +18,4 @@ void main() {
   float alpha = smoothstep(outlineDistance - smoothing, outlineDistance + smoothing, distance);
   alpha *= opacity;
   gl_FragColor = vec4(color2, alpha);
-
-  // gl_FragColor = texture2D(uTexture, vUv);
 }
