@@ -1,5 +1,6 @@
 import "normalize.css";
 import * as THREE from "three";
+import debounce from "@libs/lodash/src/debounce";
 
 import WebGL from "three_addons/capabilities/WebGL";
 if (!WebGL.isWebGL2Available()) throw new Error("浏览器不支持WebGL2");
@@ -30,8 +31,8 @@ controls.enableDamping = false;
   controls.update();
 }
 
-import ColorDefine from "./ColorDefine";
-import LayerSequence from "./LayerSequence";
+import ColorDefine from "@source/ColorDefine";
+import LayerSequence from "@source/LayerSequence";
 import { ViewportResizeDispatcher } from "@core/index";
 import { GpuPickManager } from "@core/GpuPickManager/GpuPickManager";
 
@@ -87,17 +88,50 @@ qcMT.geometry.boundingBox = qcGantry.geometry.boundingBox.clone();
 qcPT.geometry.boundingBox = qcGantry.geometry.boundingBox.clone();
 scene.add(qcGantry);
 
+const animate = () => {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+};
+
+animate();
+
+//////////////////////////////////////// Pick ////////////////////////////////////////
+
 const picker = new GpuPickManager(renderer);
 picker.register(qcGantry);
 picker.register(qcMT);
 picker.register(qcPT);
 picker.register(qcLabel);
-renderer.domElement.addEventListener("pointerdown", (e) => {
-  const { pickid, object3d } = picker.pick(scene, camera, e.clientX, e.clientY);
-  console.log(pickid, object3d?.name);
+
+const mousePosition = {
+  x: 0.0,
+  y: 0.0,
+};
+
+// renderer.domElement.addEventListener("pointerdown", (e) => {
+renderer.domElement.addEventListener("mousemove", (e) => {
+  const { x, y } = renderer.domElement.getBoundingClientRect();
+  mousePosition.x = e.clientX - x;
+  mousePosition.y = e.clientY - y;
+  pickerPick();
 });
 
-// console.log(ViewportResizeDispatcher.classInstanceMap.get("default"));
+const pickerPick = debounce(
+  () => {
+    const { pickid, object3d } = picker.pick(scene, camera, mousePosition.x, mousePosition.y);
+    console.log(pickid, object3d?.name);
+  },
+  200,
+  { leading: false, trailing: true },
+);
+
+//////////////////////////////////////// Resize ////////////////////////////////////////
+
+const resizeEventDispatcher = new ViewportResizeDispatcher(viewport as HTMLElement);
+resizeEventDispatcher.addResizeEventListener(({ message: { width, height } }) => renderer.setSize(width, height));
+resizeEventDispatcher.addResizeEventListener(({ message: { width, height } }) => picker.syncRendererStatus(width, height));
+
+console.log(ViewportResizeDispatcher.classInstanceMap.get("default"));
 {
   let size = 0;
   window.addEventListener("keydown", () => {
@@ -112,17 +146,7 @@ renderer.domElement.addEventListener("pointerdown", (e) => {
   });
 }
 
-const resizeEventDispatcher = new ViewportResizeDispatcher(viewport as HTMLElement);
-resizeEventDispatcher.addResizeEventListener(({ message: { width, height } }) => renderer.setSize(width, height));
-resizeEventDispatcher.addResizeEventListener(({ message: { width, height } }) => picker.syncRendererStatus(width, height));
-
-function animate() {
-  requestAnimationFrame(animate);
-
-  renderer.render(scene, camera);
-}
-
-animate();
+//////////////////////////////////////// Coordinate ////////////////////////////////////////
 
 import { getXZPosition } from "@source/utils/pointerCoordinates";
 {
