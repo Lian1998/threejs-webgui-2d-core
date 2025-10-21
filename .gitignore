@@ -24,6 +24,7 @@ dist-ssr
 *.local
 package-lock.json
 pnpm-lock.yaml
+public/geojson-handled
 
 # Editor directories and files
 .vscode/*
