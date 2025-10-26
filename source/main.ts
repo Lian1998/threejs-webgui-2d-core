@@ -30,6 +30,7 @@ controls.enableDamping = false;
   controls["_dollyIn"](1 / 5.0); // 略微调整视角以使得视口方便调试
   controls.update();
 }
+const defaultZomm = camera.zoom;
 
 import ColorDefine from "@source/ColorDefine";
 import LayerSequence from "@source/LayerSequence";
@@ -41,44 +42,62 @@ import { Sprite2D } from "@core/index";
 import { calculateMPP } from "@source/utils/ratio";
 import { darkenHex } from "@source/utils/color";
 
+const t_QC_Gantry = await new THREE.TextureLoader().loadAsync("/resources/QC_Gantry.png");
+const t_QC_Trolley = await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png");
+
 const qcGantry = new Sprite2D({
-  texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Gantry.png"),
+  texture: t_QC_Gantry,
   mpp: calculateMPP(35, 2230),
   depth: LayerSequence.QC_Gantry,
   color: new THREE.Color(ColorDefine.DEVICE.DEFAULT),
 });
 qcGantry.name = "qcGantry";
 
+const qcMtPviot = new THREE.Object3D();
+qcMtPviot.position.z = 18;
 const qcMT = new Sprite2D({
-  texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png"),
+  texture: t_QC_Trolley,
   mpp: calculateMPP(6, 87),
   depth: LayerSequence.QC_Trolley,
   color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
 });
 qcMT.name = "qcMT";
-const qcMtPviot = new THREE.Object3D();
-qcMtPviot.position.z = 18;
 qcMtPviot.add(qcMT);
 
+const qcPTPviot = new THREE.Object3D();
+qcPTPviot.position.z = 20;
 const qcPT = new Sprite2D({
-  texture: await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png"),
+  texture: t_QC_Trolley,
   mpp: calculateMPP(6, 87),
   depth: LayerSequence.QC_Trolley,
   color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
 });
 qcPT.name = "qcPT";
-const qcPTPviot = new THREE.Object3D();
-qcPTPviot.position.z = 20;
 qcPTPviot.add(qcPT);
 
+const qcLabelPviot = new THREE.Object3D();
+qcLabelPviot.position.z = -10;
 const qcLabel = new SDFText2D({
   text: "QC101",
   depth: LayerSequence.TEXT,
 });
 qcLabel.name = "qcLabel";
-const qcLabelPviot = new THREE.Object3D();
-qcLabelPviot.position.z = -10;
 qcLabelPviot.add(qcLabel);
+
+const qcInstance = {
+  name: "QC101",
+  qcGantry,
+  qcMtPviot,
+  qcMT,
+  qcPTPviot,
+  qcPT,
+  qcLabelPviot,
+  qcLabel,
+  update: (deltaTime: number, elapsedTime: number) => {
+    const scale = defaultZomm / camera.zoom;
+    qcLabel.scale.setScalar(scale);
+  },
+};
 
 qcGantry.add(qcMtPviot);
 qcGantry.add(qcPTPviot);
@@ -88,9 +107,11 @@ qcMT.geometry.boundingBox = qcGantry.geometry.boundingBox.clone();
 qcPT.geometry.boundingBox = qcGantry.geometry.boundingBox.clone();
 scene.add(qcGantry);
 
+const clock = new THREE.Clock();
 const animate = () => {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
+  qcInstance.update(clock.getDelta(), clock.getElapsedTime());
 };
 
 animate();
@@ -156,3 +177,9 @@ import { getXZPosition } from "@source/utils/pointerCoordinates";
     coordinatesEl.innerHTML = `${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`;
   });
 }
+
+//////////////////////////////////////// BaseMap ////////////////////////////////////////
+import { GeometryCollectionLoader } from "@core/GeometryCollectionLoader";
+
+const gcloader = new GeometryCollectionLoader();
+gcloader.load("geojson-handled/01-陆地和建筑.json", (data) => {});

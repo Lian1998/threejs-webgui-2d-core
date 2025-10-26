@@ -94,6 +94,15 @@ Object3D.userData = {
 // https://github.com/Chlumsky/msdf-atlas-gen
 ```
 
+# Threejs 加载 geojson
+1. 在视口缩放和移动的时候需要每帧都刷新, 要高性能
+2. 要支持 geojson 的几何体挖空
+3. 请求文件, 获取几何, 提交渲染状态
+4. 一个文件(单类型的 GeometryCollection)对应一个"层"概念, 一个"层"对应一个样式
+   1. 可以设置一定的样式, 如两个线条A(2px)B(1px), 在同视角时要明显的能感觉出A线条比B粗一倍
+   2. 样式还支持虚线, 填充色等
+结合以上需求设计一下技术方案, 是用canvas2D画一个类似bitmap? 还是直接自己整理几何在threejs的封装下用webgl画(要不要将几何扩充成面片)?
+
 # 问题修复历史
 1. 如果不是注册到 GpuPickManager 里的mesh, 那么不加入 pickBuffer 渲染
    1. 添加缓存容器, 统计所有在渲染 pickBuffer 前可见并未注册的 mesh, 渲染完 pickBuffer 恢复之
@@ -104,5 +113,4 @@ Object3D.userData = {
 4. threejs 渲染到 canvas 后, 再用 readPixel 拾取, 发现 rgba(0, 0, 0, x), 被读取成数字时变成灰色
    1. 开启混合后导致的问题
    2. Sprite2DShaderMaterial 替换材质 过程优化, 即便物体透明, 在上层的点击事件也不应该穿透下去
-
 
