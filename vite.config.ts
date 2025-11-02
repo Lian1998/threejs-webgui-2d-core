@@ -35,6 +35,7 @@ export default defineConfig(({ command, mode }) => {
         "@libs": _p("./libs"),
         "three": _p("./libs/three.js-r170/src/Three.js"),
         "three_addons": _p("./libs/three.js-r170/examples/jsm"),
+        "earcut":  _p("./libs/earcut-3.0.2/src/earcut.js"),
         "tiny-sdf": _p("./libs/tiny-sdf-2.0.7/index.js"),
       },
     },
@@ -46,7 +47,7 @@ export default defineConfig(({ command, mode }) => {
     plugins: [],
 
     server: {
-      port: 13261,
+      port: 5173,
       strictPort: true,           // 固定端口(不会由于占用而自动顺延端口)
 
       watch: {

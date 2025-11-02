@@ -21,7 +21,7 @@ const verticesTo3D = (flat2d: [number, number]) => {
   return r;
 };
 
-export const polygon = (polygonCoords: number[][][]) => {
+export const handlePolygon = (polygonCoords: number[][][]) => {
   const vertices = [];
   const holes = [];
   let holeIndex = 0;
@@ -39,14 +39,16 @@ export const polygon = (polygonCoords: number[][][]) => {
   return indices;
 };
 
-export const line = (lineCoords: [number, number][]) => {
+export const handleLineString = (lineCoords: number[][]) => {
   const positions = [];
   const indices = [];
 
   let idx = 0;
 
   for (let i = 0; i < lineCoords.length - 1; i++) {
+    // @ts-ignore
     const P0 = toVec2(lineCoords[i]);
+    // @ts-ignore
     const P1 = toVec2(lineCoords[i + 1]);
 
     const dir = normalize(sub(P1, P0));

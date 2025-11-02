@@ -2,7 +2,11 @@ import * as THREE from "three";
 import earcut from "earcut";
 import { GeometryCollection } from "geojson";
 
+import type { GeoJsonTypes } from "geojson";
+import type { LineString } from "geojson";
 import type { ThreejsGeometryCollection } from "./ThreejsGeometryCollection";
+
+import { handleLineString } from "@core/utils/geojson";
 
 export class GeometryCollectionLoader extends THREE.Loader<ThreejsGeometryCollection, string> {
   constructor(manager: THREE.LoadingManager = THREE.DefaultLoadingManager) {
@@ -49,11 +53,11 @@ export class GeometryCollectionLoader extends THREE.Loader<ThreejsGeometryCollec
 
     loader.load(
       url,
-      (data: string) => {
+      (data: any) => {
         try {
           // 用此类定义的parse函数解析json
           scope.parse(
-            data,
+            data as GeometryCollection,
             _resourcePath,
             (_data: ThreejsGeometryCollection) => {
               // onLoad(_data);
@@ -71,11 +75,18 @@ export class GeometryCollectionLoader extends THREE.Loader<ThreejsGeometryCollec
     );
   }
 
-  parse(data: string, path: string, onLoad: (data: ThreejsGeometryCollection) => void, onError: (err: unknown) => void) {
-    console.log(data);
+  parse(data: GeometryCollection, path: string, onLoad: (data: ThreejsGeometryCollection) => void, onError: (err: unknown) => void) {
+    if (data.geometries[0].type === "LineString") {
+      // for (let i = 0; i < data.geometries.length; i++) {
+      //   const lineString = data.geometries[i] as LineString;
+      //   console.log("lineString.coordinates", lineString.coordinates);
+      //   const mesh_lineString = handleLineString(lineString.coordinates);
+      //   console.log("mesh_lineString", mesh_lineString);
+      // }
+    }
   }
 
-  parseAsync(data: string, path: string) {
+  parseAsync(data: GeometryCollection, path: string) {
     const scope = this;
 
     return new Promise((resolve, reject) => {
