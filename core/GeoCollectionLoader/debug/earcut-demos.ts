@@ -82,7 +82,7 @@ import earcut, { flatten, deviation } from "earcut";
     ctx.fillRect(x - 3, y - 3, 6, 6);
   }
 
-  function drawPoly(rings: number[][], color: string, fill?: boolean | string) {
+  function drawPoly(rings: any, color: string, fill?: boolean | string) {
     ctx.beginPath();
 
     ctx.strokeStyle = color;
