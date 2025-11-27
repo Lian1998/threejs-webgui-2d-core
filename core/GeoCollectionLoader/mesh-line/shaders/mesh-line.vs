@@ -3,7 +3,7 @@
 #include <fog_pars_vertex>
 #include <clipping_planes_pars_vertex>
 
-attribute vec3 previous;        // 上一个顶点
+attribute vec3 prev;        // 上一个顶点
 attribute vec3 next;            // 下一个顶点
 attribute float side;           // (点在CPU阶段两份存储, 当前这个)顶点是属于线条的哪一侧(+1, 顺着顺时针法线; -1, 逆着顺时针法线)
 attribute float width;          // 当前顶点对应的线宽比例(宽度与线段进度函数计算)
@@ -32,19 +32,16 @@ void main() {
   vUV = uv;
   vCounters = counters;
 
-  // 1. 转化为NDC
+  // 1. 投影到NDC(考虑宽高比)
 
   float aspect = resolution.x / resolution.y;
-
-  mat4 m = projectionMatrix * modelViewMatrix; // 投影到NDC
-  vec4 finalPosition = m * vec4(position, 1.0);
-  vec4 prevPos = m * vec4(previous, 1.0);
-  vec4 nextPos = m * vec4(next, 1.0);
-
-  // 转为屏幕空间坐标(已考虑宽高比)
-  vec2 currentP = fix(finalPosition, aspect);
-  vec2 prevP = fix(prevPos, aspect);
-  vec2 nextP = fix(nextPos, aspect);
+  mat4 mvp = projectionMatrix * modelViewMatrix;
+  vec4 mvp_position = mvp * vec4(position, 1.0); // finalPosition
+  vec4 mvp_prev = mvp * vec4(prev, 1.0); // prevPos
+  vec4 mvp_next = mvp * vec4(next, 1.0); // nextPos
+  vec2 aspect_position = fix(mvp_position, aspect); // currentP
+  vec2 aspect_prev = fix(mvp_prev, aspect); // prevP
+  vec2 aspect_next = fix(mvp_next, aspect); // nextP
 
   // 2. 计算线的方向与法线
 
@@ -52,42 +49,40 @@ void main() {
   float w = lineWidth * width; // 从CPU计算阶段获取的attributes宽度(带变化) 和 MaterialAttribute 设置的宽度 计算出真正的宽度
 
   // 末尾段
-  if (nextP == currentP) {
-    dir = normalize(currentP - prevP);
+  if (aspect_next == aspect_position) {
+    dir = normalize(aspect_position - aspect_prev);
   } 
   // 起始段
-  else if (prevP == currentP) {
-    dir = normalize(nextP - currentP);
+  else if (aspect_prev == aspect_position) {
+    dir = normalize(aspect_next - aspect_position);
   } 
   // 在中间段, 取两边方向平均(平滑拐角)
   else {
-    vec2 dir1 = normalize(currentP - prevP);
-    vec2 dir2 = normalize(nextP - currentP);
+    vec2 dir1 = normalize(aspect_position - aspect_prev);
+    vec2 dir2 = normalize(aspect_next - aspect_position);
     dir = normalize(dir1 + dir2);
 
     //  miter join 修正以防止拐角过于尖锐
     vec2 perp = vec2(-dir1.y, dir1.x);
     vec2 miter = vec2(-dir.y, dir.x);
-    w = clamp(w / dot(miter, perp), 0., 4. * lineWidth * width);
+    w = clamp(w / dot(miter, perp), 0., 4. * w);
   }
 
   // 3. 计算法线方向
 
-  // 屏幕空间内
-  vec4 normal = vec4(-dir.y, dir.x, 0., 1.); // 顺时针法线
+  vec4 normal = vec4(-dir.y, dir.x, 0., 1.); // 屏幕空间内, 顺时针法线
   normal.xy *= w;
 
+  // sizeAttenuation(default:1.0)
   // 线宽是否随着相机与当前中点的距离变化而变化(对应到屏幕空间就是法线的长度)
   if (sizeAttenuation == 0.) {
-    // 抵消透视缩放(乘上 w)
-    normal.xy *= finalPosition.w;
-    // 按屏幕分辨率缩放, 使得线宽在屏幕上保持恒定像素大小
-    normal.xy /= (vec4(resolution, 0., 1.) * projectionMatrix).xy * aspect;
+    normal.xy *= mvp_position.w; // 抵消透视缩放(乘上 w)
+    normal.xy /= (vec4(resolution, 0., 1.) * projectionMatrix).xy * aspect; // 按屏幕分辨率缩放, 使得线宽在屏幕上保持恒定像素大小
   }
 
   // 4. 将偏移后的顶点位置应用到屏幕坐标
-  finalPosition.xy += normal.xy * side;
-  gl_Position = finalPosition;
+  mvp_position.xy += normal.xy * side;
+  gl_Position = mvp_position;
 
   #include <logdepthbuf_vertex>
   #include <fog_vertex>

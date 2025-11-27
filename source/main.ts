@@ -15,8 +15,8 @@ viewport.appendChild(renderer.domElement);
 
 const camera = new THREE.OrthographicCamera(width / -2, width / 2, height / 2, height / -2, 0.01, 1000);
 
+const scene_baseMap = new THREE.Scene();
 const scene = new THREE.Scene();
-scene.add(camera);
 
 import { MapControls } from "three_addons/controls/MapControls.js";
 const controls = new MapControls(camera, renderer.domElement);
@@ -33,9 +33,9 @@ import { MeshLineMaterial } from "@core/GeoCollectionLoader/mesh-line/";
 import { MeshLineMaterialParameters } from "@core/GeoCollectionLoader/mesh-line/";
 
 {
-  const baseMap = new THREE.Group();
-  scene.add(baseMap);
-  baseMap.rotateY(Math.PI);
+  const group = new THREE.Group();
+  scene_baseMap.add(group);
+  group.rotateY(Math.PI);
 
   const _resolution = new THREE.Vector2(1024, 768);
   const handleLineMesh = (data: GeometryCollection<LineString>, materialConfiguration: MeshLineMaterialParameters) => {
@@ -50,11 +50,11 @@ import { MeshLineMaterialParameters } from "@core/GeoCollectionLoader/mesh-line/
       const mlMaterial = new MeshLineMaterial(materialConfiguration);
       const mesh = new THREE.Mesh(mlGeometry, mlMaterial);
       mesh.frustumCulled = false;
-      baseMap.add(mesh);
+      group.add(mesh);
     }
   };
 
-  window
+  await window
     .fetch("geojson-handled/01-陆地和建筑.json")
     .then((response) => {
       return response.json();
@@ -63,7 +63,7 @@ import { MeshLineMaterialParameters } from "@core/GeoCollectionLoader/mesh-line/
       handleLineMesh(data, { resolution: _resolution, lineWidth: 1.2 / 1024 });
     });
 
-  window
+  await window
     .fetch("geojson-handled/02-基础地图.json")
     .then((response) => {
       return response.json();
@@ -72,7 +72,7 @@ import { MeshLineMaterialParameters } from "@core/GeoCollectionLoader/mesh-line/
       handleLineMesh(data, { resolution: _resolution, lineWidth: 1.75 / 1024 });
     });
 
-  window
+  await window
     .fetch("geojson-handled/03-轨道.json")
     .then((response) => {
       return response.json();
@@ -81,7 +81,7 @@ import { MeshLineMaterialParameters } from "@core/GeoCollectionLoader/mesh-line/
       handleLineMesh(data, { resolution: _resolution, lineWidth: 1 / 1024 });
     });
 
-  window
+  await window
     .fetch("geojson-handled/04-集卡车道线-实线.json")
     .then((response) => {
       return response.json();
@@ -90,7 +90,7 @@ import { MeshLineMaterialParameters } from "@core/GeoCollectionLoader/mesh-line/
       handleLineMesh(data, { resolution: _resolution, lineWidth: 2 / 1024 });
     });
 
-  window
+  await window
     .fetch("geojson-handled/04-集卡车道线-虚线.json")
     .then((response) => {
       return response.json();
@@ -227,6 +227,8 @@ scene.add(qcGantry);
 const clock = new THREE.Clock();
 const animate = () => {
   requestAnimationFrame(animate);
+  renderer.render(scene_baseMap, camera);
+  renderer.autoClear = false;
   renderer.render(scene, camera);
   qcInstance.update(clock.getDelta(), clock.getElapsedTime());
 };
