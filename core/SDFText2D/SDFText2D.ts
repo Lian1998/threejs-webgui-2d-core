@@ -39,6 +39,7 @@ export interface SDFText2DParameters {
 
 export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
   text: string;
+  texture: THREE.Texture;
   depth: number;
 
   constructor({ text = "?", depth = 1 }: SDFText2DParameters) {
@@ -49,6 +50,9 @@ export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
     const texture = new THREE.Texture(canvas);
     texture.needsUpdate = true;
     texture.flipY = false;
+
+    this.texture = texture;
+    this.depth = depth;
 
     // 生成几何
     const geometry = new Sprite2DGeometry(canvas.width, canvas.height);

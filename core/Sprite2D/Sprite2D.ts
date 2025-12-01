@@ -5,9 +5,6 @@ import { Sprite2DGeometry } from "./Sprite2DGeometry";
 import vs from "./shaders/sprite2d.vs?raw";
 import fs from "./shaders/sprite2d.fs?raw";
 
-/**
- * XZ平面精灵
- */
 export interface Sprite2DParameters {
   /** threejs纹理 */
   texture: THREE.Texture;
@@ -47,8 +44,8 @@ export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
     const { naturalWidth, naturalHeight } = texture.image; // 贴图像素大小
 
     this.texture = texture;
+    this.depth = depth;
     this.mpp = mpp; // 米/像素
-    this.depth = depth; // 深度
     this.color = color; // 混合
 
     // 生成几何
@@ -64,14 +61,12 @@ export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
       uniforms: {
         uTexture: { value: texture }, // 贴图
         uColor: { value: color }, // 混合
-        uDepth: { value: depth }, // 深度
       },
       vertexShader: vs,
       fragmentShader: fs,
     });
 
     material.defines["USE_CUSTOM_MULTICOLOR"] = color !== undefined ? 1 : 0;
-    material.defines["USE_CUSTOM_DEPTH"] = depth !== undefined ? 1 : 0;
 
     this.geometry = geometry;
     this.material = material;

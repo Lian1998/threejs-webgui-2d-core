@@ -3,8 +3,6 @@ uniform sampler2D uTexture;
 uniform bool uUseMultipleColor;
 uniform vec3 uColor;
 
-uniform float uDepth;
-
 varying vec2 vUv;
 
 // ./libs/three.js-r170/src/renderers/shaders/ShaderChunk/colorspace_pars_fragment.glsl.js
