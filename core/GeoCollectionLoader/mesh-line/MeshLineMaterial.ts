@@ -30,28 +30,25 @@ export interface MeshLineMaterialParameters {
   /** cutoff value from 0 to 1 */
   alphaTest?: number;
 
-  /** the length and space between dashes. (0 - no dash) */
-  dashArray?: number;
+  /** 使用一个两个长度数组来快速设置虚线的样式; 如设置 [5, 5] 时: 实线5个单位, 空白5个单位 */
+  dashArray?: number[];
 
-  /** defines the location where the dash will begin. Ideal to animate the line. */
-  dashOffset?: number;
-
-  /** defines the ratio between that is visible or not (0 - more visible, 1 - more invisible). */
-  dashRatio?: number;
-
+  /** 是否启用虚线 */
   useDash?: number;
 
   /** THREE.Vector2 specifying the canvas size (REQUIRED) */
   resolution: THREE.Vector2; // required
 
-  /** makes the line width constant regardless distance (1 unit is 1px on screen) (0 - attenuate, 1 - don't attenuate) */
+  /** 线宽是否随着距离衰减而衰减 */
   sizeAttenuation?: number;
 
-  /** float defining width (if sizeAttenuation is true, it's world units; else is screen pixels) */
+  /** 线宽(sizeAttenuation, 世界坐标; !sizeAttenuation, 线条在屏幕的宽度 */
   lineWidth?: number;
 
+  /** 渐变色, 设置两个threejsColor对象 */
   gradient?: string[] | THREE.Color[] | number[];
 
+  /** 是否启用渐变色 */
   useGradient?: number;
 
   visibility?: number;
@@ -69,9 +66,7 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
   gradient!: THREE.Color[];
   resolution!: THREE.Vector2;
   sizeAttenuation!: number;
-  dashArray!: number;
-  dashOffset!: number;
-  dashRatio!: number;
+  dashArray!: number[];
   useDash!: number;
   useGradient!: number;
   visibility!: number;
@@ -90,10 +85,8 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
         gradient: { value: [new THREE.Color(0xff0000), new THREE.Color(0x00ff00)] },
         opacity: { value: 1 },
         resolution: { value: new THREE.Vector2(1, 1) },
-        sizeAttenuation: { value: 1 },
-        dashArray: { value: 0 },
-        dashOffset: { value: 0 },
-        dashRatio: { value: 0.5 },
+        sizeAttenuation: { value: 0 },
+        dashArray: { value: [5, 5] },
         useDash: { value: 0 },
         useGradient: { value: 0 },
         visibility: { value: 1 },
@@ -205,24 +198,6 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
           this.useDash = value !== 0 ? 1 : 0;
         },
       },
-      dashOffset: {
-        enumerable: true,
-        get() {
-          return this.uniforms.dashOffset.value;
-        },
-        set(value) {
-          this.uniforms.dashOffset.value = value;
-        },
-      },
-      dashRatio: {
-        enumerable: true,
-        get() {
-          return this.uniforms.dashRatio.value;
-        },
-        set(value) {
-          this.uniforms.dashRatio.value = value;
-        },
-      },
       useDash: {
         enumerable: true,
         get() {
@@ -285,8 +260,6 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
     this.resolution.copy(source.resolution);
     this.sizeAttenuation = source.sizeAttenuation;
     this.dashArray = source.dashArray;
-    this.dashOffset = source.dashOffset;
-    this.dashRatio = source.dashRatio;
     this.useDash = source.useDash;
     this.useGradient = source.useGradient;
     this.visibility = source.visibility;

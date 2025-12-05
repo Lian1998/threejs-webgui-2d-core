@@ -60,7 +60,7 @@ group0.rotateY(Math.PI);
         return response.json();
       })
       .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { resolution: _resolution, lineWidth: 1.2 / 1024 });
+        handleLineMesh(data, { resolution: _resolution, lineWidth: 1.5 });
       }),
 
     window
@@ -69,7 +69,7 @@ group0.rotateY(Math.PI);
         return response.json();
       })
       .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { resolution: _resolution, lineWidth: 1.75 / 1024 });
+        handleLineMesh(data, { resolution: _resolution, lineWidth: 2.5 });
       }),
 
     window
@@ -78,7 +78,7 @@ group0.rotateY(Math.PI);
         return response.json();
       })
       .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { resolution: _resolution, lineWidth: 1 / 1024 });
+        handleLineMesh(data, { resolution: _resolution, lineWidth: 1 });
       }),
 
     window
@@ -87,7 +87,7 @@ group0.rotateY(Math.PI);
         return response.json();
       })
       .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { resolution: _resolution, lineWidth: 2 / 1024 });
+        handleLineMesh(data, { resolution: _resolution, lineWidth: 1 });
       }),
 
     window
@@ -96,7 +96,7 @@ group0.rotateY(Math.PI);
         return response.json();
       })
       .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { resolution: _resolution, lineWidth: 2 / 1024, useDash: 1, dashArray: 10, dashRatio: 0 });
+        handleLineMesh(data, { resolution: _resolution, lineWidth: 1, useDash: 1 }); // , useDash: 1, dashArray: 1.0, dashRatio: 0.5, dashOffset: 0.0
       }),
   ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
 }
@@ -134,7 +134,7 @@ resizeEventDispatcher.addResizeEventListener(({ message: { width, height } }) =>
 
 console.log(ViewportResizeDispatcher.classInstanceMap.get("default"));
 {
-  let size = 0;
+  let size = 1;
   window.addEventListener("keydown", () => {
     if (size % 2 == 1) {
       (viewport as HTMLDivElement).style.width = `800px`;

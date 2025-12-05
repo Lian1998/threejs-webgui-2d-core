@@ -135,7 +135,7 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
     for (let j = 0; j < points.length; j += 3) {
       const c = j / (l - 1);
       this.positions.push(points[j], points[j + 1], points[j + 2]);
-      this.positions.push(points[j], points[j + 1], points[j + 2]);
+      this.positions.push(points[j], points[j + 1], points[j + 2]); // 一个点扩充成两个点
       this.counters.push(c);
       this.counters.push(c);
     }
@@ -168,6 +168,7 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
     this.indices_array = []; // 构成三角面的索引
     this.uvs = []; // 每个点对应的纹理坐标 (u, v)
 
+    // this.positions => A(a, b, c), A(a, b, c), B(a, b, c), B(a, b, c)
     const l = this.positions.length / 6; // 顶点数量
     let _v: THREE.Vector3Tuple; // 临时变量，用于存放复制的顶点坐标
 
@@ -182,7 +183,7 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
 
     // 遍历所有线段点
 
-    let w = 1; // 默认线宽
+    let w = 1; // 默认线宽倍数
     for (let j = 0; j < l; j++) {
       const c = j / (l - 1);
       // 扩充的顶点扩充出去的距离
