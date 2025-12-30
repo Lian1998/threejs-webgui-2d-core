@@ -52,5 +52,9 @@
     "libs/three.js-r170/**/*.js",
     "libs/three.js-r170/**/*.js",
     "libs/three-ts-types-r170/**/*.d.ts"
-  ]
+  ],
+
+  "types": [
+    "./core/index.d.ts",
+  ],
 }

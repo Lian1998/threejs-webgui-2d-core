@@ -1,19 +1,18 @@
 # 需求分析
-
-**当前的不满足:**
+**当前Openlayers不满足:**
 1. 以钦州项目为例
-   1. QC `号码,大车,主小车,门架小车,平台,集装箱槽4,循环方向,任务计时器,状态栏` 11*12
-   2. IGV `标签,号码,车头,车身,集装箱槽1,电池,状态栏` 7*72
-   3. YC `号码,大车,小车,集装箱槽1,状态栏` 7*43
+   1. QC `号码,大车,主小车,门架小车,平台,集装箱槽4,循环方向,任务计时器,状态栏` 11 * 12
+   2. IGV `标签,号码,车头,车身,集装箱槽1,电池,状态栏` 7 * 72
+   3. YC `号码,大车,小车,集装箱槽1,状态栏` 7 * 43
    4. 如果所有设备都在动的话, 每300ms要使用canvas2DAPI刷新图形937次 (理论最低)
 2. openlayers的一些其他问题
-   1. openlayers 在项目定位上不像cesium/mapbox对webgl基本没有支持 无法过渡到三维/轻三维阶段
+   1. openlayers 在项目定位上不像cesium/mapbox, 其对webgl基本没有支持 无法过渡到三维/轻三维阶段
    2. 在钦州项目上制作历史回放功能时, 在调试4倍速(300ms/4)情况下设备的运动轨迹会有明显绘制效率更不上实际运动的情况(13hz)
       1. 我在项目中手动压缩报文才解决了这一问题
    3. openlayers 的GIS封装API导致了很多需求实现困难 
    4. 选择和缩放管线无法自控的问题
 
-[性能测试](https://benchmarks.slaylines.io/webgl.html)
+[各图形技术性能测试(仅供参考)](https://benchmarks.slaylines.io/webgl.html)
 
 **(新框架)功能需求罗列:**
 1. 稳定的图形编码测试环境
@@ -75,26 +74,23 @@ Object3D.userData = {
 }
 ```
 
-
 # 关于SDF文字的文档和库
-```javascript
-// https://github.com/dy/bitmap-sdf/tree/master
-// https://github.com/dy/bitmap-sdf/blob/master/index.js
+https://github.com/dy/bitmap-sdf/tree/master  
+https://github.com/dy/bitmap-sdf/blob/master/index.js  
 
-// https://github.com/mapbox/tiny-sdf
-// https://github.com/mapbox/tiny-sdf/blob/main/index.js
-// https://blog.csdn.net/qq_21476953/article/details/112991864
+https://github.com/mapbox/tiny-sdf  
+https://github.com/mapbox/tiny-sdf/blob/main/index.js  
+https://blog.csdn.net/qq_21476953/article/details/112991864  
 
-// https://github.com/protectwise/troika/blob/main/packages/troika-three-text/README.md
+https://github.com/protectwise/troika/blob/main/packages/troika-three-text/README.md  
 
-// https://github.com/Experience-Monks/three-bmfont-text
-// https://github.com/soadzoor/MSDF-text
-// https://github.com/davidlyons/text-sdf-bitmap
-// https://github.com/trinketmage/three-glyph
-// https://github.com/Chlumsky/msdf-atlas-gen
-```
+https://github.com/Experience-Monks/three-bmfont-text  
+https://github.com/soadzoor/MSDF-text  
+https://github.com/davidlyons/text-sdf-bitmap  
+https://github.com/trinketmage/three-glyph  
+https://github.com/Chlumsky/msdf-atlas-gen  
 
-# Threejs 加载 geojson
+# 关于 Threejs 加载 geojson
 1. 在视口缩放和移动的时候需要每帧都刷新, 要高性能
 2. 要支持 geojson 的几何体挖空
 3. 请求文件, 获取几何, 提交渲染状态
@@ -103,7 +99,7 @@ Object3D.userData = {
    2. 样式还支持虚线, 填充色等
 结合以上需求设计一下技术方案, 是用canvas2D画一个类似bitmap? 还是直接自己整理几何在threejs的封装下用webgl画(要不要将几何扩充成面片)?
 
-# 问题修复历史
+# 问题修复
 1. 如果不是注册到 GpuPickManager 里的mesh, 那么不加入 pickBuffer 渲染
    1. 添加缓存容器, 统计所有在渲染 pickBuffer 前可见并未注册的 mesh, 渲染完 pickBuffer 恢复之
 2. Sprite2D 的 fragmentShader 简单的透明度不合格 discard 片元, 效果不是很好
@@ -114,3 +110,8 @@ Object3D.userData = {
    1. 开启混合后导致的问题
    2. Sprite2DShaderMaterial 替换材质 过程优化, 即便物体透明, 在上层的点击事件也不应该穿透下去
 
+**TODO LIST:**
+1. 底图画面
+2. 数字文字标号能否有更好的效果, 缓存检查
+3. 设备Map管理方式
+4. layers 渲染次序原理

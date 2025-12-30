@@ -1,7 +1,7 @@
-type Constructor<T = object> = abstract new (...args: any[]) => T;
+type Constructor<T = {}> = abstract new (...args: any[]) => T;
 
 /**
- * Mixin这个函数类型会使类型下拥有一个静态属性用于记录当前类生成的所有实例
+ * Mixin这个函数, 使类拥有一个静态属性用于记录其生成的所有实例(Map中数字代表按生成实例顺序进行排序的实例, 其中'default'和数字0代表第一个实例)
  * ```javascript
  * import * as THREE from "three";
  * class ViewportDispatcher extends WithClassInstanceMap(THREE.Object3D) {
@@ -24,15 +24,15 @@ type Constructor<T = object> = abstract new (...args: any[]) => T;
  */
 export const WithClassInstanceMap = <TBase extends Constructor>(Base: TBase) => {
   abstract class WithInstanceMap extends Base {
-    static sequence = 1;
-    static classInstanceMap: Map<any | "default", WithInstanceMap> = new Map();
+    private static sequence = 1;
+    private static classInstanceMap: Map<any, WithInstanceMap> = new Map();
 
     constructor(...args: any[]) {
       super(...args);
 
-      const ctor = this.constructor as typeof Base & {
+      const ctor = this.constructor as TBase & {
         sequence: number;
-        classInstanceMap: Map<any | "default", WithInstanceMap>;
+        classInstanceMap: Map<any, WithInstanceMap>;
       };
 
       //
@@ -44,6 +44,10 @@ export const WithClassInstanceMap = <TBase extends Constructor>(Base: TBase) => 
         ctor.classInstanceMap.set(ctor.sequence, instance);
         ctor.sequence++;
       }
+    }
+
+    static getClassInstance<T>(key: any) {
+      return this.classInstanceMap.get(key) as T;
     }
   }
 

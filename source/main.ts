@@ -5,38 +5,40 @@ import debounce from "@libs/lodash/src/debounce";
 import WebGL from "three_addons/capabilities/WebGL";
 if (!WebGL.isWebGL2Available()) throw new Error("浏览器不支持WebGL2");
 
-const viewport = document.querySelector("#viewport");
+const viewport = document.querySelector<HTMLDivElement>("#viewport");
 const { width, height } = viewport.getBoundingClientRect();
+const viewportResizeDispatcher = new ViewportResizeDispatcher(viewport);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: true });
+viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => renderer.setSize(width, height));
 renderer.setClearColor(0xffffff, 0.0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 viewport.appendChild(renderer.domElement);
 
-const camera = new THREE.OrthographicCamera(width / -2, width / 2, height / 2, height / -2, 0.01, 1000);
+import { MapControls } from "three_addons/controls/MapControls.js";
+const camera = new THREE.OrthographicCamera(-width / 2, width / 2, height / 2, height / -2);
+const controls = new MapControls(camera, renderer.domElement);
+// controls.enableRotate = false;
+// controls.enableDamping = false;
 
 const scene = new THREE.Scene();
 
-import { MapControls } from "three_addons/controls/MapControls.js";
-const controls = new MapControls(camera, renderer.domElement);
-controls.enableRotate = false;
-controls.enableDamping = false;
-
 //////////////////////////////////////// 静态资源(底图)加载 ////////////////////////////////////////
 import type { GeometryCollection } from "geojson";
-import { LineString } from "geojson";
+import type { LineString } from "geojson";
 
 import { MeshLineGeometry } from "@core/GeoCollectionLoader/mesh-line/";
 import { MeshLineMaterial } from "@core/GeoCollectionLoader/mesh-line/";
 import { MeshLineMaterialParameters } from "@core/GeoCollectionLoader/mesh-line/";
 
 const group0 = new THREE.Group();
+group0.rotateY(Math.PI);
 group0.layers.set(0);
 scene.add(group0);
-group0.rotateY(Math.PI);
 
 {
-  const _resolution = new THREE.Vector2(1024, 768);
+  const _resolution = new THREE.Vector2(width, height);
+  viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
   const handleLineMesh = (data: GeometryCollection<LineString>, materialConfiguration: MeshLineMaterialParameters) => {
     for (let i = 0; i < data.geometries.length; i++) {
       const geometry = data.geometries[i];
@@ -53,6 +55,7 @@ group0.rotateY(Math.PI);
     }
   };
 
+  // 线
   Promise.all([
     window
       .fetch("geojson-handled/01-陆地和建筑.json")
@@ -99,18 +102,18 @@ group0.rotateY(Math.PI);
         handleLineMesh(data, { resolution: _resolution, lineWidth: 1, useDash: 1 }); // , useDash: 1, dashArray: 1.0, dashRatio: 0.5, dashOffset: 0.0
       }),
   ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
+
+  // TODO: 面
 }
 
 //////////////////////////////////////// 图元拾取 ////////////////////////////////////////
 
 const picker = new GpuPickManager(renderer);
+viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => picker.syncRendererStatus(width, height));
 
-const mousePosition = {
-  x: 0.0,
-  y: 0.0,
-};
+const mousePosition = { x: 0.0, y: 0.0 };
 
-renderer.domElement.addEventListener("click", (e) => {
+renderer.domElement.addEventListener("mousemove", (e) => {
   const { x, y } = renderer.domElement.getBoundingClientRect();
   mousePosition.x = e.clientX - x;
   mousePosition.y = e.clientY - y;
@@ -121,18 +124,15 @@ const pickerPick = debounce(
   () => {
     const { pickid, object3d } = picker.pick(scene, camera, mousePosition.x, mousePosition.y);
     console.log(pickid, object3d?.name);
+
+    if (object3d?.name) qcInstance.moveIn();
+    else qcInstance.moveOut();
   },
-  200,
+  80,
   { leading: false, trailing: true },
 );
 
-//////////////////////////////////////// 缩放管线 ////////////////////////////////////////
-
-const resizeEventDispatcher = new ViewportResizeDispatcher(viewport as HTMLElement);
-resizeEventDispatcher.addResizeEventListener(({ message: { width, height } }) => renderer.setSize(width, height));
-resizeEventDispatcher.addResizeEventListener(({ message: { width, height } }) => picker.syncRendererStatus(width, height));
-
-console.log(ViewportResizeDispatcher.classInstanceMap.get("default"));
+//////////////////////////////////////// 动态缩放测试 ////////////////////////////////////////
 {
   let size = 1;
   window.addEventListener("keydown", () => {
@@ -152,7 +152,7 @@ console.log(ViewportResizeDispatcher.classInstanceMap.get("default"));
 import { getXZPosition } from "@source/utils/pointerCoordinates";
 {
   const coordinatesEl = document.querySelector("#coordinates");
-  window.addEventListener("mousemove", (e) => {
+  ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>("default").viewportElement.addEventListener("mousemove", (e) => {
     const pos = getXZPosition(e, camera, renderer);
     coordinatesEl.innerHTML = `${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`;
   });
@@ -174,14 +174,15 @@ const group1 = new THREE.Group();
 group1.layers.set(1);
 scene.add(group1);
 
-let qcInstance = undefined;
-
 {
-  camera.position.y = 2.0; // 让相机从y轴看向地面
+  camera.position.y = 1000.0; // 让相机从y轴看向地面
   controls["_dollyIn"](1 / 5.0); // 略微调整视角以使得视口方便调试
   controls.update();
-  const defaultZomm = camera.zoom;
+}
+const defaultZomm = camera.zoom;
 
+let qcInstance = undefined;
+{
   const t_QC_Gantry = await new THREE.TextureLoader().loadAsync("/resources/QC_Gantry.png");
   const t_QC_Trolley = await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png");
 
@@ -235,8 +236,16 @@ let qcInstance = undefined;
     qcLabel,
 
     update: (deltaTime: number, elapsedTime: number) => {
-      const scale = defaultZomm / camera.zoom;
+      const scale = (1.0 * defaultZomm) / camera.zoom;
       qcLabel.scale.setScalar(scale);
+    },
+
+    moveIn: () => {
+      qcLabel.material["uniforms"].uBackgroundColor.value.set(0xffff00);
+    },
+
+    moveOut: () => {
+      qcLabel.material["uniforms"].uBackgroundColor.value.set(0xffffff);
     },
   };
 

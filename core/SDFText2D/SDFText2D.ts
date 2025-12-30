@@ -65,14 +65,16 @@ export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
       depthWrite: false,
       depthTest: true,
       uniforms: {
+        uScale: { value: 4.0 / fontSize }, // threejs三维空间单位(米)/贴图字号像素
         uTexture: { value: texture },
-        uColor: { value: new THREE.Color(0xff0000) },
-        uScale: { value: 3.0 / fontSize }, // 米/像素
-        smoothing: { value: 0.05 },
-        threshold: { value: 0.7 }, // 描边内边
-        outlineDistance: { value: 0.6 }, // 描边外边
-        outlineColor: { value: new THREE.Color(0x000000) },
-        opacity: { value: 1.0 },
+        uTextColor: { value: new THREE.Color(0x000000) }, // 字体颜色
+        uOutlineColor: { value: new THREE.Color(0x000000) }, // 描边颜色
+        uBackgroundColor: { value: new THREE.Color(0xffffff) }, // 背景色
+
+        uThreshold: { value: 0.7 }, // 描边内边
+        uOutlineThreshold: { value: 0.65 }, // 描边外边
+        uSmoothing: { value: 0.02 }, // 描边过渡
+        opacity: { value: 0.8 }, // 透明度
       },
       vertexShader: vs,
       fragmentShader: fs,
