@@ -9,11 +9,11 @@ attribute float side;           // (点在CPU阶段两份存储, 当前这个)�
 attribute float width;          // 当前顶点对应的线宽比例(宽度与线段进度函数计算)
 attribute float counters;       // 当前顶点顶点在线段中的进度(线段进度)
 
-uniform vec2 resolution;        // 屏幕分辨率(像素尺寸)
-uniform float lineWidth;        // 基础线宽
-uniform vec3 color;             // 线条颜色
-uniform float opacity;          // 不透明度
-uniform float sizeAttenuation;  // 是否随距离缩放 (1, 随距离; 0, 固定像素宽)
+uniform vec2 uResolution;        // 屏幕分辨率(像素尺寸)
+uniform float uLineWidth;        // 基础线宽
+uniform vec3 uColor;             // 线条颜色
+uniform float uOpacity;          // 不透明度
+uniform float uSizeAttenuation;  // 是否随距离缩放 (1, 随距离; 0, 固定像素宽)
 
 varying vec2 vUV;               // u, 当前顶点顶点在线段中的进度(线段进度); v, (0, 顺着顺时针法线; 1, 逆着顺时针法线)
 varying vec4 vColor;
@@ -29,11 +29,11 @@ vec2 fix(vec4 i, float aspect) {
 
 void main() {
 
-  vColor = vec4(color, opacity);
+  vColor = vec4(uColor, uOpacity);
   vUV = uv;
   vCounters = counters;
 
-  float aspect = resolution.x / resolution.y;
+  float aspect = uResolution.x / uResolution.y;
   mat4 mvp = projectionMatrix * modelViewMatrix;
   vec4 mvp_position = mvp * vec4(position, 1.0);
   vec4 mvp_prev = mvp * vec4(prev, 1.0);
@@ -48,7 +48,7 @@ void main() {
   vec4 f_position = mvp_position; // 点最终位置
 
   vec2 dir; // 当前点对应的线段的切线方向
-  float wfactor = lineWidth * width;
+  float wfactor = uLineWidth * width;
   // 末尾段
   if (aspect_next == aspect_position) {
     dir = normalize(aspect_position - aspect_prev);
@@ -69,14 +69,14 @@ void main() {
     wfactor = clamp(wfactor / dot(miter, perp), 0., 4. * wfactor);
   }
 
-  // lineWidth为世界坐标
-  if (sizeAttenuation == 1.) {
+  // uLineWidth为世界坐标
+  if (uSizeAttenuation == 1.) {
   } 
-  // lineWidth为屏幕像素宽度
+  // uLineWidth为屏幕像素宽度
   else {
     vec4 normal = vec4(-dir.y, dir.x, 0., 1.); // 屏幕空间内顺时针法线
     vec2 sized_normal = vec2(normal.x, normal.y);
-    vec2 pixelScale = vec2(2.0 / resolution.x, 2.0 / resolution.y);
+    vec2 pixelScale = vec2(2.0 / uResolution.x, 2.0 / uResolution.y);
     sized_normal *= wfactor;
     sized_normal *= pixelScale;
     sized_normal *= 0.5; // ndc

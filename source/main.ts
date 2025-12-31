@@ -1,6 +1,5 @@
 import "normalize.css";
 import * as THREE from "three";
-import debounce from "@libs/lodash/src/debounce";
 
 import WebGL from "three_addons/capabilities/WebGL";
 if (!WebGL.isWebGL2Available()) throw new Error("浏览器不支持WebGL2");
@@ -63,7 +62,7 @@ scene.add(group0);
         return response.json();
       })
       .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { resolution: _resolution, lineWidth: 1.5 });
+        handleLineMesh(data, { uResolution: _resolution, uLineWidth: 1.5 });
       }),
 
     window
@@ -72,7 +71,7 @@ scene.add(group0);
         return response.json();
       })
       .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { resolution: _resolution, lineWidth: 2.5 });
+        handleLineMesh(data, { uResolution: _resolution, uLineWidth: 2.5 });
       }),
 
     window
@@ -81,7 +80,7 @@ scene.add(group0);
         return response.json();
       })
       .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { resolution: _resolution, lineWidth: 1 });
+        handleLineMesh(data, { uResolution: _resolution, uLineWidth: 1 });
       }),
 
     window
@@ -90,7 +89,7 @@ scene.add(group0);
         return response.json();
       })
       .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { resolution: _resolution, lineWidth: 1 });
+        handleLineMesh(data, { uResolution: _resolution, uLineWidth: 1 });
       }),
 
     window
@@ -99,7 +98,7 @@ scene.add(group0);
         return response.json();
       })
       .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { resolution: _resolution, lineWidth: 1, useDash: 1 }); // , useDash: 1, dashArray: 1.0, dashRatio: 0.5, dashOffset: 0.0
+        handleLineMesh(data, { uResolution: _resolution, uLineWidth: 1, uUseDash: 1 });
       }),
   ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
 
@@ -120,7 +119,8 @@ renderer.domElement.addEventListener("mousemove", (e) => {
   pickerPick();
 });
 
-const pickerPick = debounce(
+import throttle from "@libs/lodash/src/throttle";
+const pickerPick = throttle(
   () => {
     const { pickid, object3d } = picker.pick(scene, camera, mousePosition.x, mousePosition.y);
     console.log(pickid, object3d?.name);
@@ -128,7 +128,7 @@ const pickerPick = debounce(
     if (object3d?.name) qcInstance.moveIn();
     else qcInstance.moveOut();
   },
-  80,
+  200,
   { leading: false, trailing: true },
 );
 
@@ -261,7 +261,7 @@ let qcInstance = undefined;
   picker.register(qcPT);
   picker.register(qcLabel);
 
-  group1.traverse((object3D) => object3D.layers.set(1));
+  qcGantry.traverse((object3D) => object3D.layers.set(1));
 }
 
 //////////////////////////////////////// 渲染循环 ////////////////////////////////////////
@@ -270,6 +270,8 @@ const clock = new THREE.Clock();
 
 const animate = () => {
   requestAnimationFrame(animate);
+
+  qcInstance?.update(clock.getDelta(), clock.getElapsedTime());
 
   // 渲染地图
 
@@ -284,8 +286,6 @@ const animate = () => {
 
   camera.layers.set(1);
   renderer.render(scene, camera);
-
-  qcInstance?.update(clock.getDelta(), clock.getElapsedTime());
 };
 
 animate();
