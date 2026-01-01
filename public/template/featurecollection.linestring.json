@@ -1,0 +1,31 @@
+{ 
+  "type": "Feature", 
+  "properties": { 
+    "fid": 104470, 
+    "handle": 1945841, 
+    "block": -1, 
+    "etype": 17, 
+    "space": 0, 
+    "layer": "01_coastline_and_buildings", 
+    "olinetype": "bylayer", 
+    "linetype": "", 
+    "color": "0,255,255,255", 
+    "ocolor": 256, 
+    "color24": -1, 
+    "transparency": 0, 
+    "lweight": -1, 
+    "linewidth": 0.0, 
+    "ltscale": 1.0, 
+    "visible": 1, 
+    "thickness": 0.0, 
+    "ext": "(3:0,0,1)", 
+    "width": null 
+  }, 
+  "geometry": { 
+    "type": "LineString", 
+    "coordinates": [ 
+      [ 485579.250020272040274, 2493241.939953996334225, 0.0 ],
+      [ 485579.249981488042977, 2493241.439953997731209, 0.0 ] 
+    ] 
+  } 
+}

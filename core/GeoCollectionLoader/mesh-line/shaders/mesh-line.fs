@@ -1,7 +1,3 @@
-#include <fog_pars_fragment>
-#include <logdepthbuf_pars_fragment>
-#include <clipping_planes_pars_fragment>
-
 uniform float uUseDash;
 uniform float uDashArray[2];
 uniform float uVisibility;
@@ -14,7 +10,6 @@ varying float vCounters; // 0 ~ 1
 varying float vScreenPosProj;  // 投影后的屏幕坐标(沿线方向)
 
 void main() {
-  #include <logdepthbuf_fragment>
 
   vec4 diffuseColor = vColor;
 
@@ -38,11 +33,5 @@ void main() {
 
   diffuseColor.a *= step(vCounters, uVisibility);
 
-  #include <clipping_planes_fragment>
-
-  gl_FragColor = diffuseColor;     
-
-  #include <fog_fragment>
-  #include <tonemapping_fragment>
-  #include <colorspace_fragment>
+  gl_FragColor = diffuseColor;
 }

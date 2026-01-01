@@ -42,21 +42,27 @@ export type PointsRepresentation = THREE.BufferGeometry | Float32Array | THREE.V
  * @param {PointsRepresentation} points 点
  * @returns {Float32Array | number[]}
  */
-export const convertPoints = (points: PointsRepresentation): Float32Array | number[] => {
+export const convertPoints = (points: PointsRepresentation, from: string = "geojson"): Float32Array | number[] => {
   if (points instanceof Float32Array) return points;
   else if (points instanceof THREE.BufferGeometry) return points.getAttribute("position").array as Float32Array;
   return points
     .map((p: any) => {
       const isArray = Array.isArray(p);
-      if (p instanceof THREE.Vector3) return [p.x, p.y, p.z];
-      else if (p instanceof THREE.Vector2) return [p.x, 0, p.y];
-      else if (isArray && p.length === 3) return [p[0], p[1], p[2]];
-      else if (isArray && p.length === 2) return [p[0], 0, p[1]];
-      return p;
+      let rp: [number, number, number];
+      if (p instanceof THREE.Vector3) rp = [p.x, p.y, p.z];
+      else if (p instanceof THREE.Vector2) rp = [p.x, 0, p.y];
+      else if (isArray && p.length === 3) rp = [p[0], p[1], p[2]];
+      else if (isArray && p.length === 2) rp = [p[0], 0, p[1]]; // 此函数现在默认只处理mapshaper导出的json文件
+
+      if (from === "geojson") {
+        rp = [rp[0], rp[1], -rp[2]]; // geojson的正方向是右上角, threejs从y轴向下看的正方向是右下角
+      }
+      return rp;
     })
     .flat();
 };
 
+/** 线条宽度比例计算, 输入 0 ~ 1, 输出 0 ~ 1 */
 export type WidthCallback = (p: number) => any;
 
 /**
@@ -113,10 +119,10 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
   }
 
   /**
-   * 将线段点传入函数, 类内部会自动计算这个线段的骨架, 并且生成对应的buffer
+   * 指定 线条端点, 线条宽度比例计算
    * https://iquilezles.org/articles/functions/
-   * @param points 线段点
-   * @param wcb 一条描述当前点粗细的函数, x(0~1)代表距离线段起点的距离的程度, f(x)代表线段在该点的粗细
+   * @param points 线条端点
+   * @param wcb 线宽衰减函数
    * @returns
    */
   setPoints(points: PointsRepresentation, wcb?: WidthCallback): void {

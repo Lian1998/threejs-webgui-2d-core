@@ -30,7 +30,16 @@
 7. 底图 LineString/MultiLineString
 8. 底图 Polygon/MultiPolygon
 
-# 框架建设步骤思路
+**关于 Threejs 加载 geojson**
+8. 在视口缩放和移动的时候需要每帧都刷新, 要高性能
+9. 要支持 geojson 的几何体挖空
+10. 请求文件, 获取几何, 提交渲染状态
+11. 一个文件(单类型的 GeometryCollection)对应一个"层"概念, 一个"层"对应一个样式
+   1. 可以设置一定的样式, 如两个线条A(2px)B(1px), 在同视角时要明显的能感觉出A线条比B粗一倍
+   2. 样式还支持虚线, 填充色等
+结合以上需求设计一下技术方案, 是用canvas2D画一个类似bitmap? 还是直接自己整理几何在threejs的封装下用webgl画(要不要将几何扩充成面片)?
+
+# 框架建设步骤
 1. TypeScript继承 Mixins
 2. 平面贴图精灵 Sprite2D
    1. mpp: (meter per pixel)固定几何与自动计算投影(实际)大小
@@ -52,52 +61,14 @@
 4. 文字系统 这个找个第三方框架 并在改造的过程中兼容上面的 (或者我看源码后吸收)
    1. Canvas2D烘焙 / SVGAPI转path转Shape
    2. HTML
-   3. SDF
+   3. **SDF**
    4. FontLoader => Geometry
    5. BitMap GPU取块
-5. 支持按钮后从二维升级成三维
-   1. 简易集装箱优化 https://threejs.org/manual/?q=Geometry#en/voxel-geometry
-6. GoeJson解析与底图绘制
-   1. 实线
-   2. 虚线
-   3. 实心/挖心
-
-
-# GPUPick相关UserData字段设计(可能)
-```javascript
-Object3D.userData = {
-  __pickBaseId: Math.max(1, this.maxId + 1), // 注册了就会被分配pickId
-  __origVisible: boolean, // 遍历过程中记录object3D传入时的显示状态
-  __origMaterial: THREE.Material, // object3D传入时的材质
-  __shaderPickMaterial: THREE.Material, // 第一次遍历时 创建新的用于渲染pickBuffer的材质 (这个材质注册onBeforeCompile以完成编译前shader程序字符串替换)
-  uPickColor: THREE.Color
-}
-```
-
-# 关于SDF文字的文档和库
-https://github.com/dy/bitmap-sdf/tree/master  
-https://github.com/dy/bitmap-sdf/blob/master/index.js  
-
-https://github.com/mapbox/tiny-sdf  
-https://github.com/mapbox/tiny-sdf/blob/main/index.js  
-https://blog.csdn.net/qq_21476953/article/details/112991864  
-
-https://github.com/protectwise/troika/blob/main/packages/troika-three-text/README.md  
-
-https://github.com/Experience-Monks/three-bmfont-text  
-https://github.com/soadzoor/MSDF-text  
-https://github.com/davidlyons/text-sdf-bitmap  
-https://github.com/trinketmage/three-glyph  
-https://github.com/Chlumsky/msdf-atlas-gen  
-
-# 关于 Threejs 加载 geojson
-1. 在视口缩放和移动的时候需要每帧都刷新, 要高性能
-2. 要支持 geojson 的几何体挖空
-3. 请求文件, 获取几何, 提交渲染状态
-4. 一个文件(单类型的 GeometryCollection)对应一个"层"概念, 一个"层"对应一个样式
-   1. 可以设置一定的样式, 如两个线条A(2px)B(1px), 在同视角时要明显的能感觉出A线条比B粗一倍
-   2. 样式还支持虚线, 填充色等
-结合以上需求设计一下技术方案, 是用canvas2D画一个类似bitmap? 还是直接自己整理几何在threejs的封装下用webgl画(要不要将几何扩充成面片)?
+5. GoeJson解析与底图绘制
+   1. 线条转面片, 宽度支持 按像素宽度绘制/按世界宽度绘制, 样式支持 实线/虚线
+   2. 按面绘制, 支持 实心/挖心
+6. 支持点击按钮, 图形部分能够从二维平滑过渡到三维
+7. 绘制集装箱列优化 https://threejs.org/manual/?q=Geometry#en/voxel-geometry
 
 # 问题修复
 1. 如果不是注册到 GpuPickManager 里的mesh, 那么不加入 pickBuffer 渲染
@@ -115,3 +86,4 @@ https://github.com/Chlumsky/msdf-atlas-gen
 2. 数字文字标号能否有更好的效果, 缓存检查
 3. 设备Map管理方式
 4. layers 渲染次序原理
+5. 底图几何, 在绘制阶段压缩

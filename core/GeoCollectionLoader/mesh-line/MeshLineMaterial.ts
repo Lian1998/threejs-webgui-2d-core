@@ -2,34 +2,38 @@ import * as THREE from "three";
 import vertexShader from "./shaders/mesh-line.vs?raw";
 import fragmentShader from "./shaders/mesh-line.fs?raw";
 
-/**
- * https://github.com/spite/THREE.MeshLine
- */
+// https://github.com/spite/THREE.MeshLine
+
 export interface MeshLineMaterialParameters {
-  /** THREE.Color to paint the line width, or tint the texture with */
+  /** 线条颜色 */
   uColor?: string | THREE.Color | number;
 
-  /**  alpha value from 0 to 1 (requires transparent set to true) */
+  /** 线条透明度(0 ~ 1) */
   uOpacity?: number;
 
-  /** 使用一个两个长度数组来快速设置虚线的样式; 如设置 [5, 5] 时: 实线5个单位, 空白5个单位 */
+  /** 虚线的样式; 如设置 [5, 5] 时: 实线5个单位, 空白5个单位 */
   uDashArray?: number[];
 
-  /** THREE.Vector2 specifying the canvas size (REQUIRED) */
-  uResolution: THREE.Vector2; // required
+  /** 渲染素质(像素尺寸) */
+  uResolution: THREE.Vector2;
 
-  /** 线宽是否随着距离衰减而衰减 */
+  /** 线宽是否随缩放而缩放 (1: 随距离缩放而缩放(世界位置); 0: 不随距离缩放而缩放(固定像素宽);)  */
   uSizeAttenuation?: number;
 
-  /** 线宽(sizeAttenuation, 世界坐标; !sizeAttenuation, 线条在屏幕的宽度 */
+  /** 线宽 */
   uLineWidth?: number;
 
+  /** 渲染端点数 */
   uVisibility?: number;
 
+  /** 是否启用虚线 */
   uUseDash?: number;
 
-  /** cutoff value from 0 to 1 */
+  /** 透明度测试(0 ~ 1), 当线条片元颜色低于这个透明度时不会被渲染 */
   uAlphaTest?: number;
+
+  /** 当前浏览器指定的pixelRatio */
+  uPixelRatio?: number;
 }
 
 export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMaterialParameters {
@@ -42,11 +46,11 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
   uVisibility!: number;
   uUseDash!: number;
   uAlphaTest!: number;
+  uPixelRatio!: number;
 
   constructor(parameters: MeshLineMaterialParameters) {
     super({
       uniforms: {
-        ...THREE.UniformsLib.fog,
         uColor: { value: new THREE.Color(0x000000) },
         uOpacity: { value: 1 },
         uDashArray: { value: [5, 5] },
@@ -56,6 +60,7 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
         uVisibility: { value: 1 },
         uUseDash: { value: 0 },
         uAlphaTest: { value: 0 },
+        uPixelRatio: { value: 1 },
       },
       vertexShader,
       fragmentShader,
@@ -144,6 +149,15 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
           this.uniforms.uAlphaTest.value = value;
         },
       },
+      uPixelRatio: {
+        enumerable: true,
+        get() {
+          return this.uniforms.uPixelRatio.value;
+        },
+        set(value) {
+          this.uniforms.uPixelRatio.value = value;
+        },
+      },
     });
     this.setValues(parameters as THREE.ShaderMaterialParameters);
   }
@@ -159,6 +173,7 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
     this.uVisibility = source.uVisibility;
     this.uUseDash = source.uUseDash;
     this.uAlphaTest = source.uAlphaTest;
+    this.uPixelRatio = source.uPixelRatio;
     return this;
   }
 }

@@ -23,7 +23,7 @@ const controls = new MapControls(camera, renderer.domElement);
 const scene = new THREE.Scene();
 
 //////////////////////////////////////// 静态资源(底图)加载 ////////////////////////////////////////
-import type { GeometryCollection } from "geojson";
+import type { FeatureCollection } from "geojson";
 import type { LineString } from "geojson";
 
 import { MeshLineGeometry } from "@core/GeoCollectionLoader/mesh-line/";
@@ -31,74 +31,87 @@ import { MeshLineMaterial } from "@core/GeoCollectionLoader/mesh-line/";
 import { MeshLineMaterialParameters } from "@core/GeoCollectionLoader/mesh-line/";
 
 const group0 = new THREE.Group();
-group0.rotateY(Math.PI);
+// group0.rotateY(Math.PI);
 group0.layers.set(0);
 scene.add(group0);
 
 {
   const _resolution = new THREE.Vector2(width, height);
   viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
-  const handleLineMesh = (data: GeometryCollection<LineString>, materialConfiguration: MeshLineMaterialParameters) => {
-    for (let i = 0; i < data.geometries.length; i++) {
-      const geometry = data.geometries[i];
-      const points = geometry.coordinates;
-      const mlGeometry = new MeshLineGeometry();
+  const handleMapShaperFile = (data: FeatureCollection<LineString>, materialConfiguration: MeshLineMaterialParameters) => {
+    if (data.type !== "FeatureCollection") console.error("!FeatureCollection");
 
-      // @ts-ignore
-      mlGeometry.setPoints(points);
-      // prettier-ignore
-      const mlMaterial = new MeshLineMaterial(materialConfiguration);
-      const mesh = new THREE.Mesh(mlGeometry, mlMaterial);
-      mesh.frustumCulled = false;
-      group0.add(mesh);
+    for (let i = 0; i < data.features.length; i++) {
+      const feature = data.features[i];
+      try {
+        const coordinates = feature.geometry.coordinates as THREE.Vector2Tuple[];
+        const mlGeometry = new MeshLineGeometry();
+
+        mlGeometry.setPoints(coordinates);
+        const mlMaterial = new MeshLineMaterial(materialConfiguration);
+        const mesh = new THREE.Mesh(mlGeometry, mlMaterial);
+        mesh.frustumCulled = false;
+        group0.add(mesh);
+      } catch (err) {
+        console.error("handleMapShaperFile Error", feature);
+      }
     }
   };
 
   // 线
   Promise.all([
     window
-      .fetch("geojson-handled/01-陆地和建筑.json")
+      .fetch("0/01_coastline_and_buildings.json")
       .then((response) => {
         return response.json();
       })
-      .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { uResolution: _resolution, uLineWidth: 1.5 });
+      .then((data: FeatureCollection<LineString>) => {
+        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.7 });
       }),
 
     window
-      .fetch("geojson-handled/02-基础地图.json")
+      .fetch("0/02_rails.json")
       .then((response) => {
         return response.json();
       })
-      .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { uResolution: _resolution, uLineWidth: 2.5 });
+      .then((data: FeatureCollection<LineString>) => {
+        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color(0xd3d3d3) });
       }),
 
     window
-      .fetch("geojson-handled/03-轨道.json")
+      .fetch("0/05_road_edge.json")
       .then((response) => {
         return response.json();
       })
-      .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { uResolution: _resolution, uLineWidth: 1 });
+      .then((data: FeatureCollection<LineString>) => {
+        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.5 });
       }),
 
     window
-      .fetch("geojson-handled/04-集卡车道线-实线.json")
+      .fetch("0/05_road_lane_dash.json")
       .then((response) => {
         return response.json();
       })
-      .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { uResolution: _resolution, uLineWidth: 1 });
+      .then((data: FeatureCollection<LineString>) => {
+        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.5, uUseDash: 1, uColor: new THREE.Color(0x999999) });
       }),
 
     window
-      .fetch("geojson-handled/04-集卡车道线-虚线.json")
+      .fetch("0/05_road_lane_solid.json")
       .then((response) => {
         return response.json();
       })
-      .then((data: GeometryCollection<LineString>) => {
-        handleLineMesh(data, { uResolution: _resolution, uLineWidth: 1, uUseDash: 1 });
+      .then((data: FeatureCollection<LineString>) => {
+        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.5, uColor: new THREE.Color(0x999999) });
+      }),
+
+    window
+      .fetch("0/07_marks.json")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data: FeatureCollection<LineString>) => {
+        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1 });
       }),
   ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
 
@@ -128,7 +141,7 @@ const pickerPick = throttle(
     if (object3d?.name) qcInstance.moveIn();
     else qcInstance.moveOut();
   },
-  200,
+  240,
   { leading: false, trailing: true },
 );
 
@@ -188,7 +201,7 @@ let qcInstance = undefined;
 
   const qcGantry = new Sprite2D({
     texture: t_QC_Gantry,
-    mpp: calculateMPP(30, 610),
+    mpp: calculateMPP(30.5, 610),
     depth: LayerSequence.QC_Gantry,
     color: new THREE.Color(ColorDefine.DEVICE.DEFAULT),
   });
@@ -249,6 +262,7 @@ let qcInstance = undefined;
     },
   };
 
+  qcGantry.position.set(0, 0, 1);
   qcGantry.add(qcMtPviot);
   qcGantry.add(qcPTPviot);
   qcGantry.add(qcLabelPviot);
