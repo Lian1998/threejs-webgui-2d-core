@@ -38,11 +38,11 @@ const memcpy = (src: BufferSource | ArrayLike<number>, srcOffset: number, dst: B
 /** 所有传入的点可能的类型 */
 export type PointsRepresentation = THREE.BufferGeometry | Float32Array | THREE.Vector3[] | THREE.Vector2[] | THREE.Vector3Tuple[] | THREE.Vector2Tuple[] | number[];
 /**
- * 接受以下任意格式的传入Points
+ * 格式兼容性处理函数
  * @param {PointsRepresentation} points 点
  * @returns {Float32Array | number[]}
  */
-export const convertPoints = (points: PointsRepresentation, from: string = "geojson"): Float32Array | number[] => {
+export const convertPoints = (points: PointsRepresentation, from: string = "mapshaper-geojson"): Float32Array | number[] => {
   if (points instanceof Float32Array) return points;
   else if (points instanceof THREE.BufferGeometry) return points.getAttribute("position").array as Float32Array;
   return points
@@ -54,7 +54,7 @@ export const convertPoints = (points: PointsRepresentation, from: string = "geoj
       else if (isArray && p.length === 3) rp = [p[0], p[1], p[2]];
       else if (isArray && p.length === 2) rp = [p[0], 0, p[1]]; // 此函数现在默认只处理mapshaper导出的json文件
 
-      if (from === "geojson") {
+      if (from === "mapshaper-geojson") {
         rp = [rp[0], rp[1], -rp[2]]; // geojson的正方向是右上角, threejs从y轴向下看的正方向是右下角
       }
       return rp;
@@ -80,6 +80,7 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
   indices_array: number[] = [];
   uvs: number[] = [];
   counters: number[] = [];
+  lineDistance: number[] = []; // 顶点在线段中的累计长度
   widthCallback: WidthCallback | null = null;
 
   _attributes!: {
@@ -91,6 +92,7 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
     uv: THREE.BufferAttribute;
     index: THREE.BufferAttribute;
     counters: THREE.BufferAttribute;
+    lineDistance: THREE.BufferAttribute;
   };
   _points: Float32Array | number[] = [];
   points!: Float32Array | number[];
@@ -126,11 +128,13 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
    * @returns
    */
   setPoints(points: PointsRepresentation, wcb?: WidthCallback): void {
-    points = convertPoints(points); // 格式兼容性
+    points = convertPoints(points); // 格式兼容性处理
     this._points = points;
     this.widthCallback = wcb ?? null;
     this.positions.length = 0; // this.positions => A(a, b, c), A(a, b, c), B(a, b, c), B(a, b, c)
     this.counters.length = 0; // 0 ~ 1
+    this.lineDistance.length = 0; // 顶点在线段中的长度
+    let dist = 0;
 
     if (points.length < 2) {
       this.process();
@@ -139,11 +143,21 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
 
     const l = points.length;
     for (let j = 0; j < points.length; j += 3) {
+      if (j > 0) {
+        const dx = points[j] - points[j - 3];
+        const dy = points[j + 1] - points[j - 2];
+        const dz = points[j + 2] - points[j - 1];
+        dist += Math.sqrt(dx * dx + dy * dy + dz * dz);
+      }
+
       const c = j / (l - 1);
+      // 一个点扩充成两个点
       this.positions.push(points[j], points[j + 1], points[j + 2]);
-      this.positions.push(points[j], points[j + 1], points[j + 2]); // 一个点扩充成两个点
+      this.positions.push(points[j], points[j + 1], points[j + 2]);
       this.counters.push(c);
       this.counters.push(c);
+      this.lineDistance.push(dist);
+      this.lineDistance.push(dist);
     }
     this.process();
   }
@@ -249,6 +263,7 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
         uv: new THREE.BufferAttribute(new Float32Array(this.uvs), 2),
         index: new THREE.BufferAttribute(new Uint16Array(this.indices_array), 1),
         counters: new THREE.BufferAttribute(new Float32Array(this.counters), 1),
+        lineDistance: new THREE.BufferAttribute(new Float32Array(this.lineDistance), 1),
       };
     } else {
       this._attributes.position.copyArray(new Float32Array(this.positions));
@@ -265,6 +280,8 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
       this._attributes.uv.needsUpdate = true;
       this._attributes.index.copyArray(new Uint16Array(this.indices_array));
       this._attributes.index.needsUpdate = true;
+      this._attributes.lineDistance.copyArray(new Float32Array(this.lineDistance));
+      this._attributes.lineDistance.needsUpdate = true;
     }
 
     this.setAttribute("position", this._attributes.position);
@@ -274,19 +291,9 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
     this.setAttribute("width", this._attributes.width);
     this.setAttribute("uv", this._attributes.uv);
     this.setAttribute("counters", this._attributes.counters);
-
-    this.setAttribute("position", this._attributes.position);
-    this.setAttribute("prev", this._attributes.prev);
-    this.setAttribute("next", this._attributes.next);
-    this.setAttribute("side", this._attributes.side);
-    this.setAttribute("width", this._attributes.width);
-    this.setAttribute("uv", this._attributes.uv);
-    this.setAttribute("counters", this._attributes.counters);
+    this.setAttribute("lineDistance", this._attributes.lineDistance);
 
     this.setIndex(this._attributes.index);
-
-    // this.computeBoundingSphere(); // 计算包围球
-    // this.computeBoundingBox(); // 计算包围盒
   }
 
   /**
