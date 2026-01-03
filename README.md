@@ -71,19 +71,20 @@
 7. 绘制集装箱列优化 https://threejs.org/manual/?q=Geometry#en/voxel-geometry
 
 # 问题修复
-1. 如果不是注册到 GpuPickManager 里的mesh, 那么不加入 pickBuffer 渲染
-   1. 添加缓存容器, 统计所有在渲染 pickBuffer 前可见并未注册的 mesh, 渲染完 pickBuffer 恢复之
-2. Sprite2D 的 fragmentShader 简单的透明度不合格 discard 片元, 效果不是很好
-   1. 渲染透明度, 用 threejs Opaqueue 特性设置 renderOrder 代替 gl_FragDepth 写入
-3. Shader中定义偏移量导致的 boundingbox 错位问题
-   1. 放弃在 shader 中做偏移的想法, 在生成几何时做
-4. threejs 渲染到 canvas 后, 再用 readPixel 拾取, 发现 rgba(0, 0, 0, x), 被读取成数字时变成灰色
-   1. 开启混合后导致的问题
-   2. Sprite2DShaderMaterial 替换材质 过程优化, 即便物体透明, 在上层的点击事件也不应该穿透下去
+1. GpuPickManager在渲染pickBuffer时判断bug; 如果不是注册到GpuPickManager里的mesh, 那么不进行pickBuffer渲染
+   1. GpuPickManager在恢复场景中容器材质时的优化; 添加缓存容器_originVisiableSet, 统计所有在渲染pickBuffer前可见并未注册的mesh, 渲染完pickBuffer后通过此容器恢复
+2. Sprite2D的fragmentShader的透明度方案设计不合格; 用discard片元导致毛边效果不行
+   1. webgl渲染透明度的两种方案取舍, 用threejs的Opaqueue特性设置renderOrder在CPU阶段决定渲染次序(代替在shader中覆盖gl_FragDepth写入)
+3. Sprite2D在Shader中定义偏移量导致的boundingbox错位问题; 同时设置的缩放和偏移会有bug
+   1. 放弃在shader中做偏移的想法, 在生成几何时就做这一过程
+4. GpuPickManager的数值读取bug; threejs渲染到canvas后, 再用readPixel拾取canvas中像素点, 发现rgba(0,0,0,x)在读取rgb时变成类似 (64,64,64)
+   1. 开启blendMode的某种混合后导致的问题
+   2. Sprite2DShaderMaterial 替换材质过程优化; 即便物体透明, 在上层的点击事件也不应该穿透下去, pickbuffer覆盖渲染
 
 **TODO LIST:**
-1. 底图画面
-2. 数字文字标号能否有更好的效果, 缓存检查
-3. 设备Map管理方式
-4. layers 渲染次序原理
-5. 底图几何, 在绘制阶段压缩
+1. GeoJSON绘制6点扩充线段面片的算法代码整理, 支持更好的直线和虚线样式
+   1. GEOJSON绘制面片的算法drawcall优化, 几何压缩
+2. GeoJSON绘制多边形和多边形填充
+3. 文字缓存方案; 现在的方案是TinySDF通过固定质量生成每个字的canvas贴图(唯一), 并且通过拼接不同的文字字符串来组成字符串的贴图(不唯一), 这种方式会占用大量缓存
+4. 业务代码, 设备的函数回调/绘图对象指针管理方式, 统一回调接口定义
+5. layers, renderOrder, gl_FragDepth, blendMode 等方案的研究

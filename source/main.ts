@@ -66,7 +66,7 @@ scene.add(group0);
         return response.json();
       })
       .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.7 });
+        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.6 });
       }),
 
     window
@@ -84,7 +84,7 @@ scene.add(group0);
         return response.json();
       })
       .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.5 });
+        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.2 });
       }),
 
     window
@@ -93,7 +93,7 @@ scene.add(group0);
         return response.json();
       })
       .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.5, uUseDash: 1, uColor: new THREE.Color(0x999999) });
+        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1, uUseDash: 1, uColor: new THREE.Color(0x999999) });
       }),
 
     window
@@ -102,7 +102,7 @@ scene.add(group0);
         return response.json();
       })
       .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.5, uColor: new THREE.Color(0x999999) });
+        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1, uColor: new THREE.Color(0x999999) });
       }),
 
     window
@@ -111,7 +111,7 @@ scene.add(group0);
         return response.json();
       })
       .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1 });
+        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.7 });
       }),
   ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
 

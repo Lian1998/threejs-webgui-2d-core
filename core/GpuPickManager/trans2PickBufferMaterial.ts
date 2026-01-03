@@ -9,10 +9,10 @@ import { appendAfterLastFragColor } from "@core/utils/shader_appendAfterLastFrag
 const shaderCache: Record<string, { vertexShader?: string; fragmentShader?: string }> = {};
 
 /**
- * 根据传入的 object3d
- * @param meshLike
- * @param materialIn
- * @param materialOut
+ * 将传入的Object3D对应的材质转化成PickBuffer渲染材质, 在这个函数中进行shader片段的处理
+ * @param {THREE.Object3D} meshLike 需要转换的Object3D, 这里保证是个会被渲染的Mesh
+ * @param {THREE.Material} materialIn Object3D原本的材质
+ * @param {THREE.Material} materialOut 用于渲染PickBuffer的材质
  */
 export const trans2PickBufferMaterial = (meshLike: THREE.Object3D, materialIn: THREE.Material, materialOut: THREE.Material) => {
   const userData = meshLike.userData[USER_DATA_KEY] as GpuPickManagerUserData;
