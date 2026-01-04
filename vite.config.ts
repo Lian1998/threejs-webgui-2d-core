@@ -48,6 +48,7 @@ export default defineConfig(({ command, mode }) => {
 
     server: {
       port: 5173,
+      host: true,
       strictPort: true,           // 固定端口(不会由于占用而自动顺延端口)
 
       watch: {

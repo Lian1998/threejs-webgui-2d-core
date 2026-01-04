@@ -23,14 +23,11 @@ export interface MeshLineMaterialParameters {
   /** 线宽 */
   uLineWidth?: number;
 
-  /** 渲染端点数 */
+  /** 渲染顶点数, 常用于线条生长动画 */
   uVisibility?: number;
 
   /** 是否启用虚线 */
   uUseDash?: number;
-
-  /** 透明度测试(0 ~ 1), 当线条片元颜色低于这个透明度时不会被渲染 */
-  uAlphaTest?: number;
 
   /** 当前浏览器指定的pixelRatio */
   uPixelRatio?: number;
@@ -45,7 +42,6 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
   uLineWidth!: number;
   uVisibility!: number;
   uUseDash!: number;
-  uAlphaTest!: number;
   uPixelRatio!: number;
 
   constructor(parameters: MeshLineMaterialParameters) {
@@ -53,13 +49,12 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
       uniforms: {
         uColor: { value: new THREE.Color(0x000000) },
         uOpacity: { value: 1 },
-        uDashArray: { value: [5, 5] },
+        uDashArray: { value: [4, 4] },
         uResolution: { value: new THREE.Vector2(1, 1) },
         uSizeAttenuation: { value: 0 },
         uLineWidth: { value: 1 },
         uVisibility: { value: 1 },
         uUseDash: { value: 0 },
-        uAlphaTest: { value: 0 },
         uPixelRatio: { value: 1 },
       },
       vertexShader,
@@ -140,15 +135,6 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
           this.uniforms.uUseDash.value = value;
         },
       },
-      uAlphaTest: {
-        enumerable: true,
-        get() {
-          return this.uniforms.uAlphaTest.value;
-        },
-        set(value) {
-          this.uniforms.uAlphaTest.value = value;
-        },
-      },
       uPixelRatio: {
         enumerable: true,
         get() {
@@ -172,7 +158,6 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
     this.uLineWidth = source.uLineWidth;
     this.uVisibility = source.uVisibility;
     this.uUseDash = source.uUseDash;
-    this.uAlphaTest = source.uAlphaTest;
     this.uPixelRatio = source.uPixelRatio;
     return this;
   }

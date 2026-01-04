@@ -4,10 +4,9 @@ import vs from "./shaders/sdfText2d.vs?raw";
 import fs from "./shaders/sdfText2d.fs?raw";
 import TinySDF from "tiny-sdf";
 
-import { makeRGBAImageData } from "@core/utils/canvas2d_buffers";
 import { Sprite2DGeometry } from "@core/Sprite2D/index";
 
-import { gen as genTinySDFCanvas2D, glyphs } from "./gen/TinySDF.Canvas2D";
+import { gen as genTinySDFCanvas2D } from "./gen/TinySDF.Canvas2D";
 
 const fontSize = 64; // 字号
 const buffer = Math.ceil(fontSize / 4); // 字符周围空白区域, 值过小可能导致渲染不全
@@ -37,6 +36,9 @@ export interface SDFText2DParameters {
   depth: number;
 }
 
+/** 缓存文字字符串生成过的贴图 */
+const canvasCache = new Map<string, HTMLCanvasElement>();
+
 export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
   text: string;
   texture: THREE.Texture;
@@ -45,7 +47,11 @@ export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
   constructor({ text = "?", depth = 1 }: SDFText2DParameters) {
     super();
 
-    const canvas = genTinySDFCanvas2D(tinySdf, text);
+    let canvas = canvasCache.get(text);
+    if (!canvas) {
+      canvas = genTinySDFCanvas2D(tinySdf, text);
+      canvasCache.set(text, canvas);
+    }
 
     const texture = new THREE.Texture(canvas);
     texture.needsUpdate = true;

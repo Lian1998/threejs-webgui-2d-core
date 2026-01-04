@@ -84,7 +84,8 @@
 **TODO LIST:**
 1. GeoJSON绘制6点扩充线段面片的算法代码整理, 支持更好的直线和虚线样式
    1. GEOJSON绘制面片的算法drawcall优化, 几何压缩
-2. GeoJSON绘制多边形和多边形填充
-3. 文字缓存方案; 现在的方案是TinySDF通过固定质量生成每个字的canvas贴图(唯一), 并且通过拼接不同的文字字符串来组成字符串的贴图(不唯一), 这种方式会占用大量缓存
-4. 业务代码, 设备的函数回调/绘图对象指针管理方式, 统一回调接口定义
-5. layers, renderOrder, gl_FragDepth, blendMode 等方案的研究
+2. 多种导出格式的geojson支持, GeometryCollection, FeatureCollection, mapshaper
+3. GeoJSON绘制多边形和多边形填充
+4. 文字缓存方案; 现在的方案是TinySDF通过固定质量生成每个字的canvas贴图(唯一), 并且通过拼接不同的文字字符串来组成字符串的贴图(不唯一), 这种方式会占用大量缓存
+5. 业务代码, 设备的函数回调/绘图对象指针管理方式, 统一回调接口定义
+6. layers, renderOrder, gl_FragDepth, blendMode 等方案的研究
