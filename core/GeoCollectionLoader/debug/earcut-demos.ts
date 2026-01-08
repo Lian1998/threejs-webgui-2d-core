@@ -1,14 +1,18 @@
-/*eslint @stylistic/comma-spacing: 0, no-unused-vars: 0 */
+// https://github.com/mapbox/earcut/blob/main/viz/viz.js
 
 import earcut, { flatten, deviation } from "earcut";
 
 (async function () {
+  // 从url中得到当前要访问的几何
   const params = new URLSearchParams(window.location.search.substring(1));
   const fixture = params.get("fixture") || "water";
-  const rotation = Number.parseInt(params.get("rotation")) || 0;
 
+  // 请求文件
   const testPoints = await (await fetch(`/fixtures/${fixture}.json`)).json();
-  const theta = (rotation * Math.PI) / 180;
+
+  // 处理旋转
+  const rotation = Number.parseInt(params.get("rotation")) || 0;
+  const theta = (rotation * Math.PI) / 180; // 转换成角度
   const round = rotation % 90 === 0 ? Math.round : (x) => x;
   const xx = round(Math.cos(theta));
   const xy = round(-Math.sin(theta));
@@ -25,6 +29,7 @@ import earcut, { flatten, deviation } from "earcut";
   const canvas = document.getElementById("canvas") as HTMLCanvasElement;
   const ctx = canvas.getContext("2d");
 
+  // 通过包围盒计算出canvas的大小
   let minX = Infinity,
     maxX = -Infinity,
     minY = Infinity,
@@ -36,10 +41,8 @@ import earcut, { flatten, deviation } from "earcut";
     minY = Math.min(minY, testPoints[0][i][1]);
     maxY = Math.max(maxY, testPoints[0][i][1]);
   }
-
   const width = maxX - minX;
   const height = maxY - minY;
-
   canvas.width = window.innerWidth;
   canvas.height = (canvas.width * height) / width + 10;
 
@@ -53,11 +56,15 @@ import earcut, { flatten, deviation } from "earcut";
     ctx.scale(2, 2);
   }
 
-  const data = flatten(testPoints);
+  const data = flatten(testPoints); // 拍平前 Array2<number>[][]
+
+  console.warn("flatten()", data);
 
   console.time("earcut");
   const result = earcut(data.vertices, data.holes, data.dimensions);
   console.timeEnd("earcut");
+
+  console.warn("earcut()", result);
 
   console.log(`deviation: ${deviation(data.vertices, data.holes, data.dimensions, result)}`);
 
@@ -65,6 +72,8 @@ import earcut, { flatten, deviation } from "earcut";
   for (const index of result) {
     triangles.push([data.vertices[index * data.dimensions], data.vertices[index * data.dimensions + 1]]);
   }
+
+  console.warn("triangles[]", triangles);
 
   ctx.lineJoin = "round";
 

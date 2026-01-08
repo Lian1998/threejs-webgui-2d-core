@@ -82,10 +82,15 @@
    2. Sprite2DShaderMaterial 替换材质过程优化; 即便物体透明, 在上层的点击事件也不应该穿透下去, pickbuffer覆盖渲染
 
 **TODO LIST:**
-1. GeoJSON绘制6点扩充线段面片的算法代码整理, 支持更好的直线和虚线样式
-   1. GEOJSON绘制面片的算法drawcall优化, 几何压缩
-2. 多种导出格式的geojson支持, GeometryCollection, FeatureCollection, mapshaper
-3. GeoJSON绘制多边形和多边形填充
-4. 文字缓存方案; 现在的方案是TinySDF通过固定质量生成每个字的canvas贴图(唯一), 并且通过拼接不同的文字字符串来组成字符串的贴图(不唯一), 这种方式会占用大量缓存
-5. 业务代码, 设备的函数回调/绘图对象指针管理方式, 统一回调接口定义
-6. layers, renderOrder, gl_FragDepth, blendMode 等方案的研究
+1. 底图直线绘制
+   1. GeoJSON绘制6点扩充线段面片的算法代码整理, 支持更好的直线和虚线样式, 大量测试
+   2. 当底图的坐标很大不在中心点时视口的逻辑
+   3. GeoJSON 绘制面片算法的drawcall优化, 多段线合并成一条线 Degenerate Segment
+   4. 多种导出格式的geojson支持, GeometryCollection, FeatureCollection, mapshaper
+2. 底图多边形绘制, 多边形边缘, 多边形打斜线阴影, 多边形填充色
+3. layers, renderOrder, gl_FragDepth, blendMode 等方案的研究
+4. 业务代码
+   1. 设备的函数回调/绘图对象指针管理方式, 统一回调接口定义
+   2. geojson读取类固定函数逻辑封装
+   3. qinzhou tickdemo转换坐标并播放
+   4. 

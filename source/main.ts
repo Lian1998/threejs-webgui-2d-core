@@ -6,6 +6,7 @@ if (!WebGL.isWebGL2Available()) throw new Error("浏览器不支持WebGL2");
 
 const viewport = document.querySelector<HTMLDivElement>("#viewport");
 const { width, height } = viewport.getBoundingClientRect();
+import { ViewportResizeDispatcher } from "@core/index";
 const viewportResizeDispatcher = new ViewportResizeDispatcher(viewport);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: true });
@@ -61,61 +62,45 @@ scene.add(group0);
   // 线
   Promise.all([
     window
-      .fetch("0/01_coastline_and_buildings.json")
-      .then((response) => {
-        return response.json();
-      })
+      .fetch("/mapshaper-dachanwan/01_coastline_and_buildings.json")
+      .then((response) => response.json())
       .then((data: FeatureCollection<LineString>) => {
         handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(195, 195, 195)") });
       }),
 
     window
-      .fetch("0/02_rails.json")
-      .then((response) => {
-        return response.json();
-      })
+      .fetch("/mapshaper-dachanwan/02_rails.json")
+      .then((response) => response.json())
       .then((data: FeatureCollection<LineString>) => {
         handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(195, 195, 195)") });
       }),
 
     window
-      .fetch("0/05_road_edge.json")
-      .then((response) => {
-        return response.json();
-      })
+      .fetch("/mapshaper-dachanwan/05_road_edge.json")
+      .then((response) => response.json())
       .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.8, uColor: new THREE.Color("rgb(125, 125, 125)") });
+        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.6, uColor: new THREE.Color("rgb(125, 125, 125)") });
       }),
 
     window
-      .fetch("0/05_road_lane_dash.json")
-      .then((response) => {
-        return response.json();
-      })
+      .fetch("/mapshaper-dachanwan/05_road_lane_dash.json")
+      .then((response) => response.json())
       .then((data: FeatureCollection<LineString>) => {
         handleMapShaperFile(data, { uResolution: _resolution, uUseDash: 1, uDashArray: [15, 10], uLineWidth: 0.5, uColor: new THREE.Color("rgb(0, 0, 0)") });
       }),
 
     window
-      .fetch("0/05_road_lane_solid.json")
-      .then((response) => {
-        return response.json();
-      })
+      .fetch("/mapshaper-dachanwan/05_road_lane_solid.json")
+      .then((response) => response.json())
       .then((data: FeatureCollection<LineString>) => {
         handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.5, uColor: new THREE.Color("rgb(0, 0, 0)") });
       }),
-
-    // window
-    //   .fetch("0/07_marks.json")
-    //   .then((response) => {
-    //     return response.json();
-    //   })
-    //   .then((data: FeatureCollection<LineString>) => {
-    //     handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(200, 200, 200)") });
-    //   }),
   ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
+}
 
-  // TODO: 面
+import earcut, { flatten, deviation } from "earcut";
+// TODO: 面
+{
 }
 
 //////////////////////////////////////// 图元拾取 ////////////////////////////////////////
@@ -175,7 +160,6 @@ import { getXZPosition } from "@source/utils/pointerCoordinates";
 
 import ColorDefine from "@source/ColorDefine";
 import LayerSequence from "@source/LayerSequence";
-import { ViewportResizeDispatcher } from "@core/index";
 import { GpuPickManager } from "@core/GpuPickManager/GpuPickManager";
 
 import { SDFText2D } from "@core/index";

@@ -1,28 +1,23 @@
 import * as THREE from "three";
-import earcut from "earcut";
 import { GeometryCollection } from "geojson";
 
-import type { GeoJsonTypes } from "geojson";
-import type { LineString } from "geojson";
-
-import { handleLineString } from "@core/utils/geojson";
-
+/** GeoJSON输出格式读取器, 包含几何合并优化 */
 export class GeoCollectionLoader extends THREE.Loader<GeometryCollection, string> {
   constructor(manager: THREE.LoadingManager = THREE.DefaultLoadingManager) {
     super(manager);
   }
 
   /**
-   * Begin loading from url and call the callback function with the parsed response content.
-   * @param url A string containing the path/URL of the .geojson file.
-   * @param onLoad A function to be called after the loading is successfully completed. The function receives the loaded JSON response returned from parse.
-   * @param onProgress (optional) A function to be called while the loading is in progress. The argument will be the XMLHttpRequest instance, that contains .total and .loaded bytes. If the server does not set the Content-Length header; .total will be 0.
-   * @param onError (optional) A function to be called if an error occurs during loading. The function receives error as an argument.
+   *
+   * @param url 一个包含 .geojson 文件的url路径
+   * @param onLoad 当文件请求成功时的回调函数; 这个函数入参为文件解析成的JSON报文
+   * @param onProgress (可选) 请求过程中的回调; 这个函数的入参为 XMLHttpRequest 实例, 包含了 .total 和 .loaded 字节数量. 如果服务器的响应头没有设置 Content-Length; .total 会是 0.
+   * @param onError (可选) 请求失败的回调
    */
   override load(url: string, onLoad: (data: GeometryCollection) => void, onProgress?: (event: ProgressEvent) => void, onError?: (err: unknown) => void) {
     const scope = this;
 
-    let _resourcePath: string = undefined;
+    let _resourcePath: string = undefined; // 根据全局配置等解析出的文件请求路径
 
     if (this.resourcePath !== "") {
       _resourcePath = this.resourcePath;
@@ -60,7 +55,6 @@ export class GeoCollectionLoader extends THREE.Loader<GeometryCollection, string
             _resourcePath,
             (_data: GeometryCollection) => {
               // onLoad(_data);
-
               scope.manager.itemEnd(url);
             },
             _onError,
@@ -74,18 +68,9 @@ export class GeoCollectionLoader extends THREE.Loader<GeometryCollection, string
     );
   }
 
-  parse(data: GeometryCollection, path: string, onLoad: (data: GeometryCollection) => void, onError: (err: unknown) => void) {
-    if (data.geometries[0].type === "LineString") {
-      // for (let i = 0; i < data.geometries.length; i++) {
-      //   const lineString = data.geometries[i] as LineString;
-      //   console.log("lineString.coordinates", lineString.coordinates);
-      //   const mesh_lineString = handleLineString(lineString.coordinates);
-      //   console.log("mesh_lineString", mesh_lineString);
-      // }
-    }
-  }
+  parse(data: GeometryCollection, path: string, onLoad: (data: GeometryCollection) => void, onError: (err: unknown) => void) {}
 
-  parseAsync(data: GeometryCollection, path: string) {
+  async parseAsync(data: GeometryCollection, path: string) {
     const scope = this;
 
     return new Promise((resolve, reject) => {

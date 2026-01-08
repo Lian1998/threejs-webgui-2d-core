@@ -111,7 +111,7 @@ export class GpuPickManager {
   }
 
   pick(scene: THREE.Object3D, camera: THREE.Camera, clientX: number, clientY: number) {
-    const start = performance.now();
+    console.time(`GPUPickManager.pick render pickBuffer`);
 
     const rect = this.renderer.domElement.getBoundingClientRect();
     const dpr = this.renderer.getPixelRatio();
@@ -141,9 +141,8 @@ export class GpuPickManager {
     const _colors = Array.from(pixel);
     const pickid = decodeRGBToId(_colors);
 
-    const end = performance.now();
+    console.timeEnd(`GPUPickManager.pick render pickBuffer`);
 
-    console.warn(`GPUPickManager.pick render pickBuffer in ${end - start} ms`);
     // 通过映射表找到提取的object3d
     return { pickid: pickid, object3d: this.PosMap.get(pickid) };
   }

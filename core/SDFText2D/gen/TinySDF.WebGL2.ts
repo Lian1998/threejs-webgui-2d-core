@@ -53,7 +53,7 @@ const createProgram = (gl: WebGLRenderingContext, vsSource: string, fsSource: st
 };
 
 export const gen = (tinySdf: TinySDF, text: string) => {
-  const start = performance.now();
+  console.time(`TinySDF.Canvas2D.gen`);
 
   const chars = Array.from(text);
 
@@ -154,8 +154,7 @@ export const gen = (tinySdf: TinySDF, text: string) => {
     x += glyphAdvance;
   }
 
-  const end = performance.now();
-  console.warn(`TinySDF.WebGL2.gen in ${end - start}ms`);
+  console.timeEnd(`TinySDF.Canvas2D.gen`);
 
   return canvas;
 };
