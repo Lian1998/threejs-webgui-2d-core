@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mapshaper-geojson-example</title>
+
+    <style>
+      body {
+        overflow: hidden;
+      }
+
+      #viewport {
+        width: 100%;
+        height: 100vh;
+      }
+
+      #coordinates {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="viewport"> <div id="coordinates"></div></div>
+    <script type="module">
+      import qs from "qs";
+      const query = window.location.search;
+      const queryObject = qs.parse(query, { ignoreQueryPrefix: true });
+
+      const { project } = queryObject;
+
+      /** 根据query中的project名字找到对应的模块 */
+      const modules = import.meta.glob("@core/GeoCollectionLoader/debug/examples/*.ts");
+      const modules_keys = Object.keys(modules);
+      const loadModule = async (name) => {
+        let foundModule = undefined;
+        for (let i = 0; i < modules_keys.length; i++) {
+          const key = modules_keys[i];
+          if (key.indexOf(name) !== -1) foundModule = modules[key];
+        }
+        if (!foundModule) throw new Error("module not found: " + name);
+        const mod = await foundModule();
+        return mod;
+      };
+
+      loadModule(project);
+    </script>
+  </body>
+</html>
