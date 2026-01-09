@@ -2,8 +2,9 @@ attribute vec3 prev;            // 上一个顶点
 attribute vec3 next;            // 下一个顶点
 attribute float side;           // 当前顶点处于线条的哪一侧(+1: 顺着顺时针法线; -1: 逆着顺时针法线)
 attribute float width;          // 当前顶点的线宽比例(通过cpu阶段定义的输入为线段进度的函数计算, 此函数返回值为 0 ~ 1)
-attribute float counters;       // 当前顶点在线段中的线段进度
+attribute float counter;       // 当前顶点在线段中的线段进度
 attribute float lineDistance;   // 当前顶点在线段中的累计长度
+attribute float lineBreakpoint;   // 当前顶点在线段中的累计长度
 
 uniform vec3 uColor;             // 线条颜色
 uniform float uOpacity;          // 线条透明度(0 ~ 1)
@@ -14,15 +15,17 @@ uniform float uPixelRatio;       // 当前浏览器的pixelRatio
 
 varying vec2 vUV;                // u: 当前顶点顶点在线段中的进度(线段进度); v: (0: 顺着顺时针法线; 1: 逆着顺时针法线)
 varying vec4 vColor;
-varying float vCounters;
+varying float vCounter;
 varying float vLineDistance;
+varying float vLineBreakPoint;
 
 void main() {
 
   vColor = vec4(uColor, uOpacity);
   vUV = uv;
-  vCounters = counters;
+  vCounter = counter;
   vLineDistance = lineDistance;
+  vLineBreakPoint = lineBreakpoint;
 
   // 世界坐标
   vec4 currMV = modelViewMatrix * vec4(position, 1.0);
@@ -39,7 +42,7 @@ void main() {
 
     // 世界坐标切线
     vec3 dir;
-    if (length(nextMV.xyz - currMV.xyz) > 1e-4) {
+    if (length(nextMV.xyz - currMV.xyz) > 1e-6) {
       dir = normalize(nextMV.xyz - currMV.xyz);
     } else {
       dir = normalize(currMV.xyz - prevMV.xyz);
@@ -74,9 +77,9 @@ void main() {
 
     // 对拐角进行处理(miter join)
     float miterScale = 1.0;
-    if (distance(currA, prevA) < 1e-4) {
+    if (distance(currA, prevA) < 1e-6) {
       dir = normalize(nextA - currA);
-    } else if (distance(currA, nextA) < 1e-4) {
+    } else if (distance(currA, nextA) < 1e-6) {
       dir = normalize(currA - prevA);
     } else {
       vec2 dir1 = normalize(currA - prevA);

@@ -51,6 +51,7 @@ import type { FeatureCollection } from "geojson";
 import type { LineString } from "geojson";
 
 import type { PointsRepresentation } from "@core/GeoCollectionLoader/mesh-line/";
+import { convertPoints } from "@core/GeoCollectionLoader/mesh-line/";
 import { MeshLineGeometry } from "@core/GeoCollectionLoader/mesh-line/";
 import { MeshLineMaterial } from "@core/GeoCollectionLoader/mesh-line/";
 import { MeshLineMaterialParameters } from "@core/GeoCollectionLoader/mesh-line/";
@@ -62,20 +63,62 @@ scene.add(group0);
 {
   const _resolution = new THREE.Vector2(width, height);
   viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
-  const handleMapShaperFile = (data: FeatureCollection<LineString>, materialConfiguration: MeshLineMaterialParameters) => {
-    switch (data.type) {
-      case "FeatureCollection": {
+  const handleMapShaperFile = (_data: any, materialConfiguration: MeshLineMaterialParameters) => {
+    const isFeatureCollection = _data.type === "FeatureCollection";
+    if (!isFeatureCollection) {
+      throw new Error(`[GeoCollectionLoader][handleMapShaperFile] ${_data.name ? _data.name : ""}!FeatureCollection`);
+    }
+
+    const FeatureGeometryType = _data.features[0].geometry.type;
+    switch (FeatureGeometryType) {
+      case "LineString": {
+        // 单条线段
+        // const data = _data as FeatureCollection<LineString>;
+        // for (let i = 0; i < data.features.length; i++) {
+        //   const feature = data.features[i];
+        //   const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
+        //   const coordinates = convertPoints(featureGeometryCoordinates) as number[];
+        //   const meshLineGeometry = new MeshLineGeometry();
+        //   meshLineGeometry.setLineString(coordinates);
+        //   const mlMaterial = new MeshLineMaterial(materialConfiguration);
+        //   const mesh = new THREE.Mesh(meshLineGeometry, mlMaterial);
+        //   mesh.frustumCulled = false;
+        //   group0.add(mesh);
+        // }
+
+        // (错误的)直接设置单条线段
+        // const data = _data as FeatureCollection<LineString>;
+        // const _coordinates = [];
+        // for (let i = 0; i < data.features.length; i++) {
+        //   const feature = data.features[i];
+        //   const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
+        //   const coordinates = convertPoints(featureGeometryCoordinates) as number[];
+        //   _coordinates.push(...coordinates);
+        // }
+        // const meshLineGeometry = new MeshLineGeometry();
+        // meshLineGeometry.setLineString(_coordinates);
+        // const mlMaterial = new MeshLineMaterial(materialConfiguration);
+        // const mesh = new THREE.Mesh(meshLineGeometry, mlMaterial);
+        // mesh.frustumCulled = false;
+        // group0.add(mesh);
+
+        // 多条线段(drawcall优化的);
+        const data = _data as FeatureCollection<LineString>;
+        const _coordinates = [];
         for (let i = 0; i < data.features.length; i++) {
           const feature = data.features[i];
-          const coordinates = feature.geometry.coordinates;
-          const mlGeometry = new MeshLineGeometry();
-          mlGeometry.setPoints(coordinates as PointsRepresentation);
-          const mlMaterial = new MeshLineMaterial(materialConfiguration);
-          const mesh = new THREE.Mesh(mlGeometry, mlMaterial);
-          mesh.frustumCulled = false;
-          group0.add(mesh);
+          const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
+          const coordinates = convertPoints(featureGeometryCoordinates) as number[];
+          _coordinates.push(coordinates);
         }
-        return;
+        const meshLineGeometry = new MeshLineGeometry();
+        meshLineGeometry.setMultiLineString(_coordinates);
+        const mlMaterial = new MeshLineMaterial(materialConfiguration);
+        const mesh = new THREE.Mesh(meshLineGeometry, mlMaterial);
+        mesh.frustumCulled = false;
+        group0.add(mesh);
+
+        break;
       }
     }
   };

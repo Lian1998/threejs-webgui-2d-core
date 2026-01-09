@@ -44,8 +44,6 @@ const offset = (geojson: GeoJSON, xOffset: number, yOffset: number) => {
   return geojson;
 };
 
-//////////////////////////////////// Logic ////////////////////////////////////
-
 import fs from "node:fs";
 import path from "node:path";
 
@@ -82,6 +80,6 @@ for (const entry of entries) {
     const content = await fs.promises.readFile(srcPath, "utf8");
     const processed = await processFileContent(content, srcPath);
     await fs.promises.writeFile(outPath, processed, "utf8");
-    console.log(`✅ Processed: ${srcPath} → ${outPath}`);
+    console.log(`✅ 处理文件: ${srcPath} → ${outPath}`);
   }
 }

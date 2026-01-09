@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- http://localhost:5173/debug/GeoCollectionLoader/example.html?project=dachanwan -->
     <title>mapshaper-geojson-example</title>
 
     <style>
@@ -46,7 +48,7 @@
         return mod;
       };
 
-      loadModule(project);
+      loadModule(project ?? "dachanwan");
     </script>
   </body>
 </html>

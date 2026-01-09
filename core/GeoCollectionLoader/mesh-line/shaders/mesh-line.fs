@@ -7,14 +7,20 @@ uniform vec2 uResolution;      // 渲染素质(像素尺寸)
 
 varying vec2 vUV;
 varying vec4 vColor;
-varying float vCounters;
+varying float vCounter;
 varying float vLineDistance;
+varying float vLineBreakPoint;
 
 void main() {
 
   vec4 diffuseColor = vColor;
 
-  // 虚线逻辑(Screen-space 稳定)
+  // 如果是断点
+  if (vLineBreakPoint > 1e-6) {
+    discard;
+  }
+
+  // 如果是虚线
   if (uUseDash == 1.0) {
 
     // 虚线计算方法二: 直接在cpu读取顶点阶段计算出当前顶点在线段中的累计长度(开始位置), 在片元着色器中计算虚线
@@ -28,7 +34,7 @@ void main() {
   }
 
   // 可见度裁剪(根据线段进度)
-  diffuseColor.a *= step(vCounters, uVisibility);
-
+  diffuseColor.a *= step(vCounter, uVisibility);
+  // diffuseColor = vec4(vec3(vLineBreakPoint), 1.0);
   gl_FragColor = diffuseColor;
 }
