@@ -7,7 +7,7 @@ export type PointsRepresentation = THREE.BufferGeometry | Float32Array | THREE.V
  * @param {PointsRepresentation} points 点
  * @returns {Float32Array | number[]}
  */
-export const convertPoints = (points: PointsRepresentation, from: string = "mapshaper-geojson"): Float32Array | number[] => {
+export const convertPoints = (points: PointsRepresentation, hanldeWrapper?: (p: [number, number, number]) => [number, number, number]): Float32Array | number[] => {
   // 传入的是已经处理好的数组
   if (points instanceof Float32Array) {
     return points;
@@ -21,15 +21,14 @@ export const convertPoints = (points: PointsRepresentation, from: string = "maps
     return points
       .map((p: any) => {
         const isArray = Array.isArray(p);
-        let rp: [number, number, number];
         // 先将各种原始数组的格式转化成 Array3<number>
-        if (p instanceof THREE.Vector3) rp = [p.x, p.y, p.z];
-        else if (p instanceof THREE.Vector2) rp = [p.x, 0, p.y];
-        else if (isArray && p.length === 3) rp = [p[0], p[1], p[2]];
-        else if (isArray && p.length === 2) rp = [p[0], 0, p[1]]; // 此函数现在默认只处理mapshaper导出的json文件
+        if (p instanceof THREE.Vector3) p = [p.x, p.y, p.z];
+        else if (p instanceof THREE.Vector2) p = [p.x, 0.0, p.y];
+        else if (isArray && p.length === 3) p = [p[0], p[1], p[2]];
+        else if (isArray && p.length === 2) p = [p[0], 0.0, p[1]]; // 此函数现在默认只处理mapshaper导出的json文件
         // 这里是需要特殊处理的格式
-        if (from === "mapshaper-geojson") rp = [rp[0], 0.0, -rp[2]]; // geojson的Z坐标和threejs的Z坐标是反的
-        return rp;
+        if (hanldeWrapper) return hanldeWrapper(p); // geojson的Z坐标和threejs的Z坐标是反的
+        return p;
       })
       .flat();
   }
@@ -128,7 +127,6 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
    * @param wcb 线宽衰减函数 https://iquilezles.org/articles/functions/
    */
   setMultiLineString(lines: number[][], wcb?: WidthCallback): void {
-    console.log("lines", lines);
     if (lines.length <= 1) {
       this.setLineString(lines[0], wcb);
       return;

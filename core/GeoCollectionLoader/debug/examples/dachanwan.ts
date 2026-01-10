@@ -3,7 +3,6 @@ const MAP_CENTER = [520, 285];
 const MAP_VIEW_SIZE = 300;
 
 ///////////////////////////////////// 公共文件 //////////////////////////////////////
-
 import "normalize.css";
 import * as THREE from "three";
 
@@ -50,7 +49,6 @@ const scene = new THREE.Scene();
 import type { FeatureCollection } from "geojson";
 import type { LineString } from "geojson";
 
-import type { PointsRepresentation } from "@core/GeoCollectionLoader/mesh-line/";
 import { convertPoints } from "@core/GeoCollectionLoader/mesh-line/";
 import { MeshLineGeometry } from "@core/GeoCollectionLoader/mesh-line/";
 import { MeshLineMaterial } from "@core/GeoCollectionLoader/mesh-line/";
@@ -63,12 +61,12 @@ scene.add(group0);
 {
   const _resolution = new THREE.Vector2(width, height);
   viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
+  const mapshaperHanldeWrapper = (p: [number, number, number]) => [p[0], 0.0, -p[2]] as [number, number, number];
   const handleMapShaperFile = (_data: any, materialConfiguration: MeshLineMaterialParameters) => {
     const isFeatureCollection = _data.type === "FeatureCollection";
     if (!isFeatureCollection) {
       throw new Error(`[GeoCollectionLoader][handleMapShaperFile] ${_data.name ? _data.name : ""}!FeatureCollection`);
     }
-
     const FeatureGeometryType = _data.features[0].geometry.type;
     switch (FeatureGeometryType) {
       case "LineString": {
@@ -77,7 +75,7 @@ scene.add(group0);
         // for (let i = 0; i < data.features.length; i++) {
         //   const feature = data.features[i];
         //   const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
-        //   const coordinates = convertPoints(featureGeometryCoordinates) as number[];
+        //   const coordinates = convertPoints(featureGeometryCoordinates, mapshaperHanldeWrapper);
         //   const meshLineGeometry = new MeshLineGeometry();
         //   meshLineGeometry.setLineString(coordinates);
         //   const mlMaterial = new MeshLineMaterial(materialConfiguration);
@@ -92,7 +90,7 @@ scene.add(group0);
         // for (let i = 0; i < data.features.length; i++) {
         //   const feature = data.features[i];
         //   const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
-        //   const coordinates = convertPoints(featureGeometryCoordinates) as number[];
+        //   const coordinates = convertPoints(featureGeometryCoordinates, mapshaperHanldeWrapper);
         //   _coordinates.push(...coordinates);
         // }
         // const meshLineGeometry = new MeshLineGeometry();
@@ -108,7 +106,7 @@ scene.add(group0);
         for (let i = 0; i < data.features.length; i++) {
           const feature = data.features[i];
           const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
-          const coordinates = convertPoints(featureGeometryCoordinates) as number[];
+          const coordinates = convertPoints(featureGeometryCoordinates, mapshaperHanldeWrapper);
           _coordinates.push(coordinates);
         }
         const meshLineGeometry = new MeshLineGeometry();
@@ -124,52 +122,61 @@ scene.add(group0);
   };
 
   // 线
-  Promise.all([
-    window
-      .fetch("/mapshaper-dachanwan/01_coastline_and_buildings.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(195, 195, 195)") });
-      }),
+  {
+    Promise.all([
+      window
+        .fetch("/mapshaper-dachanwan/01_coastline_and_buildings.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 3.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
+        }),
 
-    window
-      .fetch("/mapshaper-dachanwan/02_rails.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(195, 195, 195)") });
-      }),
+      window
+        .fetch("/mapshaper-dachanwan/02_rails.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.8, uColor: new THREE.Color("rgb(195, 195, 195)") });
+        }),
 
-    window
-      .fetch("/mapshaper-dachanwan/05_road_edge.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.6, uColor: new THREE.Color("rgb(125, 125, 125)") });
-      }),
+      window
+        .fetch("/mapshaper-dachanwan/05_road_edge.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
+        }),
 
-    window
-      .fetch("/mapshaper-dachanwan/05_road_lane_dash.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uUseDash: 1, uDashArray: [15, 10], uLineWidth: 0.5, uColor: new THREE.Color("rgb(0, 0, 0)") });
-      }),
+      window
+        .fetch("/mapshaper-dachanwan/05_road_lane_dash.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uUseDash: 1, uDashArray: [15, 10], uLineWidth: 1.0, uColor: new THREE.Color("rgb(155, 155, 155)") });
+        }),
 
-    window
-      .fetch("/mapshaper-dachanwan/05_road_lane_solid.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.5, uColor: new THREE.Color("rgb(0, 0, 0)") });
-      }),
-  ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
+      window
+        .fetch("/mapshaper-dachanwan/05_road_lane_solid.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(155, 155, 155)") });
+        }),
+    ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
+  }
+
+  // 面
+  {
+    const _resolution = new THREE.Vector2(width, height);
+    viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
+    Promise.all([
+      window
+        .fetch("/mapshaper-dachanwan/07_marks.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(195, 195, 195)") });
+        }),
+    ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
+  }
 }
 
-//////////////////////////////////////// 坐标轴助手 ////////////////////////////////////////
-
-import { AxesHelper } from "three";
-const axesHepler = new AxesHelper(1000);
-scene.add(axesHepler);
-
 //////////////////////////////////////// 坐标定位 ////////////////////////////////////////
-
 import { getXZPosition } from "@source/utils/pointerCoordinates";
 {
   const coordinatesEl = document.querySelector("#coordinates");
@@ -180,7 +187,6 @@ import { getXZPosition } from "@source/utils/pointerCoordinates";
 }
 
 //////////////////////////////////////// 渲染循环 ////////////////////////////////////////
-
 const clock = new THREE.Clock();
 
 const animate = () => {
@@ -199,3 +205,10 @@ const animate = () => {
 };
 
 animate();
+
+//////////////////////////////////////// drawcall监听 ////////////////////////////////////////
+import "@libs/Spector.js/distt/spector.bundle.js";
+
+// @ts-ignore
+const spector = new SPECTOR.Spector();
+spector.displayUI();

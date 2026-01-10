@@ -99,7 +99,8 @@ void main() {
     float halfWidth = uLineWidth * width * 0.5;
     float halfWidthPx = halfWidth * uPixelRatio;
     vec2 pixelToNDC = vec2(2.0 / uResolution.x, 2.0 / uResolution.y);
-    vec2 offsetNDC = normalNDC * side * halfWidthPx * miterScale * pixelToNDC;
+    float ratioFactor = 0.5;
+    vec2 offsetNDC = normalNDC * side * halfWidthPx * miterScale * pixelToNDC * ratioFactor;
 
     currClip.xy += offsetNDC * currClip.w;
     gl_Position = currClip;

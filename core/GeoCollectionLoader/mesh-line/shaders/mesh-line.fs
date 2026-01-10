@@ -1,5 +1,7 @@
 precision highp float;
 
+// /docs/index.html?q=WebGLPro#api/en/renderers/webgl/WebGLProgram
+// uniform vec3 cameraPosition;
 uniform float uUseDash;        // 是否启用虚线
 uniform float uDashArray[2];   // [dashLength, gapLength] （单位：像素）
 uniform float uVisibility;     // 渲染顶点数, 常用于线条生长动画
@@ -15,26 +17,30 @@ void main() {
 
   vec4 diffuseColor = vColor;
 
-  // 如果是断点
+  // 断点
   if (vLineBreakPoint > 1e-6) {
     discard;
   }
 
-  // 如果是虚线
   if (uUseDash == 1.0) {
+    float offset = dot(cameraPosition, vec3(1.0, 0.0, 1.0)) * 0.25;
 
-    // 虚线计算方法二: 直接在cpu读取顶点阶段计算出当前顶点在线段中的累计长度(开始位置), 在片元着色器中计算虚线
-    float worldPerPixel = fwidth(vLineDistance);
-    float dashLenWorld = uDashArray[0] * worldPerPixel;
-    float gapLenWorld = uDashArray[1] * worldPerPixel;
+    // 计算每段虚线的实际长度, 直接基于世界空间
+    float dashLenWorld = uDashArray[0];
+    float gapLenWorld = uDashArray[1];
     float period = dashLenWorld + gapLenWorld;
-    if (mod(vLineDistance, period) > dashLenWorld) {
-      discard;
+
+    // 直接使用世界空间距离vLineDistance来计算
+    if (mod(vLineDistance + offset, period) > dashLenWorld) {
+      discard; // 丢弃片元 形成虚线效果
     }
   }
 
+  // 测试: cpu阶段合并几何, 冗余线头线尾顶点来表示断点
+  // diffuseColor = vec4(vec3(vLineBreakPoint), 1.0);
+
   // 可见度裁剪(根据线段进度)
   diffuseColor.a *= step(vCounter, uVisibility);
-  // diffuseColor = vec4(vec3(vLineBreakPoint), 1.0);
+
   gl_FragColor = diffuseColor;
 }

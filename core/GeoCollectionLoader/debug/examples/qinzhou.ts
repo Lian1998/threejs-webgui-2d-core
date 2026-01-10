@@ -1,3 +1,8 @@
+///////////////////////////////////// 底图配置 /////////////////////////////////////
+const MAP_CENTER = [565816.5, -2397680.7];
+const MAP_VIEW_SIZE = 300;
+
+///////////////////////////////////// 公共文件 //////////////////////////////////////
 import "normalize.css";
 import * as THREE from "three";
 
@@ -13,22 +18,30 @@ renderer.setClearColor(0xffffff, 0.0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 viewport.appendChild(renderer.domElement);
 
-import { MapControls } from "three_addons/controls/MapControls.js";
-const viewSize = 600;
+const viewSize = MAP_VIEW_SIZE;
 const camera = new THREE.OrthographicCamera(-viewSize * aspect, viewSize * aspect, viewSize, -viewSize, 0.1, 5000);
-const center = new THREE.Vector3(565816.5, 0, -2397680.7);
+viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => {
+  const aspect = width / height;
+  camera.left = -viewSize * aspect;
+  camera.right = viewSize * aspect;
+  camera.top = viewSize;
+  camera.bottom = -viewSize;
+  camera.updateProjectionMatrix();
+});
 
-camera.position.set(center.x, 1000, center.z);
-camera.up.set(0, 1, 0);
-camera.lookAt(center);
-camera.zoom = 1;
-camera.updateProjectionMatrix();
-
+import { MapControls } from "three_addons/controls/MapControls.js";
+const center = new THREE.Vector3(MAP_CENTER[0], 0, MAP_CENTER[1]);
 const controls = new MapControls(camera, renderer.domElement);
+controls.maxPolarAngle = Math.PI / 2;
 controls.minZoom = 0.5;
 controls.maxZoom = 5;
 controls.target.copy(center);
 controls.update();
+controls.saveState();
+camera.position.set(center.x, 1000, center.z);
+camera.up.set(0, 1, 0);
+camera.zoom = 1;
+camera.updateProjectionMatrix();
 
 const scene = new THREE.Scene();
 
@@ -36,6 +49,7 @@ const scene = new THREE.Scene();
 import type { FeatureCollection } from "geojson";
 import type { LineString } from "geojson";
 
+import { convertPoints } from "@core/GeoCollectionLoader/mesh-line/";
 import { MeshLineGeometry } from "@core/GeoCollectionLoader/mesh-line/";
 import { MeshLineMaterial } from "@core/GeoCollectionLoader/mesh-line/";
 import { MeshLineMaterialParameters } from "@core/GeoCollectionLoader/mesh-line/";
@@ -47,65 +61,101 @@ scene.add(group0);
 {
   const _resolution = new THREE.Vector2(width, height);
   viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
-  const handleMapShaperFile = (data: FeatureCollection<LineString>, materialConfiguration: MeshLineMaterialParameters) => {
-    if (data.type !== "FeatureCollection") console.error("!FeatureCollection");
+  const mapshaperHanldeWrapper = (p: [number, number, number]) => [p[0], 0.0, -p[2]] as [number, number, number];
+  const handleMapShaperFile = (_data: any, materialConfiguration: MeshLineMaterialParameters) => {
+    const isFeatureCollection = _data.type === "FeatureCollection";
+    if (!isFeatureCollection) {
+      throw new Error(`[GeoCollectionLoader][handleMapShaperFile] ${_data.name ? _data.name : ""}!FeatureCollection`);
+    }
 
-    for (let i = 0; i < data.features.length; i++) {
-      const feature = data.features[i];
-      try {
-        const coordinates = feature.geometry.coordinates as THREE.Vector2Tuple[];
-        const mlGeometry = new MeshLineGeometry();
-
-        mlGeometry.setPoints(coordinates);
+    const FeatureGeometryType = _data.features[0].geometry.type;
+    switch (FeatureGeometryType) {
+      case "LineString": {
+        // 多条线段(drawcall优化的);
+        const data = _data as FeatureCollection<LineString>;
+        const _coordinates = [];
+        for (let i = 0; i < data.features.length; i++) {
+          const feature = data.features[i];
+          const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
+          const coordinates = convertPoints(featureGeometryCoordinates, mapshaperHanldeWrapper);
+          _coordinates.push(coordinates);
+        }
+        const meshLineGeometry = new MeshLineGeometry();
+        meshLineGeometry.setMultiLineString(_coordinates);
         const mlMaterial = new MeshLineMaterial(materialConfiguration);
-        const mesh = new THREE.Mesh(mlGeometry, mlMaterial);
+        const mesh = new THREE.Mesh(meshLineGeometry, mlMaterial);
         mesh.frustumCulled = false;
         group0.add(mesh);
-      } catch (err) {
-        console.error("handleMapShaperFile Error", feature);
+
+        break;
       }
     }
   };
 
   // 线
-  Promise.all([
-    window
-      .fetch("/mapshaper-qinzhou/01_coastline_and_buildings.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(195, 195, 195)") });
-      }),
+  {
+    Promise.all([
+      window
+        .fetch("/mapshaper-qinzhou/01_coastline_and_buildings.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(195, 195, 195)") });
+        }),
 
-    window
-      .fetch("/mapshaper-qinzhou/02_rails.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(195, 195, 195)") });
-      }),
+      window
+        .fetch("/mapshaper-qinzhou/02_rails.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(195, 195, 195)") });
+        }),
 
-    window
-      .fetch("/mapshaper-qinzhou/05_road_edge.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.6, uColor: new THREE.Color("rgb(125, 125, 125)") });
-      }),
+      window
+        .fetch("/mapshaper-qinzhou/05_road_edge.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.6, uColor: new THREE.Color("rgb(125, 125, 125)") });
+        }),
 
-    window
-      .fetch("/mapshaper-qinzhou/05_road_lane_solid.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.5, uColor: new THREE.Color("rgb(0, 0, 0)") });
-      }),
+      window
+        .fetch("/mapshaper-qinzhou/05_road_lane_solid.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.5, uColor: new THREE.Color("rgb(0, 0, 0)") });
+        }),
 
-    window
-      .fetch("/mapshaper-qinzhou/temple_block.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 5, uColor: new THREE.Color("rgb(255, 0, 0)"), uUseDash: 1, uDashArray: [10, 10] });
-      }),
-  ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
+      window
+        .fetch("/mapshaper-qinzhou/temple_block.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uUseDash: 1, uDashArray: [15, 10], uLineWidth: 4.0, uColor: new THREE.Color("rgb(255, 0, 0)") });
+        }),
+    ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
+  }
+
+  // 面
+  {
+    Promise.all([
+      window
+        .fetch("/mapshaper-qinzhou/07_marks.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(195, 195, 195)") });
+        }),
+    ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
+  }
 }
 
+//////////////////////////////////////// 坐标定位 ////////////////////////////////////////
+import { getXZPosition } from "@source/utils/pointerCoordinates";
+{
+  const coordinatesEl = document.querySelector("#coordinates");
+  ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>("default").viewportElement.addEventListener("mousemove", (e) => {
+    const pos = getXZPosition(e, camera, renderer);
+    coordinatesEl.innerHTML = `${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`;
+  });
+}
+
+//////////////////////////////////////// 渲染循环 ////////////////////////////////////////
 const clock = new THREE.Clock();
 
 const animate = () => {
