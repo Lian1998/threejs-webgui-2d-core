@@ -34,7 +34,7 @@ const center = new THREE.Vector3(MAP_CENTER[0], 0, MAP_CENTER[1]);
 const controls = new MapControls(camera, renderer.domElement);
 controls.maxPolarAngle = Math.PI / 2;
 controls.minZoom = 0.5;
-controls.maxZoom = 5;
+controls.maxZoom = 20;
 controls.target.copy(center);
 controls.update();
 controls.saveState();
@@ -54,6 +54,12 @@ import { MeshLineGeometry } from "@core/GeoCollectionLoader/mesh-line/";
 import { MeshLineMaterial } from "@core/GeoCollectionLoader/mesh-line/";
 import { MeshLineMaterialParameters } from "@core/GeoCollectionLoader/mesh-line/";
 
+import { MeshPolygonGeometry } from "@core/GeoCollectionLoader/mesh-polygon/";
+import { MeshPolygonMaterial } from "@core/GeoCollectionLoader/mesh-polygon/";
+
+import earcut from "earcut";
+import { flatten } from "earcut";
+
 const group0 = new THREE.Group();
 group0.layers.set(0);
 scene.add(group0);
@@ -61,27 +67,26 @@ scene.add(group0);
 {
   const _resolution = new THREE.Vector2(width, height);
   viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
-  const mapshaperHanldeWrapper = (p: [number, number, number]) => [p[0], 0.0, -p[2]] as [number, number, number];
+  const mapshaper3HanldeWrapper = (p: [number, number, number]): number[] => [p[0], 0.0, -p[2]];
   const handleMapShaperFile = (_data: any, materialConfiguration: MeshLineMaterialParameters) => {
     const isFeatureCollection = _data.type === "FeatureCollection";
     if (!isFeatureCollection) {
       throw new Error(`[GeoCollectionLoader][handleMapShaperFile] ${_data.name ? _data.name : ""}!FeatureCollection`);
     }
-
     const FeatureGeometryType = _data.features[0].geometry.type;
     switch (FeatureGeometryType) {
       case "LineString": {
-        // 多条线段(drawcall优化的);
+        // 3. 用断点顶点冗余, 做多条线段(drawcall优化)
         const data = _data as FeatureCollection<LineString>;
         const _coordinates = [];
         for (let i = 0; i < data.features.length; i++) {
           const feature = data.features[i];
           const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
-          const coordinates = convertPoints(featureGeometryCoordinates, mapshaperHanldeWrapper);
+          const coordinates = convertPoints(featureGeometryCoordinates, mapshaper3HanldeWrapper);
           _coordinates.push(coordinates);
         }
         const meshLineGeometry = new MeshLineGeometry();
-        meshLineGeometry.setMultiLineString(_coordinates);
+        meshLineGeometry.setMultiLine(_coordinates);
         const mlMaterial = new MeshLineMaterial(materialConfiguration);
         const mesh = new THREE.Mesh(meshLineGeometry, mlMaterial);
         mesh.frustumCulled = false;
@@ -99,28 +104,35 @@ scene.add(group0);
         .fetch("/mapshaper-qinzhou/01_coastline_and_buildings.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(195, 195, 195)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 3.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
         }),
 
       window
         .fetch("/mapshaper-qinzhou/02_rails.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(195, 195, 195)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.8, uColor: new THREE.Color("rgb(195, 195, 195)") });
         }),
 
       window
         .fetch("/mapshaper-qinzhou/05_road_edge.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.6, uColor: new THREE.Color("rgb(125, 125, 125)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
         }),
 
       window
         .fetch("/mapshaper-qinzhou/05_road_lane_solid.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.5, uColor: new THREE.Color("rgb(0, 0, 0)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(155, 155, 155)") });
+        }),
+
+      window
+        .fetch("/mapshaper-qinzhou/07_marks.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
         }),
 
       window
@@ -134,12 +146,30 @@ scene.add(group0);
 
   // 面
   {
+    const _resolution = new THREE.Vector2(width, height);
+    viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
+    const geometry = new MeshPolygonGeometry();
+    const material = new MeshPolygonMaterial({ uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseShadow: 1 });
+    const _triangles = [];
     Promise.all([
       window
         .fetch("/mapshaper-qinzhou/07_marks.json")
         .then((response) => response.json())
-        .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(195, 195, 195)") });
+        .then((_data: FeatureCollection<LineString>) => {
+          const data = _data as FeatureCollection<LineString>;
+          for (let i = 0; i < data.features.length; i++) {
+            const feature = data.features[i];
+            const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
+            const _flatten = flatten([featureGeometryCoordinates]);
+            const _earcut = earcut(_flatten.vertices, _flatten.holes, _flatten.dimensions);
+            for (const index of _earcut) {
+              _triangles.push([_flatten.vertices[index * _flatten.dimensions], 0.0, -_flatten.vertices[index * _flatten.dimensions + 1]]);
+            }
+          }
+          geometry.setPolygons(_triangles.flat());
+          const mesh = new THREE.Mesh(geometry, material);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
     ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
   }

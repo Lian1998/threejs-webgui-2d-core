@@ -59,7 +59,6 @@ import { MeshPolygonMaterial } from "@core/GeoCollectionLoader/mesh-polygon/";
 
 import earcut from "earcut";
 import { flatten } from "earcut";
-import { deviation } from "earcut";
 
 const group0 = new THREE.Group();
 group0.layers.set(0);
