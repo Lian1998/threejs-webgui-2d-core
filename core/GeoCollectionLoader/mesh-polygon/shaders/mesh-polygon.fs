@@ -1,7 +1,7 @@
 precision highp float;
 
 uniform float uUseShadow; // 是否启用打阴影线的模式
-uniform float uShadowStep; // 阴影间隔 default: 4
+uniform float uShadowArray[2];    // 阴影间隔 default: 4
 
 uniform vec3 uColor;
 uniform float uOpacity;
@@ -16,9 +16,10 @@ void main() {
     vec2 fragPos = gl_FragCoord.xy - vec2(0.5);
     vec2 fragPosNormal = (gl_FragCoord.xy - vec2(0.5)) / uResolution;
 
+    float uShadowStep = uShadowArray[0] + uShadowArray[1];
     float fm = mod(fragPos.x - fragPos.y, uShadowStep);
     // float fmk = step(fm, 0.0);
-    if (fm > 0.0) {
+    if (fm > uShadowArray[1]) {
       discard;
     }
   }

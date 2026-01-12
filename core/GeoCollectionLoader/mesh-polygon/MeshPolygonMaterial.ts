@@ -10,7 +10,7 @@ export interface MeshPolygonMaterialParameters {
   uOpacity?: number;
 
   /** 阴影的样式; 如设置 [5, 5] 时: 实线5个单位, 空白5个单位 */
-  uShadowStep?: number;
+  uShadowArray?: number[];
 
   /** 渲染素质(像素尺寸) */
   uResolution: THREE.Vector2;
@@ -25,7 +25,7 @@ export interface MeshPolygonMaterialParameters {
 export class MeshPolygonMaterial extends THREE.ShaderMaterial implements MeshPolygonMaterialParameters {
   uColor!: THREE.Color;
   uOpacity!: number;
-  uShadowStep!: number;
+  uShadowArray!: number[];
   uResolution!: THREE.Vector2;
   uUseShadow!: number;
   uPixelRatio!: number;
@@ -35,7 +35,7 @@ export class MeshPolygonMaterial extends THREE.ShaderMaterial implements MeshPol
       uniforms: {
         uColor: { value: new THREE.Color(0x000000) },
         uOpacity: { value: 1 },
-        uShadowStep: { value: 4 },
+        uShadowArray: { value: [3, 1] },
         uResolution: { value: new THREE.Vector2(1, 1) },
         uUseShadow: { value: 0 },
         uPixelRatio: { value: 1 },
@@ -63,13 +63,13 @@ export class MeshPolygonMaterial extends THREE.ShaderMaterial implements MeshPol
           this.uniforms.uOpacity.value = value;
         },
       },
-      uShadowStep: {
+      uShadowArray: {
         enumerable: true,
         get() {
-          return this.uniforms.uShadowStep.value;
+          return this.uniforms.uShadowArray.value;
         },
         set(value) {
-          this.uniforms.uShadowStep.value = value;
+          this.uniforms.uShadowArray.value = value;
           this.uUseShadow = value !== 0 ? 1 : 0;
         },
       },
@@ -108,7 +108,7 @@ export class MeshPolygonMaterial extends THREE.ShaderMaterial implements MeshPol
     super.copy(source);
     this.uColor.copy(source.uColor);
     this.uOpacity = source.uOpacity;
-    this.uShadowStep = source.uShadowStep;
+    this.uShadowArray = source.uShadowArray;
     this.uResolution.copy(source.uResolution);
     this.uUseShadow = source.uUseShadow;
     this.uPixelRatio = source.uPixelRatio;
