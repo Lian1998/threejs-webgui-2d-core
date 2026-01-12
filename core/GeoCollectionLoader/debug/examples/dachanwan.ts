@@ -165,6 +165,13 @@ scene.add(group0);
         .then((data: FeatureCollection<LineString>) => {
           handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(155, 155, 155)") });
         }),
+
+      window
+        .fetch("/mapshaper-dachanwan/07_marks.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
+        }),
     ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
   }
 
@@ -174,7 +181,7 @@ scene.add(group0);
     viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
     // const mapshaper2HanldeWrapper = (p: [number, number, number]) => [p[0], -p[2]];
     const geometry = new MeshPolygonGeometry();
-    const material = new MeshPolygonMaterial({ uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseShadow: 1, uShadowArray: [4, 4] });
+    const material = new MeshPolygonMaterial({ uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseShadow: 1 });
     const _triangles = [];
     Promise.all([
       window

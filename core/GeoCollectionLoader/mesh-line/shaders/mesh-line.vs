@@ -7,21 +7,18 @@ attribute float lineDistance;   // 当前顶点在线段中的累计长度
 attribute float lineBreakpoint;   // 当前顶点在线段中的累计长度
 
 uniform vec3 uColor;             // 线条颜色
-uniform float uOpacity;          // 线条透明度(0 ~ 1)
 uniform vec2 uResolution;        // 渲染素质(像素尺寸)
 uniform float uSizeAttenuation;  // 线宽是否随缩放而缩放 (1: 随距离缩放而缩放(世界位置); 0: 不随距离缩放而缩放(固定像素宽);)
 uniform float uLineWidth;        // 线宽
 uniform float uPixelRatio;       // 当前浏览器的pixelRatio
 
 varying vec2 vUV;                // u: 当前顶点顶点在线段中的进度(线段进度); v: (0: 顺着顺时针法线; 1: 逆着顺时针法线)
-varying vec4 vColor;
 varying float vCounter;
 varying float vLineDistance;
 varying float vLineBreakPoint;
 
 void main() {
 
-  vColor = vec4(uColor, uOpacity);
   vUV = uv;
   vCounter = counter;
   vLineDistance = lineDistance;
@@ -99,7 +96,7 @@ void main() {
     float halfWidth = uLineWidth * width * 0.5;
     float halfWidthPx = halfWidth * uPixelRatio;
     vec2 pixelToNDC = vec2(2.0 / uResolution.x, 2.0 / uResolution.y);
-    float ratioFactor = 0.5;
+    float ratioFactor = 0.75;
     vec2 offsetNDC = normalNDC * side * halfWidthPx * miterScale * pixelToNDC * ratioFactor;
 
     currClip.xy += offsetNDC * currClip.w;

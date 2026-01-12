@@ -2,20 +2,21 @@ precision highp float;
 
 // /docs/index.html?q=WebGLPro#api/en/renderers/webgl/WebGLProgram
 // uniform vec3 cameraPosition;
-uniform float uUseDash;        // 是否启用虚线
-uniform float uDashArray[2];   // [dashLength, gapLength] （单位：像素）
-uniform float uVisibility;     // 渲染顶点数, 常用于线条生长动画
-uniform vec2 uResolution;      // 渲染素质(像素尺寸)
+uniform float uUseDash;         // 是否启用虚线
+uniform float uDashArray[2];    // [dashLength, gapLength] （单位：像素）
+uniform vec3 uColor;            // 线条颜色
+uniform float uOpacity;         // 线条透明度(0 ~ 1)
+uniform vec2 uResolution;       // 渲染素质(像素尺寸)
+uniform float uVisibility;      // 渲染顶点数, 常用于线条生长动画
 
 varying vec2 vUV;
-varying vec4 vColor;
 varying float vCounter;
 varying float vLineDistance;
 varying float vLineBreakPoint;
 
 void main() {
 
-  vec4 diffuseColor = vColor;
+  vec4 diffuseColor = vec4(uColor, uOpacity);
 
   // 断点
   if (vLineBreakPoint > 1e-6) {

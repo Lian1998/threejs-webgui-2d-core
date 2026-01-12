@@ -1,34 +1,27 @@
-uniform vec3 uColor;
-uniform float uUseShadow;
-uniform float uOpacity;
+precision highp float;
 
-float hatchSpacing = 8.0; // 像素间距，例如 8.0
-float hatchWidth = 1.0;   // 线宽，例如 1.0
-float hatchAngle = 3.14 / 8.0;   // 弧度，例如 radians(45.0)
-float hatchAlpha = 0.4;   // 阴影线强度 0~1
+uniform float uUseShadow; // 是否启用打阴影线的模式
+uniform float uShadowStep; // 阴影间隔 default: 4
+
+uniform vec3 uColor;
+uniform float uOpacity;
+uniform vec2 uResolution;
 
 void main() {
 
+  vec4 diffuseColor = vec4(uColor, uOpacity);
+
   if (uUseShadow == 1.0) {
-    // 屏幕空间坐标
-    vec2 coord = gl_FragCoord.xy;
+    // gl_FragCoord: 0.5 ~ width * 0.5
+    vec2 fragPos = gl_FragCoord.xy - vec2(0.5);
+    vec2 fragPosNormal = (gl_FragCoord.xy - vec2(0.5)) / uResolution;
 
-    // 旋转坐标（控制线方向）
-    float c = cos(hatchAngle);
-    float s = sin(hatchAngle);
-    vec2 rotated = vec2(c * coord.x - s * coord.y, s * coord.x + c * coord.y);
-
-    // 生成周期线
-    float line = abs(fract(rotated.x / hatchSpacing) - 0.5);
-
-    // 控制线宽
-    float mask = smoothstep(0.5 * hatchWidth / hatchSpacing, 0.5 * hatchWidth / hatchSpacing + 0.01, line);
-
-    // mask: 0 是线，1 是底色
-    vec3 color = mix(uColor * (1.0 - hatchAlpha), uColor, mask);
-
-    gl_FragColor = vec4(color, uOpacity);
+    float fm = mod(fragPos.x - fragPos.y, uShadowStep);
+    // float fmk = step(fm, 0.0);
+    if (fm > 0.0) {
+      discard;
+    }
   }
 
-  gl_FragColor = vec4(uColor, 1.0);
+  gl_FragColor = diffuseColor;
 }
