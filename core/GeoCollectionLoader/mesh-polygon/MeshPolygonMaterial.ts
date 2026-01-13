@@ -6,19 +6,19 @@ export interface MeshPolygonMaterialParameters {
   /** 线条颜色 */
   uColor: string | THREE.Color | number;
 
-  /** 线条透明度(0 ~ 1) */
+  /** 线条透明度(默认值1) */
   uOpacity?: number;
 
-  /** 阴影的样式; 如设置 [5, 5] 时: 实线5个单位, 空白5个单位 */
+  /** 阴影斜线的样式(默认值[3, 1]): 如设置 [3, 1] 时, 空白3个屏幕像素填补一个屏幕像素 */
   uShadowArray?: number[];
 
-  /** 渲染素质(像素尺寸) */
+  /** 当前材质绘制时的画布大小 */
   uResolution: THREE.Vector2;
 
-  /** 是否启用阴影 */
+  /** 是否启用阴影斜线(默认值0) */
   uUseShadow?: number;
 
-  /** 当前浏览器指定的pixelRatio */
+  /** 当前材质绘制时的pixelRatio(默认值1) */
   uPixelRatio?: number;
 }
 
@@ -36,7 +36,7 @@ export class MeshPolygonMaterial extends THREE.ShaderMaterial implements MeshPol
         uColor: { value: new THREE.Color(0x000000) },
         uOpacity: { value: 1 },
         uShadowArray: { value: [3, 1] },
-        uResolution: { value: new THREE.Vector2(1, 1) },
+        uResolution: { value: new THREE.Vector2(1920, 1080) },
         uUseShadow: { value: 0 },
         uPixelRatio: { value: 1 },
       },
@@ -70,7 +70,7 @@ export class MeshPolygonMaterial extends THREE.ShaderMaterial implements MeshPol
         },
         set(value) {
           this.uniforms.uShadowArray.value = value;
-          this.uUseShadow = value !== 0 ? 1 : 0;
+          if (Array.isArray(value)) this.uUseShadow = 1;
         },
       },
       uResolution: {
