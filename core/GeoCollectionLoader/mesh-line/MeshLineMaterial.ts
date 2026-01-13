@@ -8,28 +8,25 @@ export interface MeshLineMaterialParameters {
   /** 线条颜色 */
   uColor?: string | THREE.Color | number;
 
-  /** 线条透明度(0 ~ 1) */
+  /** 线条透明度(默认值1) */
   uOpacity?: number;
 
-  /** 虚线的样式; 如设置 [5, 5] 时: 实线5个单位, 空白5个单位 */
+  /** 虚线的样式(默认值[4, 4]): 如设置 [4, 4] 时, 实线4个单位, 空白4个单位 */
   uDashArray?: number[];
 
-  /** 渲染素质(像素尺寸) */
+  /** 当前材质绘制时的画布大小 */
   uResolution: THREE.Vector2;
 
-  /** 线宽是否随缩放而缩放 (1: 随距离缩放而缩放(世界位置); 0: 不随距离缩放而缩放(固定像素宽);)  */
+  /** 线宽是否随缩放而缩放(默认值0): 1 随距离缩放而缩放(世界位置); 0 不随距离缩放而缩放(固定像素宽) */
   uSizeAttenuation?: number;
 
-  /** 线宽 */
+  /** 线宽(默认值1) */
   uLineWidth?: number;
 
-  /** 渲染顶点数, 常用于线条生长动画 */
-  uVisibility?: number;
-
-  /** 是否启用虚线 */
+  /** 是否启用虚线(默认值0) */
   uUseDash?: number;
 
-  /** 当前浏览器指定的pixelRatio */
+  /** 当前材质绘制时的pixelRatio(默认值1) */
   uPixelRatio?: number;
 }
 
@@ -40,7 +37,6 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
   uResolution!: THREE.Vector2;
   uSizeAttenuation!: number;
   uLineWidth!: number;
-  uVisibility!: number;
   uUseDash!: number;
   uPixelRatio!: number;
 
@@ -53,7 +49,6 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
         uResolution: { value: new THREE.Vector2(1, 1) },
         uSizeAttenuation: { value: 0 },
         uLineWidth: { value: 1 },
-        uVisibility: { value: 1 },
         uUseDash: { value: 0 },
         uPixelRatio: { value: 1 },
       },
@@ -68,7 +63,7 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
           return this.uniforms.uColor.value;
         },
         set(value) {
-          this.uniforms.uColor.value = value;
+          this.uniforms.uColor.value.copy(value);
         },
       },
       uOpacity: {
@@ -87,7 +82,7 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
         },
         set(value) {
           this.uniforms.uDashArray.value = value;
-          this.uUseDash = value !== 0 ? 1 : 0;
+          if (Array.isArray(value)) this.uUseDash = 1;
         },
       },
       uResolution: {
@@ -115,15 +110,6 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
         },
         set(value) {
           this.uniforms.uLineWidth.value = value;
-        },
-      },
-      uVisibility: {
-        enumerable: true,
-        get() {
-          return this.uniforms.uVisibility.value;
-        },
-        set(value) {
-          this.uniforms.uVisibility.value = value;
         },
       },
       uUseDash: {
@@ -156,7 +142,6 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
     this.uResolution.copy(source.uResolution);
     this.uSizeAttenuation = source.uSizeAttenuation;
     this.uLineWidth = source.uLineWidth;
-    this.uVisibility = source.uVisibility;
     this.uUseDash = source.uUseDash;
     this.uPixelRatio = source.uPixelRatio;
     return this;

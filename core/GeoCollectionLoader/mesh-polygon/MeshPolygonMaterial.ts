@@ -51,7 +51,7 @@ export class MeshPolygonMaterial extends THREE.ShaderMaterial implements MeshPol
           return this.uniforms.uColor.value;
         },
         set(value) {
-          this.uniforms.uColor.value = value;
+          this.uniforms.uColor.value.copy(value);
         },
       },
       uOpacity: {

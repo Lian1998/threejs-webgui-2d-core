@@ -1,11 +1,11 @@
 precision highp float;
 
-uniform float uUseShadow; // 是否启用打阴影线的模式
-uniform float uShadowArray[2];    // 阴影间隔 default: 4
-
 uniform vec3 uColor;
 uniform float uOpacity;
 uniform vec2 uResolution;
+
+uniform float uUseShadow; // 是否启用打阴影线的模式
+uniform float uShadowArray[2];    // 阴影间隔 default: 4
 
 void main() {
 

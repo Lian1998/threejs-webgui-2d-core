@@ -32,15 +32,30 @@ viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } })
 import { MapControls } from "three_addons/controls/MapControls.js";
 const center = new THREE.Vector3(MAP_CENTER[0], 0, MAP_CENTER[1]);
 const controls = new MapControls(camera, renderer.domElement);
-controls.maxPolarAngle = Math.PI / 2;
-controls.minZoom = 0.5;
-controls.maxZoom = 20;
+
+{
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.25;
+}
+
+{
+  controls.enableZoom = true;
+  camera.zoom = 1;
+  controls.minZoom = 0.5;
+  controls.maxZoom = 20;
+  controls.zoomSpeed = 1.2;
+}
+
+{
+  controls.enableRotate = true;
+  controls.maxPolarAngle = Math.PI / 2;
+}
+
 controls.target.copy(center);
 controls.update();
 controls.saveState();
 camera.position.set(center.x, 1000, center.z);
 camera.up.set(0, 1, 0);
-camera.zoom = 1;
 camera.updateProjectionMatrix();
 
 const scene = new THREE.Scene();

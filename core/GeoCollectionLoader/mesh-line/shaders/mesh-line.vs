@@ -1,18 +1,17 @@
-attribute vec3 prev;            // 上一个顶点
-attribute vec3 next;            // 下一个顶点
-attribute float side;           // 当前顶点处于线条的哪一侧(+1: 顺着顺时针法线; -1: 逆着顺时针法线)
-attribute float width;          // 当前顶点的线宽比例(通过cpu阶段定义的输入为线段进度的函数计算, 此函数返回值为 0 ~ 1)
-attribute float counter;       // 当前顶点在线段中的线段进度
-attribute float lineDistance;   // 当前顶点在线段中的累计长度
-attribute float lineBreakpoint;   // 当前顶点在线段中的累计长度
+attribute vec3 prev;              // 上一个顶点
+attribute vec3 next;              // 下一个顶点
+attribute float side;             // 当前顶点处于线条的哪一侧: +1: 顺着顺时针法线; -1 逆着顺时针法线
+attribute float width;            // 当前顶点的线宽比例: 通过cpu阶段定义的函数(输入为线条进度)计算, 此函数返回值为 0 ~ 1
+attribute float counter;          // 当前顶点在线条中的进度
+attribute float lineDistance;     // 当前顶点在线条中的累计长度
+attribute float lineBreakpoint;   // 当前顶点在线条中的累计长度
 
-uniform vec3 uColor;             // 线条颜色
 uniform vec2 uResolution;        // 渲染素质(像素尺寸)
-uniform float uSizeAttenuation;  // 线宽是否随缩放而缩放 (1: 随距离缩放而缩放(世界位置); 0: 不随距离缩放而缩放(固定像素宽);)
+uniform float uSizeAttenuation;  // 线宽是否随缩放而缩放(默认值0): 1 随距离缩放而缩放(世界位置); 0 不随距离缩放而缩放(固定像素宽)
 uniform float uLineWidth;        // 线宽
 uniform float uPixelRatio;       // 当前浏览器的pixelRatio
 
-varying vec2 vUV;                // u: 当前顶点顶点在线段中的进度(线段进度); v: (0: 顺着顺时针法线; 1: 逆着顺时针法线)
+varying vec2 vUV;                // u 当前顶点在线条中的进度; v 当前顶点在线段宽度方向上是顺法线还是逆法线
 varying float vCounter;
 varying float vLineDistance;
 varying float vLineBreakPoint;

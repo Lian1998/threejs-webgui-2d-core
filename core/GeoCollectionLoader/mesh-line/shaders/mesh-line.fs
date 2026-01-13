@@ -2,12 +2,12 @@ precision highp float;
 
 // /docs/index.html?q=WebGLPro#api/en/renderers/webgl/WebGLProgram
 // uniform vec3 cameraPosition;
+uniform vec3 uColor;
+uniform float uOpacity;
+uniform vec2 uResolution;
+
 uniform float uUseDash;         // 是否启用虚线
 uniform float uDashArray[2];    // [dashLength, gapLength] （单位：像素）
-uniform vec3 uColor;            // 线条颜色
-uniform float uOpacity;         // 线条透明度(0 ~ 1)
-uniform vec2 uResolution;       // 渲染素质(像素尺寸)
-uniform float uVisibility;      // 渲染顶点数, 常用于线条生长动画
 
 varying vec2 vUV;
 varying float vCounter;
@@ -39,9 +39,6 @@ void main() {
 
   // 测试: cpu阶段合并几何, 冗余线头线尾顶点来表示断点
   // diffuseColor = vec4(vec3(vLineBreakPoint), 1.0);
-
-  // 可见度裁剪(根据线段进度)
-  diffuseColor.a *= step(vCounter, uVisibility);
 
   gl_FragColor = diffuseColor;
 }
