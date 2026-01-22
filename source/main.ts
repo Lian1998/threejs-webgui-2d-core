@@ -27,9 +27,13 @@ const scene = new THREE.Scene();
 import type { FeatureCollection } from "geojson";
 import type { LineString } from "geojson";
 
-import { MeshLineGeometry } from "@core/GeoCollectionLoader/mesh-line/";
-import { MeshLineMaterial } from "@core/GeoCollectionLoader/mesh-line/";
-import { MeshLineMaterialParameters } from "@core/GeoCollectionLoader/mesh-line/";
+import { convertPoints } from "@core/MeshLine/";
+import { MeshLineGeometry } from "@core/MeshLine/";
+import { MeshLineMaterial } from "@core/MeshLine/";
+import { MeshLineMaterialParameters } from "@core/MeshLine/";
+
+import { MeshPolygonGeometry } from "@core/MeshPolygon/";
+import { MeshPolygonMaterial } from "@core/MeshPolygon/";
 
 const group0 = new THREE.Group();
 // group0.rotateY(Math.PI);
