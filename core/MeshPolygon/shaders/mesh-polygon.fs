@@ -16,19 +16,19 @@ void main() {
     vec2 fragPos = gl_FragCoord.xy - vec2(0.5); // fragPos ∈ [0, width-1] × [0, height-1]; 左下角为 0, 0
     vec2 fragUv = gl_FragCoord.xy / uResolution; // fragUv ∈ [0, 1] × [0, 1]; 归一化到uv, 左下角为 0, 0
 
-    float totalStep = uShadowArray[0] + uShadowArray[1];
-    float blackStep = uShadowArray[0] / totalStep;
-    // float whiteStep = uShadowArray[1] / totalStep;
+    float shadowLength = uShadowArray[0];
+    float gapLength = uShadowArray[1];
+    float period = shadowLength + gapLength;
 
     // 打45°斜线
     // float proj = fragPos.x - fragPos.y; // mod 在负数时不对称
     float proj = (fragPos.x + uResolution.y) - fragPos.y;
 
     // 归一化到 [0,1) 的周期位置
-    float phase = mod(proj, totalStep) / totalStep;
+    float phase = mod(proj, period) / period;
 
     // 如果超出黑线区域, 舍弃片元
-    if (phase > blackStep) {
+    if (phase > shadowLength / period) {
       discard;
     }
   }

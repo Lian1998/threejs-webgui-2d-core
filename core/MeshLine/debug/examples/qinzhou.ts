@@ -87,7 +87,6 @@ scene.add(group0);
   {
     const mapshaper3HanldeWrapper = (p: [number, number, number]): number[] => [p[0], 0.0, -p[2]];
     const handleMapShaperFile = (_data: any, materialConfiguration: MeshLineMaterialParameters) => {
-      // 3. 用断点顶点冗余, 做多条线段(drawcall优化)
       const data = _data as FeatureCollection<LineString>;
       const _coordinates = [];
       for (let i = 0; i < data.features.length; i++) {

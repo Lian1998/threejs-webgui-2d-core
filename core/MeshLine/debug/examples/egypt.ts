@@ -87,7 +87,6 @@ scene.add(group0);
   {
     const mapshaper3HanldeWrapper = (p: [number, number, number]): number[] => [p[0], 0.0, -p[2]];
     const handleMapShaperFile = (_data: any, materialConfiguration: MeshLineMaterialParameters) => {
-      // 3. 用断点顶点冗余, 做多条线段(drawcall优化)
       const data = _data as FeatureCollection<LineString>;
       const _coordinates = [];
       for (let i = 0; i < data.features.length; i++) {
@@ -119,12 +118,12 @@ scene.add(group0);
           handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.8, uColor: new THREE.Color("rgb(195, 195, 195)") });
         }),
 
-      // window
-      //   .fetch("/mapshaper-egypt/03_fence.json")
-      //   .then((response) => response.json())
-      //   .then((data: FeatureCollection<LineString>) => {
-      //     handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(245, 245, 245)") });
-      //   }),
+      window
+        .fetch("/mapshaper-egypt/03_fence.json")
+        .then((response) => response.json())
+        .then((data: FeatureCollection<LineString>) => {
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 8, uColor: new THREE.Color("rgb(0, 255, 0)") });
+        }),
 
       window
         .fetch("/mapshaper-egypt/04_yard_containers.json")

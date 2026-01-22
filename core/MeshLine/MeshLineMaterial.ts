@@ -11,8 +11,17 @@ export interface MeshLineMaterialParameters {
   /** 线条透明度(默认值1) */
   uOpacity?: number;
 
+  /** 是否启用虚线(默认值0) */
+  uUseDash?: number;
+
   /** 虚线的样式(默认值[4, 4]): 如设置 [4, 4] 时, 黑4白4 */
   uDashArray?: number[];
+
+  /** 是否启用小方格线(默认值0) */
+  uUseBox?: number;
+
+  /** 虚线的样式(默认值[4, 4]): 如设置 [4, 4] 时, 线4小方格4 */
+  uBoxArray?: number[];
 
   /** 当前材质绘制时的画布大小 */
   uResolution: THREE.Vector2;
@@ -23,9 +32,6 @@ export interface MeshLineMaterialParameters {
   /** 线宽(默认值1) */
   uLineWidth?: number;
 
-  /** 是否启用虚线(默认值0) */
-  uUseDash?: number;
-
   /** 当前材质绘制时的pixelRatio(默认值1) */
   uPixelRatio?: number;
 }
@@ -33,11 +39,13 @@ export interface MeshLineMaterialParameters {
 export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMaterialParameters {
   uColor!: THREE.Color;
   uOpacity!: number;
+  uUseDash!: number;
   uDashArray!: number[];
+  uUseBox!: number;
+  uBoxArray!: number[];
   uResolution!: THREE.Vector2;
   uSizeAttenuation!: number;
   uLineWidth!: number;
-  uUseDash!: number;
   uPixelRatio!: number;
 
   constructor(parameters: MeshLineMaterialParameters) {
@@ -45,11 +53,13 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
       uniforms: {
         uColor: { value: new THREE.Color(0x000000) },
         uOpacity: { value: 1 },
+        uUseDash: { value: 0 },
         uDashArray: { value: [4.0, 4.0] },
+        uUseBox: { value: 0 },
+        uBoxArray: { value: [4.0, 4.0] },
         uResolution: { value: new THREE.Vector2(1, 1) },
         uSizeAttenuation: { value: 0 },
         uLineWidth: { value: 1 },
-        uUseDash: { value: 0 },
         uPixelRatio: { value: 1 },
       },
       vertexShader,
@@ -75,6 +85,15 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
           this.uniforms.uOpacity.value = value;
         },
       },
+      uUseDash: {
+        enumerable: true,
+        get() {
+          return this.uniforms.uUseDash.value;
+        },
+        set(value) {
+          this.uniforms.uUseDash.value = value;
+        },
+      },
       uDashArray: {
         enumerable: true,
         get() {
@@ -83,6 +102,29 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
         set(value) {
           this.uniforms.uDashArray.value = value;
           if (Array.isArray(value)) this.uUseDash = 1;
+        },
+      },
+      uUseBox: {
+        enumerable: true,
+        get() {
+          return this.uniforms.uUseBox.value;
+        },
+        set(value) {
+          this.uniforms.uUseBox.value = value;
+        },
+      },
+      uBoxArray: {
+        enumerable: true,
+        get() {
+          return this.uniforms.uBoxArray.value;
+        },
+        set(value) {
+          this.uniforms.uBoxArray.value = value;
+          if (Array.isArray(value)) {
+            this.uUseBox = 1;
+            this.uSizeAttenuation = 1; // 绘制盒时保证
+            if (this.uLineWidth.value < value[1]) this.uLineWidth.value = value[1];
+          }
         },
       },
       uResolution: {
@@ -112,15 +154,6 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
           this.uniforms.uLineWidth.value = value;
         },
       },
-      uUseDash: {
-        enumerable: true,
-        get() {
-          return this.uniforms.uUseDash.value;
-        },
-        set(value) {
-          this.uniforms.uUseDash.value = value;
-        },
-      },
       uPixelRatio: {
         enumerable: true,
         get() {
@@ -138,11 +171,13 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
     super.copy(source);
     this.uColor.copy(source.uColor);
     this.uOpacity = source.uOpacity;
+    this.uUseDash = source.uUseDash;
     this.uDashArray = source.uDashArray;
+    this.uUseBox = source.uUseBox;
+    this.uBoxArray = source.uBoxArray;
     this.uResolution.copy(source.uResolution);
     this.uSizeAttenuation = source.uSizeAttenuation;
     this.uLineWidth = source.uLineWidth;
-    this.uUseDash = source.uUseDash;
     this.uPixelRatio = source.uPixelRatio;
     return this;
   }
