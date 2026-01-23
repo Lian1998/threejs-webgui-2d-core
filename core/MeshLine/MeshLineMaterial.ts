@@ -14,19 +14,19 @@ export interface MeshLineMaterialParameters {
   /** 是否启用虚线(默认值0) */
   uUseDash?: number;
 
-  /** 虚线的样式(默认值[4, 4]): 如设置 [4, 4] 时, 黑4白4 */
+  /** 虚线的样式(默认值[4.0, 4.0]): 如设置 [4.0, 4.0] 时, 先实部占用4.0个单位, 再是虚部占用4.0个单位 */
   uDashArray?: number[];
 
   /** 是否启用小方格线(默认值0) */
   uUseBox?: number;
 
-  /** 虚线的样式(默认值[4, 4]): 如设置 [4, 4] 时, 线4小方格4 */
+  /** 虚线的样式(默认值[1.0, 4.0]): 如设置 [1.0, 4.0] 时, 线条的宽度为1.0, 小方格的大小为4.0, 线条与小方格的比例恒定为4:3 */
   uBoxArray?: number[];
 
   /** 当前材质绘制时的画布大小 */
   uResolution: THREE.Vector2;
 
-  /** 线宽是否随缩放而缩放(默认值0): 1 随距离缩放而缩放(世界位置); 0 不随距离缩放而缩放(固定像素宽) */
+  /** 线宽是否随距离衰减(默认值0): 1 随与相机距离变化(世界空间); 0 不随距离变化(屏幕空间) */
   uSizeAttenuation?: number;
 
   /** 线宽(默认值1) */
@@ -56,7 +56,7 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
         uUseDash: { value: 0 },
         uDashArray: { value: [4.0, 4.0] },
         uUseBox: { value: 0 },
-        uBoxArray: { value: [4.0, 4.0] },
+        uBoxArray: { value: [1.0, 4.0] },
         uResolution: { value: new THREE.Vector2(1, 1) },
         uSizeAttenuation: { value: 0 },
         uLineWidth: { value: 1 },
@@ -101,7 +101,7 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
         },
         set(value) {
           this.uniforms.uDashArray.value = value;
-          if (Array.isArray(value)) this.uUseDash = 1;
+          if (Array.isArray(value)) this.uniforms.uUseDash.value = 1;
         },
       },
       uUseBox: {
@@ -121,9 +121,12 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
         set(value) {
           this.uniforms.uBoxArray.value = value;
           if (Array.isArray(value)) {
-            this.uUseBox = 1;
-            this.uSizeAttenuation = 1; // 绘制盒时保证
-            if (this.uLineWidth.value < value[1]) this.uLineWidth.value = value[1];
+            this.uniforms.uUseBox.value = 1;
+            this.uniforms.uSizeAttenuation.value = 1; // 开启绘制小方格功能时, 必须是世界空间
+            // 绘制小方格时需要保证面片的宽度不能小于小方格
+            if (this.uniforms.uLineWidth.value < value[1]) {
+              this.uniforms.uLineWidth.value = value[1];
+            }
           }
         },
       },
@@ -165,6 +168,7 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
       },
     });
     this.setValues(parameters as THREE.ShaderMaterialParameters);
+    if (this.uUseBox == 1.0) console.log(this); // debug: 打印一下useBox的数据
   }
 
   override copy(source: MeshLineMaterial): this {

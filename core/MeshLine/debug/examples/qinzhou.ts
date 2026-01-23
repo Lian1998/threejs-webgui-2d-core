@@ -133,13 +133,6 @@ scene.add(group0);
         }),
 
       window
-        .fetch("/mapshaper-qinzhou/07_marks.json")
-        .then((response) => response.json())
-        .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
-        }),
-
-      window
         .fetch("/mapshaper-qinzhou/temple_block.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {

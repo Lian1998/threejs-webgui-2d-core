@@ -7,18 +7,18 @@ attribute float lineDistance;     // 当前顶点在线条中的累计长度
 attribute float lineBreakpoint;   // 当前顶点在线条中的累计长度
 
 uniform vec2 uResolution;        // 渲染素质(像素尺寸)
-uniform float uSizeAttenuation;  // 线宽是否随缩放而缩放(默认值0): 1 随距离缩放而缩放(世界位置); 0 不随距离缩放而缩放(固定像素宽)
+uniform float uSizeAttenuation;  // 线宽是否随距离衰减(默认值0): 1 随与相机距离变化(世界空间); 0 不随距离变化(屏幕空间)
 uniform float uLineWidth;        // 线宽
 uniform float uPixelRatio;       // 当前浏览器的pixelRatio
 
-varying vec2 vUV;                // u 当前顶点在线条中的进度; v 当前顶点在线段宽度方向上是顺法线还是逆法线
+varying vec2 vUv;                // u 当前顶点在线条中的进度; v 当前顶点在线段宽度方向上是顺法线还是逆法线
 varying float vCounter;
 varying float vLineDistance;
 varying float vLineBreakPoint;
 
 void main() {
 
-  vUV = uv;
+  vUv = uv;
   vCounter = counter;
   vLineDistance = lineDistance;
   vLineBreakPoint = lineBreakpoint;
@@ -33,7 +33,7 @@ void main() {
   vec4 prevClip = projectionMatrix * prevMV;
   vec4 nextClip = projectionMatrix * nextMV;
 
-  // 世界位置(线宽随着缩放而缩放)
+  // 世界空间
   if (uSizeAttenuation == 1.) {
 
     // 世界坐标切线
@@ -45,7 +45,10 @@ void main() {
     }
 
     // 世界坐标法线
-    vec3 normalWorld = normalize(vec3(-dir.y, dir.x, 0.0));
+    vec3 normalWorld = normalize(vec3(-dir.y, dir.x, 0.0)); // 假设视角只会从y轴正上方往下看
+    // 正儿八经算出来(取决于是否要斜切视角)
+    // vec3 viewDir = normalize(-currMV.xyz);
+    // vec3 normalWorld = normalize(cross(dir, viewDir));
 
     float halfWidth = uLineWidth * width * 0.5;
     vec3 offset = normalWorld * side * halfWidth;
@@ -54,7 +57,7 @@ void main() {
     gl_Position = projectionMatrix * currMV;
   } 
 
-  // 屏幕空间位置(线宽依据于像素固定值不会随着缩放而缩放)
+  // 屏幕空间
   else {
 
     // NDC坐标

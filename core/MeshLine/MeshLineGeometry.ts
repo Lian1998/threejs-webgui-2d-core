@@ -196,7 +196,7 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
       this.width.push(w, w);
 
       // uv
-      this.uv.push(c, 0, c, 1); // x:counter, v:side
+      this.uv.push(c, 0, c, 1); // u:counter, v:side
 
       // 生成中间顶点的 prev 和 next
       if (j < l - 1) {

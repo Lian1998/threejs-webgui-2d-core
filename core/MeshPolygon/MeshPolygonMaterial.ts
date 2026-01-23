@@ -9,7 +9,7 @@ export interface MeshPolygonMaterialParameters {
   /** 线条透明度(默认值1) */
   uOpacity?: number;
 
-  /** 阴影斜线的样式(默认值[1.0, 3.0]): 如设置 [1.0, 3.0] 时, 黑1白3 */
+  /** 阴影斜线的样式(默认值[1.0, 3.0]): 如设置 [1.0, 3.0] 时, 先是实部占用1.0个单位, 再是虚部占用3.0个单位 */
   uShadowArray?: number[];
 
   /** 当前材质绘制时的画布大小 */
@@ -70,7 +70,7 @@ export class MeshPolygonMaterial extends THREE.ShaderMaterial implements MeshPol
         },
         set(value) {
           this.uniforms.uShadowArray.value = value;
-          if (Array.isArray(value)) this.uUseShadow = 1;
+          if (Array.isArray(value)) this.uniforms.uUseShadow.value = 1;
         },
       },
       uResolution: {
