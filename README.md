@@ -12,27 +12,23 @@
 
 2. 优化受限, openlayers在架构上封装了渲染机, 用户调用应用层api本质上是生成渲染机解析的指令, 渲染机真正的去调用canvas2DAPI, 这个渲染机本质是一个黑盒难以阅读代码和调优
 3. openlayers 本身在项目定位上不像cesium, mapbox, 其对三位坐标系和webgl没有支持, 无法平滑过渡到三维/轻三维阶段
-5. openlayers 的GIS封装API导致了很多我们专业(我的理解是WebGUI定位给技术人员用的简洁明了的AI, 后续可能支持车队/任务调度优化调优)的需求实现困难, 比如:
+4. openlayers 的GIS封装API导致了很多我们专业(我的理解是WebGUI定位给技术人员用的简洁明了的AI, 后续可能支持车队/任务调度优化调优)的需求实现困难, 比如:
    1. 拾取管线, 需要我封装额外的管线以保证应用层代码简洁, 并且拾取api的逻辑无法优化(openlayers封装)
    2. 缩放比例对齐, 需要我封装额外的管线
    3. 平滑缩放设备贴图
    4. 在设备旁显示设备状态, 且设备状态等细小图元支持拾取
 
-**(新框架)功能需求平行罗列:**
-1. 稳定的图形编码测试环境
-2. 一定的缓存机制, 不被标记updated的图元不调用api渲染
-3. 批量渲染的优化, 比如所有岸桥大车批量渲染
-4. 业务层面的拓展性, 更好的API帮助实现业务功能
-5. 可读取geojson格式(或其他模型格式)并指定样式以在二维平面更好的绘制底图
+**(新框架)底层功能需求平行罗列:**
+1. 稳定的图形测试架构
+2. 保证渲染性能, 保证渲染图形时使用最优解
+3. 保证业务层面的拓展性
 
-**所有需要支持的图元:**
-1. 由 png 或 svg 图片转化出来的贴图 (sprite2D) 
-2. 设备号 (text)
-3. 禁行区 (几何转三角面)
-4. 锁闭区 (几何转三角面或多个面)
-5. 路径 (线)
-7. 底图 LineString/MultiLineString
-8. 底图 Polygon/MultiPolygon
+**所有需要支持的图元类型:**
+1. 四通道图片(设备贴图等)
+2. 文字(堆场编号, 设备编号等)(SDF, TextGeometry, HTMLLabel)
+3. 多边形区(禁行区, 工作区等)
+4. 线(车道, 围网等)(MeshLine)
+5. 面(车道标记, 斑马线等)(MeshPolygon)
 
 **关于 Threejs 加载 geojson**
 8. 在视口缩放和移动的时候需要每帧都刷新, 要高性能
@@ -44,58 +40,76 @@
 结合以上需求设计一下技术方案, 是用canvas2D画一个类似bitmap? 还是直接自己整理几何在threejs的封装下用webgl画(要不要将几何扩充成面片)?
 
 # 框架建设步骤
-1. TypeScript继承 Mixins
-2. 平面贴图精灵 Sprite2D
-   1. mpp: (meter per pixel)固定几何与自动计算投影(实际)大小
-   2. texture: 贴图
-   3. color: 贴图混合色
-   4. offset: 偏移量, 左上角为正方向
-   5. depth: 深度值写入(枚举固定值)
-3. 基于GPU拾取 GpuPickManager
-   1. 注册 将Object3D注册到类内部 是否InstancedMesh, 是否继承透明度
-   2. 内部自定义一个自增 pickBaseId 的分配管理函数
-   3. 渲染一个场景的 pickBuffer
+
+## 二维范畴
+1. TypeScript继承是如何编译的研究, 增加 Mixins 函数
+2. 封装二维平面贴图精灵 Sprite2D
+   1. mpp: (meter per pixel) 自动计算投影(实际)大小与生成几何面片
+   2. depth: threejs Object3D renderOrder
+   3. USE_CUSTOM_MULTICOLOR: 是否启用贴图混合色算法
+3. 封装基于 GPUBuffer 的拾取类 GpuPickManager
+   1. 注册: 将Object3D注册到类内部, 使用内部自定义的自增 pickBaseId 的分配Object3D的id
+   2. 渲染阶段, 渲染一个场景的 pickBuffer
       1. 保存/恢复 Renderer的上下文环境
-      2. 遍历Object3D (在原来的材质基础上)生成pickShaderMaterial
-      > 难点: 怎么保证 自定义材质 和 原生材质 在字符串替换这件事上的一致性?
-         1. 注册状态 和 object3D的visible 决定是否渲染到 pickBuffer
-         2. pickShaderMaterial保留透明度通道, 替换rgb通道为 userData.__pickBaseId 计算的color
-      3. 点击事件触发后 从pickBuffer和定义的threshold取x个像素
-   4. Buffer通过一种机制映射可见色后输出到指定画布(用于debug)
+      2. 遍历场景, 获取被注册的 Object3D 其原来的材质, 在原来的材质基础上生成 pickShaderMaterial
+      3. pickShaderMaterial保留透明度通道, 替换rgb通道为 userData.__pickBaseId 中通过数字ID转换出来的颜色
+      4. 点击事件触发即刻渲染
+      5. 通过点击触发时记录的点击位置, 从 pickBuffer 中按照定义的 threshold 取x个像素, 找到存储数字ID的颜色
+   3. 将颜色反转为数字ID, 通过映射机制找到注册的 Object3D
 4. 文字系统 这个找个第三方框架 并在改造的过程中兼容上面的 (或者我看源码后吸收)
-   1. Canvas2D烘焙 / SVGAPI转path转Shape
-   2. HTML
-   3. **SDF**
-   4. FontLoader => Geometry
-   5. BitMap GPU取块
-5. GoeJson解析与底图绘制
-   1. 线条转面片, 宽度支持 按像素宽度绘制/按世界宽度绘制, 样式支持 实线/虚线
-   2. 按面绘制, 支持 实心/挖心
-6. 支持点击按钮, 图形部分能够从二维平滑过渡到三维
-7. 绘制集装箱列优化 https://threejs.org/manual/?q=Geometry#en/voxel-geometry
+   1. 封装基于距离场的文字框架 **SDF**
+   2. 使用 HTML 在DOM结构上渲染
+   3. FontLoader 直接计算文字的Geometry
+   4. 三元额外距离场 与 字体管理缓存中从预计算的GPU贴图中取块
+5. 针对mapshaper导出的GoeJson解析与底图绘制
+   1. nodejs工具脚本读取项目geojson文件, 一键插值geojson文件中的点坐标
+   2. MeshLine 支持自定义线条粗细, 颜色, 虚线? 盒线? 线条批处理drawcall优化
+   3. MeshPolygon 支持自定义面颜色, 阴影线条面?
+6. 针对Orthographic相机与底图缩放对齐的过程方法调优
+7. 业务逻辑代发封装整合, 以岸桥项目为例, 支持批处理渲染
+  
+## 三维范畴
+1. 一键点击, 从二维视角转化为三维视角
+2. 一键点击, 从二维贴图模式切换到三维模型场景
+3. 绘制集装箱列优化 https://threejs.org/manual/?q=Geometry#en/voxel-geometry
 
-# 问题修复
-1. GpuPickManager在渲染pickBuffer时判断bug; 如果不是注册到GpuPickManager里的mesh, 那么不进行pickBuffer渲染
-   1. GpuPickManager在恢复场景中容器材质时的优化; 添加缓存容器_originVisiableSet, 统计所有在渲染pickBuffer前可见并未注册的mesh, 渲染完pickBuffer后通过此容器恢复
-2. Sprite2D的fragmentShader的透明度方案设计不合格; 用discard片元导致毛边效果不行
-   1. webgl渲染透明度的两种方案取舍, 用threejs的Opaqueue特性设置renderOrder在CPU阶段决定渲染次序(代替在shader中覆盖gl_FragDepth写入)
-3. Sprite2D在Shader中定义偏移量导致的boundingbox错位问题; 同时设置的缩放和偏移会有bug
-   1. 放弃在shader中做偏移的想法, 在生成几何时就做这一过程
-4. GpuPickManager的数值读取bug; threejs渲染到canvas后, 再用readPixel拾取canvas中像素点, 发现rgba(0,0,0,x)在读取rgb时变成类似 (64,64,64)
-   1. 开启blendMode的某种混合后导致的问题
-   2. Sprite2DShaderMaterial 替换材质过程优化; 即便物体透明, 在上层的点击事件也不应该穿透下去, pickbuffer覆盖渲染
-5. 
+# 问题修复日志
 
-**TODO LIST:**
-1. 底图直线绘制
-   1. GeoJSON绘制6点扩充线段面片的算法代码整理, 支持更好的直线和虚线样式, 大量测试
-   2. 当底图的坐标很大不在中心点时视口的逻辑
-   3. GeoJSON 绘制面片算法的drawcall优化, 多段线合并成一条线 Degenerate Segment
-   4. 多种导出格式的geojson支持, GeometryCollection, FeatureCollection, mapshaper
-2. 底图多边形绘制, 多边形边缘, 多边形打斜线阴影, 多边形填充色
-3. layers, renderOrder, gl_FragDepth, blendMode 等方案的研究
-4. 业务代码
-   1. 设备的函数回调/绘图对象指针管理方式, 统一回调接口定义
-   2. geojson读取类固定函数逻辑封装
-   3. qinzhou tickdemo转换坐标并播放
-   4. 
+```log
+GpuPickManager在渲染pickBuffer时判断遗漏;
+解决措施:
+  如果不是注册到GpuPickManager里的mesh, 那么不进行pickBuffer渲染
+
+GpuPickManager在渲染完pickBuffer后, 准备恢复场景容器中被临时替换为pickBufferMaterial的Object3D阶段中缺少缓存机制; 
+解决措施:
+  添加缓存容器_originVisiableSet, 在遍历所有Object3D替换pickBufferMaterial时候顺便统计所有可见但并未注册到PickManager的Mesh, 渲染完pickBuffer后通过此容器恢复
+
+Sprite2D的fragmentShader中对透明像素直接discard片元导致毛边效果; 
+解决措施: 
+  现在直接使用图片透明度输出
+
+Sprite2D层叠时在shader中覆盖gl_FragDepth写入导致透明度叠加紊乱;
+解决措施:  
+  用threejs的Opaqueue物体渲染顺序, 设置renderOrder在CPU阶段决定渲染次序(代替GPU深度写入)
+
+Sprite2D在Shader中定义偏移量导致的boundingbox错位问题; 
+解决措施: 
+  同时设置的缩放和偏移会有bug, 放弃在shader中做偏移的想法, 在生成几何时就做这一过程
+
+GpuPickManager的数值读取bug, threejs渲染到canvas后, 再用readPixel拾取canvas中像素点, 发现rgba(0,0,0,x)在读取rgb时变成类似 (64,64,64);
+解决措施: 
+  1. 开启blendMode的某种混合后导致的问题, 使用默认即可
+  2. Sprite2DShaderMaterial 替换材质过程优化, 即便物体透明, 在上层的点击事件也不应该穿透下去, pickbuffer覆盖渲染即可
+
+MeshLine虚线绘制问题, 通过x轴坐标加y轴坐标以计算line部分和dash部分效果很差, 在转弯处完全无法维持虚线观感;
+解决措施: 
+  在cpu整理线段阶段添加一道attribute(lineDistance)用于计算每段线条的累计长度, 在fragmentShader中通过当前顶点在线段中的累计长度来计算line部分和dash部分
+
+MeshLine虚线绘制问题, 工程上MeshLine无法保证起始末尾都不存在dash, 仅能保证一头;
+解决措施: 
+  基于相机(threejs的CustomShaderMaterial内建unifroms的cameraPosition)在xz平面范畴移动视角时对虚线的line部分和dash部分计算时进行微微偏移, 至少代表着移动到某一视角可以完全掌握虚线线条的起始点终末点位置
+
+MeshLine使用SpectorJs监视drawcall, 渲染效率存在问题;
+解决措施:
+  新增一种断点技术, 将多个段的数据融合成一段, 并将每段的起始点和结束点冗余处理, 并通过一位的attribute(lineBreakpoint)标记这些冗余顶点, 在fragmentShader中对存在标记的冗余顶点的面进行舍弃片元处理; 公网上对这种技术叫做 Degenerate Segment 我这里做了一点改进
+```
