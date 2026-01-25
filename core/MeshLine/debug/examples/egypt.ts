@@ -109,7 +109,7 @@ scene.add(group0);
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
           // 埃及这里做一个切口用于修改 MeshLineMaterial 在使用世界位置时的处理
-          handleMapShaperFile(data, { uSizeAttenuation: 1, uResolution: _resolution, uLineWidth: 3.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
         }),
 
       window
@@ -123,8 +123,7 @@ scene.add(group0);
         .fetch("/mapshaper-egypt/03_fence.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseBox: 1, uBoxArray: [2.0, 4.0] });
-          // handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 4.0, uColor: new THREE.Color("rgb(0, 255, 0)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseBox: 1 });
         }),
 
       window
@@ -152,7 +151,7 @@ scene.add(group0);
         .fetch("/mapshaper-egypt/05_road_lane_dash.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uUseDash: 1, uDashArray: [8, 4], uLineWidth: 1.0, uColor: new THREE.Color("rgb(155, 155, 155)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uUseDash: 1, uDashArray: [8, 4], uColor: new THREE.Color("rgb(155, 155, 155)") });
         }),
 
       window
@@ -166,7 +165,7 @@ scene.add(group0);
         .fetch("/mapshaper-egypt/08_zebra.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(0, 0, 0)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
         }),
     ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
   }

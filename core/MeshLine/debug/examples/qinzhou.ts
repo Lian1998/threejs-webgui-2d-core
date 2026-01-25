@@ -108,7 +108,7 @@ scene.add(group0);
         .fetch("/mapshaper-qinzhou/01_coastline_and_buildings.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 3.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
         }),
 
       window
@@ -136,7 +136,7 @@ scene.add(group0);
         .fetch("/mapshaper-qinzhou/temple_block.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uUseDash: 1, uDashArray: [15, 10], uLineWidth: 4.0, uColor: new THREE.Color("rgb(255, 0, 0)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 4.0, uUseDash: 1, uDashArray: [15, 10], uColor: new THREE.Color("rgb(255, 0, 0)") });
         }),
     ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
   }

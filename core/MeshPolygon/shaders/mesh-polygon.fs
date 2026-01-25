@@ -21,8 +21,9 @@ void main() {
     float period = shadowLength + gapLength;
 
     // 打45°斜线
-    // float proj = fragPos.x - fragPos.y; // mod 在负数时不对称
-    float proj = (fragPos.x + uResolution.y) - fragPos.y;
+    // float proj = fragPos.x - fragPos.y; // mod 在负数时不对称做如下处理, 使其保证永远在正数, mod时不会有跳跃
+    float aspect = uResolution.x / uResolution.y;
+    float proj = (fragPos.x + uResolution.y * aspect) - fragPos.y;
 
     // 归一化到 [0,1) 的周期位置
     float phase = mod(proj, period) / period;

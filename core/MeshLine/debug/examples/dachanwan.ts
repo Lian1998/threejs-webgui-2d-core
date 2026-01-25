@@ -150,7 +150,7 @@ scene.add(group0);
         .fetch("/mapshaper-dachanwan/01_coastline_and_buildings.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 3.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
         }),
 
       window
@@ -171,7 +171,7 @@ scene.add(group0);
         .fetch("/mapshaper-dachanwan/05_road_lane_dash.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uUseDash: 1, uDashArray: [8, 4], uLineWidth: 1.0, uColor: new THREE.Color("rgb(155, 155, 155)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uUseDash: 1, uDashArray: [8, 4], uColor: new THREE.Color("rgb(155, 155, 155)") });
         }),
 
       window
@@ -179,13 +179,6 @@ scene.add(group0);
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
           handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(155, 155, 155)") });
-        }),
-
-      window
-        .fetch("/mapshaper-dachanwan/07_marks.json")
-        .then((response) => response.json())
-        .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
         }),
     ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
   }
@@ -218,7 +211,7 @@ scene.add(group0);
         .fetch("/mapshaper-dachanwan/07_marks.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseShadow: 1 });
+          handleMapShaperFile(data, { uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)") });
         }),
     ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
   }

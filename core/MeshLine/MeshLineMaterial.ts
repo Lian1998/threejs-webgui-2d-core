@@ -14,13 +14,13 @@ export interface MeshLineMaterialParameters {
   /** 是否启用虚线(默认值0) */
   uUseDash?: number;
 
-  /** 虚线的样式(默认值[4.0, 4.0]): 如设置 [4.0, 4.0] 时, 先实部占用4.0个单位, 再是虚部占用4.0个单位 */
+  /** 虚线的样式(默认值[4.0, 4.0]): 先实部占用4.0个单位, 再是虚部占用4.0个单位 */
   uDashArray?: number[];
 
   /** 是否启用小方格线(默认值0) */
   uUseBox?: number;
 
-  /** 虚线的样式(默认值[1.0, 4.0]): 如设置 [1.0, 4.0] 时, 线条的宽度为1.0, 小方格的大小为4.0, 线条与小方格的比例恒定为4:3 */
+  /** 虚线的样式(默认值[1.0, 5.0]): 线条的宽度为1.0, 小方格的大小为5.0, 线条与小方格的比例恒定为4:3 */
   uBoxArray?: number[];
 
   /** 当前材质绘制时的画布大小 */
@@ -52,15 +52,15 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
     super({
       uniforms: {
         uColor: { value: new THREE.Color(0x000000) },
-        uOpacity: { value: 1 },
+        uOpacity: { value: 1.0 },
         uUseDash: { value: 0 },
         uDashArray: { value: [4.0, 4.0] },
         uUseBox: { value: 0 },
-        uBoxArray: { value: [1.0, 4.0] },
+        uBoxArray: { value: [1.0, 5.0] },
         uResolution: { value: new THREE.Vector2(1, 1) },
         uSizeAttenuation: { value: 0 },
-        uLineWidth: { value: 1 },
-        uPixelRatio: { value: 1 },
+        uLineWidth: { value: 1.0 },
+        uPixelRatio: { value: 1.0 },
       },
       vertexShader,
       fragmentShader,
@@ -100,8 +100,8 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
           return this.uniforms.uDashArray.value;
         },
         set(value) {
+          if (!(Array.isArray(value) && value.length === 2)) throw new Error("[MeshLineMaterial]: 注册虚线配置时请用长度为2的javascript数组!");
           this.uniforms.uDashArray.value = value;
-          if (Array.isArray(value)) this.uniforms.uUseDash.value = 1;
         },
       },
       uUseBox: {
@@ -111,6 +111,7 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
         },
         set(value) {
           this.uniforms.uUseBox.value = value;
+          this.updateBoxState();
         },
       },
       uBoxArray: {
@@ -119,15 +120,9 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
           return this.uniforms.uBoxArray.value;
         },
         set(value) {
+          if (!(Array.isArray(value) && value.length === 2)) throw new Error("[MeshLineMaterial]: 注册方格线配置时请用长度为2的javascript数组!");
           this.uniforms.uBoxArray.value = value;
-          if (Array.isArray(value)) {
-            this.uniforms.uUseBox.value = 1;
-            this.uniforms.uSizeAttenuation.value = 1; // 开启绘制小方格功能时, 必须是世界空间
-            // 绘制小方格时需要保证面片的宽度不能小于小方格
-            if (this.uniforms.uLineWidth.value < value[1]) {
-              this.uniforms.uLineWidth.value = value[1];
-            }
-          }
+          this.updateBoxState(); // 改动涉及到其他属性
         },
       },
       uResolution: {
@@ -167,8 +162,24 @@ export class MeshLineMaterial extends THREE.ShaderMaterial implements MeshLineMa
         },
       },
     });
+
+    // threejs Material类提供的函数, 遍历 parameters 的 key 设置类 property, 出发 Object.defineProperty 中的 get/set 函数
     this.setValues(parameters as THREE.ShaderMaterialParameters);
-    if (this.uUseBox == 1.0) console.log(this); // debug: 打印一下useBox的数据
+  }
+
+  private updateBoxState() {
+    if (this.uniforms.uUseBox.value !== 1) return;
+    // 开启绘制小方格功能时, 会强制使用屏幕空间缩放模式
+    this.uniforms.uSizeAttenuation.value = 0;
+    const uBoxArray = this.uniforms.uBoxArray.value;
+    // 在屏幕空间缩放模式下, 保证线宽不能小于1.0
+    if (uBoxArray[0] < 1.0) {
+      uBoxArray[0] = 1.0;
+    }
+    // 绘制小方格时需要保证面片的宽度不能小于小方格
+    if (this.uniforms.uLineWidth.value < uBoxArray[1]) {
+      this.uniforms.uLineWidth.value = uBoxArray[1];
+    }
   }
 
   override copy(source: MeshLineMaterial): this {

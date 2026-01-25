@@ -9,14 +9,14 @@ export interface MeshPolygonMaterialParameters {
   /** 线条透明度(默认值1) */
   uOpacity?: number;
 
-  /** 阴影斜线的样式(默认值[1.0, 3.0]): 如设置 [1.0, 3.0] 时, 先是实部占用1.0个单位, 再是虚部占用3.0个单位 */
+  /** 是否启用阴影斜线(默认值0) */
+  uUseShadow?: number;
+
+  /** 阴影斜线的样式(默认值[1.0, 3.0]): 先是实部占用1.0个单位, 再是虚部占用3.0个单位 */
   uShadowArray?: number[];
 
   /** 当前材质绘制时的画布大小 */
   uResolution: THREE.Vector2;
-
-  /** 是否启用阴影斜线(默认值0) */
-  uUseShadow?: number;
 
   /** 当前材质绘制时的pixelRatio(默认值1) */
   uPixelRatio?: number;
@@ -25,20 +25,20 @@ export interface MeshPolygonMaterialParameters {
 export class MeshPolygonMaterial extends THREE.ShaderMaterial implements MeshPolygonMaterialParameters {
   uColor!: THREE.Color;
   uOpacity!: number;
+  uUseShadow!: number;
   uShadowArray!: number[];
   uResolution!: THREE.Vector2;
-  uUseShadow!: number;
   uPixelRatio!: number;
 
   constructor(parameters: MeshPolygonMaterialParameters) {
     super({
       uniforms: {
         uColor: { value: new THREE.Color(0x000000) },
-        uOpacity: { value: 1 },
+        uOpacity: { value: 1.0 },
+        uUseShadow: { value: 0 },
         uShadowArray: { value: [1.0, 3.0] },
         uResolution: { value: new THREE.Vector2(1920, 1080) },
-        uUseShadow: { value: 0 },
-        uPixelRatio: { value: 1 },
+        uPixelRatio: { value: 1.0 },
       },
       vertexShader,
       fragmentShader,
@@ -63,14 +63,23 @@ export class MeshPolygonMaterial extends THREE.ShaderMaterial implements MeshPol
           this.uniforms.uOpacity.value = value;
         },
       },
+      uUseShadow: {
+        enumerable: true,
+        get() {
+          return this.uniforms.uUseShadow.value;
+        },
+        set(value) {
+          this.uniforms.uUseShadow.value = value;
+        },
+      },
       uShadowArray: {
         enumerable: true,
         get() {
           return this.uniforms.uShadowArray.value;
         },
         set(value) {
+          if (!(Array.isArray(value) && value.length === 2)) throw new Error("[MeshPolygonMaterial]: 注册阴影面配置时请用长度为2的javascript数组!");
           this.uniforms.uShadowArray.value = value;
-          if (Array.isArray(value)) this.uniforms.uUseShadow.value = 1;
         },
       },
       uResolution: {
@@ -80,15 +89,6 @@ export class MeshPolygonMaterial extends THREE.ShaderMaterial implements MeshPol
         },
         set(value) {
           this.uniforms.uResolution.value.copy(value);
-        },
-      },
-      uUseShadow: {
-        enumerable: true,
-        get() {
-          return this.uniforms.uUseShadow.value;
-        },
-        set(value) {
-          this.uniforms.uUseShadow.value = value;
         },
       },
       uPixelRatio: {
@@ -101,6 +101,7 @@ export class MeshPolygonMaterial extends THREE.ShaderMaterial implements MeshPol
         },
       },
     });
+
     this.setValues(parameters as THREE.ShaderMaterialParameters);
   }
 
@@ -108,9 +109,9 @@ export class MeshPolygonMaterial extends THREE.ShaderMaterial implements MeshPol
     super.copy(source);
     this.uColor.copy(source.uColor);
     this.uOpacity = source.uOpacity;
+    this.uUseShadow = source.uUseShadow;
     this.uShadowArray = source.uShadowArray;
     this.uResolution.copy(source.uResolution);
-    this.uUseShadow = source.uUseShadow;
     this.uPixelRatio = source.uPixelRatio;
     return this;
   }

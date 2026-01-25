@@ -23,42 +23,41 @@ void main() {
   vLineDistance = lineDistance;
   vLineBreakPoint = lineBreakpoint;
 
-  // 世界坐标
-  vec4 currMV = modelViewMatrix * vec4(position, 1.0);
-  vec4 prevMV = modelViewMatrix * vec4(prev, 1.0);
-  vec4 nextMV = modelViewMatrix * vec4(next, 1.0);
-
-  // 视锥平截头体坐标
-  vec4 currClip = projectionMatrix * currMV;
-  vec4 prevClip = projectionMatrix * prevMV;
-  vec4 nextClip = projectionMatrix * nextMV;
-
   // 世界空间
   if (uSizeAttenuation == 1.) {
 
     // 世界坐标切线
     vec3 dir;
-    if (length(nextMV.xyz - currMV.xyz) > 1e-6) {
-      dir = normalize(nextMV.xyz - currMV.xyz);
+    if (length(next.xyz - position.xyz) > 1e-6) {
+      dir = normalize(next.xyz - position.xyz);
     } else {
-      dir = normalize(currMV.xyz - prevMV.xyz);
+      dir = normalize(position.xyz - prev.xyz);
     }
 
-    // 世界坐标法线
-    vec3 normalWorld = normalize(vec3(-dir.y, dir.x, 0.0)); // 假设视角只会从y轴正上方往下看
-    // 正儿八经算出来(取决于是否要斜切视角)
-    // vec3 viewDir = normalize(-currMV.xyz);
-    // vec3 normalWorld = normalize(cross(dir, viewDir));
+    // 世界坐标法线, 假设线条只会存在在xz平面上
+    vec3 upWorld = vec3(0., -1., 0.);
+    vec3 normalWorld = normalize(cross(dir, upWorld));
 
     float halfWidth = uLineWidth * width * 0.5;
     vec3 offset = normalWorld * side * halfWidth;
-    currMV.xyz += offset;
+    vec3 _position = position;
+    _position.xyz += offset;
 
-    gl_Position = projectionMatrix * currMV;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(_position, 1.0);
   } 
 
   // 屏幕空间
   else {
+
+    // 世界坐标
+    vec4 currMV = modelViewMatrix * vec4(position, 1.0);
+    vec4 prevMV = modelViewMatrix * vec4(prev, 1.0);
+    vec4 nextMV = modelViewMatrix * vec4(next, 1.0);
+
+    // 视锥平截头体坐标
+    vec4 currClip = projectionMatrix * currMV;
+    vec4 prevClip = projectionMatrix * prevMV;
+    vec4 nextClip = projectionMatrix * nextMV;
 
     // NDC坐标
     vec2 prevNDC = prevClip.xy / prevClip.w;

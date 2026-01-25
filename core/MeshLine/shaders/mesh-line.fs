@@ -41,31 +41,34 @@ void main() {
     }
 
   } else if (uUseBox == 1.0) {
+    // 在使用盒渲染模式时会强制使用屏幕空间
     // diffuseColor = vec4(1., 1., 1., 1.); // debug
-    float axisYFactor = smoothstep(0., 1., abs(vUv.y - 0.5) * 2.0);
+    float axisYFactor = smoothstep(0.0, 1.0, abs(vUv.y - 0.5) * 2.0);
     // diffuseColor *= vec4(vec3(axisYFactor), 1.0); // debug1: 沿线法线的vUv.y从-1.0~1.0
     // 用vUv画线条
-    float lineLimitIn1 = uBoxArray[0] / uLineWidth;
-    float connectorLength = uBoxArray[1] / 3. * 4.;
+    float aspect = uResolution.x / uResolution.y;
+    float lineLimit = uBoxArray[0] / uLineWidth + 0.075; // 加一个0.075的uv补偿值
+    float lineLimitAspect = lineLimit * aspect; // 同样的单位下, x轴的像素更多, y轴高度需要补偿
+    float connectorLength = uBoxArray[1] / 3. * 4.; // 恒定四个单位的连接符 三个单位的盒
     float boxStepLength = uBoxArray[1];
     float period = connectorLength + boxStepLength;
     float stripeXFactor = mod(vLineDistance, period); // 当前x坐标在段落中的位置
     float boxMask = step(connectorLength, stripeXFactor); // 当前是否处于盒部分
     // diffuseColor *= vec4(vec3(boxMask), 1.0); // debug2: 白色部分是box位置
-    float discardMask = 0.0;
+    float discardMask = 0.0; // 标记当前片元是否被舍弃
     // 连接部分
-    if (boxMask == 0.0) {
-      if (axisYFactor > (lineLimitIn1 / 2.0)) {
+    if (boxMask < 0.5) {
+      if (axisYFactor > lineLimitAspect / 2.0) {
         discardMask = 1.0;
       }
     }
     // 小盒部分(线条 空心 线条)
-    else if (boxMask == 1.0) {
+    else {
       if (
       // 上下  
-      axisYFactor > (-1.0 + lineLimitIn1) && axisYFactor < (1.0 - lineLimitIn1)
+      axisYFactor > (-1.0 + lineLimitAspect) && axisYFactor < (1.0 - lineLimitAspect)
       // 左右
-      && stripeXFactor > connectorLength + lineLimitIn1 && stripeXFactor < period - lineLimitIn1) {
+      && stripeXFactor > connectorLength + lineLimit && stripeXFactor < period - lineLimit) {
         discardMask = 1.0;
       }
     }
