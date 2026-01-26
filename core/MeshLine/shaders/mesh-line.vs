@@ -1,7 +1,6 @@
 attribute vec3 prev;              // 上一个顶点
 attribute vec3 next;              // 下一个顶点
 attribute float side;             // 当前顶点处于线条的哪一侧: +1: 顺着顺时针法线; -1 逆着顺时针法线
-attribute float width;            // 当前顶点的线宽比例: 通过cpu阶段定义的函数(输入为线条进度)计算, 此函数返回值为 0 ~ 1
 attribute float counter;          // 当前顶点在线条中的进度
 attribute float lineDistance;     // 当前顶点在线条中的累计长度
 attribute float lineBreakpoint;   // 当前顶点在线条中的累计长度
@@ -38,12 +37,9 @@ void main() {
     vec3 upWorld = vec3(0., -1., 0.);
     vec3 normalWorld = normalize(cross(dir, upWorld));
 
-    float halfWidth = uLineWidth * width * 0.5;
-    vec3 offset = normalWorld * side * halfWidth;
-    vec3 _position = position;
-    _position.xyz += offset;
+    vec3 offset = normalWorld * side * uLineWidth * 0.5;
 
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(_position, 1.0);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position + offset, 1.0);
   } 
 
   // 屏幕空间
@@ -94,8 +90,7 @@ void main() {
     // NDC坐标法线
     vec2 normalNDC = vec2(-dir.y, dir.x);
 
-    float halfWidth = uLineWidth * width * 0.5;
-    float halfWidthPx = halfWidth * uPixelRatio;
+    float halfWidthPx = uLineWidth * 0.5 * uPixelRatio;
     vec2 pixelToNDC = vec2(2.0 / uResolution.x, 2.0 / uResolution.y);
     float ratioFactor = 0.75;
     vec2 offsetNDC = normalNDC * side * halfWidthPx * miterScale * pixelToNDC * ratioFactor;

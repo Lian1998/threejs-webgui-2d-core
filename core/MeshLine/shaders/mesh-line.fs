@@ -22,11 +22,12 @@ void main() {
 
   vec4 diffuseColor = vec4(uColor, uOpacity);
 
-  // 断点
+  // 断点(合并drawcall渲染多线段)
   if (vLineBreakPoint > 1e-6) {
     discard;
   }
 
+  // 虚线模式
   if (uUseDash == 1.0) {
     float offset = dot(cameraPosition, vec3(1.0, 0.0, 1.0)) * 0.05; // 希望视角移动的时候重绘虚线
 
@@ -40,15 +41,18 @@ void main() {
       discard; // 丢弃片元 形成虚线效果
     }
 
-  } else if (uUseBox == 1.0) {
+  } 
+
+  // 盒线模式
+  else if (uUseBox == 1.0) {
     // 在使用盒渲染模式时会强制使用屏幕空间
     // diffuseColor = vec4(1., 1., 1., 1.); // debug
-    float axisYFactor = smoothstep(0.0, 1.0, abs(vUv.y - 0.5) * 2.0);
+    float axisYFactor = abs(vUv.y - 0.5) * 2.0;
     // diffuseColor *= vec4(vec3(axisYFactor), 1.0); // debug1: 沿线法线的vUv.y从-1.0~1.0
     // 用vUv画线条
     float aspect = uResolution.x / uResolution.y;
-    float lineLimit = uBoxArray[0] / uLineWidth + 0.075; // 加一个0.075的uv补偿值
-    float lineLimitAspect = lineLimit * aspect; // 同样的单位下, x轴的像素更多, y轴高度需要补偿
+    float lineLimit = uBoxArray[0] / uLineWidth + 0.075; // 加一个0.075的uv补偿值(经验值)
+    float lineLimitX = lineLimit * aspect; // 同样的单位下, x轴的像素更多, y轴高度需要补偿
     float connectorLength = uBoxArray[1] / 3. * 4.; // 恒定四个单位的连接符 三个单位的盒
     float boxStepLength = uBoxArray[1];
     float period = connectorLength + boxStepLength;
@@ -58,16 +62,16 @@ void main() {
     float discardMask = 0.0; // 标记当前片元是否被舍弃
     // 连接部分
     if (boxMask < 0.5) {
-      if (axisYFactor > lineLimitAspect / 2.0) {
+      if (axisYFactor > lineLimitX / 2.0) {
         discardMask = 1.0;
       }
     }
-    // 小盒部分(线条 空心 线条)
+    // 小盒部分
     else {
       if (
-      // 上下  
-      axisYFactor > (-1.0 + lineLimitAspect) && axisYFactor < (1.0 - lineLimitAspect)
-      // 左右
+      // 上下边线框
+      axisYFactor > (-1.0 + lineLimitX) && axisYFactor < (1.0 - lineLimitX)
+      // 左右边线框
       && stripeXFactor > connectorLength + lineLimit && stripeXFactor < period - lineLimit) {
         discardMask = 1.0;
       }

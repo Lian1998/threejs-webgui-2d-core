@@ -24,9 +24,6 @@ export const convertPoints = (points: PointsRepresentation, hanldeWrapper?: (p: 
     .flat();
 };
 
-/** 线条宽度比例计算, 输入 0 ~ 1, 输出 0 ~ 1 */
-export type WidthCallback = (p: number) => any;
-
 /**
  * 将线段点通过API传入, 通过计算函数扩充成面片
  * 注: 在 CPU 端只是将连续点扩充, 形成 (1*3*2)*n 的buffer(线的骨架), 而真正的面展开与厚度扩充过程是在 GPU 阶段完成的
@@ -39,20 +36,17 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
   prev: number[] = [];
   next: number[] = [];
   side: number[] = [];
-  width: number[] = [];
   indices_array: number[] = [];
   uv: number[] = [];
   counter: number[] = [];
   lineDistance: number[] = []; // 顶点在线段中的累计长度
   lineBreakpoint: number[] = []; // 顶点是否为断点
-  widthCallback: WidthCallback | null = null;
 
   _attributes!: {
     position: THREE.BufferAttribute;
     prev: THREE.BufferAttribute;
     next: THREE.BufferAttribute;
     side: THREE.BufferAttribute;
-    width: THREE.BufferAttribute;
     uv: THREE.BufferAttribute;
     index: THREE.BufferAttribute;
     counter: THREE.BufferAttribute;
@@ -67,11 +61,9 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
   /**
    * 设置线段
    * @param points 线条端点
-   * @param wcb 线宽衰减函数 https://iquilezles.org/articles/functions/
    */
-  setLine(points: number[], wcb?: WidthCallback): void {
+  setLine(points: number[]): void {
     if (points.length % 3 !== 0) throw new Error("[MeshLineGeometry]: 输入的线段顶点必须是三维坐标");
-    this.widthCallback = wcb ?? null;
     this.position.length = 0; // this.position => A(a, b, c), A(a, b, c), B(a, b, c), B(a, b, c)
     this.counter.length = 0; // 0 ~ 1
     this.lineDistance.length = 0;
@@ -110,12 +102,11 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
    * @param lines 多条线段的端点
    * @param wcb 线宽衰减函数 https://iquilezles.org/articles/functions/
    */
-  setMultiLine(lines: number[][], wcb?: WidthCallback): void {
+  setMultiLine(lines: number[][]): void {
     if (lines.length <= 1) {
-      this.setLine(lines[0], wcb);
+      this.setLine(lines[0]);
       return;
     }
-    this.widthCallback = wcb ?? null;
     this.position.length = 0; // this.position => A(a, b, c), A(a, b, c), B(a, b, c), B(a, b, c)
     this.counter.length = 0; // 0 ~ 1
     this.lineDistance.length = 0;
@@ -171,7 +162,6 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
     this.prev = []; // 每个顶点对应的 "上个顶点"
     this.next = []; // 每个顶点对应的 "下个顶点"
     this.side = []; // 标记当前点是线的左侧(+1)还是右侧(-1)
-    this.width = []; // 每个顶点对应的线宽
     this.indices_array = []; // 构成三角面的索引
     this.uv = []; // 每个点对应的纹理坐标 (u, v)
 
@@ -189,11 +179,6 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
 
       // side
       this.side.push(1, -1);
-
-      // width
-      let w = 1;
-      if (this.widthCallback) w = this.widthCallback(c);
-      this.width.push(w, w);
 
       // uv
       this.uv.push(c, 0, c, 1); // u:counter, v:side
@@ -227,7 +212,6 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
         prev: new THREE.BufferAttribute(new Float32Array(this.prev), 3),
         next: new THREE.BufferAttribute(new Float32Array(this.next), 3),
         side: new THREE.BufferAttribute(new Float32Array(this.side), 1),
-        width: new THREE.BufferAttribute(new Float32Array(this.width), 1),
         uv: new THREE.BufferAttribute(new Float32Array(this.uv), 2),
         index: new THREE.BufferAttribute(new Uint16Array(this.indices_array), 1),
         counter: new THREE.BufferAttribute(new Float32Array(this.counter), 1),
@@ -243,8 +227,6 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
       this._attributes.next.needsUpdate = true;
       this._attributes.side.copyArray(new Float32Array(this.side));
       this._attributes.side.needsUpdate = true;
-      this._attributes.width.copyArray(new Float32Array(this.width));
-      this._attributes.width.needsUpdate = true;
       this._attributes.uv.copyArray(new Float32Array(this.uv));
       this._attributes.uv.needsUpdate = true;
       this._attributes.index.copyArray(new Uint16Array(this.indices_array));
@@ -259,7 +241,6 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
     this.setAttribute("prev", this._attributes.prev);
     this.setAttribute("next", this._attributes.next);
     this.setAttribute("side", this._attributes.side);
-    this.setAttribute("width", this._attributes.width);
     this.setAttribute("uv", this._attributes.uv);
     this.setAttribute("counter", this._attributes.counter);
     this.setAttribute("lineDistance", this._attributes.lineDistance);
