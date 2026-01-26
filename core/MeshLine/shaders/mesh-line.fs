@@ -51,7 +51,8 @@ void main() {
     // diffuseColor *= vec4(vec3(axisYFactor), 1.0); // debug1: 沿线法线的vUv.y从-1.0~1.0
     // 用vUv画线条
     float aspect = uResolution.x / uResolution.y;
-    float lineLimit = uBoxArray[0] / uLineWidth + 0.075; // 加一个0.075的uv补偿值(经验值)
+    float supple = 0.075 * exp2((1300.0) / min(uResolution.x, uResolution.y)); // 加一个uv补偿值(经验值)
+    float lineLimit = uBoxArray[0] / uLineWidth + supple;
     float lineLimitX = lineLimit * aspect; // 同样的单位下, x轴的像素更多, y轴高度需要补偿
     float connectorLength = uBoxArray[1] / 3. * 4.; // 恒定四个单位的连接符 三个单位的盒
     float boxStepLength = uBoxArray[1];
