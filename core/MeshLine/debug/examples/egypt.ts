@@ -31,7 +31,7 @@ viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } })
 
 import { MapControls } from "three_addons/controls/MapControls.js";
 const center = new THREE.Vector3(MAP_CENTER[0], 0, MAP_CENTER[1]);
-const controls = new MapControls(camera, renderer.domElement);
+const controls = new MapControls(camera, viewport);
 
 {
   controls.enableDamping = true;
@@ -97,8 +97,8 @@ scene.add(group0);
       }
       const meshLineGeometry = new MeshLineGeometry();
       meshLineGeometry.setMultiLine(_coordinates);
-      const mlMaterial = new MeshLineMaterial(materialConfiguration);
-      const mesh = new THREE.Mesh(meshLineGeometry, mlMaterial);
+      const meshLineMaterial = new MeshLineMaterial(materialConfiguration);
+      const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
       mesh.frustumCulled = false;
       group0.add(mesh);
     };
@@ -174,8 +174,8 @@ scene.add(group0);
   {
     const handleMapShaperFile = (_data: any, materialConfiguration: MeshPolygonMaterialParameters) => {
       const _triangles = [];
-      const geometry = new MeshPolygonGeometry();
-      const material = new MeshPolygonMaterial(materialConfiguration);
+      const meshPolygonGeometry = new MeshPolygonGeometry();
+      const meshPolygonMaterial = new MeshPolygonMaterial(materialConfiguration);
 
       const data = _data as FeatureCollection<LineString>;
       for (let i = 0; i < data.features.length; i++) {
@@ -187,8 +187,8 @@ scene.add(group0);
           _triangles.push([_flatten.vertices[index * _flatten.dimensions], 0.0, -_flatten.vertices[index * _flatten.dimensions + 1]]);
         }
       }
-      geometry.setPolygons(_triangles.flat());
-      const mesh = new THREE.Mesh(geometry, material);
+      meshPolygonGeometry.setPolygons(_triangles.flat());
+      const mesh = new THREE.Mesh(meshPolygonGeometry, meshPolygonMaterial);
       mesh.frustumCulled = false;
       group0.add(mesh);
     };

@@ -15,97 +15,59 @@ renderer.setClearColor(0xffffff, 0.0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 viewport.appendChild(renderer.domElement);
 
-import { MapControls } from "three_addons/controls/MapControls.js";
-const camera = new THREE.OrthographicCamera(-width / 2, width / 2, height / 2, height / -2);
-const controls = new MapControls(camera, renderer.domElement);
-// controls.enableRotate = false;
-// controls.enableDamping = false;
+import { orthoCamera, mapControls } from "./viewport";
 
 const scene = new THREE.Scene();
 
 //////////////////////////////////////// 静态资源(底图)加载 ////////////////////////////////////////
-import type { FeatureCollection } from "geojson";
-import type { LineString } from "geojson";
-
-import { convertPoints } from "@core/MeshLine/";
-import { MeshLineGeometry } from "@core/MeshLine/";
-import { MeshLineMaterial } from "@core/MeshLine/";
-import { MeshLineMaterialParameters } from "@core/MeshLine/";
-
-import { MeshPolygonGeometry } from "@core/MeshPolygon/";
-import { MeshPolygonMaterial } from "@core/MeshPolygon/";
 
 const group0 = new THREE.Group();
-// group0.rotateY(Math.PI);
 group0.layers.set(0);
 scene.add(group0);
 
-{
-  const _resolution = new THREE.Vector2(width, height);
-  viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
-  const handleMapShaperFile = (data: FeatureCollection<LineString>, materialConfiguration: MeshLineMaterialParameters) => {
-    if (data.type !== "FeatureCollection") console.error("!FeatureCollection");
+const _resolution = new THREE.Vector2(width, height);
+viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
 
-    for (let i = 0; i < data.features.length; i++) {
-      const feature = data.features[i];
-      try {
-        const coordinates = feature.geometry.coordinates as THREE.Vector2Tuple[];
-        const mlGeometry = new MeshLineGeometry();
+import { getMultiLineFromFile } from "@source/utils/mapshaperLoader";
+import { MeshLineMaterial } from "@core/MeshLine/";
 
-        mlGeometry.setPoints(coordinates);
-        const mlMaterial = new MeshLineMaterial(materialConfiguration);
-        const mesh = new THREE.Mesh(mlGeometry, mlMaterial);
-        mesh.frustumCulled = false;
-        group0.add(mesh);
-      } catch (err) {
-        console.error("handleMapShaperFile Error", feature);
-      }
-    }
-  };
+getMultiLineFromFile("/mapshaper-qinzhou/01_coastline_and_buildings.json").then((meshLineGeometry) => {
+  const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
+  const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+  group0.add(mesh);
+});
+getMultiLineFromFile("/mapshaper-qinzhou/02_rails.json").then((meshLineGeometry) => {
+  const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 0.8, uColor: new THREE.Color("rgb(195, 195, 195)") });
+  const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+  group0.add(mesh);
+});
+getMultiLineFromFile("/mapshaper-qinzhou/05_road_edge.json").then((meshLineGeometry) => {
+  const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
+  const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+  group0.add(mesh);
+});
+getMultiLineFromFile("/mapshaper-qinzhou/05_road_lane_solid.json").then((meshLineGeometry) => {
+  const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(155, 155, 155)") });
+  const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+  group0.add(mesh);
+});
+getMultiLineFromFile("/mapshaper-qinzhou/temple_block.json").then((meshLineGeometry) => {
+  const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 4.0, uUseDash: 1, uDashArray: [15, 10], uColor: new THREE.Color("rgb(255, 0, 0)") });
+  const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+  group0.add(mesh);
+});
 
-  // 线
-  Promise.all([
-    window
-      .fetch("/mapshaper-dachanwan/01_coastline_and_buildings.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(195, 195, 195)") });
-      }),
+import { getMultiPolygonFromFile } from "@source/utils/mapshaperLoader";
+getMultiPolygonFromFile("/mapshaper-qinzhou/07_marks.json").then((meshPolygonGeometry) => {
+  const meshPolygonMaterial = new MeshLineMaterial({ uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)") });
+  const mesh = new THREE.Mesh(meshPolygonGeometry, meshPolygonMaterial);
+  group0.add(mesh);
+});
 
-    window
-      .fetch("/mapshaper-dachanwan/02_rails.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(195, 195, 195)") });
-      }),
-
-    window
-      .fetch("/mapshaper-dachanwan/05_road_edge.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.6, uColor: new THREE.Color("rgb(125, 125, 125)") });
-      }),
-
-    window
-      .fetch("/mapshaper-dachanwan/05_road_lane_dash.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uUseDash: 1, uDashArray: [15, 10], uLineWidth: 0.5, uColor: new THREE.Color("rgb(0, 0, 0)") });
-      }),
-
-    window
-      .fetch("/mapshaper-dachanwan/05_road_lane_solid.json")
-      .then((response) => response.json())
-      .then((data: FeatureCollection<LineString>) => {
-        handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.5, uColor: new THREE.Color("rgb(0, 0, 0)") });
-      }),
-  ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
-}
-
-import earcut, { flatten, deviation } from "earcut";
-// TODO: 面
-{
-}
+group0.traverse((mesh) => {
+  mesh.frustumCulled = false;
+  mesh.layers.set(0);
+});
 
 //////////////////////////////////////// 图元拾取 ////////////////////////////////////////
 
@@ -124,7 +86,7 @@ renderer.domElement.addEventListener("mousemove", (e) => {
 import throttle from "@libs/lodash/src/throttle";
 const pickerPick = throttle(
   () => {
-    const { pickid, object3d } = picker.pick(scene, camera, mousePosition.x, mousePosition.y);
+    const { pickid, object3d } = picker.pick(scene, orthoCamera, mousePosition.x, mousePosition.y);
     console.log(pickid, object3d?.name);
 
     if (object3d?.name) qcInstance.moveIn();
@@ -155,7 +117,7 @@ import { getXZPosition } from "@source/utils/pointerCoordinates";
 {
   const coordinatesEl = document.querySelector("#coordinates");
   ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>("default").viewportElement.addEventListener("mousemove", (e) => {
-    const pos = getXZPosition(e, camera, renderer);
+    const pos = getXZPosition(e, orthoCamera, renderer);
     coordinatesEl.innerHTML = `${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`;
   });
 }
@@ -176,11 +138,11 @@ group1.layers.set(1);
 scene.add(group1);
 
 {
-  camera.position.y = 1000.0; // 让相机从y轴看向地面
-  controls["_dollyIn"](1 / 5.0); // 略微调整视角以使得视口方便调试
-  controls.update();
+  orthoCamera.position.y = 1000.0; // 让相机从y轴看向地面
+  mapControls["_dollyIn"](1 / 5.0); // 略微调整视角以使得视口方便调试
+  mapControls.update();
 }
-const defaultZomm = camera.zoom;
+const defaultZomm = orthoCamera.zoom;
 
 let qcInstance = undefined;
 {
@@ -237,7 +199,7 @@ let qcInstance = undefined;
     qcLabel,
 
     update: (deltaTime: number, elapsedTime: number) => {
-      const scale = (1.0 * defaultZomm) / camera.zoom;
+      const scale = (1.0 * defaultZomm) / orthoCamera.zoom;
       qcLabel.scale.setScalar(scale);
     },
 
@@ -277,8 +239,8 @@ const animate = () => {
 
   // 渲染地图
 
-  camera.layers.set(0);
-  renderer.render(scene, camera);
+  orthoCamera.layers.set(0);
+  renderer.render(scene, orthoCamera);
 
   renderer.autoClearColor = false;
   renderer.autoClearDepth = true;
@@ -286,8 +248,8 @@ const animate = () => {
 
   // 渲染设备
 
-  camera.layers.set(1);
-  renderer.render(scene, camera);
+  orthoCamera.layers.set(1);
+  renderer.render(scene, orthoCamera);
 };
 
 animate();
