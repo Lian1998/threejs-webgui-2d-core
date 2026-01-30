@@ -1,0 +1,2130 @@
+[
+    {
+        "itemName": "QCMS",
+        "itemValue": [
+            {
+                "cheId": "QC071",
+                "MtHoistPos": 4000,
+                "MtTrolleyPos": 3140,
+                "PtHoistPos": 1610,
+                "PtTrolleyPos": 920,
+                "GantryPos": 25553
+            },
+            {
+                "cheId": "QC072",
+                "MtHoistPos": 4000,
+                "MtTrolleyPos": 8920,
+                "PtHoistPos": 1610,
+                "PtTrolleyPos": 920,
+                "GantryPos": 33305
+            },
+            {
+                "cheId": "QC073",
+                "MtHoistPos": 4000,
+                "MtTrolleyPos": 3140,
+                "PtHoistPos": 1610,
+                "PtTrolleyPos": 120,
+                "GantryPos": 41057
+            },
+            {
+                "cheId": "QC081",
+                "MtHoistPos": 4000,
+                "MtTrolleyPos": 3140,
+                "PtHoistPos": 1610,
+                "PtTrolleyPos": 1320,
+                "GantryPos": 51393
+            },
+            {
+                "cheId": "QC082",
+                "MtHoistPos": 4000,
+                "MtTrolleyPos": 3140,
+                "PtHoistPos": 1610,
+                "PtTrolleyPos": 120,
+                "GantryPos": 61083
+            },
+            {
+                "cheId": "QC091",
+                "MtHoistPos": 4000,
+                "MtTrolleyPos": 3140,
+                "PtHoistPos": 1610,
+                "PtTrolleyPos": 1320,
+                "GantryPos": 73680
+            },
+            {
+                "cheId": "QC092",
+                "MtHoistPos": 4000,
+                "MtTrolleyPos": 3140,
+                "PtHoistPos": 1610,
+                "PtTrolleyPos": 120,
+                "GantryPos": 81432
+            },
+            {
+                "cheId": "QC093",
+                "MtHoistPos": 4000,
+                "MtTrolleyPos": 8920,
+                "PtHoistPos": 1610,
+                "PtTrolleyPos": 920,
+                "GantryPos": 91122
+            },
+            {
+                "cheId": "QC094",
+                "MtHoistPos": 4000,
+                "MtTrolleyPos": 6200,
+                "PtHoistPos": 1610,
+                "PtTrolleyPos": 1320,
+                "GantryPos": 100700
+            },
+            {
+                "cheId": "QC101",
+                "MtHoistPos": 4000,
+                "MtTrolleyPos": 6200,
+                "PtHoistPos": 1610,
+                "PtTrolleyPos": 1320,
+                "GantryPos": 109000
+            },
+            {
+                "cheId": "QC102",
+                "MtHoistPos": 4000,
+                "MtTrolleyPos": 6200,
+                "PtHoistPos": 1610,
+                "PtTrolleyPos": 1320,
+                "GantryPos": 118000
+            },
+            {
+                "cheId": "QC103",
+                "MtHoistPos": 4000,
+                "MtTrolleyPos": 6200,
+                "PtHoistPos": 1610,
+                "PtTrolleyPos": 1320,
+                "GantryPos": 126500
+            },
+            {
+                "cheId": "QC104",
+                "MtHoistPos": 4000,
+                "MtTrolleyPos": 6200,
+                "PtHoistPos": 1610,
+                "PtTrolleyPos": 1320,
+                "GantryPos": 120000
+            },
+            {
+                "cheId": "QC105",
+                "MtHoistPos": 4000,
+                "MtTrolleyPos": 6200,
+                "PtHoistPos": 1610,
+                "PtTrolleyPos": 1320,
+                "GantryPos": 125000
+            }
+        ]
+    },
+    {
+        "itemName": "VMS",
+        "itemValue": [
+            {
+                "cheId": "V001",
+                "inventory": {
+                    "cheId": "V001"
+                },
+                "AGVX": 24805,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 44,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V001",
+                    "heading": 90,
+                    "location": "PB.PB009",
+                    "locationX": 248050,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 44,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V002",
+                "inventory": {
+                    "cheId": "V002"
+                },
+                "AGVX": 90200,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 47,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V002",
+                    "heading": 270,
+                    "location": "PB.PB118",
+                    "locationX": 902000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 47,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V003",
+                "inventory": {
+                    "cheId": "V003"
+                },
+                "AGVX": 24205,
+                "AGVY": 72566,
+                "Heading": 9000,
+                "EnergyPercent": 72,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V003",
+                    "heading": 90,
+                    "location": "CLTP.B01.WS01.100",
+                    "locationX": 242050,
+                    "locationY": 725660,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 72,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V004",
+                "inventory": {
+                    "cheId": "V004"
+                },
+                "AGVX": 24205,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 44,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V004",
+                    "heading": 90,
+                    "location": "PB.PB008",
+                    "locationX": 242050,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 44,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V005",
+                "inventory": {
+                    "cheId": "V005"
+                },
+                "AGVX": 75200,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 45,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V005",
+                    "heading": 90,
+                    "location": "PB.PB093",
+                    "locationX": 752000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 45,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V006",
+                "inventory": {
+                    "cheId": "V006"
+                },
+                "AGVX": 46700,
+                "AGVY": 43496,
+                "Heading": -9000,
+                "EnergyPercent": 45,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V006",
+                    "heading": 270,
+                    "location": "CLTP.B05.WS01.042",
+                    "locationX": 467000,
+                    "locationY": 434960,
+                    "orientation": "LOWROW",
+                    "remainingFuel": 45,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V007",
+                "inventory": {
+                    "cheId": "V007"
+                },
+                "AGVX": 50000,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 44,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V007",
+                    "heading": 90,
+                    "location": "PB.PB051",
+                    "locationX": 500000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 44,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V008",
+                "inventory": {
+                    "cheId": "V008"
+                },
+                "AGVX": 32600,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 45,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V008",
+                    "heading": 90,
+                    "location": "PB.PB022",
+                    "locationX": 326000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 45,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V009",
+                "inventory": {
+                    "cheId": "V009"
+                },
+                "AGVX": 57950,
+                "AGVY": 57118,
+                "Heading": 9000,
+                "EnergyPercent": 55,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V009",
+                    "heading": 90,
+                    "location": "CLTP.B07.WS01.083",
+                    "locationX": 579500,
+                    "locationY": 571180,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 55,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V010",
+                "inventory": {
+                    "cheId": "V010"
+                },
+                "AGVX": 26600,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 45,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V010",
+                    "heading": 90,
+                    "location": "PB.PB012",
+                    "locationX": 266000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 45,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V011",
+                "inventory": {
+                    "cheId": "V011"
+                },
+                "AGVX": 57950,
+                "AGVY": 62230,
+                "Heading": 9000,
+                "EnergyPercent": 45,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V011",
+                    "heading": 90,
+                    "location": "CLTP.B07.WS01.100",
+                    "locationX": 579500,
+                    "locationY": 622300,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 45,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V012",
+                "inventory": {
+                    "cheId": "V012"
+                },
+                "AGVX": 61400,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 45,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V012",
+                    "heading": 90,
+                    "location": "PB.PB070",
+                    "locationX": 614000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 45,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V013",
+                "inventory": {
+                    "cheId": "V013"
+                },
+                "AGVX": 59150,
+                "AGVY": 35800,
+                "Heading": 9000,
+                "EnergyPercent": 47,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V013",
+                    "heading": 90,
+                    "location": "CLTP.B08.WS01.017",
+                    "locationX": 591500,
+                    "locationY": 358000,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 47,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V014",
+                "inventory": {
+                    "cheId": "V014"
+                },
+                "AGVX": 81650,
+                "AGVY": 56360,
+                "Heading": -9000,
+                "EnergyPercent": 50,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V014",
+                    "heading": 270,
+                    "location": "CLTP.B12.WS01.083",
+                    "locationX": 816500,
+                    "locationY": 563600,
+                    "orientation": "LOWROW",
+                    "remainingFuel": 50,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V015",
+                "inventory": {
+                    "cheId": "V015"
+                },
+                "AGVX": 97400,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 48,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V015",
+                    "heading": 270,
+                    "location": "PB.PB130",
+                    "locationX": 974000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 48,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V016",
+                "inventory": {
+                    "cheId": "V016"
+                },
+                "AGVX": 74000,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 44,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V016",
+                    "heading": 90,
+                    "location": "PB.PB091",
+                    "locationX": 740000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 44,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V017",
+                "inventory": {
+                    "cheId": "V017"
+                },
+                "AGVX": 92900,
+                "AGVY": 37036,
+                "Heading": 9000,
+                "EnergyPercent": 50,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V017",
+                    "heading": 90,
+                    "location": "CLTP.B14.WS01.018",
+                    "locationX": 929000,
+                    "locationY": 370360,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 50,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V018",
+                "inventory": {
+                    "cheId": "V018"
+                },
+                "AGVX": 50600,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 45,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V018",
+                    "heading": 270,
+                    "location": "PB.PB052",
+                    "locationX": 506000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 45,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V019",
+                "inventory": {
+                    "cheId": "V019"
+                },
+                "AGVX": 41000,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 52,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V019",
+                    "heading": 90,
+                    "location": "PB.PB036",
+                    "locationX": 410000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 52,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V020",
+                "inventory": {
+                    "cheId": "V020"
+                },
+                "AGVX": 24205,
+                "AGVY": 49310,
+                "Heading": 9000,
+                "EnergyPercent": 52,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V020",
+                    "heading": 90,
+                    "location": "CLTP.B01.WS01.028",
+                    "locationX": 242050,
+                    "locationY": 493100,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 52,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V021",
+                "inventory": {
+                    "cheId": "V021"
+                },
+                "AGVX": 73400,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 50,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V021",
+                    "heading": 90,
+                    "location": "PB.PB090",
+                    "locationX": 734000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 50,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V022",
+                "inventory": {
+                    "cheId": "V022"
+                },
+                "AGVX": 35000,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 44,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V022",
+                    "heading": 270,
+                    "location": "PB.PB026",
+                    "locationX": 350000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 44,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V023",
+                "inventory": {
+                    "cheId": "V023"
+                },
+                "AGVX": 90800,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 48,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V023",
+                    "heading": 90,
+                    "location": "PB.PB119",
+                    "locationX": 908000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 48,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V024",
+                "inventory": {
+                    "cheId": "V024"
+                },
+                "AGVX": 42200,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 44,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V024",
+                    "heading": 90,
+                    "location": "PB.PB038",
+                    "locationX": 422000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 44,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V025",
+                "inventory": {
+                    "cheId": "V025"
+                },
+                "AGVX": 47900,
+                "AGVY": 57062,
+                "Heading": 9000,
+                "EnergyPercent": 45,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V025",
+                    "heading": 90,
+                    "location": "CLTP.B06.WS01.084",
+                    "locationX": 479000,
+                    "locationY": 570620,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 45,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V026",
+                "inventory": {
+                    "cheId": "V026"
+                },
+                "AGVX": 23605,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 57,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V026",
+                    "heading": 90,
+                    "location": "PB.PB007",
+                    "locationX": 236050,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 57,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V027",
+                "inventory": {
+                    "cheId": "V027"
+                },
+                "AGVX": 46700,
+                "AGVY": 57062,
+                "Heading": -9000,
+                "EnergyPercent": 45,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V027",
+                    "heading": 270,
+                    "location": "CLTP.B05.WS01.084",
+                    "locationX": 467000,
+                    "locationY": 570620,
+                    "orientation": "LOWROW",
+                    "remainingFuel": 45,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V028",
+                "inventory": {
+                    "cheId": "V028"
+                },
+                "AGVX": 33800,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 45,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V028",
+                    "heading": 270,
+                    "location": "PB.PB024",
+                    "locationX": 338000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 45,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V029",
+                "inventory": {
+                    "cheId": "V029"
+                },
+                "AGVX": 60800,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 50,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V029",
+                    "heading": 270,
+                    "location": "PB.PB069",
+                    "locationX": 608000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 50,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V030",
+                "inventory": {
+                    "cheId": "V030"
+                },
+                "AGVX": 33200,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 44,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V030",
+                    "heading": 270,
+                    "location": "PB.PB023",
+                    "locationX": 332000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 44,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V031",
+                "inventory": {
+                    "cheId": "V031"
+                },
+                "AGVX": 83600,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 44,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V031",
+                    "heading": 90,
+                    "location": "PB.PB107",
+                    "locationX": 836000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 44,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V032",
+                "inventory": {
+                    "cheId": "V032"
+                },
+                "AGVX": 62000,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 52,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V032",
+                    "heading": 90,
+                    "location": "PB.PB071",
+                    "locationX": 620000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 52,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V033",
+                "inventory": {
+                    "cheId": "V033"
+                },
+                "AGVX": 70400,
+                "AGVY": 35800,
+                "Heading": -9000,
+                "EnergyPercent": 44,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V033",
+                    "heading": 270,
+                    "location": "CLTP.B10.WS01.017",
+                    "locationX": 704000,
+                    "locationY": 358000,
+                    "orientation": "LOWROW",
+                    "remainingFuel": 44,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V034",
+                "inventory": {
+                    "cheId": "V034"
+                },
+                "AGVX": 93200,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 48,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V034",
+                    "heading": 90,
+                    "location": "PB.PB123",
+                    "locationX": 932000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 48,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V035",
+                "inventory": {
+                    "cheId": "V035"
+                },
+                "AGVX": 39800,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 45,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V035",
+                    "heading": 90,
+                    "location": "PB.PB034",
+                    "locationX": 398000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 45,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V036",
+                "inventory": {
+                    "cheId": "V036"
+                },
+                "AGVX": 91700,
+                "AGVY": 38974,
+                "Heading": -9000,
+                "EnergyPercent": 51,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V036",
+                    "heading": 270,
+                    "location": "CLTP.B13.WS01.028",
+                    "locationX": 917000,
+                    "locationY": 389740,
+                    "orientation": "LOWROW",
+                    "remainingFuel": 51,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V037",
+                "inventory": {
+                    "cheId": "V037"
+                },
+                "AGVX": 41600,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 45,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V037",
+                    "heading": 270,
+                    "location": "PB.PB037",
+                    "locationX": 416000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 45,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V038",
+                "inventory": {
+                    "cheId": "V038"
+                },
+                "AGVX": 70400,
+                "AGVY": 57118,
+                "Heading": -9000,
+                "EnergyPercent": 51,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V038",
+                    "heading": 270,
+                    "location": "CLTP.B10.WS01.083",
+                    "locationX": 704000,
+                    "locationY": 571180,
+                    "orientation": "LOWROW",
+                    "remainingFuel": 51,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V039",
+                "inventory": {
+                    "cheId": "V039"
+                },
+                "AGVX": 70400,
+                "AGVY": 62230,
+                "Heading": -9000,
+                "EnergyPercent": 57,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V039",
+                    "heading": 270,
+                    "location": "CLTP.B10.WS01.100",
+                    "locationX": 704000,
+                    "locationY": 622300,
+                    "orientation": "LOWROW",
+                    "remainingFuel": 57,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V040",
+                "inventory": {
+                    "cheId": "V040"
+                },
+                "AGVX": 32000,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 44,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V040",
+                    "heading": 90,
+                    "location": "PB.PB021",
+                    "locationX": 320000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 44,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V041",
+                "inventory": {
+                    "cheId": "V041"
+                },
+                "AGVX": 69200,
+                "AGVY": 57118,
+                "Heading": 9000,
+                "EnergyPercent": 46,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V041",
+                    "heading": 90,
+                    "location": "CLTP.B09.WS01.083",
+                    "locationX": 692000,
+                    "locationY": 571180,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 46,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V042",
+                "inventory": {
+                    "cheId": "V042"
+                },
+                "AGVX": 24205,
+                "AGVY": 42850,
+                "Heading": 9000,
+                "EnergyPercent": 45,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V042",
+                    "heading": 90,
+                    "location": "CLTP.B01.WS01.008",
+                    "locationX": 242050,
+                    "locationY": 428500,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 45,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V043",
+                "inventory": {
+                    "cheId": "V043"
+                },
+                "AGVX": 74600,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 47,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V043",
+                    "heading": 90,
+                    "location": "PB.PB092",
+                    "locationX": 746000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 47,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V044",
+                "inventory": {
+                    "cheId": "V044"
+                },
+                "AGVX": 34400,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 53,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V044",
+                    "heading": 270,
+                    "location": "PB.PB025",
+                    "locationX": 344000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 53,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V045",
+                "inventory": {
+                    "cheId": "V045"
+                },
+                "AGVX": 27200,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 49,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V045",
+                    "heading": 90,
+                    "location": "PB.PB013",
+                    "locationX": 272000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 49,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V046",
+                "inventory": {
+                    "cheId": "V046"
+                },
+                "AGVX": 24205,
+                "AGVY": 67398,
+                "Heading": 9000,
+                "EnergyPercent": 44,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V046",
+                    "heading": 90,
+                    "location": "CLTP.B01.WS01.084",
+                    "locationX": 242050,
+                    "locationY": 673980,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 44,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V047",
+                "inventory": {
+                    "cheId": "V047"
+                },
+                "AGVX": 81650,
+                "AGVY": 35042,
+                "Heading": -9000,
+                "EnergyPercent": 50,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V047",
+                    "heading": 270,
+                    "location": "CLTP.B12.WS01.017",
+                    "locationX": 816500,
+                    "locationY": 350420,
+                    "orientation": "LOWROW",
+                    "remainingFuel": 50,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V048",
+                "inventory": {
+                    "cheId": "V048"
+                },
+                "AGVX": 98000,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 48,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V048",
+                    "heading": 90,
+                    "location": "PB.PB131",
+                    "locationX": 980000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 48,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V049",
+                "inventory": {
+                    "cheId": "V049"
+                },
+                "AGVX": 80450,
+                "AGVY": 38272,
+                "Heading": 9000,
+                "EnergyPercent": 58,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V049",
+                    "heading": 90,
+                    "location": "CLTP.B11.WS01.027",
+                    "locationX": 804500,
+                    "locationY": 382720,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 58,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V050",
+                "inventory": {
+                    "cheId": "V050"
+                },
+                "AGVX": 57950,
+                "AGVY": 39030,
+                "Heading": -9000,
+                "EnergyPercent": 54,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V050",
+                    "heading": 270,
+                    "location": "CLTP.B07.WS01.027",
+                    "locationX": 579500,
+                    "locationY": 390300,
+                    "orientation": "LOWROW",
+                    "remainingFuel": 54,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V051",
+                "inventory": {
+                    "cheId": "V051"
+                },
+                "AGVX": 46700,
+                "AGVY": 38974,
+                "Heading": -9000,
+                "EnergyPercent": 53,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V051",
+                    "heading": 270,
+                    "location": "CLTP.B05.WS01.028",
+                    "locationX": 467000,
+                    "locationY": 389740,
+                    "orientation": "LOWROW",
+                    "remainingFuel": 53,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V052",
+                "inventory": {
+                    "cheId": "V052"
+                },
+                "AGVX": 91700,
+                "AGVY": 57062,
+                "Heading": 9000,
+                "EnergyPercent": 48,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V052",
+                    "heading": 90,
+                    "location": "CLTP.B13.WS01.084",
+                    "locationX": 917000,
+                    "locationY": 570620,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 48,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V053",
+                "inventory": {
+                    "cheId": "V053"
+                },
+                "AGVX": 89600,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 49,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V053",
+                    "heading": 270,
+                    "location": "PB.PB117",
+                    "locationX": 896000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 49,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V054",
+                "inventory": {
+                    "cheId": "V054"
+                },
+                "AGVX": 98600,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 92,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V054",
+                    "heading": 270,
+                    "location": "PB.PB132",
+                    "locationX": 986000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 92,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V055",
+                "inventory": {
+                    "cheId": "V055"
+                },
+                "AGVX": 93800,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 51,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V055",
+                    "heading": 270,
+                    "location": "PB.PB124",
+                    "locationX": 938000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 51,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V056",
+                "inventory": {
+                    "cheId": "V056"
+                },
+                "AGVX": 59150,
+                "AGVY": 57118,
+                "Heading": 9000,
+                "EnergyPercent": 49,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V056",
+                    "heading": 90,
+                    "location": "CLTP.B08.WS01.083",
+                    "locationX": 591500,
+                    "locationY": 571180,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 49,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V057",
+                "inventory": {
+                    "cheId": "V057"
+                },
+                "AGVX": 25405,
+                "AGVY": 57062,
+                "Heading": 9000,
+                "EnergyPercent": 49,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V057",
+                    "heading": 90,
+                    "location": "CLTP.B02.WS01.084",
+                    "locationX": 254050,
+                    "locationY": 570620,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 49,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V058",
+                "inventory": {
+                    "cheId": "V058"
+                },
+                "AGVX": 40400,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 83,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V058",
+                    "heading": 90,
+                    "location": "PB.PB035",
+                    "locationX": 404000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 83,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V059",
+                "inventory": {
+                    "cheId": "V059"
+                },
+                "AGVX": 25405,
+                "AGVY": 35744,
+                "Heading": -9000,
+                "EnergyPercent": 90,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V059",
+                    "heading": 270,
+                    "location": "CLTP.B02.WS01.018",
+                    "locationX": 254050,
+                    "locationY": 357440,
+                    "orientation": "LOWROW",
+                    "remainingFuel": 90,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V060",
+                "inventory": {
+                    "cheId": "V060"
+                },
+                "AGVX": 69200,
+                "AGVY": 39030,
+                "Heading": -9000,
+                "EnergyPercent": 56,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V060",
+                    "heading": 270,
+                    "location": "CLTP.B09.WS01.027",
+                    "locationX": 692000,
+                    "locationY": 390300,
+                    "orientation": "LOWROW",
+                    "remainingFuel": 56,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V061",
+                "inventory": {
+                    "cheId": "V061"
+                },
+                "AGVX": 51200,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 47,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V061",
+                    "heading": 90,
+                    "location": "PB.PB053",
+                    "locationX": 512000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 47,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V062",
+                "inventory": {
+                    "cheId": "V062"
+                },
+                "AGVX": 42800,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 87,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V062",
+                    "heading": 270,
+                    "location": "PB.PB039",
+                    "locationX": 428000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 87,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V063",
+                "inventory": {
+                    "cheId": "V063"
+                },
+                "AGVX": 99200,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 44,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V063",
+                    "heading": 270,
+                    "location": "PB.PB133",
+                    "locationX": 992000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 44,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V064",
+                "inventory": {
+                    "cheId": "V064"
+                },
+                "AGVX": 53600,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 62,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V064",
+                    "heading": 270,
+                    "location": "PB.PB057",
+                    "locationX": 536000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 62,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V065",
+                "inventory": {
+                    "cheId": "V065"
+                },
+                "AGVX": 47900,
+                "AGVY": 35744,
+                "Heading": -9000,
+                "EnergyPercent": 59,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V065",
+                    "heading": 270,
+                    "location": "CLTP.B06.WS01.018",
+                    "locationX": 479000,
+                    "locationY": 357440,
+                    "orientation": "LOWROW",
+                    "remainingFuel": 59,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V066",
+                "inventory": {
+                    "cheId": "V066"
+                },
+                "AGVX": 62600,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 47,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V066",
+                    "heading": 90,
+                    "location": "PB.PB072",
+                    "locationX": 626000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 47,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V067",
+                "inventory": {
+                    "cheId": "V067"
+                },
+                "AGVX": 92900,
+                "AGVY": 58354,
+                "Heading": 9000,
+                "EnergyPercent": 54,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V067",
+                    "heading": 90,
+                    "location": "CLTP.B14.WS01.084",
+                    "locationX": 929000,
+                    "locationY": 583540,
+                    "orientation": "HIGHROW",
+                    "remainingFuel": 54,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V068",
+                "inventory": {
+                    "cheId": "V068"
+                },
+                "AGVX": 60200,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 46,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V068",
+                    "heading": 90,
+                    "location": "PB.PB068",
+                    "locationX": 602000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 46,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V069",
+                "inventory": {
+                    "cheId": "V069"
+                },
+                "AGVX": 43400,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 45,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V069",
+                    "heading": 270,
+                    "location": "PB.PB040",
+                    "locationX": 434000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 45,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V070",
+                "inventory": {
+                    "cheId": "V070"
+                },
+                "AGVX": 72800,
+                "AGVY": 23600,
+                "Heading": -9000,
+                "EnergyPercent": 85,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V070",
+                    "heading": 270,
+                    "location": "PB.PB089",
+                    "locationX": 728000,
+                    "locationY": 236000,
+                    "orientation": "WATERSIDE",
+                    "remainingFuel": 85,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V071",
+                "inventory": {
+                    "cheId": "V071"
+                },
+                "AGVX": 63200,
+                "AGVY": 23600,
+                "Heading": 9000,
+                "EnergyPercent": 89,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V071",
+                    "heading": 90,
+                    "location": "PB.PB073",
+                    "locationX": 632000,
+                    "locationY": 236000,
+                    "orientation": "LANDSIDE",
+                    "remainingFuel": 89,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            },
+            {
+                "cheId": "V072",
+                "inventory": {
+                    "cheId": "V072"
+                },
+                "AGVX": 80450,
+                "AGVY": 56360,
+                "Heading": -9000,
+                "EnergyPercent": 88,
+                "Fault": 0,
+                "Charging": 2,
+                "E-STOP": 0,
+                "AhtStatus": {
+                    "cheId": "V072",
+                    "heading": 270,
+                    "location": "CLTP.B11.WS01.083",
+                    "locationX": 804500,
+                    "locationY": 563600,
+                    "orientation": "LOWROW",
+                    "remainingFuel": 88,
+                    "ahtFleet": "YES",
+                    "controlMode": "Auto",
+                    "technicalStatus": "GREEN",
+                    "arrived": false
+                }
+            }
+        ]
+    },
+    {
+        "itemName": "BMS",
+        "itemValue": [
+            {
+                "cheId": "YC092"
+            },
+            {
+                "cheId": "YC192"
+            },
+            {
+                "cheId": "YC022"
+            },
+            {
+                "cheId": "YC071"
+            },
+            {
+                "cheId": "YC052"
+            },
+            {
+                "cheId": "YC091"
+            },
+            {
+                "cheId": "YC132"
+            },
+            {
+                "cheId": "YC042"
+            },
+            {
+                "cheId": "YC142"
+            },
+            {
+                "cheId": "YC212"
+            },
+            {
+                "cheId": "YC201"
+            },
+            {
+                "cheId": "YC011"
+            },
+            {
+                "cheId": "YC032"
+            },
+            {
+                "cheId": "YC152"
+            },
+            {
+                "cheId": "YC012"
+            },
+            {
+                "cheId": "YC062"
+            },
+            {
+                "cheId": "YC112"
+            },
+            {
+                "cheId": "YC102"
+            },
+            {
+                "cheId": "YC162"
+            },
+            {
+                "cheId": "YC111"
+            },
+            {
+                "cheId": "YC081"
+            },
+            {
+                "cheId": "YC061"
+            },
+            {
+                "cheId": "YC211"
+            },
+            {
+                "cheId": "YC031"
+            },
+            {
+                "cheId": "YC072"
+            },
+            {
+                "cheId": "YC151"
+            },
+            {
+                "cheId": "YC082"
+            },
+            {
+                "cheId": "YC161"
+            },
+            {
+                "cheId": "YC182"
+            },
+            {
+                "cheId": "YC141"
+            },
+            {
+                "cheId": "YC191"
+            },
+            {
+                "cheId": "YC051"
+            },
+            {
+                "cheId": "YC041"
+            },
+            {
+                "cheId": "YC202"
+            },
+            {
+                "cheId": "YC121"
+            },
+            {
+                "cheId": "YC122"
+            },
+            {
+                "cheId": "YC172"
+            },
+            {
+                "cheId": "YC131"
+            },
+            {
+                "cheId": "111"
+            },
+            {
+                "cheId": "YC021"
+            },
+            {
+                "cheId": "YC171"
+            },
+            {
+                "cheId": "YC181"
+            },
+            {
+                "cheId": "YC101"
+            }
+        ]
+    }
+]

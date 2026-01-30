@@ -1,0 +1,2721 @@
+{
+  "itemName": "DF.DoorControl",
+  "itemValue": [
+      {
+          "name": "K7/K8-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "K7/K8-M01",
+              "X": "440800",
+              "Y": "197000",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B07/B08-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B07/B08-M01",
+              "X": "595300",
+              "Y": "836300",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B14-ZJM01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B14-ZJM01",
+              "X": "973800",
+              "Y": "747740",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B12-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B12-M05",
+              "X": "861500",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B17-M07",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B17-M07",
+              "X": "1130600",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B03-M10",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B03-M10",
+              "X": "342800",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B19-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B19-M06",
+              "X": "1211800",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B02-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B02-M01",
+              "X": "299000",
+              "Y": "293000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B18-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B18-M02",
+              "X": "1198800",
+              "Y": "315000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B13-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B13-M05",
+              "X": "912000",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B07-M13",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B07-M13",
+              "X": "558300",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B13-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B13-M01",
+              "X": "890500",
+              "Y": "296400",
+              "Angle": 0,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B03-M13",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B03-M13",
+              "X": "329800",
+              "Y": "830035",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B03-M09",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B03-M09",
+              "X": "312200",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B11-M08",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B11-M08",
+              "X": "798800",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B18-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B18-M06",
+              "X": "1188800",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B09-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B09-M06",
+              "X": "650200",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B02-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B02-M06",
+              "X": "288000",
+              "Y": "830035",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B11-M12",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B11-M12",
+              "X": "798800",
+              "Y": "815935",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B14-ZJM03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B14-ZJM03",
+              "X": "973800",
+              "Y": "777326",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B02-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B02-M03",
+              "X": "299000",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B16-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B16-M05",
+              "X": "1087500",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-M04",
+              "X": "455000",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B01-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B01-M03",
+              "X": "199500",
+              "Y": "547720",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B19-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B19-M01",
+              "X": "1228500",
+              "Y": "296400",
+              "Angle": 0,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B17-M10",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B17-M10",
+              "X": "1130600",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B18-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B18-M03",
+              "X": "1198800",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B09-M11",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B09-M11",
+              "X": "687000",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B03-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B03-M01",
+              "X": "328000",
+              "Y": "296500",
+              "Angle": 0,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B10-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B10-M06",
+              "X": "739300",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B16-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B16-M02",
+              "X": "1087500",
+              "Y": "315000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B11-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B11-M01",
+              "X": "778300",
+              "Y": "296400",
+              "Angle": 0,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B21-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B21-M06",
+              "X": "1325100",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B20-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B20-M06",
+              "X": "1300800",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B09-M12",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B09-M12",
+              "X": "687000",
+              "Y": "815935",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B10-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B10-M02",
+              "X": "748700",
+              "Y": "315000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B09-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B09-M02",
+              "X": "687000",
+              "Y": "315000",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B16-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B16-M06",
+              "X": "1069500",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B07-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B07-M02",
+              "X": "574300",
+              "Y": "315000",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-ZJM04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-ZJM04",
+              "X": "424500",
+              "Y": "759660",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-ZJM05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-ZJM05",
+              "X": "424500",
+              "Y": "773735",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B13-M12",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B13-M12",
+              "X": "912000",
+              "Y": "815935",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B14-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B14-M04",
+              "X": "973800",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B03-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B03-M03",
+              "X": "312200",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B11-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B11-M06",
+              "X": "761900",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B11-M13",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B11-M13",
+              "X": "778800",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B17-M08",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B17-M08",
+              "X": "1137200",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B03-M12",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B03-M12",
+              "X": "349300",
+              "Y": "815935",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B11-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B11-M04",
+              "X": "792300",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B11-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B11-M02",
+              "X": "798800",
+              "Y": "315000",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B08-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B08-M05",
+              "X": "636700",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B17-M11",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B17-M11",
+              "X": "1137200",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-M13",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-M13",
+              "X": "445300",
+              "Y": "830035",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-LXM01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-LXM01",
+              "X": "424500",
+              "Y": "817000",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-ZJM01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-ZJM01",
+              "X": "987200",
+              "Y": "718153",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-M03",
+              "X": "987200",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B03-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B03-M02",
+              "X": "349200",
+              "Y": "315000",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B04-LXM01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B04-LXM01",
+              "X": "411500",
+              "Y": "817000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B07-M10",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B07-M10",
+              "X": "567400",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B04-ZJM03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B04-ZJM03",
+              "X": "411500",
+              "Y": "773735",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-M08",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-M08",
+              "X": "1024200",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B14-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B14-M05",
+              "X": "973800",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B07-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B07-M06",
+              "X": "537000",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B06-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B06-M04",
+              "X": "523800",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B09-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B09-M03",
+              "X": "650200",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B06-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B06-M06",
+              "X": "513300",
+              "Y": "830035",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-M04",
+              "X": "1017600",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B11-M09",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B11-M09",
+              "X": "761900",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B20-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B20-M02",
+              "X": "1311800",
+              "Y": "315000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B01-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B01-M06",
+              "X": "199500",
+              "Y": "687500",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B21-M08",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B21-M08",
+              "X": "1362300",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-ZJM01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-ZJM01",
+              "X": "424500",
+              "Y": "717435",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B04-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B04-M04",
+              "X": "411500",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B07-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B07-M04",
+              "X": "567400",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B03-M08",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B03-M08",
+              "X": "349300",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B17/B18-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B17/B18-M01",
+              "X": "1158800",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-ZJM02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-ZJM02",
+              "X": "987200",
+              "Y": "732946",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B07-M08",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B07-M08",
+              "X": "574300",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B09-M13",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B09-M13",
+              "X": "665300",
+              "Y": "837000",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B21-M13",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B21-M13",
+              "X": "1342300",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B13-M13",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B13-M13",
+              "X": "892000",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-M07",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-M07",
+              "X": "455000",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B04-ZJM01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B04-ZJM01",
+              "X": "411500",
+              "Y": "745585",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B04-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B04-M02",
+              "X": "411500",
+              "Y": "325000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-M02",
+              "X": "1024200",
+              "Y": "315000",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B07-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B07-M01",
+              "X": "552300",
+              "Y": "296400",
+              "Angle": 0,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B04-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B04-M03",
+              "X": "411500",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05/B06-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05/B06-M01",
+              "X": "485300",
+              "Y": "830035",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-ZJM06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-ZJM06",
+              "X": "424500",
+              "Y": "787810",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B04-ZJM02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B04-ZJM02",
+              "X": "411500",
+              "Y": "759660",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B09-M10",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B09-M10",
+              "X": "680500",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "IGV-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "IGV-M01",
+              "X": "197000",
+              "Y": "295000",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-M12",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-M12",
+              "X": "1024200",
+              "Y": "815935",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-M08",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-M08",
+              "X": "462000",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B01-M08",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B01-M08",
+              "X": "237000",
+              "Y": "687500",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B14-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B14-M03",
+              "X": "973800",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-M06",
+              "X": "987200",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B06-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B06-M01",
+              "X": "523800",
+              "Y": "293000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B03-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B03-M04",
+              "X": "342800",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B09-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B09-M01",
+              "X": "665300",
+              "Y": "296400",
+              "Angle": 0,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-M11",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-M11",
+              "X": "462000",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B14-ZJM02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B14-ZJM02",
+              "X": "973800",
+              "Y": "762533",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B13/B14-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B13/B14-M01",
+              "X": "933800",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B13-M11",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B13-M11",
+              "X": "912000",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B12-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B12-M06",
+              "X": "846500",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B17-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B17-M02",
+              "X": "1137200",
+              "Y": "315000",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-ZJM04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-ZJM04",
+              "X": "987200",
+              "Y": "762533",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B13-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B13-M02",
+              "X": "912000",
+              "Y": "315000",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B07-M09",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B07-M09",
+              "X": "537000",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B19-M09",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B19-M09",
+              "X": "1211800",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B04-ZJM04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B04-ZJM04",
+              "X": "411500",
+              "Y": "787810",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B12-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B12-M01",
+              "X": "861500",
+              "Y": "293000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B19-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B19-M02",
+              "X": "1249500",
+              "Y": "315000",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B01-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B01-M02",
+              "X": "237000",
+              "Y": "415000",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B19-M07",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B19-M07",
+              "X": "1243500",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B19-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B19-M05",
+              "X": "1249500",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-M10",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-M10",
+              "X": "1017600",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B21-M12",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B21-M12",
+              "X": "1382300",
+              "Y": "821000",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-M09",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-M09",
+              "X": "424500",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B20-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B20-M05",
+              "X": "1311800",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B09-M09",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B09-M09",
+              "X": "650200",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B19-M12",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B19-M12",
+              "X": "1249500",
+              "Y": "815935",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-M01",
+              "X": "1005500",
+              "Y": "296400",
+              "Angle": 0,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B03-M11",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B03-M11",
+              "X": "349300",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B12-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B12-M03",
+              "X": "861500",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B18-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B18-M05",
+              "X": "1198800",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B13-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B13-M04",
+              "X": "905600",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B19/B20-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B19/B20-M01",
+              "X": "1270800",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B19-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B19-M03",
+              "X": "1211800",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-M07",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-M07",
+              "X": "1017600",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B11-M07",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B11-M07",
+              "X": "792300",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B04-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B04-M05",
+              "X": "411500",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-M03",
+              "X": "424500",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B06-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B06-M02",
+              "X": "523800",
+              "Y": "315000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B11-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B11-M05",
+              "X": "798800",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B16-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B16-M03",
+              "X": "1087500",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B16-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B16-M01",
+              "X": "1087500",
+              "Y": "293000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B21/B22-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B21/B22-M01",
+              "X": "1382300",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B17-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B17-M06",
+              "X": "1099900",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-ZJM05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-ZJM05",
+              "X": "987200",
+              "Y": "777326",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B03/B04-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B03/B04-M01",
+              "X": "369800",
+              "Y": "830035",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B02-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B02-M02",
+              "X": "299000",
+              "Y": "315000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-ZJM03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-ZJM03",
+              "X": "987200",
+              "Y": "747740",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B08-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B08-M04",
+              "X": "636700",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B11-M10",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B11-M10",
+              "X": "792300",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B21-M11",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B21-M11",
+              "X": "1362300",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-ZJM06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-ZJM06",
+              "X": "987200",
+              "Y": "792120",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-M06",
+              "X": "424500",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B13-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B13-M03",
+              "X": "874800",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-M12",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-M12",
+              "X": "462000",
+              "Y": "815935",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B12-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B12-M02",
+              "X": "861500",
+              "Y": "315000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B12-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B12-M04",
+              "X": "861500",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-M05",
+              "X": "462000",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B17-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B17-M05",
+              "X": "1137200",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B21-M10",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B21-M10",
+              "X": "1355500",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B19-M13",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B19-M13",
+              "X": "1229500",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-M02",
+              "X": "462000",
+              "Y": "315000",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B04-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B04-M06",
+              "X": "411500",
+              "Y": "830035",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B07-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B07-M03",
+              "X": "537000",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-M10",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-M10",
+              "X": "455000",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B21-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B21-M01",
+              "X": "1343000",
+              "Y": "296400",
+              "Angle": 0,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B19-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B19-M04",
+              "X": "1243500",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B02-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B02-M05",
+              "X": "299000",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B09/B10-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B09/B10-M01",
+              "X": "709300",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-ZJM02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-ZJM02",
+              "X": "424500",
+              "Y": "731510",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B20-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B20-M03",
+              "X": "1311800",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B07-M11",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B07-M11",
+              "X": "574300",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B11-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B11-M03",
+              "X": "761900",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B20-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B20-M04",
+              "X": "1311800",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B21-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B21-M02",
+              "X": "1362300",
+              "Y": "315000",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B01-M07",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B01-M07",
+              "X": "230500",
+              "Y": "687500",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B13-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B13-M06",
+              "X": "874800",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B19-M11",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B19-M11",
+              "X": "1249500",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B13-M07",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B13-M07",
+              "X": "905600",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-M01",
+              "X": "440800",
+              "Y": "296400",
+              "Angle": 0,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B20-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B20-M01",
+              "X": "1311800",
+              "Y": "293000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "K9/K10-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "K9/K10-M01",
+              "X": "894000",
+              "Y": "197000",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B17-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B17-M04",
+              "X": "1130600",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B01-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B01-M04",
+              "X": "230500",
+              "Y": "547720",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B14-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B14-M02",
+              "X": "973800",
+              "Y": "315000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B01/B02-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B01/B02-M01",
+              "X": "258000",
+              "Y": "830035",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Open"
+          }
+      },
+      {
+          "name": "B10-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B10-M03",
+              "X": "748700",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B17-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B17-M01",
+              "X": "1115500",
+              "Y": "296400",
+              "Angle": 0,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B07-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B07-M05",
+              "X": "574300",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B03-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B03-M05",
+              "X": "349300",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B09-M07",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B09-M07",
+              "X": "680500",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B18-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B18-M04",
+              "X": "1198800",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-LXM01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-LXM01",
+              "X": "987200",
+              "Y": "824000",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B01-M10",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B01-M10",
+              "X": "220000",
+              "Y": "830035",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B10-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B10-M04",
+              "X": "748700",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B10-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B10-M05",
+              "X": "748700",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B18-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B18-M01",
+              "X": "1198800",
+              "Y": "293000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B03-M07",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B03-M07",
+              "X": "342800",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B07-M07",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B07-M07",
+              "X": "567400",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-M13",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-M13",
+              "X": "1004200",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B01-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B01-M05",
+              "X": "237000",
+              "Y": "547720",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B21-M09",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B21-M09",
+              "X": "1325100",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B13-M08",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B13-M08",
+              "X": "912000",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B08-M02",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B08-M02",
+              "X": "636700",
+              "Y": "315000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B06-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B06-M05",
+              "X": "523800",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B11/B12-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B11/B12-M01",
+              "X": "820500",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B21-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B21-M03",
+              "X": "1325100",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B19-M10",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B19-M10",
+              "X": "1243500",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B07-M12",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B07-M12",
+              "X": "574300",
+              "Y": "815935",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-M05",
+              "X": "1024200",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B11-M11",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B11-M11",
+              "X": "798800",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B09-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B09-M04",
+              "X": "680500",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B08-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B08-M01",
+              "X": "636700",
+              "Y": "293000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B21-M07",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B21-M07",
+              "X": "1355500",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B19-M08",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B19-M08",
+              "X": "1249500",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B21-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B21-M05",
+              "X": "1362300",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B21-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B21-M04",
+              "X": "1355500",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B01-M09",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B01-M09",
+              "X": "237000",
+              "Y": "815935",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B13-M10",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B13-M10",
+              "X": "905600",
+              "Y": "703360",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B13-M09",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B13-M09",
+              "X": "874800",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B17-M12",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B17-M12",
+              "X": "1137200",
+              "Y": "815935",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B05-ZJM03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B05-ZJM03",
+              "X": "424500",
+              "Y": "745585",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15/B16-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15/B16-M01",
+              "X": "1043500",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B08-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B08-M03",
+              "X": "636700",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B14-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B14-M06",
+              "X": "973800",
+              "Y": "829500",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B14-ZJM04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B14-ZJM04",
+              "X": "973800",
+              "Y": "792120",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B14-LXM01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B14-LXM01",
+              "X": "973800",
+              "Y": "816576",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B02-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B02-M04",
+              "X": "299000",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B03-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B03-M06",
+              "X": "312200",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B17-M09",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B17-M09",
+              "X": "1099900",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B09-M08",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B09-M08",
+              "X": "687000",
+              "Y": "574160",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B16-M04",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B16-M04",
+              "X": "1087500",
+              "Y": "574160",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B17-M13",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B17-M13",
+              "X": "1118200",
+              "Y": "836500",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-M11",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-M11",
+              "X": "1024200",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B15-M09",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B15-M09",
+              "X": "987200",
+              "Y": "703360",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B08-M06",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B08-M06",
+              "X": "625300",
+              "Y": "836300",
+              "Angle": 0,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B09-M05",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B09-M05",
+              "X": "687000",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B10-M01",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B10-M01",
+              "X": "748700",
+              "Y": "293000",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B17-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B17-M03",
+              "X": "1099900",
+              "Y": "445100",
+              "Angle": 270,
+              "Position": "Right",
+              "Status": "Close"
+          }
+      },
+      {
+          "name": "B06-M03",
+          "value": {
+              "areaBadEntry": false,
+              "DoorCode": "B06-M03",
+              "X": "523800",
+              "Y": "445100",
+              "Angle": 270,
+              "Status": "Close"
+          }
+      }
+  ]
+}
