@@ -1,5 +1,5 @@
 ///////////////////////////////////// 底图配置 /////////////////////////////////////
-const MAP_CENTER = [600.0, 300.0];
+const MAP_CENTER = [950, -950];
 const MAP_VIEW_SIZE = 300;
 
 ///////////////////////////////////// 公共文件 //////////////////////////////////////
@@ -61,7 +61,7 @@ camera.updateProjectionMatrix();
 const scene = new THREE.Scene();
 
 //////////////////////////////////////// 静态资源(底图)加载 ////////////////////////////////////////
-import type { FeatureCollection } from "geojson";
+import type { FeatureCollection, GeometryCollection } from "geojson";
 import type { LineString } from "geojson";
 
 import { convertPoints } from "@core/MeshLine/";
@@ -87,11 +87,11 @@ scene.add(group0);
   {
     const mapshaper3HanldeWrapper = (p: [number, number, number]): number[] => [p[0], 0.0, -p[2]];
     const handleMapShaperFile = (_data: any, materialConfiguration: MeshLineMaterialParameters) => {
-      const data = _data as FeatureCollection<LineString>;
+      const data = _data as GeometryCollection<LineString>;
       const _coordinates = [];
-      for (let i = 0; i < data.features.length; i++) {
-        const feature = data.features[i];
-        const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
+      for (let i = 0; i < data.geometries.length; i++) {
+        const geometry = data.geometries[i];
+        const featureGeometryCoordinates = geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
         const coordinates = convertPoints(featureGeometryCoordinates, mapshaper3HanldeWrapper);
         _coordinates.push(coordinates);
       }
@@ -105,67 +105,68 @@ scene.add(group0);
 
     Promise.all([
       window
-        .fetch("/mapshaper-egypt/01_coastline_and_buildings.json")
+        .fetch("/mapshaper-tongyong/01_coastline_and_buildings.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
+          // 埃及这里做一个切口用于修改 MeshLineMaterial 在使用世界位置时的处理
           handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
         }),
 
       window
-        .fetch("/mapshaper-egypt/02_rails.json")
+        .fetch("/mapshaper-tongyong/02_rails.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
           handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.8, uColor: new THREE.Color("rgb(195, 195, 195)") });
         }),
 
       window
-        .fetch("/mapshaper-egypt/03_fence.json")
+        .fetch("/mapshaper-tongyong/03_fence.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
           handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseBox: 1 });
         }),
 
-      window
-        .fetch("/mapshaper-egypt/04_yard_containers.json")
-        .then((response) => response.json())
-        .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(245, 245, 245)") });
-        }),
+      // window
+      //   .fetch("/mapshaper-tongyong/04_yard_containers.json")
+      //   .then((response) => response.json())
+      //   .then((data: FeatureCollection<LineString>) => {
+      //     handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(245, 245, 245)") });
+      //   }),
+
+      // window
+      //   .fetch("/mapshaper-tongyong/04_yard_reefer.json")
+      //   .then((response) => response.json())
+      //   .then((data: FeatureCollection<LineString>) => {
+      //     handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(245, 245, 245)") });
+      //   }),
 
       window
-        .fetch("/mapshaper-egypt/04_yard_reefer.json")
-        .then((response) => response.json())
-        .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(245, 245, 245)") });
-        }),
-
-      window
-        .fetch("/mapshaper-egypt/05_road_edge.json")
+        .fetch("/mapshaper-tongyong/05_road_edge.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
           handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
         }),
 
       window
-        .fetch("/mapshaper-egypt/05_road_lane_dash.json")
+        .fetch("/mapshaper-tongyong/05_road_lane_dash.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
           handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uUseDash: 1, uDashArray: [8, 4], uColor: new THREE.Color("rgb(155, 155, 155)") });
         }),
 
-      window
-        .fetch("/mapshaper-egypt/05_road_lane_solid.json")
-        .then((response) => response.json())
-        .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(155, 155, 155)") });
-        }),
+      // window
+      //   .fetch("/mapshaper-tongyong/05_road_lane_solid.json")
+      //   .then((response) => response.json())
+      //   .then((data: FeatureCollection<LineString>) => {
+      //     handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(155, 155, 155)") });
+      //   }),
 
-      window
-        .fetch("/mapshaper-egypt/08_zebra.json")
-        .then((response) => response.json())
-        .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
-        }),
+      // window
+      //   .fetch("/mapshaper-tongyong/08_zebra.json")
+      //   .then((response) => response.json())
+      //   .then((data: FeatureCollection<LineString>) => {
+      //     handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
+      //   }),
     ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
   }
 
@@ -191,24 +192,6 @@ scene.add(group0);
       mesh.frustumCulled = false;
       group0.add(mesh);
     };
-
-    Promise.all([
-      window
-        .fetch("/mapshaper-egypt/07_marks.json")
-        .then((response) => response.json())
-        .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)") });
-        }),
-    ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
-
-    Promise.all([
-      window
-        .fetch("/mapshaper-egypt/08_zebra.json")
-        .then((response) => response.json())
-        .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseShadow: 1, uShadowArray: [1, 4] });
-        }),
-    ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
   }
 }
 

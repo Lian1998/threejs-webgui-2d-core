@@ -35,51 +35,51 @@ void main() {
     float dashLength = uDashArray[0];
     float gapLength = uDashArray[1];
     float period = dashLength + gapLength;
+    float phase = fract(vLineDistance / period) * period;
 
     // 直接使用世界空间距离vLineDistance来计算
-    if (mod(vLineDistance + offset, period) > dashLength) {
+    if (phase > dashLength) {
       discard; // 丢弃片元 形成虚线效果
     }
-
   } 
 
   // 盒线模式
   else if (uUseBox == 1.0) {
     // 在使用盒渲染模式时会强制使用屏幕空间
     // diffuseColor = vec4(1., 1., 1., 1.); // debug
-    float axisYFactor = abs(vUv.y - 0.5) * 2.0;
+    float axisYFactor = abs(vUv.y - 0.5) * 2.0; // 1.0 ~ 0.0 ~ 1.0
     // diffuseColor *= vec4(vec3(axisYFactor), 1.0); // debug1: 沿线法线的vUv.y从-1.0~1.0
     // 用vUv画线条
     float aspect = uResolution.x / uResolution.y;
-    float supple = 0.075 * exp2((1300.0) / min(uResolution.x, uResolution.y)); // 加一个uv补偿值(经验值)
-    float lineLimit = uBoxArray[0] / uLineWidth + supple;
-    float lineLimitX = lineLimit * aspect; // 同样的单位下, x轴的像素更多, y轴高度需要补偿
+    float boxLineWidth = uBoxArray[0];
+    float lineLimit = boxLineWidth / uLineWidth; // 线条粗细在uv中的比例
     float connectorLength = uBoxArray[1] / 3. * 4.; // 恒定四个单位的连接符 三个单位的盒
     float boxStepLength = uBoxArray[1];
     float period = connectorLength + boxStepLength;
-    float stripeXFactor = mod(vLineDistance, period); // 当前x坐标在段落中的位置
+    float stripeXFactor = fract(vLineDistance / period) * period; // 当前x坐标在段落中的位置
     float boxMask = step(connectorLength, stripeXFactor); // 当前是否处于盒部分
     // diffuseColor *= vec4(vec3(boxMask), 1.0); // debug2: 白色部分是box位置
-    float discardMask = 0.0; // 标记当前片元是否被舍弃
+
     // 连接部分
-    if (boxMask < 0.5) {
-      if (axisYFactor > lineLimitX / 2.0) {
-        discardMask = 1.0;
-      }
+    if (boxMask < 1e-6) {
+      float edge1 = lineLimit / 2.0;
+      float mask1 = 1.0 - smoothstep(edge1 - axisYFactor, edge1 + axisYFactor, axisYFactor);
+      diffuseColor.a *= mask1;
     }
     // 小盒部分
     else {
-      if (
-      // 上下边线框
-      axisYFactor > (-1.0 + lineLimitX) && axisYFactor < (1.0 - lineLimitX)
-      // 左右边线框
-      && stripeXFactor > connectorLength + lineLimit && stripeXFactor < period - lineLimit) {
-        discardMask = 1.0;
-      }
-    }
 
-    if (discardMask == 1.0) {
-      discard;
+      // Y 方向(上下边框内侧挖空)
+      float edge1 = 1.0 - (lineLimit / 2.0);
+      float mask1 = 1.0 - smoothstep(edge1 - axisYFactor, edge1 + axisYFactor, axisYFactor); // 让命中的部分为0
+
+      // X 方向(左右边框内侧挖空)
+      float edge2 = lineLimit;
+      float mask2 = smoothstep(period, period - edge2, stripeXFactor); // 让命中的部分为0
+      float mask3 = 1.0 - smoothstep(connectorLength + edge2, connectorLength, stripeXFactor); // 让命中的部分为0
+
+      float mask4 = mask1 * mask2 * mask3;
+      diffuseColor.a *= 1.0 - mask4; // Mask;
     }
   }
 

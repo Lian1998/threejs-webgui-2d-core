@@ -25,7 +25,7 @@ void main() {
     float proj = (fragPos.x + uResolution.y + 1.) - fragPos.y; // 发现在接近0时出现很诡异的情况, 保证这个数字只能存在在单轴向上
 
     // 归一化到 [0,1) 的周期位置
-    float phase = mod(proj, period) / period;
+    float phase = fract(proj / period) * period;
 
     // 如果超出黑线区域, 舍弃片元
     if (phase > shadowLength / period) {

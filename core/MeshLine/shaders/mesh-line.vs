@@ -22,6 +22,27 @@ void main() {
   vLineDistance = lineDistance;
   vLineBreakPoint = lineBreakpoint;
 
+    // 世界坐标
+  vec4 currMV = modelViewMatrix * vec4(position, 1.0);
+  vec4 prevMV = modelViewMatrix * vec4(prev, 1.0);
+  vec4 nextMV = modelViewMatrix * vec4(next, 1.0);
+
+    // 视锥平截头体坐标
+  vec4 currClip = projectionMatrix * currMV;
+  vec4 prevClip = projectionMatrix * prevMV;
+  vec4 nextClip = projectionMatrix * nextMV;
+
+    // NDC坐标
+  vec2 currNDC = currClip.xy / currClip.w;
+  vec2 prevNDC = prevClip.xy / prevClip.w;
+  vec2 nextNDC = nextClip.xy / nextClip.w;
+
+  // aspect修复的NDC坐标, 否则y轴会被拉长
+  float aspect = uResolution.x / uResolution.y;
+  vec2 currA = vec2(currNDC.x * aspect, currNDC.y);
+  vec2 prevA = vec2(prevNDC.x * aspect, prevNDC.y);
+  vec2 nextA = vec2(nextNDC.x * aspect, nextNDC.y);
+
   // 世界空间
   if (uSizeAttenuation == 1.) {
 
@@ -45,39 +66,19 @@ void main() {
   // 屏幕空间
   else {
 
-    // 世界坐标
-    vec4 currMV = modelViewMatrix * vec4(position, 1.0);
-    vec4 prevMV = modelViewMatrix * vec4(prev, 1.0);
-    vec4 nextMV = modelViewMatrix * vec4(next, 1.0);
-
-    // 视锥平截头体坐标
-    vec4 currClip = projectionMatrix * currMV;
-    vec4 prevClip = projectionMatrix * prevMV;
-    vec4 nextClip = projectionMatrix * nextMV;
-
-    // NDC坐标
-    vec2 prevNDC = prevClip.xy / prevClip.w;
-    vec2 currNDC = currClip.xy / currClip.w;
-    vec2 nextNDC = nextClip.xy / nextClip.w;
-
-    // aspect修复的NDC坐标, 否则y轴会被拉长
-    float aspect = uResolution.x / uResolution.y;
-    vec2 prevA = vec2(prevNDC.x * aspect, prevNDC.y);
-    vec2 currA = vec2(currNDC.x * aspect, currNDC.y);
-    vec2 nextA = vec2(nextNDC.x * aspect, nextNDC.y);
-
     // NDC坐标切线
     vec2 dir;
 
     // 对拐角进行处理(miter join)
     float miterScale = 1.0;
-    if (distance(currA, prevA) < 1e-6) {
-      dir = normalize(nextA - currA);
-    } else if (distance(currA, nextA) < 1e-6) {
-      dir = normalize(currA - prevA);
+
+    if (distance(currNDC, prevNDC) < 1e-6) {
+      dir = normalize(nextNDC - currNDC);
+    } else if (distance(currNDC, nextNDC) < 1e-6) {
+      dir = normalize(currNDC - prevNDC);
     } else {
-      vec2 dir1 = normalize(currA - prevA);
-      vec2 dir2 = normalize(nextA - currA);
+      vec2 dir1 = normalize(currNDC - prevNDC);
+      vec2 dir2 = normalize(nextNDC - currNDC);
 
       dir = normalize(dir1 + dir2);
 
@@ -92,8 +93,7 @@ void main() {
 
     float halfWidthPx = uLineWidth * 0.5 * uPixelRatio;
     vec2 pixelToNDC = vec2(2.0 / uResolution.x, 2.0 / uResolution.y);
-    float ratioFactor = 0.75;
-    vec2 offsetNDC = normalNDC * side * halfWidthPx * miterScale * pixelToNDC * ratioFactor;
+    vec2 offsetNDC = normalNDC * side * halfWidthPx * miterScale * pixelToNDC;
 
     currClip.xy += offsetNDC * currClip.w;
     gl_Position = currClip;
