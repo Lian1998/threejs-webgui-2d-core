@@ -123,7 +123,7 @@ scene.add(group0);
         .fetch("/mapshaper-tongyong/03_fence.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseBox: 1 });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseBox: 1, uBoxArray: [1.5, 5.0] });
         }),
 
       // window
