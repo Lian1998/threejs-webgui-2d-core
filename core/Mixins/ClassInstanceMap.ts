@@ -46,7 +46,7 @@ export const WithClassInstanceMap = <TBase extends Constructor>(Base: TBase) => 
       }
     }
 
-    static getClassInstance<T>(key: any) {
+    static getClassInstance<T>(key: any = "default") {
       return this.classInstanceMap.get(key) as T;
     }
   }

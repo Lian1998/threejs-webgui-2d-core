@@ -29,13 +29,15 @@ const genUserData = (): GpuPickManagerUserData => {
   };
 };
 
-export class GpuPickManager {
+import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
+export class GpuPickManager extends WithClassInstanceMap(Object) {
   renderer: THREE.WebGLRenderer;
   PosMap: Map<number, THREE.Object3D> = new Map(); // pickid => object3d
   NegMap: WeakMap<THREE.Object3D, number> = new WeakMap(); // object3d => pickid
   rt: THREE.WebGLRenderTarget;
 
   constructor(renderer: THREE.WebGLRenderer) {
+    super();
     this.renderer = renderer;
     this.syncRendererStatus();
 

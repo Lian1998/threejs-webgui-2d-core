@@ -48,3 +48,5 @@ mapControls.saveState();
 orthoCamera.position.set(center.x, 1000, center.z);
 orthoCamera.up.set(0, 1, 0);
 orthoCamera.updateProjectionMatrix();
+
+export const defaultZoom = orthoCamera.zoom;

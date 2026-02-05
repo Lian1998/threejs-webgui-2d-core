@@ -221,7 +221,7 @@ scene.add(group0);
 import { getXZPosition } from "@source/utils/pointerCoordinates";
 {
   const coordinatesEl = document.querySelector("#coordinates");
-  ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>("default").viewportElement.addEventListener("mousemove", (e) => {
+  ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().viewportElement.addEventListener("mousemove", (e) => {
     const pos = getXZPosition(e, camera, renderer);
     coordinatesEl.innerHTML = `${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`;
   });

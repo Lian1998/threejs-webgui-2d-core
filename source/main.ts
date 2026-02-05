@@ -15,9 +15,28 @@ renderer.setClearColor(0xffffff, 0.0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 viewport.appendChild(renderer.domElement);
 
-import { orthoCamera, mapControls } from "./viewport";
+import { orthoCamera, mapControls, defaultZoom } from "./viewport";
 
 const scene = new THREE.Scene();
+
+//////////////////////////////////////// 图元拾取 ////////////////////////////////////////
+
+import { GpuPickManager } from "@core/GpuPickManager/";
+import { GpuPickCommonListener } from "@core/GpuPickManager/";
+const picker = new GpuPickManager(renderer);
+viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => picker.syncRendererStatus(width, height));
+const pickerHelper = new GpuPickCommonListener(picker, scene, orthoCamera);
+
+//////////////////////////////////////// 光标坐标定位提示 ////////////////////////////////////////
+
+import { getXZPosition } from "@source/utils/pointerCoordinates";
+{
+  const coordinatesEl = document.querySelector("#coordinates");
+  ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().viewportElement.addEventListener("mousemove", (e) => {
+    const pos = getXZPosition(e, orthoCamera, renderer);
+    coordinatesEl.innerHTML = `${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`;
+  });
+}
 
 //////////////////////////////////////// 静态资源(底图)加载 ////////////////////////////////////////
 
@@ -30,108 +49,48 @@ viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } })
 
 import { getMultiLineFromFile } from "@source/utils/mapshaperLoader";
 import { MeshLineMaterial } from "@core/MeshLine/";
-
-getMultiLineFromFile("/mapshaper-qinzhou/01_coastline_and_buildings.json").then((meshLineGeometry) => {
-  const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
-  const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
-  group0.add(mesh);
-});
-getMultiLineFromFile("/mapshaper-qinzhou/02_rails.json").then((meshLineGeometry) => {
-  const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 0.8, uColor: new THREE.Color("rgb(195, 195, 195)") });
-  const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
-  group0.add(mesh);
-});
-getMultiLineFromFile("/mapshaper-qinzhou/05_road_edge.json").then((meshLineGeometry) => {
-  const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
-  const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
-  group0.add(mesh);
-});
-getMultiLineFromFile("/mapshaper-qinzhou/05_road_lane_solid.json").then((meshLineGeometry) => {
-  const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(155, 155, 155)") });
-  const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
-  group0.add(mesh);
-});
-getMultiLineFromFile("/mapshaper-qinzhou/temple_block.json").then((meshLineGeometry) => {
-  const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 4.0, uUseDash: 1, uDashArray: [15, 10], uColor: new THREE.Color("rgb(255, 0, 0)") });
-  const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
-  group0.add(mesh);
-});
-
 import { getMultiPolygonFromFile } from "@source/utils/mapshaperLoader";
-getMultiPolygonFromFile("/mapshaper-qinzhou/07_marks.json").then((meshPolygonGeometry) => {
-  const meshPolygonMaterial = new MeshLineMaterial({ uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)") });
-  const mesh = new THREE.Mesh(meshPolygonGeometry, meshPolygonMaterial);
-  group0.add(mesh);
-});
+import { MeshPolygonMaterial } from "@core/MeshPolygon/";
+{
+  getMultiLineFromFile("/mapshaper-qinzhou/01_coastline_and_buildings.json").then((meshLineGeometry) => {
+    const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
+    const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+    group0.add(mesh);
+  });
+  getMultiLineFromFile("/mapshaper-qinzhou/02_rails.json").then((meshLineGeometry) => {
+    const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 0.4, uColor: new THREE.Color("rgb(195, 195, 195)") });
+    const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+    group0.add(mesh);
+  });
+  getMultiLineFromFile("/mapshaper-qinzhou/05_road_edge.json").then((meshLineGeometry) => {
+    const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
+    const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+    group0.add(mesh);
+  });
+  getMultiLineFromFile("/mapshaper-qinzhou/05_road_lane_solid.json").then((meshLineGeometry) => {
+    const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(155, 155, 155)") });
+    const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+    group0.add(mesh);
+  });
+  getMultiLineFromFile("/mapshaper-qinzhou/temple_block.json").then((meshLineGeometry) => {
+    const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 2.0, uUseDash: 1, uDashArray: [15, 10], uColor: new THREE.Color("rgb(255, 0, 0)") });
+    const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+    group0.add(mesh);
+  });
+
+  getMultiPolygonFromFile("/mapshaper-qinzhou/07_marks.json").then((meshPolygonGeometry) => {
+    const meshPolygonMaterial = new MeshLineMaterial({ uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)") });
+    const mesh = new THREE.Mesh(meshPolygonGeometry, meshPolygonMaterial);
+    group0.add(mesh);
+  });
+}
 
 group0.traverse((mesh) => {
   mesh.frustumCulled = false;
   mesh.layers.set(0);
 });
 
-//////////////////////////////////////// 图元拾取 ////////////////////////////////////////
-
-const picker = new GpuPickManager(renderer);
-viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => picker.syncRendererStatus(width, height));
-
-const mousePosition = { x: 0.0, y: 0.0 };
-
-renderer.domElement.addEventListener("mousemove", (e) => {
-  const { x, y } = renderer.domElement.getBoundingClientRect();
-  mousePosition.x = e.clientX - x;
-  mousePosition.y = e.clientY - y;
-  pickerPick();
-});
-
-import throttle from "@libs/lodash/src/throttle";
-const pickerPick = throttle(
-  () => {
-    const { pickid, object3d } = picker.pick(scene, orthoCamera, mousePosition.x, mousePosition.y);
-    console.log(pickid, object3d?.name);
-
-    if (object3d?.name) qcInstance.moveIn();
-    else qcInstance.moveOut();
-  },
-  240,
-  { leading: false, trailing: true },
-);
-
-//////////////////////////////////////// 动态缩放测试 ////////////////////////////////////////
-{
-  let size = 1;
-  window.addEventListener("keydown", () => {
-    if (size % 2 == 1) {
-      (viewport as HTMLDivElement).style.width = `800px`;
-      (viewport as HTMLDivElement).style.height = `600px`;
-    } else {
-      (viewport as HTMLDivElement).style.width = `1024px`;
-      (viewport as HTMLDivElement).style.height = `768px`;
-    }
-    size += 1;
-  });
-}
-
-//////////////////////////////////////// 坐标定位 ////////////////////////////////////////
-
-import { getXZPosition } from "@source/utils/pointerCoordinates";
-{
-  const coordinatesEl = document.querySelector("#coordinates");
-  ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>("default").viewportElement.addEventListener("mousemove", (e) => {
-    const pos = getXZPosition(e, orthoCamera, renderer);
-    coordinatesEl.innerHTML = `${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`;
-  });
-}
-
 //////////////////////////////////////// 业务代码(设备)逻辑 ////////////////////////////////////////
-
-import ColorDefine from "@source/ColorDefine";
-import LayerSequence from "@source/LayerSequence";
-import { GpuPickManager } from "@core/GpuPickManager/GpuPickManager";
-
-import { SDFText2D } from "@core/index";
-import { Sprite2D } from "@core/index";
-import { calculateMPP } from "@source/utils/ratio";
-import { darkenHex } from "@source/utils/color";
 
 const group1 = new THREE.Group();
 group1.layers.set(1);
@@ -142,91 +101,20 @@ scene.add(group1);
   mapControls["_dollyIn"](1 / 5.0); // 略微调整视角以使得视口方便调试
   mapControls.update();
 }
-const defaultZomm = orthoCamera.zoom;
 
-let qcInstance = undefined;
-{
-  const t_QC_Gantry = await new THREE.TextureLoader().loadAsync("/resources/QC_Gantry.png");
-  const t_QC_Trolley = await new THREE.TextureLoader().loadAsync("/resources/QC_Trolley.png");
+import { STS } from "@source/classes/STS";
 
-  const qcGantry = new Sprite2D({
-    texture: t_QC_Gantry,
-    mpp: calculateMPP(30.5, 610),
-    depth: LayerSequence.QC_Gantry,
-    color: new THREE.Color(ColorDefine.DEVICE.DEFAULT),
+fetch("/qinzhou/initDevice.json")
+  .then((response) => response.json())
+  .then((data) => {
+    const QCMS = data[0];
+    const QCMiddle = -(2397641.79 + 2397676.79) / 2.0;
+    for (const itemValue of QCMS.itemValue) {
+      const sts = new STS(itemValue.cheId);
+      group1.add(sts.pool.stsGantry);
+      sts.pool.stsGantry.position.set(567297.0 - itemValue.GantryPos / 100.0, 0.0, QCMiddle - 21.0);
+    }
   });
-  qcGantry.name = "qcGantry";
-
-  const qcMtPviot = new THREE.Object3D();
-  qcMtPviot.position.z = 60;
-  const qcMT = new Sprite2D({
-    texture: t_QC_Trolley,
-    mpp: calculateMPP(18, 87),
-    depth: LayerSequence.QC_Trolley,
-    color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
-  });
-  qcMT.name = "qcMT";
-  qcMtPviot.add(qcMT);
-
-  const qcPTPviot = new THREE.Object3D();
-  qcPTPviot.position.z = 40;
-  const qcPT = new Sprite2D({
-    texture: t_QC_Trolley,
-    mpp: calculateMPP(18, 87),
-    depth: LayerSequence.QC_Trolley,
-    color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
-  });
-  qcPT.name = "qcPT";
-  qcPTPviot.add(qcPT);
-
-  const qcLabelPviot = new THREE.Object3D();
-  qcLabelPviot.position.z = -40;
-  const qcLabel = new SDFText2D({
-    text: "QC101",
-    depth: LayerSequence.TEXT,
-  });
-  qcLabel.name = "qcLabel";
-  qcLabelPviot.add(qcLabel);
-
-  qcInstance = {
-    name: "QC101",
-    qcGantry,
-    qcMtPviot,
-    qcMT,
-    qcPTPviot,
-    qcPT,
-    qcLabelPviot,
-    qcLabel,
-
-    update: (deltaTime: number, elapsedTime: number) => {
-      const scale = (1.0 * defaultZomm) / orthoCamera.zoom;
-      qcLabel.scale.setScalar(scale);
-    },
-
-    moveIn: () => {
-      qcLabel.material["uniforms"].uBackgroundColor.value.set(0xffff00);
-    },
-
-    moveOut: () => {
-      qcLabel.material["uniforms"].uBackgroundColor.value.set(0xffffff);
-    },
-  };
-
-  qcGantry.position.set(0, 0, 1);
-  qcGantry.add(qcMtPviot);
-  qcGantry.add(qcPTPviot);
-  qcGantry.add(qcLabelPviot);
-  qcGantry.geometry.computeBoundingBox();
-  qcMT.geometry.boundingBox = qcGantry.geometry.boundingBox.clone();
-  qcPT.geometry.boundingBox = qcGantry.geometry.boundingBox.clone();
-  group1.add(qcGantry);
-  picker.register(qcGantry);
-  picker.register(qcMT);
-  picker.register(qcPT);
-  picker.register(qcLabel);
-
-  qcGantry.traverse((object3D) => object3D.layers.set(1));
-}
 
 //////////////////////////////////////// 渲染循环 ////////////////////////////////////////
 
@@ -235,7 +123,7 @@ const clock = new THREE.Clock();
 const animate = () => {
   requestAnimationFrame(animate);
 
-  qcInstance?.update(clock.getDelta(), clock.getElapsedTime());
+  // qcInstance?.update(clock.getDelta(), clock.getElapsedTime());
 
   // 渲染地图
 
@@ -253,3 +141,18 @@ const animate = () => {
 };
 
 animate();
+
+//////////////////////////////////////// 动态缩放测试 ////////////////////////////////////////
+{
+  let size = 1;
+  window.addEventListener("keydown", () => {
+    if (size % 2 == 1) {
+      (viewport as HTMLDivElement).style.width = `800px`;
+      (viewport as HTMLDivElement).style.height = `600px`;
+    } else {
+      (viewport as HTMLDivElement).style.width = `1024px`;
+      (viewport as HTMLDivElement).style.height = `768px`;
+    }
+    size += 1;
+  });
+}
