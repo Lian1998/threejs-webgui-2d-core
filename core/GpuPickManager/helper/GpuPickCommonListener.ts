@@ -22,11 +22,11 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
    */
   register(picker: GpuPickManager, scene: THREE.Scene = undefined, camera: THREE.Camera = undefined) {
     if (picker && picker.renderer && picker.renderer.domElement) {
-      const oldDomElement = picker.renderer.domElement;
+      const oldDomElement = picker.renderer.domElement.parentElement; // OrbitControl会拦canvas的PoinerDown事件以阻止冒泡
       if (oldDomElement) {
-        oldDomElement.removeEventListener("mousemove", this.onDomMousemove);
         oldDomElement.removeEventListener("click", this.onDomClick);
         oldDomElement.removeEventListener("dblclick", this.onDomDoubleClick);
+        oldDomElement.removeEventListener("mousemove", this.onDomMousemove);
       }
     }
 
@@ -34,13 +34,13 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
     this.scene = scene;
     this.camera = camera;
     if (picker && picker.renderer && picker.renderer.domElement) {
-      const newDomElement = picker.renderer.domElement;
+      const newDomElement = picker.renderer.domElement.parentElement;
       const { x, y } = newDomElement.getBoundingClientRect();
       this.mousePosition.clientX = x;
       this.mousePosition.clientY = y;
-      newDomElement.addEventListener("mousemove", this.onDomMousemove);
       newDomElement.addEventListener("click", this.onDomClick);
       newDomElement.addEventListener("dblclick", this.onDomDoubleClick);
+      newDomElement.addEventListener("mousemove", this.onDomMousemove);
     }
   }
 
@@ -102,7 +102,7 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
       this.callFunction(inspected.lastMoveinFeaturePointer, "onMovein");
     }
   };
-  onDetect = throttle(this._detect, 60, { trailing: true });
+  onDetect = throttle(this._detect, 240, { trailing: true });
 
   singleClick = () => {
     const { inspected } = this;
@@ -136,8 +136,11 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
   _clickEvent = undefined;
 
   onDomClick = (e: MouseEvent) => {
-    window.clearTimeout(this._clickEvent);
-    this._clickEvent = window.setTimeout(this.singleClick, 30);
+    if (this._clickEvent) {
+      window.clearTimeout(this._clickEvent);
+      this._clickEvent = undefined;
+    }
+    this._clickEvent = window.setTimeout(this.singleClick, 120);
   };
 
   onDomDoubleClick = (e: MouseEvent) => {

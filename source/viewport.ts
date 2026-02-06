@@ -24,11 +24,13 @@ import { MapControls } from "three_addons/controls/MapControls.js";
 const center = new THREE.Vector3(MAP_CENTER[0], 0, MAP_CENTER[1]);
 export const mapControls = new MapControls(orthoCamera, viewport);
 
-{
-  mapControls.enableDamping = true;
-  mapControls.dampingFactor = 0.25;
-}
+// 视口平滑运动
+// {
+//   mapControls.enableDamping = true;
+//   mapControls.dampingFactor = 0.25;
+// }
 
+// 视口范围
 {
   mapControls.enableZoom = true;
   orthoCamera.zoom = 1;
@@ -37,6 +39,7 @@ export const mapControls = new MapControls(orthoCamera, viewport);
   mapControls.zoomSpeed = 1.2;
 }
 
+// 视口旋转角度
 {
   mapControls.enableRotate = true;
   mapControls.maxPolarAngle = Math.PI / 2;
@@ -45,8 +48,15 @@ export const mapControls = new MapControls(orthoCamera, viewport);
 mapControls.target.copy(center);
 mapControls.update();
 mapControls.saveState();
-orthoCamera.position.set(center.x, 1000, center.z);
+orthoCamera.position.set(center.x, 1000, center.z); // 视口初始化视角
 orthoCamera.up.set(0, 1, 0);
 orthoCamera.updateProjectionMatrix();
+
+// 视口初始化视角缩放
+{
+  orthoCamera.position.y = 1000.0; // 让相机从y轴看向地面
+  mapControls["_dollyIn"](1 / 5.0); // 略微调整视角以使得视口方便调试
+  mapControls.update();
+}
 
 export const defaultZoom = orthoCamera.zoom;

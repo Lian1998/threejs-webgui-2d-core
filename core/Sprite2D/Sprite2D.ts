@@ -12,7 +12,7 @@ export interface Sprite2DParameters {
   /** 真实比例 */
   mpp: number;
 
-  /** 写入深度图的值 */
+  /** renderOrder */
   depth: number;
 
   /** threejs纹理 shader叠加算法颜色 */

@@ -96,23 +96,31 @@ const group1 = new THREE.Group();
 group1.layers.set(1);
 scene.add(group1);
 
-{
-  orthoCamera.position.y = 1000.0; // 让相机从y轴看向地面
-  mapControls["_dollyIn"](1 / 5.0); // 略微调整视角以使得视口方便调试
-  mapControls.update();
-}
-
 import { STS } from "@source/classes/STS";
+import { AGV } from "@source/classes/AGV";
+
+const LOGIC_CENTER = [567485.3, -2397835];
+export const coordinateTrans_mm = (x: number, y: number) => [LOGIC_CENTER[0] - x / 1000.0, LOGIC_CENTER[1] + y / 1000.0];
 
 fetch("/qinzhou/initDevice.json")
   .then((response) => response.json())
   .then((data) => {
-    const QCMS = data[0];
-    const QCMiddle = -(2397641.79 + 2397676.79) / 2.0;
-    for (const itemValue of QCMS.itemValue) {
+    console.log(data);
+    const STSRailsAnchorY = -(2397641.79 + 2397676.79) / 2.0 - 21.0;
+    for (const itemValue of data[0].itemValue) {
       const sts = new STS(itemValue.cheId);
       group1.add(sts.pool.stsGantry);
-      sts.pool.stsGantry.position.set(567297.0 - itemValue.GantryPos / 100.0, 0.0, QCMiddle - 21.0);
+      sts.pool.stsGantry.position.set(567297.0 - itemValue.GantryPos / 100.0, 0.0, STSRailsAnchorY);
+    }
+
+    for (const itemValue of data[1].itemValue) {
+      const agv = new AGV(itemValue.cheId);
+      group1.add(agv.pool.agvBase);
+      try {
+        const positions = coordinateTrans_mm(itemValue.AhtStatus.locationX, itemValue.AhtStatus.locationY);
+        agv.pool.agvBase.position.set(positions[0], 0.0, positions[1]);
+        agv.pool.agvBase.rotation.y = (itemValue.Heading / 100.0 / 180.0) * Math.PI;
+      } catch (err) {}
     }
   });
 
@@ -147,12 +155,20 @@ animate();
   let size = 1;
   window.addEventListener("keydown", () => {
     if (size % 2 == 1) {
-      (viewport as HTMLDivElement).style.width = `800px`;
-      (viewport as HTMLDivElement).style.height = `600px`;
-    } else {
       (viewport as HTMLDivElement).style.width = `1024px`;
       (viewport as HTMLDivElement).style.height = `768px`;
+    } else {
+      const { width, height } = viewport.getBoundingClientRect();
+      (viewport as HTMLDivElement).style.width = `${width}px`;
+      (viewport as HTMLDivElement).style.height = `${height}px`;
     }
     size += 1;
   });
 }
+
+//////////////////////////////////////// drawcall监听 ////////////////////////////////////////
+import "@libs/Spector.js/distt/spector.bundle.js";
+
+// @ts-ignore
+const spector = new SPECTOR.Spector();
+spector.displayUI();

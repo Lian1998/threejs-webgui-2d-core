@@ -10,14 +10,18 @@ import { Sprite2D } from "@core/index";
 import { calculateMPP } from "@source/utils/ratio";
 import { darkenHex } from "@source/utils/color";
 
-import { orthoCamera, defaultZoom } from "@source/viewport";
+import { orthoCamera } from "@source/viewport";
+import { defaultZoom } from "@source/viewport";
 
-const t_STS_Gantry = await new THREE.TextureLoader().loadAsync("/resources/STS_Gantry.png");
-const t_STS_Trolley = await new THREE.TextureLoader().loadAsync("/resources/STS_Trolley.png");
+const textrues = {
+  STS_Gantry: await new THREE.TextureLoader().loadAsync("/resources/STS_Gantry.png"),
+  STS_Trolley: await new THREE.TextureLoader().loadAsync("/resources/STS_Trolley.png"),
+};
 
 /** 岸桥 */
 export class STS implements GpuPickFeature {
   code: string = "";
+  static codeSelected = undefined;
   pool: Record<string, THREE.Mesh> = {};
 
   constructor(code: string) {
@@ -25,18 +29,18 @@ export class STS implements GpuPickFeature {
 
     // 生成图元
     const stsGantry = new Sprite2D({
-      texture: t_STS_Gantry,
+      texture: textrues.STS_Gantry,
       mpp: calculateMPP(35, 610),
-      depth: LayerSequence.QC_Gantry,
+      depth: LayerSequence.STS_Gantry,
       color: new THREE.Color(ColorDefine.DEVICE.DEFAULT),
     });
 
     const stsMtPviot = new THREE.Object3D();
     stsMtPviot.position.z = 60;
     const stsMT = new Sprite2D({
-      texture: t_STS_Trolley,
+      texture: textrues.STS_Trolley,
       mpp: calculateMPP(18, 87),
-      depth: LayerSequence.QC_Trolley,
+      depth: LayerSequence.STS_Trolley,
       color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
     });
     stsMtPviot.add(stsMT);
@@ -44,20 +48,25 @@ export class STS implements GpuPickFeature {
     const stsPTPviot = new THREE.Object3D();
     stsPTPviot.position.z = 40;
     const stsPT = new Sprite2D({
-      texture: t_STS_Trolley,
+      texture: textrues.STS_Trolley,
       mpp: calculateMPP(18, 87),
-      depth: LayerSequence.QC_Trolley,
+      depth: LayerSequence.STS_Trolley,
       color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
     });
     stsPTPviot.add(stsPT);
 
     const stsLabelPviot = new THREE.Object3D();
-    stsLabelPviot.position.z = -40;
+    stsLabelPviot.position.z = 8;
     const stsLabel = new SDFText2D({
       text: this.code,
-      depth: LayerSequence.TEXT,
+      depth: LayerSequence.STS_LABEL,
     });
     stsLabelPviot.add(stsLabel);
+    stsLabel.onBeforeRender = () => {
+      const scale = defaultZoom / orthoCamera.zoom;
+      const scalar = Math.max(Math.min(scale, 1.0), 1.5);
+      stsLabel.scale.setScalar(scalar);
+    };
 
     // 绑定关系
     stsGantry.add(stsMtPviot);
@@ -85,24 +94,35 @@ export class STS implements GpuPickFeature {
     }
   }
 
-  update(deltaTime: number, elapsedTime: number) {
-    const scale = (1.0 * defaultZoom) / orthoCamera.zoom;
-    this.pool.stsLabel.scale.setScalar(scale);
+  onSelected() {
+    STS.codeSelected = this.code;
+    this.focused();
   }
 
-  onSelected() {}
-
-  onCancelSelected() {}
+  onCancelSelected() {
+    STS.codeSelected = undefined;
+    this.unfocused();
+  }
 
   onDoubleClicked() {}
 
   onMovein() {
-    this.pool.stsLabel.material["uniforms"].uBackgroundColor.value.set(0xffff00);
+    this.focused();
   }
 
   onMoveout() {
-    this.pool.stsLabel.material["uniforms"].uBackgroundColor.value.set(0xffffff);
+    if (STS.codeSelected !== this.code) {
+      this.unfocused();
+    }
   }
 
   onZoomTo() {}
+
+  focused = () => {
+    this.pool.stsLabel.material["uniforms"].uBackgroundColor.value.set(0xffff00);
+  };
+
+  unfocused = () => {
+    this.pool.stsLabel.material["uniforms"].uBackgroundColor.value.set(0xffffff);
+  };
 }

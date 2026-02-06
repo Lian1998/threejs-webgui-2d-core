@@ -113,3 +113,13 @@ MeshLine使用SpectorJs监视drawcall, 渲染效率存在问题;
 解决措施:
   新增一种断点技术, 将多个段的数据融合成一段, 并将每段的起始点和结束点冗余处理, 并通过一位的attribute(lineBreakpoint)标记这些冗余顶点, 在fragmentShader中对存在标记的冗余顶点的面进行舍弃片元处理; 公网上对这种技术叫做 Degenerate Segment 我这里做了一点改进
 ```
+
+# TODO-LIST(2026-02-06)
+1. 堆场位置录入
+2. ASC生成
+3. nodejs解历史回放录像包
+4. 号码绘制(寻找更优质的文字渲染方案)
+5. Sprite2D合批渲染
+6. Sprite2D合批渲染拾取测试优化
+7. 动画插值
+8. 颜色切换
