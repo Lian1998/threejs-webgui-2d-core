@@ -9,7 +9,7 @@
     "dev": "vite",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
-    "geojson.vertexoffset": "esno ./.scripts/geojson/01.vertexoffset.ts"
+    "geojson.vertex_offset": "esno ./.scripts/geojson/exports/vertex_offset.ts"
   },
   "devDependencies": {
     "@commitlint/cli": "~18.6.0",

@@ -1,17 +1,15 @@
-const INPUT_FOLDER = path.resolve("./public/geojson");
-const OUTPUT_FOLDER = path.resolve("./public/geojson_vertexoffseted");
+//////////////////////////////////// 配置项 ////////////////////////////////////
+
+const INPUT_FOLDER = path.resolve("./assets/qgis.dachanwan/"); // 输入目录(包含一个或多个geojson文件的目录)
+const OUTPUT_FOLDER = path.resolve("./output/.scripts/geojson/vertex_offset/"); // 结果输出目录
 const OFFSET = [-484869.29, -2493687.04];
 
-//////////////////////////////////// Utils ////////////////////////////////////
-//
-// 读取标准Geojson格式对每个顶点进行偏移
-//
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////// 工具函数 ////////////////////////////////////
 
-import { GeoJSON } from "geojson";
-import { Point } from "geojson";
-import { LineString } from "geojson";
-import { Polygon } from "geojson";
+import type { GeoJSON } from "geojson";
+import type { Point } from "geojson";
+import type { LineString } from "geojson";
+import type { Polygon } from "geojson";
 
 const pointOffset = (coordinates: Point["coordinates"], x: number, y: number) => {
   coordinates[0] += x;
@@ -44,6 +42,12 @@ const offset = (geojson: GeoJSON, xOffset: number, yOffset: number) => {
   return geojson;
 };
 
+//////////////////////////////////// 主函数 ////////////////////////////////////
+//
+// 根据配置读取文件夹中的所有文件内容, 解析并按照文件名输出
+//
+///////////////////////////////////////////////////////////////////////////////
+
 import fs from "node:fs";
 import path from "node:path";
 
@@ -66,20 +70,24 @@ const processFileContent = async (content: string, filePath: string): Promise<st
   return JSON.stringify(geojson);
 };
 
-const entries = await fs.promises.readdir(INPUT_FOLDER, { withFileTypes: true });
+const main = async () => {
+  const entries = await fs.promises.readdir(INPUT_FOLDER, { withFileTypes: true });
 
-for (const entry of entries) {
-  const srcPath = path.join(INPUT_FOLDER, entry.name);
-  const outPath = path.join(OUTPUT_FOLDER, entry.name);
+  for (const entry of entries) {
+    const srcPath = path.join(INPUT_FOLDER, entry.name);
+    const outPath = path.join(OUTPUT_FOLDER, entry.name);
 
-  try {
-    await fs.promises.mkdir(path.dirname(outPath), { recursive: true });
-  } catch (err) {}
+    try {
+      await fs.promises.mkdir(path.dirname(outPath), { recursive: true });
+    } catch (err) {}
 
-  if (entry.isFile()) {
-    const content = await fs.promises.readFile(srcPath, "utf8");
-    const processed = await processFileContent(content, srcPath);
-    await fs.promises.writeFile(outPath, processed, "utf8");
-    console.log(`✅ 处理文件: ${srcPath} → ${outPath}`);
+    if (entry.isFile()) {
+      const content = await fs.promises.readFile(srcPath, "utf8");
+      const processed = await processFileContent(content, srcPath);
+      await fs.promises.writeFile(outPath, processed, "utf8");
+      console.log(`✅ 处理文件: ${srcPath} → ${outPath}`);
+    }
   }
-}
+};
+
+main();

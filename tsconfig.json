@@ -45,6 +45,7 @@
 
   // 此配置打包编译的范围
   "include": [ 
+    ".scripts/**/*.ts",
     "vite.config.ts",
     "core/**/*.ts",
     "source/**/*.ts",
