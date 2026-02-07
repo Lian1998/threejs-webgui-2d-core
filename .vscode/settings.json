@@ -12,10 +12,12 @@
   "files.exclude": { // explorer 显示屏蔽
     ".git": true,
     "**/node_modules": true,
+    "**/*.v1ticks": true,
   },
 
   // 代码查看
   "diffEditor.ignoreTrimWhitespace": false, // 对比窗忽略文字行前后空格差异
+  "workbench.editor.enablePreview": false,
 
   // 将编辑器设置配置为覆盖某一语言模式
   "[jsonc]": { "editor.defaultFormatter": "vscode.json-language-features" }, // JSON with Comments 比如 vscode的settings.json
