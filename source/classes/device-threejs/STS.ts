@@ -3,7 +3,7 @@ import { GpuPickManager } from "@core/GpuPickManager/";
 import { GpuPickFeature } from "@core/GpuPickManager/";
 
 import ColorDefine from "@source/ColorDefine";
-import LayerSequence from "@source/LayerSequence";
+import LayerSequence from "@source/classes/LayerSequence";
 
 import { SDFText2D } from "@core/index";
 import { Sprite2D } from "@core/index";
@@ -31,26 +31,26 @@ export class STS implements GpuPickFeature {
     const stsGantry = new Sprite2D({
       texture: textrues.STS_Gantry,
       mpp: calculateMPP(35, 610),
-      depth: LayerSequence.STS_Gantry,
+      renderOrder: LayerSequence.STS_Gantry,
       color: new THREE.Color(ColorDefine.DEVICE.DEFAULT),
     });
 
     const stsMtPviot = new THREE.Object3D();
-    stsMtPviot.position.z = 60;
+    stsMtPviot.position.z = 60.0;
     const stsMT = new Sprite2D({
       texture: textrues.STS_Trolley,
       mpp: calculateMPP(18, 87),
-      depth: LayerSequence.STS_Trolley,
+      renderOrder: LayerSequence.STS_Trolley,
       color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
     });
     stsMtPviot.add(stsMT);
 
     const stsPTPviot = new THREE.Object3D();
-    stsPTPviot.position.z = 40;
+    stsPTPviot.position.z = 40.0;
     const stsPT = new Sprite2D({
       texture: textrues.STS_Trolley,
       mpp: calculateMPP(18, 87),
-      depth: LayerSequence.STS_Trolley,
+      renderOrder: LayerSequence.STS_Trolley,
       color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
     });
     stsPTPviot.add(stsPT);
@@ -59,7 +59,7 @@ export class STS implements GpuPickFeature {
     stsLabelPviot.position.z = 8;
     const stsLabel = new SDFText2D({
       text: this.code,
-      depth: LayerSequence.STS_LABEL,
+      renderOrder: LayerSequence.STS_LABEL,
     });
     stsLabelPviot.add(stsLabel);
     stsLabel.onBeforeRender = () => {
@@ -120,9 +120,11 @@ export class STS implements GpuPickFeature {
 
   focused = () => {
     this.pool.stsLabel.material["uniforms"].uBackgroundColor.value.set(0xffff00);
+    this.pool.stsLabel.renderOrder = LayerSequence.ACTIVE_LABEL;
   };
 
   unfocused = () => {
     this.pool.stsLabel.material["uniforms"].uBackgroundColor.value.set(0xffffff);
+    this.pool.stsLabel.renderOrder = LayerSequence.STS_LABEL;
   };
 }

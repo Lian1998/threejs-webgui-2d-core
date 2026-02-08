@@ -6,23 +6,15 @@ import vs from "./shaders/sprite2d.vs?raw";
 import fs from "./shaders/sprite2d.fs?raw";
 
 export interface Sprite2DParameters {
-  /** threejs纹理 */
   texture: THREE.Texture;
-
-  /** 真实比例 */
   mpp: number;
-
-  /** renderOrder */
-  depth: number;
-
-  /** threejs纹理 shader叠加算法颜色 */
+  renderOrder: number;
   color?: THREE.Color;
 }
 
 export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
   texture: THREE.Texture;
   mpp: number;
-  depth: number;
   color?: THREE.Color;
 
   /**
@@ -31,7 +23,7 @@ export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
    * @param height 精灵在三维空间坐标系中实际的高度
    * @param textureUrl 纹理的路径
    */
-  constructor({ texture, mpp, depth = 1, color = new THREE.Color(1, 1, 1) }: Sprite2DParameters) {
+  constructor({ texture, mpp, renderOrder = 1, color = new THREE.Color(1, 1, 1) }: Sprite2DParameters) {
     super();
 
     if (texture === undefined) throw new Error("请指定 Sprite2D 的纹理贴图");
@@ -44,7 +36,7 @@ export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
     const { naturalWidth, naturalHeight } = texture.image; // 贴图像素大小
 
     this.texture = texture;
-    this.depth = depth;
+    this.renderOrder = renderOrder;
     this.mpp = mpp; // 米/像素
     this.color = color; // 混合
 
@@ -70,7 +62,6 @@ export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
 
     this.geometry = geometry;
     this.material = material;
-    this.renderOrder = depth; // 给 threejs 的 opaque render list 排序
   }
 
   /** 注销原生的基于cpu判断拾取的方法 */

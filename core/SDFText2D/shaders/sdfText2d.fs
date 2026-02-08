@@ -2,6 +2,7 @@ uniform sampler2D uTexture;
 uniform vec3 uTextColor;
 uniform vec3 uOutlineColor;
 uniform vec3 uBackgroundColor;
+uniform float uBackgroundAlpha;
 
 uniform float uThreshold; // 描边内边
 uniform float uOutlineThreshold; // 描边外边
@@ -26,22 +27,24 @@ void main() {
   float sdf = texture2D(uTexture, vUv).r;
 
   // 字体
-  float textAlpha = smoothstep(uThreshold - uSmoothing, uThreshold + uSmoothing, sdf);
+  float textFactor = smoothstep(uThreshold - uSmoothing, uThreshold + uSmoothing, sdf);
 
   // 描边
-  float outlineAlpha = smoothstep(uOutlineThreshold - uSmoothing, uOutlineThreshold + uSmoothing, sdf);
+  float outlineFactor = smoothstep(uOutlineThreshold - uSmoothing, uOutlineThreshold + uSmoothing, sdf);
 
-  outlineAlpha *= (1.0 - textAlpha);
+  outlineFactor *= (1.0 - textFactor);
 
   // 背景
-  float bgAlpha = 1.0 - smoothstep(uOutlineThreshold - uSmoothing, uOutlineThreshold + uSmoothing, sdf);
+  float bgFactor = (1.0 - smoothstep(uOutlineThreshold - uSmoothing, uOutlineThreshold + uSmoothing, sdf));
 
   // 颜色混合
-  vec3 color = uBackgroundColor * bgAlpha +
-    uOutlineColor * outlineAlpha +
-    uTextColor * textAlpha;
+  vec3 color = uBackgroundColor * bgFactor +
+    uOutlineColor * outlineFactor +
+    uTextColor * textFactor;
 
-  float alpha = (textAlpha + outlineAlpha + bgAlpha) * opacity;
+  float finalAlpha = clamp(textFactor +
+    outlineFactor +
+    bgFactor * uBackgroundAlpha, 0.0, 1.0) * opacity;
 
-  gl_FragColor = vec4(color, alpha);
+  gl_FragColor = vec4(color, finalAlpha);
 }

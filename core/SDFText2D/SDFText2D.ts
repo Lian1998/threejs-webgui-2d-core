@@ -29,11 +29,8 @@ const tinySdf = new TinySDF({
 });
 
 export interface SDFText2DParameters {
-  /** 文字 */
   text: string;
-
-  /** 写入深度图的值 */
-  depth: number;
+  renderOrder: number;
 }
 
 /** 缓存文字字符串生成过的贴图 */
@@ -42,9 +39,8 @@ const canvasCache = new Map<string, HTMLCanvasElement>();
 export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
   text: string;
   texture: THREE.Texture;
-  depth: number;
 
-  constructor({ text = "?", depth = 1 }: SDFText2DParameters) {
+  constructor({ text = "?", renderOrder = 1 }: SDFText2DParameters) {
     super();
 
     let canvas = canvasCache.get(text);
@@ -58,7 +54,7 @@ export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
     texture.flipY = false;
 
     this.texture = texture;
-    this.depth = depth;
+    this.renderOrder = renderOrder;
 
     // 生成几何
     const geometry = new Sprite2DGeometry(canvas.width, canvas.height);
@@ -76,11 +72,12 @@ export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
         uTextColor: { value: new THREE.Color(0x000000) }, // 字体颜色
         uOutlineColor: { value: new THREE.Color(0x000000) }, // 描边颜色
         uBackgroundColor: { value: new THREE.Color(0xffffff) }, // 背景色
+        uBackgroundAlpha: { value: 0.8 }, // 背景色透明度
 
         uThreshold: { value: 0.7 }, // 描边内边
         uOutlineThreshold: { value: 0.65 }, // 描边外边
         uSmoothing: { value: 0.02 }, // 描边过渡
-        opacity: { value: 0.8 }, // 透明度
+        opacity: { value: 1.0 }, // 透明度
       },
       vertexShader: vs,
       fragmentShader: fs,
@@ -88,6 +85,5 @@ export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
 
     this.geometry = geometry;
     this.material = material;
-    this.renderOrder = depth; // 给 threejs 的 opaque render list 排序
   }
 }

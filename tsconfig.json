@@ -57,5 +57,6 @@
 
   "types": [
     "./core/index.d.ts",
+    "./source/index.d.ts"
   ],
 }

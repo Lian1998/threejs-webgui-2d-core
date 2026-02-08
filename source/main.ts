@@ -31,10 +31,19 @@ const pickerHelper = new GpuPickCommonListener(picker, scene, orthoCamera);
 
 import { getXZPosition } from "@source/utils/pointerCoordinates";
 {
+  const pos = { x: 0.0, z: 0.0 };
+
   const coordinatesEl = document.querySelector("#coordinates");
   ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().viewportElement.addEventListener("mousemove", (e) => {
-    const pos = getXZPosition(e, orthoCamera, renderer);
+    const { x, z } = getXZPosition(e, orthoCamera, renderer);
+    pos.x = x;
+    pos.z = z;
     coordinatesEl.innerHTML = `${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`;
+  });
+
+  window.addEventListener("keyup", (e) => {
+    if (e.code !== "KeyS") return;
+    console.warn(`${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`);
   });
 }
 
@@ -77,7 +86,6 @@ import { MeshPolygonMaterial } from "@core/MeshPolygon/";
     const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
     group0.add(mesh);
   });
-
   getMultiPolygonFromFile("/mapshaper-qinzhou/07_marks.json").then((meshPolygonGeometry) => {
     const meshPolygonMaterial = new MeshLineMaterial({ uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)") });
     const mesh = new THREE.Mesh(meshPolygonGeometry, meshPolygonMaterial);
@@ -96,31 +104,78 @@ const group1 = new THREE.Group();
 group1.layers.set(1);
 scene.add(group1);
 
-import { STS } from "@source/classes/STS";
-import { AGV } from "@source/classes/AGV";
+import { STS } from "@source/classes/device-threejs/STS";
+import { AGV } from "@source/classes/device-threejs/AGV";
+import { ASC } from "@source/classes/device-threejs/ASC";
+
+import { BlockMap } from "@source/data";
+import { SDFText2D } from "@core/index";
+import LayerSequence from "@source/classes/LayerSequence";
+import { handleYardData } from "./data/handleYardData";
 
 const LOGIC_CENTER = [567485.3, -2397835];
 export const coordinateTrans_mm = (x: number, y: number) => [LOGIC_CENTER[0] - x / 1000.0, LOGIC_CENTER[1] + y / 1000.0];
+Promise.all([
+  // 设备位置初始化
+  fetch("/restful-qinzhou/initDevice.json")
+    .then((response) => response.json())
+    .then((data) => {
+      console.warn("initDevice", data);
+      const STSRailsAnchorY = -(2397641.79 + 2397676.79) / 2.0 - 21.0;
+      // STS
+      for (const itemValue of data[0].itemValue) {
+        const sts = new STS(itemValue.cheId);
+        group1.add(sts.pool.stsGantry);
+        sts.pool.stsGantry.position.set(567297.0 - itemValue.GantryPos / 100.0, 0.0, STSRailsAnchorY);
+      }
 
-fetch("/qinzhou/initDevice.json")
-  .then((response) => response.json())
-  .then((data) => {
-    console.log(data);
-    const STSRailsAnchorY = -(2397641.79 + 2397676.79) / 2.0 - 21.0;
-    for (const itemValue of data[0].itemValue) {
-      const sts = new STS(itemValue.cheId);
-      group1.add(sts.pool.stsGantry);
-      sts.pool.stsGantry.position.set(567297.0 - itemValue.GantryPos / 100.0, 0.0, STSRailsAnchorY);
+      // AGV
+      for (const itemValue of data[1].itemValue) {
+        const agv = new AGV(itemValue.cheId);
+        group1.add(agv.pool.agvBase);
+        try {
+          const positions = coordinateTrans_mm(itemValue.AhtStatus.locationX, itemValue.AhtStatus.locationY);
+          agv.pool.agvBase.position.set(positions[0], 0.0, positions[1]);
+          agv.pool.agvBase.rotation.y = (itemValue.Heading / 100.0 / 180.0) * Math.PI;
+        } catch (err) {}
+      }
+
+      return data;
+    }),
+])
+  .then((responses) => {
+    handleYardData();
+
+    // ASC
+    const initDeviceResponse = responses[0];
+    for (const itemValue of initDeviceResponse[2].itemValue) {
+      const blockNo = `B${itemValue.cheId.slice(2, 4)}`;
+      const blockItem = BlockMap.get(blockNo);
+      const startZ = blockItem.defs.min[1];
+      const endZ = blockItem.defs.max[1];
+      const centerX = (blockItem.defs.min[0] + blockItem.defs.max[0]) / 2;
+      const inBlockSeq = Number.parseInt(itemValue.cheId.slice(4));
+      const centerZ = (startZ + endZ) / 2.0 + Math.random() * ((endZ - startZ) / 2.0) * (inBlockSeq - 1.5) * 2.0;
+      const asc = new ASC(itemValue.cheId);
+      group1.add(asc.pool.ascGantry);
+      asc.pool.ascGantry.position.set(centerX, 0.0, centerZ);
     }
-
-    for (const itemValue of data[1].itemValue) {
-      const agv = new AGV(itemValue.cheId);
-      group1.add(agv.pool.agvBase);
-      try {
-        const positions = coordinateTrans_mm(itemValue.AhtStatus.locationX, itemValue.AhtStatus.locationY);
-        agv.pool.agvBase.position.set(positions[0], 0.0, positions[1]);
-        agv.pool.agvBase.rotation.y = (itemValue.Heading / 100.0 / 180.0) * Math.PI;
-      } catch (err) {}
+  })
+  .finally(() => {
+    // BLOCK NO
+    for (const [blockNo, blockItem] of BlockMap) {
+      const blockLabel = new SDFText2D({ text: blockNo, renderOrder: LayerSequence.BLOCK_NO });
+      (blockLabel.material as THREE.ShaderMaterial).uniforms.uBackgroundAlpha.value = 0.0;
+      blockLabel.layers.set(1);
+      const centerX = (blockItem.defs.min[0] + blockItem.defs.max[0]) / 2.0 + blockItem.defs.offset[0];
+      const centerZ = (blockItem.defs.min[1] + blockItem.defs.max[1]) / 2.0 + blockItem.defs.offset[1];
+      blockLabel.position.set(centerX, 0.0, centerZ);
+      group1.add(blockLabel);
+      blockLabel.onBeforeRender = () => {
+        const scale = defaultZoom / orthoCamera.zoom;
+        const scalar = 1.5 * Math.max(Math.min(scale, 1.0), 1.5);
+        blockLabel.scale.setScalar(scalar);
+      };
     }
   });
 
@@ -153,12 +208,14 @@ animate();
 //////////////////////////////////////// 动态缩放测试 ////////////////////////////////////////
 {
   let size = 1;
-  window.addEventListener("keydown", () => {
+  window.addEventListener("keyup", (e) => {
+    if (e.code !== "KeyQ") return;
     if (size % 2 == 1) {
       (viewport as HTMLDivElement).style.width = `1024px`;
       (viewport as HTMLDivElement).style.height = `768px`;
     } else {
-      const { width, height } = viewport.getBoundingClientRect();
+      const width = window.innerWidth;
+      const height = window.innerHeight;
       (viewport as HTMLDivElement).style.width = `${width}px`;
       (viewport as HTMLDivElement).style.height = `${height}px`;
     }

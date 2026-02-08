@@ -3,7 +3,7 @@ import { GpuPickManager } from "@core/GpuPickManager/";
 import { GpuPickFeature } from "@core/GpuPickManager/";
 
 import ColorDefine from "@source/ColorDefine";
-import LayerSequence from "@source/LayerSequence";
+import LayerSequence from "@source/classes/LayerSequence";
 
 import { SDFText2D } from "@core/index";
 import { Sprite2D } from "@core/index";
@@ -30,25 +30,25 @@ export class ASC implements GpuPickFeature {
     const ascGantry = new Sprite2D({
       texture: textrues.ASC_Gantry,
       mpp: calculateMPP(54, 6594),
-      depth: LayerSequence.ASC_Gantry,
+      renderOrder: LayerSequence.ASC_Gantry,
       color: new THREE.Color(ColorDefine.DEVICE.DEFAULT),
     });
 
     const ascMtPviot = new THREE.Object3D();
-    ascMtPviot.position.z = 60;
+    ascMtPviot.position.x = -26.0;
     const ascMT = new Sprite2D({
       texture: textrues.ASC_Trolley,
       mpp: calculateMPP(18, 87),
-      depth: LayerSequence.ASC_Trolley,
+      renderOrder: LayerSequence.ASC_Trolley,
       color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
     });
-    ascMT.rotateY(Math.PI);
+    ascMT.rotateY(Math.PI / 2);
     ascMtPviot.add(ascMT);
 
     const ascLabelPviot = new THREE.Object3D();
     const ascLabel = new SDFText2D({
       text: this.code,
-      depth: LayerSequence.ASC_Label,
+      renderOrder: LayerSequence.ASC_Label,
     });
     ascLabelPviot.add(ascLabel);
     ascLabel.onBeforeRender = () => {
@@ -59,8 +59,9 @@ export class ASC implements GpuPickFeature {
 
     // 绑定关系
     ascGantry.add(ascMtPviot);
+    ascGantry.add(ascLabelPviot);
     ascGantry.geometry.computeBoundingBox();
-    ascMT.geometry.boundingBox = ascMT.geometry.boundingBox.clone();
+    ascMT.geometry.boundingBox = ascGantry.geometry.boundingBox.clone();
     ascGantry.traverse((object3D) => object3D.layers.set(1));
 
     // 绑定指针
@@ -105,9 +106,11 @@ export class ASC implements GpuPickFeature {
 
   focused = () => {
     this.pool.ascLabel.material["uniforms"].uBackgroundColor.value.set(0xffff00);
+    this.pool.ascLabel.renderOrder = LayerSequence.ACTIVE_LABEL;
   };
 
   unfocused = () => {
     this.pool.ascLabel.material["uniforms"].uBackgroundColor.value.set(0xffffff);
+    this.pool.ascLabel.renderOrder = LayerSequence.ASC_Label;
   };
 }
