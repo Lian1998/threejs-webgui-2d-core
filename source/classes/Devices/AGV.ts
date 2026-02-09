@@ -2,16 +2,17 @@ import * as THREE from "three";
 import { GpuPickManager } from "@core/GpuPickManager/";
 import { GpuPickFeature } from "@core/GpuPickManager/";
 
+import { ThemeConfig } from "@source/classes/ThemeConfig/index";
 import ColorDefine from "@source/ColorDefine";
 import LayerSequence from "@source/classes/LayerSequence";
 
 import { SDFText2D } from "@core/index";
 import { Sprite2D } from "@core/index";
-import { calculateMPP } from "@source/utils/ratio";
-import { darkenHex } from "@source/utils/color";
+import { calculateMPP } from "@core/utils/ratio";
+import { darkenHex } from "@core/utils/color";
 
-import { orthoCamera } from "@source/viewport";
-import { defaultZoom } from "@source/viewport";
+import { orthoCamera } from "@source/inMap/viewport";
+import { defaultZoom } from "@source/inMap/viewport";
 
 const textrues = {
   AGV_Base: await new THREE.TextureLoader().loadAsync("/resources/AGV_Base.png"),
@@ -26,6 +27,10 @@ export class AGV implements GpuPickFeature {
 
   constructor(code: string) {
     this.code = code;
+
+    console.log(ThemeConfig.itemsMap.get("VARS.DEVICE_STATUS.NORMAL"));
+    const color = new THREE.Color(ThemeConfig.itemsMap.get("VARS.DEVICE_STATUS.NORMAL"));
+    console.log(color);
 
     // 生成图元
     const agvBase = new Sprite2D({

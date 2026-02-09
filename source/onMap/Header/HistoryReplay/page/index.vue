@@ -249,6 +249,7 @@ defineExpose({
       .status-0 {
         margin-left: 10px;
         color: red;
+
         svg {
           fill: red;
         }
@@ -257,6 +258,7 @@ defineExpose({
       .status-1 {
         margin-left: 10px;
         color: orange;
+
         svg {
           fill: orange;
         }
@@ -265,6 +267,7 @@ defineExpose({
       .status-2 {
         margin-left: 10px;
         color: green;
+
         svg {
           fill: green;
         }

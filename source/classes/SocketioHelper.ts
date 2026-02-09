@@ -1,5 +1,5 @@
+import { Socket } from "socket.io-client";
 import { Manager } from "socket.io-client";
-import { getAppEnvConfig } from "@/utils/env";
 import dayjs from "dayjs";
 
 /**
@@ -40,7 +40,7 @@ export const getTimeStampForSocketReq = () => {
 };
 
 /** 点位所对应的事件与其所有订阅点的映射 */
-type PointMapping = { event: CustomEvent; eventTargets: EventTarget[] };
+type PointMapping = { event: CustomEvent; eventTargets: SocketioSubModule[] };
 
 /** 观察者子模块的回调函数(主模块调用) */
 type SubModuleCallbackWrapped = (event: CustomEvent) => void;
@@ -49,12 +49,11 @@ type SubModuleCallbackWrapped = (event: CustomEvent) => void;
 type SubModuleCallback<T> = (itemValue: T, response?: any) => void;
 
 // 初始化SocketIO
-const viteEnvs = getAppEnvConfig();
-const manager = new Manager(viteEnvs.VITE_GLOB_MAP_WS_BASE_URL, {
-  autoConnect: true, // 是否自动连接
+const manager = new Manager("/socket", {
+  autoConnect: false, // 是否自动连接
+  reconnection: true, // 是否自动重新连接
   reconnectionAttempts: 3, // 重新连接尝试次数
   reconnectionDelayMax: 10000, // 重新连接延迟时间（毫秒）
-  reconnection: true, // 是否自动重新连接
   transports: ["websocket"], // 协议
 });
 
@@ -65,11 +64,11 @@ const manager = new Manager(viteEnvs.VITE_GLOB_MAP_WS_BASE_URL, {
  * 3. 监听"messageReal"时按订阅事件点发出对应的自定义事件
  */
 export class SocketioMainModule {
-  static manager = manager;
-  static defaultOption = { autoConnect: true, autoListenMessageReal: true };
+  static manager = manager; // SocketIO Manager 是SocketIO的默认配置基础类
+  static defaultOption = { autoConnect: true, autoListenMessageReal: true }; // 初始化MainModule的默认配置项
 
-  mapping: Map<string, PointMapping> = new Map();
-  socket = undefined;
+  mapping: Map<string, PointMapping> = new Map(); // 所有点位与自定义事件相关内容的映射
+  socket: Socket = undefined; // SocketIO Socket 是与服务器交互的基础类
   beforeDispatch: (response: any) => boolean = undefined; // 当消息从后端发送到主模块,主模块准备遍历订阅事件并分发前调用
   beforeWrapperCall: (event: CustomEvent) => void = undefined; // (订阅事件分发时)在执行注册的监听器前执行
   afterWrapperCall: (event: CustomEvent) => void = undefined; // (订阅事件分发时)在执行注册的监听器后执行
@@ -77,25 +76,28 @@ export class SocketioMainModule {
   constructor(option?: typeof SocketioMainModule.defaultOption) {
     const _defaultOption = JSON.parse(JSON.stringify(SocketioMainModule.defaultOption));
     const optionsMerged = Object.assign(_defaultOption, option ?? {});
-    // console.log("optionsMerged", optionsMerged);
+    this.socket = SocketioMainModule.manager.socket("/"); // 生成连接
+    this.socket.on("connect", () => console.log("Data socket connected!"));
+    this.socket.on("reconnect", () => console.log("Data socket reconnect!"));
+    this.socket.on("connect_error", (reason) => console.error(reason));
+    this.socket.on("disconnect", (reason) => {
+      console.error(reason);
+      if (reason === "io client disconnect") return; // 手动调用
+      window.alert("实时推送端口已断开, 请刷新页面后重试~");
+      window.location.reload();
+    });
     if (optionsMerged.autoConnect) this.connect();
-    if (optionsMerged.autoListenMessageReal) this.listenMessageReal();
+    if (optionsMerged.autoConnect && optionsMerged.autoListenMessageReal) this.listenMessageReal();
   }
 
-  /** 客户端 SocketIOManager 建立连接 */
+  /** 手动开启SocketIO连接 */
   connect() {
-    if (!this.socket) {
-      this.socket = SocketioMainModule.manager.socket("/");
-      this.socket.on("connect", () => console.log("Data socket connected!"));
-      this.socket.on("reconnect", () => console.error("Data socket reconnect!"));
-      this.socket.on("connect_error", () => console.error("Data socket connect error!"));
-      this.socket.on("disconnect", () => {
-        console.error("Data socket disconnect!");
-        window.alert("实时推送端口已断开, 请刷新页面后重试~");
-        window.location.reload();
-      });
-      this.socket.open();
-    }
+    if (!this.socket.connected) this.socket.connect();
+  }
+
+  /** 手动关闭SocketIO连接 */
+  disconnect() {
+    if (this.socket.connected) this.socket.disconnect();
   }
 
   /** 监听 messageReal 事件 */
@@ -109,16 +111,42 @@ export class SocketioMainModule {
         const itemName = element["itemName"];
         const itemValue = element["itemValue"];
         const pointMapping = this.mapping.get(itemName);
-        if (pointMapping) {
-          pointMapping.event.detail.value = itemValue;
-          pointMapping.event.detail.response = response;
-          for (let j = 0; j < pointMapping.eventTargets.length; j++) {
-            const eventTarget = pointMapping.eventTargets[j];
-            eventTarget.dispatchEvent(pointMapping.event);
-          }
+        if (!pointMapping) continue;
+        pointMapping.event.detail.value = itemValue;
+        pointMapping.event.detail.response = response;
+        for (let j = 0; j < pointMapping.eventTargets.length; j++) {
+          const socketioSubModule = pointMapping.eventTargets[j];
+          socketioSubModule.dispatchEvent(pointMapping.event);
         }
       }
     });
+  }
+
+  /** 取消所有主/子模块点位与自定义事件映射 */
+  dispose() {
+    // 子模块的所有事件订阅全部取消
+    for (const [point, pointMapping] of this.mapping) {
+      for (let i = 0; i < pointMapping.eventTargets.length; i++) {
+        const socketioSubModule = pointMapping.eventTargets[i];
+        const callbackWrappeds = socketioSubModule.mapping.get(point);
+        if (!Array.isArray(callbackWrappeds)) continue;
+        for (let j = 0; j < callbackWrappeds.length; j++) {
+          const callbackWrapped = callbackWrappeds[j];
+          socketioSubModule.removeEventListener(point, callbackWrapped);
+        }
+      }
+    }
+
+    // 子模块的事件映射全部删除回收
+    for (const [point, pointMapping] of this.mapping) {
+      for (let i = 0; i < pointMapping.eventTargets.length; i++) {
+        const socketioSubModule = pointMapping.eventTargets[i];
+        socketioSubModule.mapping.clear(); // 清空指针
+      }
+    }
+
+    // 子模块映射全部删除回收
+    this.mapping.clear();
   }
 }
 
@@ -132,7 +160,7 @@ export class SocketioMainModule {
 class SocketioSubModule extends EventTarget {
   scope: SocketioSubModule = undefined;
   socketioMainModule: SocketioMainModule = undefined;
-  mapping: Map<string, SubModuleCallbackWrapped[]> = undefined;
+  mapping: Map<string, SubModuleCallbackWrapped[]> = undefined; // 订阅点与回调函数数组的映射
   afterSubReal: (points: string[]) => boolean;
 
   constructor(socketioMainModule: SocketioMainModule) {
@@ -142,7 +170,11 @@ class SocketioSubModule extends EventTarget {
     this.mapping = new Map();
   }
 
-  /** 注册对某个事件的监听函数 */
+  /**
+   * 注册对某个事件的监听函数
+   * @param point 订阅点
+   * @param callback 回调函数
+   */
   registerListener<T>(point: string, callback: SubModuleCallback<T>) {
     const pointMapping = this.socketioMainModule.mapping.get(point);
     // 如果主模块没有注册过这个事件点
@@ -169,7 +201,10 @@ class SocketioSubModule extends EventTarget {
     this.addEventListener(point, callbackWrapped);
   }
 
-  /** 发出订阅事件 */
+  /**
+   * 发出订阅事件
+   * @param points 订阅点
+   */
   subReal(requestId: string, ...points: string[]) {
     if (this.socketioMainModule.socket) {
       if (!points.length) return;
@@ -181,36 +216,40 @@ class SocketioSubModule extends EventTarget {
 
   /** 解除子模块订阅 */
   dispose() {
-    const needDispose = [];
-    this.mapping.forEach((value, key) => {
-      // 注销所有的回调事件
-      for (let i = 0; i < value.length; i++) {
-        const callbackWrapped = value[i];
-        this.removeEventListener(key, callbackWrapped);
+    const needDispose = []; // 统计需要从主模块中剔除的点
+    for (const [point, callbackWrappeds] of this.mapping) {
+      // 注销子模块中的回调事件表
+      for (let i = 0; i < callbackWrappeds.length; i++) {
+        const callbackWrapped = callbackWrappeds[i];
+        this.removeEventListener(point, callbackWrapped);
       }
 
       // 判断是否需要发出解除订阅事件
-      const pointMapping = this.socketioMainModule.mapping.get(key);
-      if (!pointMapping) return;
+      const pointMapping = this.socketioMainModule.mapping.get(point);
+      if (!pointMapping) continue;
       // 如果当前子模块是最后一个订阅此点的子模块
       if (pointMapping.eventTargets.length === 1 && pointMapping.eventTargets.includes(this.scope)) {
-        this.socketioMainModule.mapping.delete(key);
-        // 发出解除订阅事件
-        needDispose.push(key);
+        this.socketioMainModule.mapping.delete(point);
+        needDispose.push(point); // 发出解除订阅事件
       }
       // 如果当前模块并不是最后一个订阅此点的子模块
       else {
         const index = pointMapping.eventTargets.findIndex((item) => item == this.scope);
         if (index !== -1) pointMapping.eventTargets.splice(index, 1);
       }
-    });
+    }
 
     console.warn("需要解除订阅的点", needDispose);
 
+    // 发出解除订阅事件
     if (this.socketioMainModule.socket) {
-      if (!needDispose.length) return;
-      this.socketioMainModule.socket.emit("unsubReal", { event: "unsubReal", data: needDispose });
+      if (needDispose.length) {
+        this.socketioMainModule.socket.emit("unsubReal", { event: "unsubReal", data: needDispose });
+      }
     }
+
+    // 清空子模块中的回调事件表
+    this.mapping.clear();
   }
 
   /** 生成具有切片回调函数的调用栈 */

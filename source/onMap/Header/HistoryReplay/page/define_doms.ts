@@ -1,4 +1,4 @@
-import { DOMElements } from "@2dmapv2/onMap/index";
+import { DOMElements } from "@source/onMap/index";
 
 /** 设置需要隐藏的Dom元素层 */
 export const historyReplayDefine_doms = () => {

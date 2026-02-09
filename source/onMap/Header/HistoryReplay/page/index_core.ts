@@ -1,11 +1,11 @@
-import { SocketioMainModule } from "@2dmapv2/classes/SocketioHelper";
-import { socketioMainModule } from "@2dmapv2/classes/SocketioHelper";
-import { getTimeStampForSocketReq } from "@2dmapv2/classes/SocketioHelper";
+import { SocketioMainModule } from "@source/classes/SocketioHelper";
+import { socketioMainModule } from "@source/classes/SocketioHelper";
+import { getTimeStampForSocketReq } from "@source/classes/SocketioHelper";
 import dayjs from "dayjs";
 
 import { reactive } from "vue";
 import { historyReplayDefine_doms } from "./define_doms";
-import { historyReplayDefine_layers } from "./define_layers";
+// import { historyReplayDefine_layers } from "./define_layers";
 import { _socketioMainModule } from "./define_infocards";
 import { historyReplayDefine_infoCards } from "./define_infocards";
 import { historyReplayDefine_socketioSubModules } from "./define_socketioSubModules";
@@ -61,7 +61,7 @@ export const historyReplaySub = () => {
 
   // 初始化UI
   historyReplayDefine_doms(); // 去除UI
-  historyReplayDefine_layers(); // 去除Openlayers层
+  // historyReplayDefine_layers(); // 去除Openlayers层
   historyReplayDefine_socketioSubModules(); // 去除多余的订阅
 
   // 清屏点位
@@ -422,7 +422,7 @@ export const on_tickFileImport = () => {
 
       // 初始化UI
       historyReplayDefine_doms(); // 去除UI
-      historyReplayDefine_layers(); // 去除Openlayers层
+      // historyReplayDefine_layers(); // 去除Openlayers层
       historyReplayDefine_socketioSubModules(); // 去除多余的订阅
       timePickedClear();
       timePicked.value[0] = dayjs(struct.startTimeStamp); // 时间选择器 开始时间
@@ -478,7 +478,7 @@ export const on_tickFileExport = () => {
       ticks: Array.from(ticksMap.entries()),
     };
     const encoded = msgpack.encode(struct) as Uint8Array;
-    const compressed = pako.deflate(encoded) as Uint8Array;
+    const compressed = pako.deflate(encoded) as Uint8Array as BlobPart;
     const blob = new Blob([compressed], { type: "application/octet-stream" });
     const url = URL.createObjectURL(blob);
     aEl.href = url;

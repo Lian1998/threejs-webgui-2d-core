@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- http://localhost:13261/debug/GpuPickManager.html -->
+    <title>DEBUG StaticDraw</title>
+
+    <style>
+      #viewport {
+        width: 100%;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      #spy {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="viewport"></div>
+    <script type="module">
+      import "@source/debug/index.ts";
+    </script>
+  </body>
+</html>

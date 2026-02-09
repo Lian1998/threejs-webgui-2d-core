@@ -3,12 +3,12 @@ import { iticksMap } from "./index_core";
 import { dbticksMap } from "./index_core";
 import { dispatchResponsesBatch } from "./index_core";
 
-import { SocketioMainModule } from "@2dmapv2/classes/SocketioHelper";
+import { SocketioMainModule } from "@source/classes/SocketioHelper";
 import { sliderValue } from "./index_ui";
 
-import { socketioSubModule_infocard_igv } from "@2dmapv2/data/initWebSocketData";
-import { socketioSubModule_infocard_qc } from "@2dmapv2/data/initWebSocketData";
-import { socketioSubModule_infocard_yc } from "@2dmapv2/data/initWebSocketData";
+import { socketioSubModule_infocard_igv } from "@source/data/initWebSocketData";
+import { socketioSubModule_infocard_qc } from "@source/data/initWebSocketData";
+import { socketioSubModule_infocard_yc } from "@source/data/initWebSocketData";
 
 export const _socketioMainModule = new SocketioMainModule({ autoConnect: false, autoListenMessageReal: false });
 
@@ -16,12 +16,7 @@ export const _socketioMainModule = new SocketioMainModule({ autoConnect: false, 
 export const historyReplayDefine_infoCards = () => {
   // 1. dispose掉所有当前已存在的弹窗订阅
 
-  // prettier-ignore
-  const need = [
-    socketioSubModule_infocard_igv,
-    socketioSubModule_infocard_qc,
-    socketioSubModule_infocard_yc,
-  ];
+  const need = [socketioSubModule_infocard_igv, socketioSubModule_infocard_qc, socketioSubModule_infocard_yc];
   need.forEach((item) => item.dispose());
 
   // 2. 给 igv qc 弹窗的 subModule 换 新mainModule

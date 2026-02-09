@@ -196,7 +196,7 @@ scene.add(group0);
 }
 
 //////////////////////////////////////// 坐标定位 ////////////////////////////////////////
-import { getXZPosition } from "@source/utils/pointerCoordinates";
+import { getXZPosition } from "@core/utils/pointerCoordinates";
 {
   const coordinatesEl = document.querySelector("#coordinates");
   ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().viewportElement.addEventListener("mousemove", (e) => {

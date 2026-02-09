@@ -3,6 +3,9 @@ import { loadEnv } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
 
+import vue from '@vitejs/plugin-vue';
+import vueJsx from '@vitejs/plugin-vue-jsx';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const _p = (relativePath: string) => path.resolve(__dirname, relativePath)
@@ -44,7 +47,7 @@ export default defineConfig(({ command, mode }) => {
       include: ["three", "three_addons"],
     },
 
-    plugins: [],
+    plugins: [vue(), vueJsx()],
 
     server: {
       port: 5173,

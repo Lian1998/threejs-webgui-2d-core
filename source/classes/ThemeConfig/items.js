@@ -1,26 +1,24 @@
-// 正则表达式 #[(a-z)|(0-9)]{6}
-
 // 以下预定义色决定了项目的色系
 export const DEFAULT_COLOR = "#F905F9FF"; // 缺省色
-const TRANSPARENT = "#00000000"; // 透明色
-const THEME = "#498CFFFF"; // 主题色
-const THEME_ = "#83AFCDFF"; // 主题色_稍浅
-// (饱和度)雅色 主要用于图上的设备
-const LIGHT_GRAY = "#CDCDCDFF";
-const LIGHT_RED = "#FFD3D3FF";
-const LIGHT_GREEN = "#D9FFD9FF";
-const LIGHT_ORANGE = "#EEB45CFF";
-// (饱和度)艳色 主要用于虚拟状态提示
-const GREEN = "#47EE1DFF";
-const RED = "#FF0000FF";
-const YELLOW = "#FFFF00FF";
-const GRAY = "#8D989FFF";
-const ORANGE = "#FFC107FF";
-const DARK_GREEN = "#1D8F20FF";
+export const TRANSPARENT = "#00000000"; // 透明色
+export const THEME = "#498CFFFF"; // 主题色
 
-export default {
+// (饱和度低)雅色, 主要用于图上的设备
+export const ELEG_GRAY = "#CDCDCDFF";
+export const ELEG_RED = "#FFD3D3FF";
+export const ELEG_GREEN = "#D9FFD9FF";
+export const ELEG_ORANGE = "#EEB45CFF";
+
+// (饱和度高)艳色, 主要用于虚拟状态提示
+export const GORG_GREEN = "#47EE1DFF";
+export const GORG_RED = "#FF0000FF";
+export const GORG_YELLOW = "#FFFF00FF";
+export const GORG_GRAY = "#8D989FFF";
+export const GORG_ORANGE = "#FFC107FF";
+export const GORG_DARKGREEN = "#1D8F20FF";
+
+export const items = {
   NAME: "light",
-
   BACKGROUND: "#FFFFFFFF",
   ANNOTATION: "#000000FF", // 地图号码注记
 
@@ -93,23 +91,23 @@ export default {
   LANE: {
     MT: {
       TEXT: "#BBBBBBFF",
-      BACKGROUND: LIGHT_GREEN,
+      BACKGROUND: ELEG_GREEN,
     },
     PB: {
       TEXT: "#BBBBBBFF",
       BACKGROUND_ENABLE: TRANSPARENT,
-      BACKGROUND_DISABLE: LIGHT_GRAY,
+      BACKGROUND_DISABLE: ELEG_GRAY,
     },
     RECHARGE: {
       TEXT: "#BBBBBBFF",
-      BACKGROUND_ENABLE: LIGHT_GREEN,
-      BACKGROUND_INSERVICE_DISABLE: LIGHT_GRAY,
-      BACKGROUND_NOT_INSERVICE: LIGHT_RED,
+      BACKGROUND_ENABLE: ELEG_GREEN,
+      BACKGROUND_INSERVICE_DISABLE: ELEG_GRAY,
+      BACKGROUND_NOT_INSERVICE: ELEG_RED,
     },
     QCTP: {
       TEXT: "#BBBBBBFF",
-      BACKGROUND_ENABLE: LIGHT_GREEN,
-      BACKGROUND_DISABLE: LIGHT_GRAY,
+      BACKGROUND_ENABLE: ELEG_GREEN,
+      BACKGROUND_DISABLE: ELEG_GRAY,
     },
   },
 
@@ -131,7 +129,7 @@ export default {
     BORDER: "#FFA07AFF",
     SELECTED_BORDER: "#FF0000FF",
 
-    // 不活跃状态的禁行区, 比如门禁设置的非活跃禁行区, 预设的禁行区
+    // 不活跃状态的禁行区; 如堆场门禁设置的非活跃禁行区, 预设IGV禁行区
     INACTIVE: {
       FILL: "#BBBBBBCC",
       BORDER: "#000000FF",
@@ -140,18 +138,19 @@ export default {
 
   IGV: {
     ROUTE: {
-      DEFAULT: DARK_GREEN,
+      DEFAULT: GORG_GREEN,
       PASS: "#BBBBBBFF",
-      ACTIVE: DARK_GREEN,
-      TERMINAL: DARK_GREEN,
+      ACTIVE: GORG_GREEN,
+      TERMINAL: GORG_GREEN,
     },
+
     LOCK_AREA: {
       FILL: "#FFB631AA",
       DRAWING: "#CCCCCCAA",
       BORDER: "#1D8F2000",
     },
   },
-  // GUI立即执行的跟堆场禁行区启用状态的色值透明度一样
+
   TRUCK: {
     NORMAL: "#008000FF",
     OVERTIME: "#FC1717FF",
@@ -160,8 +159,8 @@ export default {
 
   QC: {
     CYCLE: {
-      ACTIVE: DARK_GREEN,
-      INACTIVE: RED,
+      ACTIVE: GORG_GREEN,
+      INACTIVE: GORG_RED,
     },
   },
 
@@ -177,13 +176,13 @@ export default {
     BORDER: "#000000FF",
   },
 
-  // 特殊的 需要同时保持一份 csskey
+  // (VARS开头为特殊变量, 会同时写入RootCss)
   VARS: {
     DEVICE_STATUS: {
       NORMAL: THEME,
-      OFFLINE: GRAY,
-      ARRIVED: GREEN,
-      FAULT: RED,
+      OFFLINE: GORG_GRAY,
+      ARRIVED: GORG_GREEN,
+      FAULT: GORG_RED,
     },
 
     CONTAINER_STATUS: {
