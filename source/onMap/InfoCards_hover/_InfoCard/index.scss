@@ -1,12 +1,8 @@
 .gui-infocard-hover {
   position: absolute;
-  opacity: 0.8;
-  color: #ffffff;
-  background: #404040;
-  box-shadow: 0 4px 8px #3f3f3f;
-  border-radius: 4px;
-  line-height: 22px;
-  padding: 5px 16px;
-  font-size: 10px;
+  color: var(--ant-color-white);
+  background-color: var(--ant-color-bg-mask);
+  box-shadow: var(--ant-box-shadow-secondary);
+  border-radius: calc(var(--ant-border-radius) * 1px);
   font-weight: bold;
 }

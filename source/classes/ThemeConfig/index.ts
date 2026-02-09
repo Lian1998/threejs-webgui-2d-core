@@ -39,7 +39,7 @@ export class ThemeConfig {
 
     // 4. 写出 --VARS 特殊变量到 RootCss
     const styleEl = document.createElement("style");
-    styleEl.setAttribute("data-theme-vars", "true");
+    styleEl.setAttribute("theme-inmap-vars", "true");
     let cssText = ":root {";
     ThemeConfig.itemsMap.forEach((value, key) => {
       if (key.startsWith("VARS.")) cssText += `--${key.split(".").join("-")}: ${value};`;

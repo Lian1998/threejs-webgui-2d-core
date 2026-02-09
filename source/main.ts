@@ -4,7 +4,7 @@ import { createApp } from "vue";
 import Antd from "ant-design-vue";
 
 import { ThemeConfig } from "@source/classes/ThemeConfig/";
-import App from "./onMap/index.vue";
+import App from "@source/onMap/index.vue";
 
 export const initializationWebGUI = async () => {
   ThemeConfig.instance.initialization();

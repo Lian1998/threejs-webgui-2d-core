@@ -160,7 +160,6 @@ defineExpose({
       // 去除弹框头的移动监听
       const headerElement: HTMLDivElement = father.firstElementChild as HTMLDivElement;
       const title = headerElement.querySelector(".title") as HTMLDivElement;
-      title.style.padding = "5px";
       title.innerHTML = "历史回放";
       if (headerElement["callback_mousedown"]) {
         headerElement.style.cursor = "unset";
@@ -217,7 +216,6 @@ defineExpose({
         on_sliderRailHover(e.clientX - sliderRailLeft, sliderRailWidth);
       });
     }
-    return Promise.resolve({ block: true });
   },
   onCloseInfoCard: () => {},
 } as InfoCardDefaultSlot);
@@ -309,7 +307,6 @@ defineExpose({
       // 自定义hover tooltip样式
       .tooltip-add {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        font-size: 14px;
         position: absolute;
         top: -45px;
         left: 0px;
@@ -322,7 +319,7 @@ defineExpose({
         text-align: start;
         text-decoration: none;
         background-color: rgba(0, 0, 0, 0.85);
-        border-radius: 6px;
+        border-radius: calc(var(--ant-border-radius) * 1px);
         box-shadow:
           0 6px 16px 0 rgba(0, 0, 0, 0.08),
           0 3px 6px -4px rgba(0, 0, 0, 0.12),

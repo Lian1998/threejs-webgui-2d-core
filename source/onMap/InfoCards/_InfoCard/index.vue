@@ -15,7 +15,7 @@
         </template>
       </div>
       <div @click="closeInfoCard(index)" class="close-button">
-        <!-- <SvgIcon name="mapui-close" /> -->
+        <CloseOutlined />
       </div>
     </div>
 
@@ -27,7 +27,7 @@
 <script lang="ts" setup>
 import "./index.scss";
 
-// import { SvgIcon } from "@/components/Icon";
+import { CloseOutlined } from "@ant-design/icons-vue";
 
 import type { Ref } from "vue";
 import type { VNode } from "vue";

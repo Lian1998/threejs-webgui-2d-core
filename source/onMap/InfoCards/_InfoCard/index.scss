@@ -3,36 +3,33 @@
   pointer-events: none;
   visibility: hidden;
   position: absolute;
-  background-color: var(--overlay-background);
-  color: var(--overlay-font);
-  box-shadow: var(--overlay-shadow);
-  text-transform: none;
+  background-color: var(--ant-color-bg-container);
+  color: var(--ant-color-text);
+  box-shadow: var(--ant-box-shadow-card);
   width: auto;
   left: 800px;
   top: 80px;
-  border-radius: 5px;
+  border-radius: calc(var(--ant-border-radius) * 1px);
 
   .gui-infocard-header {
-    border-radius: 5px 5px 0 0;
+    border-radius: calc(var(--ant-border-radius) * 1px) calc(var(--ant-border-radius) * 1px) 0 0;
     display: flex;
     align-items: center;
-    background-color: var(--overlay-background-darker);
-    padding: 2px 14px;
+    background-color: var(--ant-color-bg-layout);
+    padding: 8px 12px;
     cursor: move;
-    border-bottom: 1px solid var(--overlay-border);
-    min-height: 45px;
+    border-bottom: 1px solid var(--ant-color-border);
+    min-height: var(--ant-control-height);
 
     .title {
-      font-size: 1.08rem;
-      font-weight: bold;
-      color: var(--overlay-font);
+      font-weight: var(--ant-font-weight-strong);
+      color: var(--ant-color-text);
     }
 
     .close-button {
       margin-left: auto;
-      height: 1.08rem;
       cursor: pointer;
-      fill: var(--overlay-font);
+      color: var(--ant-color-text);
     }
   }
 }
