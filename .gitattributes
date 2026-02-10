@@ -1,1 +1,2 @@
 # v1ticks 文件, 钦州项目自定义后台数据帧
+*.v1ticks filter=lfs diff=lfs merge=lfs -text
