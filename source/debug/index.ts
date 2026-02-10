@@ -29,7 +29,7 @@ const pickerHelper = new GpuPickCommonListener(picker, scene, orthoCamera);
 
 //////////////////////////////////////// 光标坐标定位提示 ////////////////////////////////////////
 
-import { getXZPosition } from "@core/utils/pointerCoordinates";
+import { getXZPosition } from "@source/inMap/utils/pointerCoordinates";
 {
   const pos = { x: 0.0, z: 0.0 };
 
@@ -58,9 +58,9 @@ scene.add(group0);
 const _resolution = new THREE.Vector2(width, height);
 viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
 
-import { getMultiLineFromFile } from "@core/utils/mapshaperLoader";
+import { getMultiLineFromFile } from "@source/inMap/utils/mapshaperHelpers";
 import { MeshLineMaterial } from "@core/MeshLine/";
-import { getMultiPolygonFromFile } from "@core/utils/mapshaperLoader";
+import { getMultiPolygonFromFile } from "@source/inMap/utils/mapshaperHelpers";
 import { MeshPolygonMaterial } from "@core/MeshPolygon/";
 {
   getMultiLineFromFile("/mapshaper-qinzhou/01_coastline_and_buildings.json").then((meshLineGeometry) => {
@@ -101,8 +101,8 @@ group0.traverse((mesh) => {
 });
 
 //////////////////////////////////////// 业务代码(设备)逻辑 ////////////////////////////////////////
-import { ThemeConfig } from "@source/classes/ThemeConfig/";
-await ThemeConfig.instance.initialization();
+import { ColorPaletteManager } from "@source/themes/ColorPaletteManager/";
+await ColorPaletteManager.instance.initialization();
 
 const group1 = new THREE.Group();
 group1.layers.set(1);

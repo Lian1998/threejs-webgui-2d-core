@@ -6,9 +6,8 @@
   background-color: var(--ant-color-bg-container);
   color: var(--ant-color-text);
   box-shadow: var(--ant-box-shadow-card);
+  text-transform: none;
   width: auto;
-  left: 800px;
-  top: 80px;
   border-radius: calc(var(--ant-border-radius) * 1px);
 
   .gui-infocard-header {
@@ -16,10 +15,10 @@
     display: flex;
     align-items: center;
     background-color: var(--ant-color-bg-layout);
-    padding: 8px 12px;
     cursor: move;
     border-bottom: 1px solid var(--ant-color-border);
     min-height: var(--ant-control-height);
+    padding: calc(var(--ant-padding-content-vertical) * 1px) calc(var(--ant-padding-content-horizontal) * 1px);
 
     .title {
       font-weight: var(--ant-font-weight-strong);
@@ -32,9 +31,15 @@
       color: var(--ant-color-text);
     }
   }
+
+  .gui-infocard-header.small {
+    padding: calc(var(--ant-padding-content-vertical-s-m) * 1px) calc(var(--ant-padding-content-horizontal-s-m) * 1px);
+  }
 }
 
 .gui-infocard.active {
   pointer-events: auto;
   visibility: visible;
 }
+
+@import "./ext-animation";

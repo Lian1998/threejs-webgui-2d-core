@@ -17,7 +17,7 @@ export const GORG_GRAY = "#8D989FFF";
 export const GORG_ORANGE = "#FFC107FF";
 export const GORG_DARKGREEN = "#1D8F20FF";
 
-export const items = {
+export const ITEMS_DEV = {
   NAME: "light",
   BACKGROUND: "#FFFFFFFF",
   ANNOTATION: "#000000FF", // 地图号码注记
@@ -205,3 +205,13 @@ export const items = {
     },
   },
 };
+
+type FlattenObjectKeys<T> = T extends object
+  ? T extends Array<any> | Function | Date | RegExp
+    ? never
+    : {
+        [K in keyof T]: K extends string ? (T[K] extends object ? (T[K] extends Array<any> | Function | Date | RegExp ? K : K | `${K}.${FlattenObjectKeys<T[K]>}`) : K) : never;
+      }[keyof T]
+  : never;
+
+export type ITEMS_DEV_KEY = FlattenObjectKeys<typeof ITEMS_DEV>;

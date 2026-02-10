@@ -1,5 +1,5 @@
 <template>
-  <a-config-provider :theme="{ algorithm: theme.defaultAlgorithm }">
+  <a-config-provider :theme="{ algorithm: theme.defaultAlgorithm }" :component-size="'small'">
     <div id="gui-container">
       <!-- 遮罩 -->
       <div id="gui-mask" />
@@ -14,28 +14,13 @@
 
 <script setup lang="ts">
 import "./index.scss";
+import { theme } from "ant-design-vue";
 
 /////////////////////////////////// 将 Ant-Design-Vue 计算的颜色变量注入到RootCss ///////////////////////////////////
-import { theme } from "ant-design-vue";
-const { useToken } = theme;
-const { token } = useToken();
-const injectAntdCssVars = (token: Record<string, any>) => {
-  const styleEl = document.createElement("style");
-  styleEl.setAttribute("theme-onmap-vars", "true");
-  let cssText = ":root {";
-  Object.entries(token).forEach(([key, value]) => {
-    if (typeof value === "string" || typeof value === "number") {
-      cssText += `--ant-${kebabCase(key)}: ${String(value)};`;
-    }
-  });
-  cssText += "}";
-  styleEl.innerHTML = cssText;
-  document.head.appendChild(styleEl);
-};
-const kebabCase = (str: string) => {
-  return str.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`);
-};
-injectAntdCssVars(token.value);
+import { injectRootCssVars } from "@source/themes/injectRootCss";
+import { getAntDesignVueCurrentToken } from "@source/themes/getAntDesignVueThemeToken";
+injectRootCssVars("ant-design-vue-theme-token", getAntDesignVueCurrentToken());
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 import { DOMElements } from "./index";
@@ -43,7 +28,7 @@ import { historyReplayInfoCardRef } from "./index";
 
 import InfoCard from "./InfoCards/_InfoCard/index.vue";
 import InfoCardHover from "./InfoCards_hover/_InfoCard/index.vue";
-import HistoryReplaypage from "@source/onMap/Header/HistoryReplay/page/index.vue";
+import HistoryReplaypage from "@source/onMap/InfoCards/HistoryReplay/page/index.vue";
 
 import { onMounted } from "vue";
 import { onUnmounted } from "vue";

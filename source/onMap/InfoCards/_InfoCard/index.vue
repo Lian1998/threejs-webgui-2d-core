@@ -1,7 +1,7 @@
 <template>
   <div v-for="(element, index) of props.instanceCount" :ref="(el: HTMLDivElement) => (instanceMap.get(index).infoCardRootElement = el)" class="gui-infocard">
     <!-- 弹窗标头 -->
-    <div class="gui-infocard-header">
+    <div :class="{ 'gui-infocard-header': true, [componentSize]: true }">
       <div class="title">
         <template v-if="titleType(index) === 'string'">{{ titleRenderFunction(index) }}</template>
         <template v-else-if="titleType(index) === 'default'">
@@ -27,15 +27,18 @@
 <script lang="ts" setup>
 import "./index.scss";
 
-import { CloseOutlined } from "@ant-design/icons-vue";
-
 import type { Ref } from "vue";
 import type { VNode } from "vue";
 import { ref } from "vue";
+import { toRef } from "vue";
 import { getCurrentInstance } from "vue";
 import { useSlots } from "vue";
 import { computed } from "vue";
 import { onMounted } from "vue";
+
+import { CloseOutlined } from "@ant-design/icons-vue";
+import { useConfigContextInject } from "ant-design-vue/es/config-provider/context";
+const { componentSize } = useConfigContextInject();
 
 import { context } from "./index";
 

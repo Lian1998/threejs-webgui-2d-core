@@ -1,23 +1,19 @@
 import * as THREE from "three";
+import Tinycolor from "tinycolor2";
 import { GpuPickManager } from "@core/GpuPickManager/";
 import { GpuPickFeature } from "@core/GpuPickManager/";
-
-import ColorDefine from "@source/ColorDefine";
 import LayerSequence from "@source/classes/LayerSequence";
-
 import { SDFText2D } from "@core/index";
 import { Sprite2D } from "@core/index";
-import { calculateMPP } from "@core/utils/ratio";
-import { darkenHex } from "@core/utils/color";
-
+import { calculateMPP } from "@source/inMap/utils/ratio";
 import { orthoCamera } from "@source/inMap/viewport";
 import { defaultZoom } from "@source/inMap/viewport";
+import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
 
-const textrues = {
-  ASC_Gantry: await new THREE.TextureLoader().loadAsync("/resources/ASC_Gantry.png"),
-  ASC_Trolley: await new THREE.TextureLoader().loadAsync("/resources/STS_Trolley.png"),
-};
+const texture_ascGantry = await new THREE.TextureLoader().loadAsync("/resources/ASC_Gantry.png");
+const texture_ascTrolley = await new THREE.TextureLoader().loadAsync("/resources/STS_Trolley.png");
 
+/** Automated Stacking Crane 自动化堆场起重机 */
 export class ASC implements GpuPickFeature {
   code: string = "";
   static codeSelected = undefined;
@@ -28,19 +24,19 @@ export class ASC implements GpuPickFeature {
 
     // 生成图元
     const ascGantry = new Sprite2D({
-      texture: textrues.ASC_Gantry,
+      texture: texture_ascGantry,
       mpp: calculateMPP(54, 6594),
       renderOrder: LayerSequence.ASC_Gantry,
-      color: new THREE.Color(ColorDefine.DEVICE.DEFAULT),
+      color: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
     });
 
     const ascMtPviot = new THREE.Object3D();
     ascMtPviot.position.x = -26.0;
     const ascMT = new Sprite2D({
-      texture: textrues.ASC_Trolley,
+      texture: texture_ascTrolley,
       mpp: calculateMPP(18, 87),
       renderOrder: LayerSequence.ASC_Trolley,
-      color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
+      color: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
     });
     ascMT.rotateY(Math.PI / 2);
     ascMtPviot.add(ascMT);

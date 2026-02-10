@@ -77,9 +77,9 @@
 </template>
 
 <script setup lang="ts">
+import "./index.scss";
 import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
-import zhCN from "ant-design-vue/es/locale/zh_CN";
 
 import { Slider as ASlider } from "ant-design-vue";
 import { RangePicker as ARangePicker } from "ant-design-vue";
@@ -127,8 +127,6 @@ const sliderFormatter = () => dayjs(sliderValue.value).format("MM-DD HH:mm:ss");
 const pageRef = ref(null);
 const sliderRef = ref(null);
 
-let firstTimeOpen = true;
-
 // 如果是确定了时间范围进入UA初始化阶段了, 那么去除掉header的关闭按钮
 watch(historyReplayStatus, (newValue) => {
   if (newValue.pickTimeConfirmed === true) {
@@ -146,10 +144,11 @@ const on_tickFileExport_wrapped = async () => {
   }, 100);
 };
 
+let opened = false;
 defineExpose({
   onOpenInfoCard: async (data: any) => {
-    if (firstTimeOpen) {
-      firstTimeOpen = false;
+    if (!opened) {
+      opened = true;
       // 强制修改样式
       const father = (pageRef.value as HTMLDivElement).parentNode as HTMLDivElement;
       father.style.position = "absolute";
@@ -168,9 +167,8 @@ defineExpose({
       }
       extraDoms.headerCloseBtn = headerElement.querySelector(".close-button");
 
-      const sliderDom = sliderRef.value as HTMLDivElement;
-
       // 添加一个sliderTrack, 用于现实当前帧加载情况
+      const sliderDom = sliderRef.value as HTMLDivElement;
       const sliderTrack = sliderDom.querySelector(".ant-slider-track") as HTMLDivElement;
       const sliderTrackAdd = document.createElement("div");
       extraDoms.sliderTrackAdd = sliderTrackAdd;
@@ -220,124 +218,3 @@ defineExpose({
   onCloseInfoCard: () => {},
 } as InfoCardDefaultSlot);
 </script>
-
-<style lang="scss">
-.hostory-replay-page {
-  width: 1000px;
-
-  .hostory-replay-page-container {
-    padding: 10px 32px;
-
-    .tool-box {
-      margin-bottom: 12px;
-      align-content: center;
-      display: flex;
-      align-items: center;
-      position: relative;
-    }
-
-    // 第一层
-    .tool-box {
-      .input-export {
-        display: inline-block;
-        scale: 0.8;
-        margin-left: 5px;
-      }
-
-      .status-0 {
-        margin-left: 10px;
-        color: red;
-
-        svg {
-          fill: red;
-        }
-      }
-
-      .status-1 {
-        margin-left: 10px;
-        color: orange;
-
-        svg {
-          fill: orange;
-        }
-      }
-
-      .status-2 {
-        margin-left: 10px;
-        color: green;
-
-        svg {
-          fill: green;
-        }
-      }
-
-      .rtbtn {
-        margin-left: auto;
-      }
-    }
-
-    // 第二层
-    .tool-box {
-      .playbtn {
-        .ant-btn {
-          margin-right: 7px;
-        }
-
-        .ant-select {
-          margin-left: 7px;
-        }
-      }
-    }
-
-    // 第三层
-    .slider {
-      position: relative;
-
-      .ant-slider {
-        // 给mark添加一个默认宽度, 不让文字换行
-        .ant-slider-mark {
-          .ant-slider-mark-text {
-            width: 108px;
-            height: 32px;
-            white-space: nowrap;
-          }
-        }
-      }
-
-      // 自定义hover tooltip样式
-      .tooltip-add {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        position: absolute;
-        top: -45px;
-        left: 0px;
-        transform: translateX(-50%);
-
-        width: 108px;
-        height: 32px;
-        padding: 6px 8px;
-        color: #fff;
-        text-align: start;
-        text-decoration: none;
-        background-color: rgba(0, 0, 0, 0.85);
-        border-radius: calc(var(--ant-border-radius) * 1px);
-        box-shadow:
-          0 6px 16px 0 rgba(0, 0, 0, 0.08),
-          0 3px 6px -4px rgba(0, 0, 0, 0.12),
-          0 9px 28px 8px rgba(0, 0, 0, 0);
-        white-space: nowrap;
-      }
-
-      .tooltip-add::after {
-        position: absolute;
-        width: 16px;
-        height: 8px;
-        bottom: 0;
-        background: black;
-        transform: rotate(180deg) translateX(48px) translateY(-8px);
-        clip-path: path("M 0 8 A 4 4 0 0 0 2.82842712474619 6.82842712474619 L 6.585786437626905 3.0710678118654755 A 2 2 0 0 1 9.414213562373096 3.0710678118654755 L 13.17157287525381 6.82842712474619 A 4 4 0 0 0 16 8 Z");
-        content: "";
-      }
-    }
-  }
-}
-</style>

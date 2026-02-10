@@ -1,24 +1,21 @@
 import * as THREE from "three";
+import Tinycolor from "tinycolor2";
 import { GpuPickManager } from "@core/GpuPickManager/";
 import { GpuPickFeature } from "@core/GpuPickManager/";
-
-import ColorDefine from "@source/ColorDefine";
 import LayerSequence from "@source/classes/LayerSequence";
-
 import { SDFText2D } from "@core/index";
 import { Sprite2D } from "@core/index";
-import { calculateMPP } from "@core/utils/ratio";
-import { darkenHex } from "@core/utils/color";
-
+import { calculateMPP } from "@source/inMap/utils/ratio";
 import { orthoCamera } from "@source/inMap/viewport";
 import { defaultZoom } from "@source/inMap/viewport";
+import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
 
 const textrues = {
   STS_Gantry: await new THREE.TextureLoader().loadAsync("/resources/STS_Gantry.png"),
   STS_Trolley: await new THREE.TextureLoader().loadAsync("/resources/STS_Trolley.png"),
 };
 
-/** 岸桥 */
+/** Ship-to-Shore Crane 岸边集装箱起重机 */
 export class STS implements GpuPickFeature {
   code: string = "";
   static codeSelected = undefined;
@@ -26,13 +23,14 @@ export class STS implements GpuPickFeature {
 
   constructor(code: string) {
     this.code = code;
+    const colorRuntime = getColorRuntime("VARS.DEVICE_STATUS.NORMAL");
 
     // 生成图元
     const stsGantry = new Sprite2D({
       texture: textrues.STS_Gantry,
       mpp: calculateMPP(35, 610),
       renderOrder: LayerSequence.STS_Gantry,
-      color: new THREE.Color(ColorDefine.DEVICE.DEFAULT),
+      color: colorRuntime.threejsColor,
     });
 
     const stsMtPviot = new THREE.Object3D();
@@ -41,7 +39,7 @@ export class STS implements GpuPickFeature {
       texture: textrues.STS_Trolley,
       mpp: calculateMPP(18, 87),
       renderOrder: LayerSequence.STS_Trolley,
-      color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
+      color: new THREE.Color(Tinycolor(colorRuntime.tinyColor.getOriginalInput()).darken(10).toHexString()),
     });
     stsMtPviot.add(stsMT);
 
@@ -51,7 +49,7 @@ export class STS implements GpuPickFeature {
       texture: textrues.STS_Trolley,
       mpp: calculateMPP(18, 87),
       renderOrder: LayerSequence.STS_Trolley,
-      color: new THREE.Color(darkenHex(ColorDefine.DEVICE.DEFAULT, 15)),
+      color: new THREE.Color(Tinycolor(colorRuntime.tinyColor.getOriginalInput()).darken(10).toHexString()),
     });
     stsPTPviot.add(stsPT);
 

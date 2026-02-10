@@ -3,11 +3,11 @@ import "normalize.css";
 import { createApp } from "vue";
 import Antd from "ant-design-vue";
 
-import { ThemeConfig } from "@source/classes/ThemeConfig/";
+import { ColorPaletteManager } from "@source/themes/ColorPaletteManager/";
 import App from "@source/onMap/index.vue";
 
 export const initializationWebGUI = async () => {
-  ThemeConfig.instance.initialization();
+  ColorPaletteManager.instance.initialization();
 
   const app = createApp(App);
   app.use(Antd);
@@ -18,5 +18,5 @@ initializationWebGUI();
 
 window.addEventListener("keyup", (e) => {
   if (e.code !== "KeyP") return;
-  ThemeConfig.instance.downloadItemsTemplate();
+  ColorPaletteManager.instance.downloadItemsTemplate();
 });

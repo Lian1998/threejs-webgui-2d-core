@@ -1,7 +1,4 @@
 html {
-  font-size: var(--ant-font-size);
-  line-height: var(--ant-line-height);
-
   ::-webkit-scrollbar {
     width: calc(var(--ant-border-radius) * 1px);
     height: calc(var(--ant-border-radius) * 1px);

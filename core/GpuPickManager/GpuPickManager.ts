@@ -239,8 +239,8 @@ export class GpuPickManager extends WithClassInstanceMap(Object) {
 
   /** 向brodcastChannel发送消息 */
   private async _sendDebugFrame() {
-    const width = this.rendererStatus.size.width;
-    const height = this.rendererStatus.size.height;
+    const width = Math.floor(this.rendererStatus.size.width);
+    const height = Math.floor(this.rendererStatus.size.height);
     const buffer = new Uint8Array(width * height * 4);
     this.renderer.readRenderTargetPixels(this.rt, 0, 0, width, height, buffer);
     const imageData = new ImageData(new Uint8ClampedArray(buffer), width, height);

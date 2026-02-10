@@ -1,25 +1,18 @@
 import * as THREE from "three";
 import { GpuPickManager } from "@core/GpuPickManager/";
 import { GpuPickFeature } from "@core/GpuPickManager/";
-
-import { ThemeConfig } from "@source/classes/ThemeConfig/index";
-import ColorDefine from "@source/ColorDefine";
 import LayerSequence from "@source/classes/LayerSequence";
-
 import { SDFText2D } from "@core/index";
 import { Sprite2D } from "@core/index";
-import { calculateMPP } from "@core/utils/ratio";
-import { darkenHex } from "@core/utils/color";
-
+import { calculateMPP } from "@source/inMap/utils/ratio";
 import { orthoCamera } from "@source/inMap/viewport";
 import { defaultZoom } from "@source/inMap/viewport";
+import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
 
-const textrues = {
-  AGV_Base: await new THREE.TextureLoader().loadAsync("/resources/AGV_Base.png"),
-  AGV_Header: await new THREE.TextureLoader().loadAsync("/resources/AGV_Header.png"),
-};
+const texture_agvBase = await new THREE.TextureLoader().loadAsync("/resources/AGV_Base.png");
+const texture_agvHeader = await new THREE.TextureLoader().loadAsync("/resources/AGV_Header.png");
 
-/** 水平运输车 */
+/** Automated Guided Vehicle 自动导引运输车 */
 export class AGV implements GpuPickFeature {
   code: string = "";
   static codeSelected = undefined;
@@ -28,20 +21,16 @@ export class AGV implements GpuPickFeature {
   constructor(code: string) {
     this.code = code;
 
-    console.log(ThemeConfig.itemsMap.get("VARS.DEVICE_STATUS.NORMAL"));
-    const color = new THREE.Color(ThemeConfig.itemsMap.get("VARS.DEVICE_STATUS.NORMAL"));
-    console.log(color);
-
     // 生成图元
     const agvBase = new Sprite2D({
-      texture: textrues.AGV_Base,
+      texture: texture_agvBase,
       mpp: calculateMPP(15, 2330),
       renderOrder: LayerSequence.AGV_Base,
-      color: new THREE.Color(ColorDefine.DEVICE.DEFAULT),
+      color: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
     });
 
     const agvHeader = new Sprite2D({
-      texture: textrues.AGV_Header,
+      texture: texture_agvHeader,
       mpp: calculateMPP(15, 2330),
       renderOrder: LayerSequence.AGV_Header,
     });
