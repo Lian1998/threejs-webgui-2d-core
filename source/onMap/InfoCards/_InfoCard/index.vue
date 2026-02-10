@@ -1,7 +1,7 @@
 <template>
-  <div v-for="(element, index) of props.instanceCount" :ref="(el: HTMLDivElement) => (instanceMap.get(index).infoCardRootElement = el)" class="gui-infocard">
+  <div v-for="(element, index) of props.instanceCount" :ref="(el: HTMLDivElement) => (instanceMap.get(index).infoCardRootElement = el)" :class="{ 'gui-infocard': true, [componentSize]: true }">
     <!-- 弹窗标头 -->
-    <div :class="{ 'gui-infocard-header': true, [componentSize]: true }">
+    <div class="gui-infocard-header">
       <div class="title">
         <template v-if="titleType(index) === 'string'">{{ titleRenderFunction(index) }}</template>
         <template v-else-if="titleType(index) === 'default'">

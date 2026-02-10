@@ -33,8 +33,10 @@
       color: var(--ant-color-text);
     }
   }
+}
 
-  .gui-infocard-header.small {
+.gui-infocard.small {
+  .gui-infocard-header {
     padding: calc(var(--ant-padding-content-vertical-s-m) * 1px) calc(var(--ant-padding-content-horizontal-s-m) * 1px);
   }
 }

@@ -6,31 +6,27 @@
         <a-range-picker class="range" format="YYYY-MM-DD HH:mm:ss" v-model:value="timePicked" :disabled="historyReplayStatus.pickTimeConfirmed" :placeholder="['回放开始时间', '回放结束时间']" :show-time="{ format: 'YYYY-MM-DD HH:mm:ss' }" @ok="on_timePickedChanged" />
 
         <!-- Tick文件导入导出 -->
-        <div class="input-export">
-          <a-button v-show="!historyReplayStatus.pickTimeConfirmed" :icon="h(ImportOutlined)" :loading="importBtnLoading" @click="on_tickFileImport" />
-        </div>
+        <a-button style="scale: 0.9" v-show="!historyReplayStatus.pickTimeConfirmed" :icon="h(ImportOutlined)" :loading="importBtnLoading" @click="on_tickFileImport" />
 
         <!-- 当前状态文字提示 -->
-        <template v-if="historyReplayStatus.pickTimeConfirmed">
-          <span v-if="!historyReplayStatus.initializedUA" class="status-0">
-            <LoadingOutlined :style="'fill: red'" />
+        <div class="status" v-if="historyReplayStatus.pickTimeConfirmed">
+          <span v-if="!historyReplayStatus.initializedUA" class="error">
+            <LoadingOutlined />
             等待UA初始化中...
           </span>
-          <span v-else-if="!historyReplayStatus.finishedUA" class="status-1">
+          <span v-else-if="!historyReplayStatus.finishedUA" class="warn">
             <LoadingOutlined />
             回放数据获取中...
           </span>
-          <span v-else class="status-2">
+          <span v-else class="success">
+            <a-button style="scale: 0.9" v-show="historyReplayStatus.finishedUA" :icon="h(ExportOutlined)" :loading="exportBtnLoading" @click="on_tickFileExport_wrapped" />
             <CheckOutlined />
             数据加载完成
-            <div class="input-export">
-              <a-button v-show="historyReplayStatus.finishedUA" :icon="h(ExportOutlined)" :loading="exportBtnLoading" @click="on_tickFileExport_wrapped" />
-            </div>
           </span>
-        </template>
+        </div>
 
         <!-- prettier-ignore -->
-        <a-button type="primary" class="rtbtn" :disabled="historyReplayStatus.pickTimeConfirmed" @click="on_timePickedConfirmed">确认回放</a-button>
+        <a-button type="primary" style="margin-left: auto;" :disabled="historyReplayStatus.pickTimeConfirmed" @click="on_timePickedConfirmed">确认回放</a-button>
       </div>
 
       <div class="tool-box">
@@ -62,7 +58,7 @@
           </a-select>
         </div>
 
-        <a-button class="rtbtn" style="margin-right: 10px" type="primary" :disabled="!historyReplayStatus.initializedUA || historyReplayStatus.playing" @click="on_reqeuestDBInfo"> 获取此刻任务数据 </a-button>
+        <a-button class="rtbtn" style="margin-left: auto" type="primary" :disabled="!historyReplayStatus.initializedUA || historyReplayStatus.playing" @click="on_reqeuestDBInfo"> 获取此刻任务数据 </a-button>
         <a-button type="primary" @click="on_quit">退出回放</a-button>
       </div>
 
@@ -81,11 +77,6 @@ import "./index.scss";
 import dayjs from "dayjs";
 import type { Dayjs } from "dayjs";
 
-import { Slider as ASlider } from "ant-design-vue";
-import { RangePicker as ARangePicker } from "ant-design-vue";
-import { Select as ASelect } from "ant-design-vue";
-import { Button as AButton } from "ant-design-vue";
-import { Tooltip as ATooltip } from "ant-design-vue";
 import { CaretRightOutlined } from "@ant-design/icons-vue";
 import { DoubleLeftOutlined } from "@ant-design/icons-vue";
 import { DoubleRightOutlined } from "@ant-design/icons-vue";
@@ -187,7 +178,6 @@ defineExpose({
       );
       resizeCallback();
       window.addEventListener("resize", resizeCallback);
-
       const tooltipAdd = document.createElement("div");
       extraDoms.tooltipAdd = tooltipAdd;
       sliderDom.appendChild(tooltipAdd);
