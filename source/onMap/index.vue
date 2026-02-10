@@ -1,5 +1,5 @@
 <template>
-  <a-config-provider :theme="{ algorithm: theme.defaultAlgorithm }" :component-size="'small'">
+  <a-config-provider :theme="{ algorithm: theme.defaultAlgorithm }" :component-size="'small'" :locale="zhCN">
     <div id="gui-container">
       <!-- 遮罩 -->
       <div id="gui-mask" />
@@ -15,6 +15,10 @@
 <script setup lang="ts">
 import "./index.scss";
 import { theme } from "ant-design-vue";
+import zhCN from "ant-design-vue/es/locale/zh_CN";
+import dayjs from "dayjs";
+import "dayjs/locale/zh-cn";
+dayjs.locale("zh-cn");
 
 /////////////////////////////////// 将 Ant-Design-Vue 计算的颜色变量注入到RootCss ///////////////////////////////////
 import { injectRootCssVars } from "@source/themes/injectRootCss";

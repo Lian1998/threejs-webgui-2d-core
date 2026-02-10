@@ -149,17 +149,10 @@ defineExpose({
   onOpenInfoCard: async (data: any) => {
     if (!opened) {
       opened = true;
-      // 强制修改样式
       const father = (pageRef.value as HTMLDivElement).parentNode as HTMLDivElement;
-      father.style.position = "absolute";
-      father.style.left = "50%";
-      father.style.top = "5px";
-      father.style.transform = "translateX(-50%)";
 
       // 去除弹框头的移动监听
       const headerElement: HTMLDivElement = father.firstElementChild as HTMLDivElement;
-      const title = headerElement.querySelector(".title") as HTMLDivElement;
-      title.innerHTML = "历史回放";
       if (headerElement["callback_mousedown"]) {
         headerElement.style.cursor = "unset";
         headerElement.removeEventListener("mousedown", headerElement["callback_mousedown"]);
@@ -216,5 +209,6 @@ defineExpose({
     }
   },
   onCloseInfoCard: () => {},
+  setTitle: () => "历史回放",
 } as InfoCardDefaultSlot);
 </script>

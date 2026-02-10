@@ -1,3 +1,12 @@
+.gui-infocard:has(.hostory-replay-page) {
+  top: 10px;
+  left: 50% !important;
+  transform: translateX(-50%) translateY(-20px) !important;
+}
+.gui-infocard.active:has(.hostory-replay-page) {
+  transform: translateX(-50%) translateY(0px) !important;
+}
+
 .hostory-replay-page {
   width: 1000px;
 

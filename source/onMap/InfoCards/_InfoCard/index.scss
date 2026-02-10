@@ -1,3 +1,5 @@
+@use "./ext-animation";
+
 // 弹窗自身样式
 .gui-infocard {
   pointer-events: none;
@@ -41,5 +43,3 @@
   pointer-events: auto;
   visibility: visible;
 }
-
-@import "./ext-animation";

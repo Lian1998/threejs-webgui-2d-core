@@ -3,10 +3,8 @@
  */
 
 $global: true; // 是否局限于 gui-infocard 内
-$transitionDuration: 0.18s; // 过渡效果持续时间
 $enableAntTransition: true; // 是否开启AntDesign子组件的动画
-
-$scope: if($global, ".ant-tabs", ".gui-infocard > .ant-tabs");
+$transitionDuration: var(--ant-motion-duration-mid); // 过渡效果持续时间
 
 .gui-infocard {
   opacity: 0;
@@ -25,7 +23,7 @@ $scope: if($global, ".ant-tabs", ".gui-infocard > .ant-tabs");
 }
 
 @if $enableAntTransition {
-  #{$scope} {
+  .gui-infocard > .ant-tabs {
     .ant-tabs-nav {
       .ant-tabs-nav-wrap {
         .ant-tabs-nav-list {
@@ -53,7 +51,7 @@ $scope: if($global, ".ant-tabs", ".gui-infocard > .ant-tabs");
     }
   }
 } @else {
-  #{$scope} {
+  .gui-infocard > .ant-tabs {
     .ant-tabs-nav {
       .ant-tabs-nav-wrap {
         .ant-tabs-nav-list {
