@@ -65,7 +65,7 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
     const { pickid, object3d } = this.picker.pick(scene, camera, mousePosition.x, mousePosition.y);
 
     let feature = undefined;
-    feature = object3d?.userData?.gpuPickManager?.feature;
+    feature = object3d?.userData?.[GpuPickManager.className]?.feature;
 
     inspected.featurePointer = feature;
 

@@ -1,7 +1,6 @@
 import * as THREE from "three";
 
-import { USER_DATA_KEY } from "./GpuPickManager";
-import type { GpuPickManagerUserData } from "./GpuPickManager";
+import { GpuPickManager } from "./GpuPickManager";
 
 import { insertUniformBeforeMain } from "@core/utils/shader_insertUniformBeforeMain";
 import { appendAfterLastFragColor } from "@core/utils/shader_appendAfterLastFragColor";
@@ -15,7 +14,7 @@ const shaderCache: Record<string, { vertexShader?: string; fragmentShader?: stri
  * @param {THREE.Material} materialOut 用于渲染PickBuffer的材质
  */
 export const trans2PickBufferMaterial = (meshLike: THREE.Object3D, materialIn: THREE.Material, materialOut: THREE.Material) => {
-  const userData = meshLike.userData[USER_DATA_KEY] as GpuPickManagerUserData;
+  const userData = meshLike.userData[GpuPickManager.className] as ReturnType<GpuPickManager["genUserData"]>;
   materialOut.defines["USE_PICK_BUFFER"] = 1;
   materialOut.onBeforeCompile = (shaderObject: THREE.WebGLProgramParametersWithUniforms) => {
     shaderObject.uniforms["uPickColor"] = userData.uniforms.uPickColor;

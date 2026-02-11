@@ -73,7 +73,7 @@ export class AGV implements GpuPickFeature {
     picker.register(agvLabel);
     for (const key of Object.keys(this.pool)) {
       picker.register(this.pool[key]);
-      this.pool[key].userData.gpuPickManager.feature = this;
+      this.pool[key].userData[GpuPickManager.className].feature = this;
     }
   }
 

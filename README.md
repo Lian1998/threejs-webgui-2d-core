@@ -73,8 +73,9 @@
 2. 一键点击, 从二维贴图模式切换到三维模型场景
 3. 绘制集装箱列优化 https://threejs.org/manual/?q=Geometry#en/voxel-geometry
 
-# 问题修复日志
+# 日志
 
+## 问题修复日志(before 2026-02-06)
 ```log
 GpuPickManager在渲染pickBuffer时判断遗漏;
 解决措施:
@@ -82,7 +83,7 @@ GpuPickManager在渲染pickBuffer时判断遗漏;
 
 GpuPickManager在渲染完pickBuffer后, 准备恢复场景容器中被临时替换为pickBufferMaterial的Object3D阶段中缺少缓存机制; 
 解决措施:
-  添加缓存容器_originVisiableSet, 在遍历所有Object3D替换pickBufferMaterial时候顺便统计所有可见但并未注册到PickManager的Mesh, 渲染完pickBuffer后通过此容器恢复
+  添加缓存容器_originVisibleSet, 在遍历所有Object3D替换pickBufferMaterial时候顺便统计所有可见但并未注册到PickManager的Mesh, 渲染完pickBuffer后通过此容器恢复
 
 Sprite2D的fragmentShader中对透明像素直接discard片元导致毛边效果; 
 解决措施: 
@@ -114,12 +115,20 @@ MeshLine使用SpectorJs监视drawcall, 渲染效率存在问题;
   新增一种断点技术, 将多个段的数据融合成一段, 并将每段的起始点和结束点冗余处理, 并通过一位的attribute(lineBreakpoint)标记这些冗余顶点, 在fragmentShader中对存在标记的冗余顶点的面进行舍弃片元处理; 公网上对这种技术叫做 Degenerate Segment 我这里做了一点改进
 ```
 
-# TODO-LIST(2026-02-06)
-1. 堆场位置录入
-2. ASC生成
-3. nodejs解历史回放录像包
-4. 号码绘制(寻找更优质的文字渲染方案)
+## TODO-LIST(2026-02-06)
+1. 以钦州项目位置为基准
+   1. 堆场位置录入
+   2. STS/AGV/ASC生成
+2. AntDesignVueUI引入项目, 弹窗组件移植, 历史回放组件移植
+3. 颜色配置管理器, 读取颜色配置管理器配置, 颜色动态切换
+4. 号码绘制(更优质的文字渲染方案)
 5. Sprite2D合批渲染
 6. Sprite2D合批渲染拾取测试优化
-7. 动画插值
-8. 颜色切换
+7. 根据历史回放数据, 编写动画插值思路
+
+## TODO-LIST(2026-02-12)
+按照AI回答内容优化GpuPickManager
+1. `samples: 4` 不安全
+2. renderer 状态保存不完整
+3. register 直接修改 object.userData 污染外部对象, 数据不会自动同步, 删除 object 时无清理逻辑 **并且由于双视口选中我自己也认为是不妥的???**, 使用 WeakMap 存储所有状态
+4. pickScene 分离; 用 `Set` 或者 `Threejs.Layers` 或 `单独的Three.Scene` 统计所有注册进来的 Object3D

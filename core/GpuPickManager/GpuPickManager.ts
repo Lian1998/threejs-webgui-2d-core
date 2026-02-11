@@ -7,28 +7,6 @@ import { trans2PickBufferMaterial } from "./trans2PickBufferMaterial";
 
 import { channel } from "./debug/";
 
-export const USER_DATA_KEY = "gpuPickManager";
-
-export type GpuPickManagerUserData = {
-  originMaterial: THREE.Material | THREE.Material[];
-  pickBufferMaterial: THREE.Material | THREE.Material[];
-  uniforms: {
-    uPickColor: { value: THREE.Color };
-  };
-};
-
-const genUserData = (): GpuPickManagerUserData => {
-  return {
-    originMaterial: undefined,
-    pickBufferMaterial: undefined,
-    uniforms: {
-      uPickColor: {
-        value: new THREE.Color(),
-      },
-    },
-  };
-};
-
 import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
 /**
  * GpuPickManager 是一个基于 GPU 离屏渲染(RenderTarget)颜色编码 实现的 Three.js 物体拾取管理器;
@@ -40,6 +18,7 @@ import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
  * 3. 基于颜色编码, 理论支持 16,777,215 个对象;
  */
 export class GpuPickManager extends WithClassInstanceMap(Object) {
+  static readonly className = "GpuPickManager";
   renderer: THREE.WebGLRenderer;
   PositiveMap: Map<number, THREE.Object3D> = new Map(); // pickid => object3d
   NegativeMap: WeakMap<THREE.Object3D, number> = new WeakMap(); // object3d => pickid
@@ -57,7 +36,7 @@ export class GpuPickManager extends WithClassInstanceMap(Object) {
       magFilter: THREE.NearestFilter,
       format: THREE.RGBAFormat,
       type: THREE.UnsignedByteType,
-      samples: 4,
+      samples: 0,
       depthBuffer: true,
       stencilBuffer: false,
       colorSpace: THREE.NoColorSpace,
@@ -80,37 +59,36 @@ export class GpuPickManager extends WithClassInstanceMap(Object) {
     if (!object3d) return 0;
     if (this.NegativeMap.has(object3d)) return this.NegativeMap.get(object3d); // 如果已经注册过了
 
-    // 如果还没有注册过
     let count = 1;
     if ((object3d as THREE.InstancedMesh).isInstancedMesh) count = (object3d as THREE.InstancedMesh).count; // 如果是instancedMesh 需要将当前计数一并传入
-    const pickid = this._allocIdRange(count); // 获取当前排位的id
-    const pickColorArr = encodeIdToRGB(pickid); // 将id转化成颜色数组
-    object3d.userData[USER_DATA_KEY] = genUserData(); // 生成一个userData的数据模型
+    const pickid = this._allocIdRange(count); // 对于Mesh来说是pickId, 对于InstancedMesh来说是startCount
+    object3d.userData[GpuPickManager.className] = this.genUserData(); // 生成一个userData的数据模型
     const meshLike = object3d as THREE.Mesh | THREE.InstancedMesh;
-    const userData = meshLike.userData[USER_DATA_KEY] as GpuPickManagerUserData;
-    userData.uniforms.uPickColor.value.setRGB(pickColorArr[0], pickColorArr[1], pickColorArr[2]); // 缓存颜色需要在编译阶段将此Color传递给shader对象
+    const userData = meshLike.userData[GpuPickManager.className] as ReturnType<typeof this.genUserData>;
     userData.originMaterial = meshLike.material; // 缓存初始材质
-    if (!userData.originMaterial) throw new Error("请在注册object3d到GpuPickManager前为其添加材质"); // 在注册object3d到此类时必须保证其拥有基础材质
+    if (!userData.originMaterial) throw new Error("GpuPickManager注册前请绑定渲染材质"); // 在注册object3d到此类时必须保证其拥有基础材质
 
     // Mesh
     if ((meshLike as THREE.Mesh).isMesh) {
       const material = userData.originMaterial as THREE.Material;
+
+      // 生成 Uniforms.uPickColor
+      const pickColorArr = encodeIdToRGB(pickid); // 将id转化成颜色数组
+      userData.uniforms.uPickColor.value = new THREE.Color();
+      userData.uniforms.uPickColor.value.setRGB(pickColorArr[0], pickColorArr[1], pickColorArr[2]); // 缓存颜色需要在编译阶段将此Color传递给shader对象
+
       const pickBufferMaterial = material.clone();
-      userData.pickBufferMaterial = pickBufferMaterial;
       trans2PickBufferMaterial(meshLike, material, pickBufferMaterial);
+      userData.pickBufferMaterial = pickBufferMaterial;
     }
 
     // InstancedMesh
     else if ((meshLike as THREE.InstancedMesh).isInstancedMesh) {
-      const materials = meshLike.material as THREE.Material[];
-      const pickBufferMaterials: THREE.Material[] = [];
-      for (let i = 0; i < materials.length; i++) {
-        const material = materials[i];
-        const pickBufferMaterial = material.clone();
-        pickBufferMaterials.push(pickBufferMaterial);
-        trans2PickBufferMaterial(meshLike, material, pickBufferMaterial);
-      }
-      userData.pickBufferMaterial = pickBufferMaterials;
+    }
+
+    // Others
+    else {
+      throw new Error("GpuPickManager 仅支持 Mesh 和 InstancedMesh");
     }
 
     // 设置Map
@@ -215,21 +193,40 @@ export class GpuPickManager extends WithClassInstanceMap(Object) {
 
   /////////////////// 材质替换 //////////////////
 
-  private _originVisiableSet = new Set<THREE.Object3D>();
+  private _originVisibleSet = new Set<THREE.Object3D>();
+
+  /** 生成注册后类的相关信息 */
+  private genUserData = (): {
+    originMaterial: THREE.Material | THREE.Material[];
+    pickBufferMaterial: THREE.Material | THREE.Material[];
+    uniforms: { uPickColor: { value: THREE.Color } };
+    attributes: { aPickColor: THREE.BufferAttribute };
+    feature: any;
+    features: any[];
+  } => {
+    return {
+      originMaterial: undefined,
+      pickBufferMaterial: undefined,
+      uniforms: { uPickColor: { value: undefined } },
+      attributes: { aPickColor: undefined },
+      feature: undefined,
+      features: [],
+    };
+  };
 
   /** 遍历场景树将所有注册的物体的材质替换为pickBuffer渲染所需要的材质 */
   private _swapMaterials(root: THREE.Object3D) {
-    this._originVisiableSet.clear();
+    this._originVisibleSet.clear();
     root.traverseVisible((child) => {
-      if (!child.type.toLowerCase().includes("mesh")) return;
+      if (!((child as THREE.Mesh).isMesh || (child as THREE.InstancedMesh).isInstancedMesh)) return;
       const pickid = this.NegativeMap.get(child);
       if (!pickid) {
-        this._originVisiableSet.add(child);
+        this._originVisibleSet.add(child);
         child.visible = false; // 标记为未注册, 不需要渲染到pickBuffer
         return;
       }
       const meshLike = child as THREE.Mesh | THREE.InstancedMesh;
-      const userData = meshLike.userData[USER_DATA_KEY] as GpuPickManagerUserData;
+      const userData = meshLike.userData[GpuPickManager.className] as ReturnType<typeof this.genUserData>;
       meshLike.material = userData.pickBufferMaterial;
     });
   }
@@ -237,15 +234,15 @@ export class GpuPickManager extends WithClassInstanceMap(Object) {
   /** 遍历场景树将所有注册的物体的材质替换回pickBuffer渲染所需要的材质 */
   private _restoreMaterial(root: THREE.Object3D) {
     root.traverse((child) => {
-      if (!child.type.toLowerCase().includes("mesh")) return;
+      if (!((child as THREE.Mesh).isMesh || (child as THREE.InstancedMesh).isInstancedMesh)) return;
       const pickid = this.NegativeMap.get(child);
       if (!pickid) return;
       const meshLike = child as THREE.Mesh | THREE.InstancedMesh;
-      const userData = meshLike.userData[USER_DATA_KEY] as GpuPickManagerUserData;
+      const userData = meshLike.userData[GpuPickManager.className] as ReturnType<typeof this.genUserData>;
       meshLike.material = userData.originMaterial;
     });
 
-    for (const child of this._originVisiableSet) {
+    for (const child of this._originVisibleSet) {
       child.visible = true; // 如果在上次渲染pickBuffer时被标记为未注册, 恢复其visible状态
     }
   }
