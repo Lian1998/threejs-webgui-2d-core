@@ -30,10 +30,19 @@ const genUserData = (): GpuPickManagerUserData => {
 };
 
 import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
+/**
+ * GpuPickManager 是一个基于 GPU 离屏渲染(RenderTarget)颜色编码 实现的 Three.js 物体拾取管理器;
+ * **其核心思想是: 将每个已注册的 Object3D 映射为唯一的颜色值, 通过渲染到专用缓冲区并读取像素颜色, 从而反向解析得到被点击的对象;**
+ * > 该类适用于需要高性能, 支持复杂材质与实例化网格(InstancedMesh)的场景拾取;
+ *
+ * 1. 支持 Mesh 与 InstancedMesh;
+ * 2. 可用于复杂 shader / 自定义材质场景;
+ * 3. 基于颜色编码, 理论支持 16,777,215 个对象;
+ */
 export class GpuPickManager extends WithClassInstanceMap(Object) {
   renderer: THREE.WebGLRenderer;
-  PosMap: Map<number, THREE.Object3D> = new Map(); // pickid => object3d
-  NegMap: WeakMap<THREE.Object3D, number> = new WeakMap(); // object3d => pickid
+  PositiveMap: Map<number, THREE.Object3D> = new Map(); // pickid => object3d
+  NegativeMap: WeakMap<THREE.Object3D, number> = new WeakMap(); // object3d => pickid
   rt: THREE.WebGLRenderTarget;
 
   constructor(renderer: THREE.WebGLRenderer) {
@@ -63,21 +72,20 @@ export class GpuPickManager extends WithClassInstanceMap(Object) {
   }
 
   /**
-   * 注册一个Threejs的Object3D
+   * 注册一个需要拾取的图元
    * @param {THREE.Object3D} object3d 需要被注册的object3d
    * @returns pickid
    */
   register(object3d: THREE.Object3D): number {
-    // 如果已经注册过了
     if (!object3d) return 0;
-    if (this.NegMap.has(object3d)) return this.NegMap.get(object3d);
+    if (this.NegativeMap.has(object3d)) return this.NegativeMap.get(object3d); // 如果已经注册过了
 
     // 如果还没有注册过
     let count = 1;
     if ((object3d as THREE.InstancedMesh).isInstancedMesh) count = (object3d as THREE.InstancedMesh).count; // 如果是instancedMesh 需要将当前计数一并传入
     const pickid = this._allocIdRange(count); // 获取当前排位的id
     const pickColorArr = encodeIdToRGB(pickid); // 将id转化成颜色数组
-    object3d.userData[USER_DATA_KEY] = genUserData(); // 生成一个缓存
+    object3d.userData[USER_DATA_KEY] = genUserData(); // 生成一个userData的数据模型
     const meshLike = object3d as THREE.Mesh | THREE.InstancedMesh;
     const userData = meshLike.userData[USER_DATA_KEY] as GpuPickManagerUserData;
     userData.uniforms.uPickColor.value.setRGB(pickColorArr[0], pickColorArr[1], pickColorArr[2]); // 缓存颜色需要在编译阶段将此Color传递给shader对象
@@ -106,12 +114,20 @@ export class GpuPickManager extends WithClassInstanceMap(Object) {
     }
 
     // 设置Map
-    this.PosMap.set(pickid, object3d);
-    this.NegMap.set(object3d, pickid);
+    this.PositiveMap.set(pickid, object3d);
+    this.NegativeMap.set(object3d, pickid);
 
     return pickid;
   }
 
+  /**
+   * 渲染buffer并拾取出定义的物体信息
+   * @param {THREE.Object3D} scene SceneGraph
+   * @param camera 相机
+   * @param clientX 光标在viewport中的x坐标
+   * @param clientY 光标在viewport中的y坐标
+   * @returns
+   */
   pick(scene: THREE.Object3D, camera: THREE.Camera, clientX: number, clientY: number) {
     console.time(`GPUPickManager.pick render pickBuffer`);
 
@@ -146,7 +162,7 @@ export class GpuPickManager extends WithClassInstanceMap(Object) {
     console.timeEnd(`GPUPickManager.pick render pickBuffer`);
 
     // 通过映射表找到提取的object3d
-    return { pickid: pickid, object3d: this.PosMap.get(pickid) };
+    return { pickid: pickid, object3d: this.PositiveMap.get(pickid) };
   }
 
   /////////////////// 视口状态 //////////////////
@@ -154,10 +170,9 @@ export class GpuPickManager extends WithClassInstanceMap(Object) {
   rendererStatus = {
     size: new THREE.Vector2(),
     dpr: 0.0,
-    rt: { width: window.innerWidth, height: window.innerHeight },
+    rt: { width: 0.0, height: 0.0 },
   };
-
-  /** 视口发生变化时调用, 用于重算监听渲染画布的变化 */
+  /** 重算离线渲染的画布大小  */
   syncRendererStatus(width?: number, height?: number) {
     const size = this.rendererStatus.size;
     if (!this.renderer) throw new Error("请指定 GpuPickManager 的 renderer");
@@ -207,7 +222,7 @@ export class GpuPickManager extends WithClassInstanceMap(Object) {
     this._originVisiableSet.clear();
     root.traverseVisible((child) => {
       if (!child.type.toLowerCase().includes("mesh")) return;
-      const pickid = this.NegMap.get(child);
+      const pickid = this.NegativeMap.get(child);
       if (!pickid) {
         this._originVisiableSet.add(child);
         child.visible = false; // 标记为未注册, 不需要渲染到pickBuffer
@@ -223,7 +238,7 @@ export class GpuPickManager extends WithClassInstanceMap(Object) {
   private _restoreMaterial(root: THREE.Object3D) {
     root.traverse((child) => {
       if (!child.type.toLowerCase().includes("mesh")) return;
-      const pickid = this.NegMap.get(child);
+      const pickid = this.NegativeMap.get(child);
       if (!pickid) return;
       const meshLike = child as THREE.Mesh | THREE.InstancedMesh;
       const userData = meshLike.userData[USER_DATA_KEY] as GpuPickManagerUserData;
@@ -239,8 +254,8 @@ export class GpuPickManager extends WithClassInstanceMap(Object) {
 
   /** 向brodcastChannel发送消息 */
   private async _sendDebugFrame() {
-    const width = Math.floor(this.rendererStatus.size.width);
-    const height = Math.floor(this.rendererStatus.size.height);
+    const width = this.rendererStatus.rt.width;
+    const height = this.rendererStatus.rt.height;
     const buffer = new Uint8Array(width * height * 4);
     this.renderer.readRenderTargetPixels(this.rt, 0, 0, width, height, buffer);
     const imageData = new ImageData(new Uint8ClampedArray(buffer), width, height);

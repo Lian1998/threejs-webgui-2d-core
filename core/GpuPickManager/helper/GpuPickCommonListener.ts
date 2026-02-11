@@ -9,7 +9,7 @@ import throttle from "@libs/lodash/src/throttle";
  */
 export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
   picker: GpuPickManager;
-  scene: THREE.Scene;
+  scene: THREE.Object3D;
   camera: THREE.Camera;
 
   mousePosition = { x: 0.0, y: 0.0, clientX: 0.0, clientY: 0.0 };
@@ -20,7 +20,7 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
    * @param scene THREE.Scene
    * @param camera THREE.Camera
    */
-  register(picker: GpuPickManager, scene: THREE.Scene = undefined, camera: THREE.Camera = undefined) {
+  register(picker: GpuPickManager, scene: THREE.Object3D = undefined, camera: THREE.Camera = undefined) {
     if (picker && picker.renderer && picker.renderer.domElement) {
       const oldDomElement = picker.renderer.domElement.parentElement; // OrbitControl会拦canvas的PoinerDown事件以阻止冒泡
       if (oldDomElement) {

@@ -25,7 +25,6 @@ import { GpuPickManager } from "@core/GpuPickManager/";
 import { GpuPickCommonListener } from "@core/GpuPickManager/";
 const picker = new GpuPickManager(renderer);
 viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => picker.syncRendererStatus(width, height));
-const pickerHelper = new GpuPickCommonListener(picker, scene, orthoCamera);
 
 //////////////////////////////////////// 光标坐标定位提示 ////////////////////////////////////////
 
@@ -107,6 +106,7 @@ await ColorPaletteManager.instance.initialization();
 const group1 = new THREE.Group();
 group1.layers.set(1);
 scene.add(group1);
+new GpuPickCommonListener(picker, group1, orthoCamera);
 
 import { STS } from "@source/classes/Devices/STS";
 import { AGV } from "@source/classes/Devices/AGV";
