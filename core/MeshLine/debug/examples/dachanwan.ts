@@ -81,7 +81,7 @@ scene.add(group0);
 
 {
   const _resolution = new THREE.Vector2(width, height);
-  viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
+  viewportResizeDispatcher.addResizeEventListener(({ message: { rwidth, rheight } }) => _resolution.set(rwidth, rheight));
 
   // 线
   {

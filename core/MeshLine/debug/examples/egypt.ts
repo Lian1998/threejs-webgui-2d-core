@@ -81,7 +81,7 @@ scene.add(group0);
 
 {
   const _resolution = new THREE.Vector2(width, height);
-  viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
+  viewportResizeDispatcher.addResizeEventListener(({ message: { rwidth, rheight } }) => _resolution.set(rwidth, rheight));
 
   // 线
   {
@@ -206,7 +206,7 @@ scene.add(group0);
         .fetch("/mapshaper-egypt/08_zebra.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseShadow: 1, uShadowArray: [1, 4] });
+          handleMapShaperFile(data, { uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseShadow: 1, uShadowArray: [1.0, 4.0] });
         }),
     ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
   }

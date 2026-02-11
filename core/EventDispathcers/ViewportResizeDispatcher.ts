@@ -2,7 +2,16 @@ import * as THREE from "three";
 import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
 
 type TEventMap = {
-  resize: { type: "resize"; message: { viewportElement: HTMLElement; width: number; height: number } };
+  resize: {
+    type: "resize";
+    message: {
+      viewportElement: HTMLElement;
+      width: number;
+      height: number;
+      rwidth: number;
+      rheight: number;
+    };
+  };
 };
 
 /**
@@ -10,26 +19,32 @@ type TEventMap = {
  * [window.ResizeObserver](https://developer.mozilla.org/zh-CN/docs/Web/API/ResizeObserver)
  */
 export class ViewportResizeDispatcher extends WithClassInstanceMap(THREE.EventDispatcher<TEventMap>) {
-  viewportElement: HTMLElement; // 当前监听的视口
-  width: number; // 上一次变化记录的宽度
-  height: number; // 上一次变化记录的高度
+  viewportElement: TEventMap["resize"]["message"]["viewportElement"] = undefined;
+  message: TEventMap["resize"]["message"] = {
+    viewportElement: undefined,
+    width: 0.0,
+    height: 0.0,
+    rwidth: 0.0,
+    rheight: 0.0,
+  };
 
   constructor(viewportElement: HTMLElement) {
     super();
 
+    this.message.viewportElement = viewportElement;
     this.viewportElement = viewportElement;
 
     // https://developer.mozilla.org/zh-CN/docs/Web/API/ResizeObserver
     const resizeObserver = new window.ResizeObserver((entries) => {
       const { width, height } = entries[0].contentRect; // 将需要的属性注册到类内部进行缓存
-      this.width = width;
-      this.height = height;
+      this.message.width = width;
+      this.message.height = height;
+      const dpr = window.devicePixelRatio;
+      this.message.rwidth = Math.floor(width * dpr);
+      this.message.rheight = Math.floor(height * dpr);
 
       // 这里手动触发一次对所有监听回调函数触发
-      this.dispatchEvent({
-        type: "resize",
-        message: { viewportElement: this.viewportElement, width: this.width, height: this.height },
-      });
+      this.dispatchEvent({ type: "resize", message: this.message });
     });
     resizeObserver.observe(viewportElement);
   }
@@ -42,10 +57,7 @@ export class ViewportResizeDispatcher extends WithClassInstanceMap(THREE.EventDi
     this.addEventListener("resize", listener);
 
     try {
-      this.dispatchEvent({
-        type: "resize",
-        message: { viewportElement: this.viewportElement, width: this.width, height: this.height },
-      });
+      this.dispatchEvent({ type: "resize", message: this.message });
     } catch (err) {}
   }
 }
