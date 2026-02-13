@@ -25,7 +25,7 @@ type Constructor<T = {}> = abstract new (...args: any[]) => T;
 export const WithClassInstanceMap = <TBase extends Constructor>(Base: TBase) => {
   abstract class WithInstanceMap extends Base {
     private static sequence = 1;
-    private static classInstanceMap: Map<any, WithInstanceMap> = new Map();
+    static classInstanceMap: Map<any, WithInstanceMap> = new Map();
 
     constructor(...args: any[]) {
       super(...args);
@@ -48,6 +48,12 @@ export const WithClassInstanceMap = <TBase extends Constructor>(Base: TBase) => 
 
     static getClassInstance<T>(key: any = "default") {
       return this.classInstanceMap.get(key) as T;
+    }
+
+    static getSequence(_instance: ThisType<WithInstanceMap>): any {
+      for (const [key, instance] of this.classInstanceMap) {
+        if (instance === _instance) return key;
+      }
     }
   }
 

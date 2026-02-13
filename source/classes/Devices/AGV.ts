@@ -1,19 +1,20 @@
 import * as THREE from "three";
 import { GpuPickManager } from "@core/GpuPickManager/";
 import { GpuPickFeature } from "@core/GpuPickManager/";
-import LayerSequence from "@source/classes/LayerSequence";
+import { ThreejsRenderOrder } from "@source/inMap/index";
 import { SDFText2D } from "@core/index";
 import { Sprite2D } from "@core/index";
 import { calculateMPP } from "@source/inMap/utils/ratio";
 import { orthoCamera } from "@source/inMap/viewport";
-import { defaultZoom } from "@source/inMap/viewport";
 import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
+import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
 
 const texture_agvBase = await new THREE.TextureLoader().loadAsync("/resources/AGV_Base.png");
 const texture_agvHeader = await new THREE.TextureLoader().loadAsync("/resources/AGV_Header.png");
 
 /** Automated Guided Vehicle 自动导引运输车 */
 export class AGV implements GpuPickFeature {
+  isGpuPickFeature: true;
   code: string = "";
   static codeSelected = undefined;
   pool: Record<string, THREE.Mesh> = {};
@@ -25,14 +26,14 @@ export class AGV implements GpuPickFeature {
     const agvBase = new Sprite2D({
       texture: texture_agvBase,
       mpp: calculateMPP(15, 2330),
-      renderOrder: LayerSequence.AGV_Base,
+      renderOrder: ThreejsRenderOrder.AGV_BASE,
       color: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
     });
 
     const agvHeader = new Sprite2D({
       texture: texture_agvHeader,
       mpp: calculateMPP(15, 2330),
-      renderOrder: LayerSequence.AGV_Header,
+      renderOrder: ThreejsRenderOrder.AGV_HEADER,
     });
 
     const agvLabelPviot = new THREE.Object3D();
@@ -40,11 +41,11 @@ export class AGV implements GpuPickFeature {
     agvBase.add(agvLabelPviot);
     const agvLabel = new SDFText2D({
       text: this.code,
-      renderOrder: LayerSequence.AGV_LABEL,
+      renderOrder: ThreejsRenderOrder.AGV_LABEL,
     });
     const invQuat = new THREE.Quaternion();
     agvLabel.onBeforeRender = () => {
-      const scale = defaultZoom / orthoCamera.zoom;
+      const scale = MAP_DEFAULT_ZOOM / orthoCamera.zoom;
       const scalar = 0.6 * Math.max(Math.min(scale, 1.0), 1.5);
       agvLabel.scale.setScalar(scalar);
 
@@ -59,7 +60,6 @@ export class AGV implements GpuPickFeature {
     agvBase.geometry.computeBoundingBox();
     agvLabel.geometry.computeBoundingBox();
     agvHeader.geometry.boundingBox = agvBase.geometry.boundingBox.clone();
-    agvBase.traverse((object3D) => object3D.layers.set(1));
 
     // 绑定指针
     this.pool.agvBase = agvBase;
@@ -67,14 +67,7 @@ export class AGV implements GpuPickFeature {
     this.pool.agvLabel = agvLabel;
 
     // 注册拾取
-    const picker = GpuPickManager.getClassInstance<GpuPickManager>();
-    picker.register(agvBase);
-    picker.register(agvHeader);
-    picker.register(agvLabel);
-    for (const key of Object.keys(this.pool)) {
-      picker.register(this.pool[key]);
-      this.pool[key].userData[GpuPickManager.className].feature = this;
-    }
+    for (const key of Object.keys(this.pool)) GpuPickManager.register(this.pool[key], this);
   }
 
   onSelected() {
@@ -103,11 +96,11 @@ export class AGV implements GpuPickFeature {
 
   focused = () => {
     this.pool.agvLabel.material["uniforms"].uBackgroundColor.value.set(0xffff00);
-    this.pool.agvLabel.renderOrder = LayerSequence.ACTIVE_LABEL;
+    this.pool.agvLabel.renderOrder = ThreejsRenderOrder.ACTIVE_LABEL;
   };
 
   unfocused = () => {
     this.pool.agvLabel.material["uniforms"].uBackgroundColor.value.set(0xffffff);
-    this.pool.agvLabel.renderOrder = LayerSequence.AGV_LABEL;
+    this.pool.agvLabel.renderOrder = ThreejsRenderOrder.AGV_LABEL;
   };
 }

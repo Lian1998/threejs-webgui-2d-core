@@ -53,7 +53,7 @@ const manager = new Manager("/socket", {
   autoConnect: false, // 是否自动连接
   reconnection: true, // 是否自动重新连接
   reconnectionAttempts: 3, // 重新连接尝试次数
-  reconnectionDelayMax: 10000, // 重新连接延迟时间（毫秒）
+  reconnectionDelayMax: 10000, // 重新连接延迟时间(毫秒)
   transports: ["websocket"], // 协议
 });
 

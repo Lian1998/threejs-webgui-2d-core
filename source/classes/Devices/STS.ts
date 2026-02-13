@@ -2,13 +2,13 @@ import * as THREE from "three";
 import Tinycolor from "tinycolor2";
 import { GpuPickManager } from "@core/GpuPickManager/";
 import { GpuPickFeature } from "@core/GpuPickManager/";
-import LayerSequence from "@source/classes/LayerSequence";
+import { ThreejsRenderOrder } from "@source/inMap/index";
 import { SDFText2D } from "@core/index";
 import { Sprite2D } from "@core/index";
 import { calculateMPP } from "@source/inMap/utils/ratio";
 import { orthoCamera } from "@source/inMap/viewport";
-import { defaultZoom } from "@source/inMap/viewport";
 import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
+import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
 
 const textrues = {
   STS_Gantry: await new THREE.TextureLoader().loadAsync("/resources/STS_Gantry.png"),
@@ -17,6 +17,7 @@ const textrues = {
 
 /** Ship-to-Shore Crane 岸边集装箱起重机 */
 export class STS implements GpuPickFeature {
+  isGpuPickFeature: true;
   code: string = "";
   static codeSelected = undefined;
   pool: Record<string, THREE.Mesh> = {};
@@ -29,7 +30,7 @@ export class STS implements GpuPickFeature {
     const stsGantry = new Sprite2D({
       texture: textrues.STS_Gantry,
       mpp: calculateMPP(35, 610),
-      renderOrder: LayerSequence.STS_Gantry,
+      renderOrder: ThreejsRenderOrder.STS_GANTRY,
       color: colorRuntime.threejsColor,
     });
 
@@ -38,7 +39,7 @@ export class STS implements GpuPickFeature {
     const stsMT = new Sprite2D({
       texture: textrues.STS_Trolley,
       mpp: calculateMPP(18, 87),
-      renderOrder: LayerSequence.STS_Trolley,
+      renderOrder: ThreejsRenderOrder.STS_TROLLEY,
       color: new THREE.Color(Tinycolor(colorRuntime.tinyColor.getOriginalInput()).darken(10).toHexString()),
     });
     stsMtPviot.add(stsMT);
@@ -48,7 +49,7 @@ export class STS implements GpuPickFeature {
     const stsPT = new Sprite2D({
       texture: textrues.STS_Trolley,
       mpp: calculateMPP(18, 87),
-      renderOrder: LayerSequence.STS_Trolley,
+      renderOrder: ThreejsRenderOrder.STS_TROLLEY,
       color: new THREE.Color(Tinycolor(colorRuntime.tinyColor.getOriginalInput()).darken(10).toHexString()),
     });
     stsPTPviot.add(stsPT);
@@ -57,11 +58,11 @@ export class STS implements GpuPickFeature {
     stsLabelPviot.position.z = 8;
     const stsLabel = new SDFText2D({
       text: this.code,
-      renderOrder: LayerSequence.STS_LABEL,
+      renderOrder: ThreejsRenderOrder.STS_LABEL,
     });
     stsLabelPviot.add(stsLabel);
     stsLabel.onBeforeRender = () => {
-      const scale = defaultZoom / orthoCamera.zoom;
+      const scale = MAP_DEFAULT_ZOOM / orthoCamera.zoom;
       const scalar = Math.max(Math.min(scale, 1.0), 1.5);
       stsLabel.scale.setScalar(scalar);
     };
@@ -73,7 +74,6 @@ export class STS implements GpuPickFeature {
     stsGantry.geometry.computeBoundingBox();
     stsMT.geometry.boundingBox = stsGantry.geometry.boundingBox.clone();
     stsPT.geometry.boundingBox = stsGantry.geometry.boundingBox.clone();
-    stsGantry.traverse((object3D) => object3D.layers.set(1));
 
     // 绑定指针
     this.pool.stsGantry = stsGantry;
@@ -82,14 +82,7 @@ export class STS implements GpuPickFeature {
     this.pool.stsLabel = stsLabel;
 
     // 注册拾取
-    const picker = GpuPickManager.getClassInstance<GpuPickManager>();
-    picker.register(stsGantry);
-    picker.register(stsMT);
-    picker.register(stsPT);
-    for (const key of Object.keys(this.pool)) {
-      picker.register(this.pool[key]);
-      this.pool[key].userData[GpuPickManager.className].feature = this;
-    }
+    for (const key of Object.keys(this.pool)) GpuPickManager.register(this.pool[key], this);
   }
 
   onSelected() {
@@ -118,11 +111,11 @@ export class STS implements GpuPickFeature {
 
   focused = () => {
     this.pool.stsLabel.material["uniforms"].uBackgroundColor.value.set(0xffff00);
-    this.pool.stsLabel.renderOrder = LayerSequence.ACTIVE_LABEL;
+    this.pool.stsLabel.renderOrder = ThreejsRenderOrder.ACTIVE_LABEL;
   };
 
   unfocused = () => {
     this.pool.stsLabel.material["uniforms"].uBackgroundColor.value.set(0xffffff);
-    this.pool.stsLabel.renderOrder = LayerSequence.STS_LABEL;
+    this.pool.stsLabel.renderOrder = ThreejsRenderOrder.STS_LABEL;
   };
 }

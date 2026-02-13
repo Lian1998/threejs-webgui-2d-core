@@ -5,7 +5,7 @@
  * @returns {string} 输出的代码字符串
  */
 export const insertUniformBeforeMain = (shaderCode: string, uniformLine: string): string => {
-  // 匹配 "void main" 前的位置（忽略前面的空格或注释）
+  // 匹配 "void main" 前的位置 (忽略前面的空格或注释)
   const regex = /(^|\n)\s*void\s+main\s*\(/;
 
   const match = shaderCode.match(regex);

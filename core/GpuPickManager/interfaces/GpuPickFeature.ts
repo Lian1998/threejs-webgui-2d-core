@@ -1,4 +1,5 @@
 export interface GpuPickFeature {
+  isGpuPickFeature: true;
   onSelected?: () => void;
   onCancelSelected?: () => void;
   onDoubleClicked?: () => void;

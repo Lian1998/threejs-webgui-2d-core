@@ -48,15 +48,17 @@
     ".scripts/**/*.ts",
     "vite.config.ts",
     "core/**/*.ts",
+    "core/**/*.d.ts",
     "source/**/*.ts",
+    "source/**/*.d.ts",
     ".env/vite-env.d.ts",
-    "libs/three.js-r170/**/*.js",
     "libs/three.js-r170/**/*.js",
     "libs/three-ts-types-r170/**/*.d.ts"
   ],
 
   "types": [
     "./core/index.d.ts",
-    "./source/index.d.ts"
+    "./source/index.d.ts",
+    "libs/three-ts-types-r170/**/*.d.ts"
   ],
 }

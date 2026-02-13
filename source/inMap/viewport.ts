@@ -6,29 +6,18 @@ const MAP_VIEW_SIZE = 300; // 正交相机初始化显示范围
 const viewport = document.querySelector<HTMLDivElement>("#viewport");
 const { width, height } = viewport.getBoundingClientRect();
 const aspect = width / height;
-import { ViewportResizeDispatcher } from "@core/index";
-const viewportResizeDispatcher = new ViewportResizeDispatcher(viewport);
 
-const viewSize = MAP_VIEW_SIZE;
-export const orthoCamera = new THREE.OrthographicCamera(-viewSize * aspect, viewSize * aspect, viewSize, -viewSize, 0.1, 5000);
-viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => {
-  const aspect = width / height;
-  orthoCamera.left = -viewSize * aspect;
-  orthoCamera.right = viewSize * aspect;
-  orthoCamera.top = viewSize;
-  orthoCamera.bottom = -viewSize;
-  orthoCamera.updateProjectionMatrix();
-});
+const orthoCamera = new THREE.OrthographicCamera(-MAP_VIEW_SIZE * aspect, MAP_VIEW_SIZE * aspect, MAP_VIEW_SIZE, -MAP_VIEW_SIZE, 0.1, 5000);
 
 import { MapControls } from "three_addons/controls/MapControls.js";
 const center = new THREE.Vector3(MAP_CENTER[0], 0, MAP_CENTER[1]);
-export const mapControls = new MapControls(orthoCamera, viewport);
+const mapControls = new MapControls(orthoCamera, viewport);
 
 // 视口平滑运动
-// {
-//   mapControls.enableDamping = true;
-//   mapControls.dampingFactor = 0.25;
-// }
+{
+  mapControls.enableDamping = true;
+  mapControls.dampingFactor = 0.25;
+}
 
 // 视口范围
 {
@@ -59,4 +48,10 @@ orthoCamera.updateProjectionMatrix();
   mapControls.update();
 }
 
-export const defaultZoom = orthoCamera.zoom;
+const MAP_DEFAULT_ZOOM = orthoCamera.zoom;
+
+export { MAP_CENTER };
+export { MAP_VIEW_SIZE };
+export { MAP_DEFAULT_ZOOM };
+export { orthoCamera };
+export { mapControls };

@@ -5,57 +5,52 @@ import WebGL from "three_addons/capabilities/WebGL";
 if (!WebGL.isWebGL2Available()) throw new Error("浏览器不支持WebGL2");
 
 const viewport = document.querySelector<HTMLDivElement>("#viewport");
-const { width, height } = viewport.getBoundingClientRect();
-import { ViewportResizeDispatcher } from "@core/index";
-const viewportResizeDispatcher = new ViewportResizeDispatcher(viewport);
-
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: true });
-viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => renderer.setSize(width, height));
 renderer.setClearColor(0xffffff, 0.0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 viewport.appendChild(renderer.domElement);
 
-import { orthoCamera, mapControls, defaultZoom } from "@source/inMap/viewport";
-
 const scene = new THREE.Scene();
+
+import { ViewportResizeDispatcher } from "@core/index";
+new ViewportResizeDispatcher(renderer);
+
+import { orthoCamera } from "@source/inMap/viewport";
+import { MAP_VIEW_SIZE } from "@source/inMap/viewport";
+import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
+
+ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().addResizeEventListener(
+  ({
+    message: {
+      rendererSize: { width, height },
+    },
+  }) => {
+    const aspect = width / height;
+    orthoCamera.left = -MAP_VIEW_SIZE * aspect;
+    orthoCamera.right = MAP_VIEW_SIZE * aspect;
+    orthoCamera.top = MAP_VIEW_SIZE;
+    orthoCamera.bottom = -MAP_VIEW_SIZE;
+    orthoCamera.updateProjectionMatrix();
+  },
+);
 
 //////////////////////////////////////// 图元拾取 ////////////////////////////////////////
 
-import { GpuPickManager } from "@core/GpuPickManager/";
 import { GpuPickCommonListener } from "@core/GpuPickManager/";
-const picker = new GpuPickManager(renderer);
-viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => picker.syncRendererStatus(width, height));
-
-//////////////////////////////////////// 光标坐标定位提示 ////////////////////////////////////////
-
-import { getXZPosition } from "@source/inMap/utils/pointerCoordinates";
-{
-  const pos = { x: 0.0, z: 0.0 };
-
-  const spyEl = document.createElement("div");
-  spyEl.id = "spy";
-  viewport.appendChild(spyEl);
-  ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().viewportElement.addEventListener("mousemove", (e) => {
-    const { x, z } = getXZPosition(e, orthoCamera, renderer);
-    pos.x = x;
-    pos.z = z;
-    spyEl.innerHTML = `${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`;
-  });
-
-  window.addEventListener("keyup", (e) => {
-    if (e.code !== "KeyS") return;
-    console.warn(`${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`);
-  });
-}
+new GpuPickCommonListener(renderer, ThreejsGroups.Devices, orthoCamera);
 
 //////////////////////////////////////// 静态资源(底图)加载 ////////////////////////////////////////
 
-const group0 = new THREE.Group();
-group0.layers.set(0);
-scene.add(group0);
+import { ThreejsGroups } from "@source/inMap/index";
 
-const _resolution = new THREE.Vector2(width, height);
-viewportResizeDispatcher.addResizeEventListener(({ message: { rwidth, rheight } }) => _resolution.set(rwidth, rheight));
+const _resolution = new THREE.Vector2(1.0, 1.0);
+ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().addResizeEventListener(
+  ({
+    message: {
+      rendererSize: { width, height },
+    },
+  }) => _resolution.set(width, height),
+);
 
 import { getMultiLineFromFile } from "@source/inMap/utils/mapshaperHelpers";
 import { MeshLineMaterial } from "@core/MeshLine/";
@@ -65,48 +60,46 @@ import { MeshPolygonMaterial } from "@core/MeshPolygon/";
   getMultiLineFromFile("/mapshaper-qinzhou/01_coastline_and_buildings.json").then((meshLineGeometry) => {
     const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
     const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
-    group0.add(mesh);
+    ThreejsGroups.BaseMap.add(mesh);
   });
   getMultiLineFromFile("/mapshaper-qinzhou/02_rails.json").then((meshLineGeometry) => {
     const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 0.4, uColor: new THREE.Color("rgb(195, 195, 195)") });
     const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
-    group0.add(mesh);
+    ThreejsGroups.BaseMap.add(mesh);
   });
   getMultiLineFromFile("/mapshaper-qinzhou/05_road_edge.json").then((meshLineGeometry) => {
     const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
     const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
-    group0.add(mesh);
+    ThreejsGroups.BaseMap.add(mesh);
   });
   getMultiLineFromFile("/mapshaper-qinzhou/05_road_lane_solid.json").then((meshLineGeometry) => {
     const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(155, 155, 155)") });
     const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
-    group0.add(mesh);
+    ThreejsGroups.BaseMap.add(mesh);
   });
   getMultiLineFromFile("/mapshaper-qinzhou/temple_block.json").then((meshLineGeometry) => {
     const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 2.0, uUseDash: 1, uDashArray: [15, 10], uColor: new THREE.Color("rgb(255, 0, 0)") });
     const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
-    group0.add(mesh);
+    ThreejsGroups.BaseMap.add(mesh);
   });
   getMultiPolygonFromFile("/mapshaper-qinzhou/07_marks.json").then((meshPolygonGeometry) => {
     const meshPolygonMaterial = new MeshLineMaterial({ uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)") });
     const mesh = new THREE.Mesh(meshPolygonGeometry, meshPolygonMaterial);
-    group0.add(mesh);
+    ThreejsGroups.BaseMap.add(mesh);
   });
 }
 
-group0.traverse((mesh) => {
+ThreejsGroups.BaseMap.traverse((mesh) => {
+  mesh.renderOrder = ThreejsRenderOrder.PLACEHOLDER0;
   mesh.frustumCulled = false;
-  mesh.layers.set(0);
 });
+scene.add(ThreejsGroups.BaseMap);
 
 //////////////////////////////////////// 业务代码(设备)逻辑 ////////////////////////////////////////
 import { ColorPaletteManager } from "@source/themes/ColorPaletteManager/";
 await ColorPaletteManager.instance.initialization();
 
-const group1 = new THREE.Group();
-group1.layers.set(1);
-scene.add(group1);
-new GpuPickCommonListener(picker, group1, orthoCamera);
+scene.add(ThreejsGroups.Devices);
 
 import { STS } from "@source/classes/Devices/STS";
 import { AGV } from "@source/classes/Devices/AGV";
@@ -114,8 +107,8 @@ import { ASC } from "@source/classes/Devices/ASC";
 
 import { BlockMap } from "@source/data";
 import { SDFText2D } from "@core/index";
-import LayerSequence from "@source/classes/LayerSequence";
 import { handleYardData } from "@source/data/handleYardData";
+import { ThreejsRenderOrder } from "@source/inMap/index";
 
 const LOGIC_CENTER = [567485.3, -2397835];
 export const coordinateTrans_mm = (x: number, y: number) => [LOGIC_CENTER[0] - x / 1000.0, LOGIC_CENTER[1] + y / 1000.0];
@@ -129,14 +122,14 @@ Promise.all([
       // STS
       for (const itemValue of data[0].itemValue) {
         const sts = new STS(itemValue.cheId);
-        group1.add(sts.pool.stsGantry);
+        ThreejsGroups.Devices.add(sts.pool.stsGantry);
         sts.pool.stsGantry.position.set(567297.0 - itemValue.GantryPos / 100.0, 0.0, STSRailsAnchorY);
       }
 
       // AGV
       for (const itemValue of data[1].itemValue) {
         const agv = new AGV(itemValue.cheId);
-        group1.add(agv.pool.agvBase);
+        ThreejsGroups.Devices.add(agv.pool.agvBase);
         try {
           const positions = coordinateTrans_mm(itemValue.AhtStatus.locationX, itemValue.AhtStatus.locationY);
           agv.pool.agvBase.position.set(positions[0], 0.0, positions[1]);
@@ -161,22 +154,21 @@ Promise.all([
       const inBlockSeq = Number.parseInt(itemValue.cheId.slice(4));
       const centerZ = (startZ + endZ) / 2.0 + Math.random() * ((endZ - startZ) / 2.0) * (inBlockSeq - 1.5) * 2.0;
       const asc = new ASC(itemValue.cheId);
-      group1.add(asc.pool.ascGantry);
+      ThreejsGroups.Devices.add(asc.pool.ascGantry);
       asc.pool.ascGantry.position.set(centerX, 0.0, centerZ);
     }
   })
   .finally(() => {
     // BLOCK NO
     for (const [blockNo, blockItem] of BlockMap) {
-      const blockLabel = new SDFText2D({ text: blockNo, renderOrder: LayerSequence.BLOCK_NO });
+      const blockLabel = new SDFText2D({ text: blockNo, renderOrder: ThreejsRenderOrder.BLOCK_NO });
       (blockLabel.material as THREE.ShaderMaterial).uniforms.uBackgroundAlpha.value = 0.0;
-      blockLabel.layers.set(1);
       const centerX = (blockItem.defs.min[0] + blockItem.defs.max[0]) / 2.0 + blockItem.defs.offset[0];
       const centerZ = (blockItem.defs.min[1] + blockItem.defs.max[1]) / 2.0 + blockItem.defs.offset[1];
       blockLabel.position.set(centerX, 0.0, centerZ);
-      group1.add(blockLabel);
+      ThreejsGroups.Devices.add(blockLabel);
       blockLabel.onBeforeRender = () => {
-        const scale = defaultZoom / orthoCamera.zoom;
+        const scale = MAP_DEFAULT_ZOOM / orthoCamera.zoom;
         const scalar = 1.5 * Math.max(Math.min(scale, 1.0), 1.5);
         blockLabel.scale.setScalar(scalar);
       };
@@ -190,24 +182,37 @@ const clock = new THREE.Clock();
 const animate = () => {
   requestAnimationFrame(animate);
 
-  // qcInstance?.update(clock.getDelta(), clock.getElapsedTime());
-
-  // 渲染地图
-
-  orthoCamera.layers.set(0);
-  renderer.render(scene, orthoCamera);
+  renderer.render(ThreejsGroups.BaseMap, orthoCamera);
 
   renderer.autoClearColor = false;
   renderer.autoClearDepth = true;
   renderer.autoClearStencil = true;
-
-  // 渲染设备
-
-  orthoCamera.layers.set(1);
-  renderer.render(scene, orthoCamera);
+  renderer.render(ThreejsGroups.Devices, orthoCamera);
 };
 
 animate();
+
+//////////////////////////////////////// 光标坐标定位提示 ////////////////////////////////////////
+
+import { getXZPosition } from "@source/inMap/utils/pointerCoordinates";
+{
+  const pos = { x: 0.0, z: 0.0 };
+
+  const spyEl = document.createElement("div");
+  spyEl.id = "spy";
+  viewport.appendChild(spyEl);
+  ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().viewportElement.addEventListener("mousemove", (e) => {
+    const { x, z } = getXZPosition(e, orthoCamera, renderer);
+    pos.x = x;
+    pos.z = z;
+    spyEl.innerHTML = `${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`;
+  });
+
+  window.addEventListener("keyup", (e) => {
+    if (e.code !== "KeyS") return;
+    console.warn(`${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`);
+  });
+}
 
 //////////////////////////////////////// 动态缩放测试 ////////////////////////////////////////
 {
@@ -233,3 +238,8 @@ import "@libs/Spector.js/distt/spector.bundle.js";
 // @ts-ignore
 const spector = new SPECTOR.Spector();
 spector.displayUI();
+
+//////////////////////////////////////// 打印上下文 ////////////////////////////////////////
+
+console.warn("ViewportResizeDispatcher", ViewportResizeDispatcher.classInstanceMap);
+console.warn("GpuPickCommonListener", GpuPickCommonListener.classInstanceMap);

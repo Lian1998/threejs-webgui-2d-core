@@ -167,7 +167,7 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
 
     // this.position => A(a, b, c), A(a, b, c), B(a, b, c), B(a, b, c)
     const l = this.position.length / 6; // 顶点数量
-    let _v: THREE.Vector3Tuple; // 临时变量，用于存放复制的顶点坐标
+    let _v: THREE.Vector3Tuple; // 临时变量, 用于存放复制的顶点坐标
 
     // 第一个点的prev是自身, 第一个线段通过 next - prev 得到方向向量
     _v = this.copyV3(0);

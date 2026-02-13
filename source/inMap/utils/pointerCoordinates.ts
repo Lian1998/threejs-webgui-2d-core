@@ -3,7 +3,7 @@ import * as THREE from "three";
 // 监听鼠标移动
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
-const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0); // 定义地面平面（Y=0）
+const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0); // 定义地面平面(Y=0)
 const pos = new THREE.Vector3();
 
 /**

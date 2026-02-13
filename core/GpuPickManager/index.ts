@@ -1,4 +1,6 @@
 export * from "./GpuPickManager";
+export * from "./GpuPickCommonListener";
+export * from "./interfaces/GpuPickFeature";
 
-export * from "./helper/GpuPickFeature";
-export * from "./helper/GpuPickCommonListener";
+export const DEBUG_PICK_BUFFER_FRAME = true;
+export const DEBUG_PICK_BUFFER_RENDER_PERFORMANCE = true;
