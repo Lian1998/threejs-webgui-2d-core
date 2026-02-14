@@ -50,8 +50,12 @@ export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
     }
 
     const texture = new THREE.Texture(canvas);
-    texture.needsUpdate = true;
     texture.flipY = false;
+    texture.minFilter = THREE.LinearFilter; // THREE.NearestFilter
+    texture.magFilter = THREE.LinearFilter;
+    texture.generateMipmaps = false;
+    texture.format = THREE.RedFormat; // 注意兼容性
+    texture.needsUpdate = true;
 
     this.texture = texture;
     this.renderOrder = renderOrder;

@@ -124,7 +124,7 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
     }
   };
 
-  private onDetect = throttle(this._onDetect, 256, { leading: false, trailing: true });
+  private onDetect = throttle(this._onDetect, 128, { leading: false, trailing: true });
 
   private singleClick = () => {
     const { inspected } = this;
@@ -155,7 +155,7 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
     this.mousePosition.clientY = y;
   };
 
-  private onDomResize = throttle(this._onDomResize, 256, { leading: false, trailing: true });
+  private onDomResize = throttle(this._onDomResize, 128, { leading: false, trailing: true });
 
   private onDomMousemove = (e: MouseEvent) => {
     // 计算局部 canvas 坐标 (相对于 canvas 左上角)

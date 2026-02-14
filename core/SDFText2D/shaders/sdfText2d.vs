@@ -1,7 +1,6 @@
 varying vec2 vUv;
 
 uniform float uScale;
-uniform vec2 uOffset;
 
 void main() {
   vUv = uv;
