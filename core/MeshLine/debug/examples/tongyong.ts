@@ -9,29 +9,29 @@ import * as THREE from "three";
 const viewport = document.querySelector<HTMLDivElement>("#viewport");
 const { width, height } = viewport.getBoundingClientRect();
 const aspect = width / height;
-import { ViewportResizeDispatcher } from "@core/index";
-const viewportResizeDispatcher = new ViewportResizeDispatcher(viewport);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: true, precision: "highp" });
-viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => renderer.setSize(width, height));
 renderer.setClearColor(0xffffff, 0.0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 viewport.appendChild(renderer.domElement);
 
+import { ViewportResizeDispatcher } from "@core/index";
+new ViewportResizeDispatcher(renderer);
+
 const viewSize = MAP_VIEW_SIZE;
-const camera = new THREE.OrthographicCamera(-viewSize * aspect, viewSize * aspect, viewSize, -viewSize, 0.1, 5000);
-viewportResizeDispatcher.addResizeEventListener(({ message: { width, height } }) => {
-  const aspect = width / height;
-  camera.left = -viewSize * aspect;
-  camera.right = viewSize * aspect;
-  camera.top = viewSize;
-  camera.bottom = -viewSize;
-  camera.updateProjectionMatrix();
+const orthoCamera = new THREE.OrthographicCamera(-viewSize * aspect, viewSize * aspect, viewSize, -viewSize, 0.1, 5000);
+ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().addResizeEventListener(({ message: { containerWidth, containerHeight } }) => {
+  const aspect = containerWidth / containerHeight;
+  orthoCamera.left = -MAP_VIEW_SIZE * aspect;
+  orthoCamera.right = MAP_VIEW_SIZE * aspect;
+  orthoCamera.top = MAP_VIEW_SIZE;
+  orthoCamera.bottom = -MAP_VIEW_SIZE;
+  orthoCamera.updateProjectionMatrix();
 });
 
 import { MapControls } from "three_addons/controls/MapControls.js";
 const center = new THREE.Vector3(MAP_CENTER[0], 0, MAP_CENTER[1]);
-const controls = new MapControls(camera, viewport);
+const controls = new MapControls(orthoCamera, viewport);
 
 {
   controls.enableDamping = true;
@@ -40,7 +40,7 @@ const controls = new MapControls(camera, viewport);
 
 {
   controls.enableZoom = true;
-  camera.zoom = 1;
+  orthoCamera.zoom = 1;
   controls.minZoom = 0.5;
   controls.maxZoom = 20;
   controls.zoomSpeed = 1.2;
@@ -54,9 +54,9 @@ const controls = new MapControls(camera, viewport);
 controls.target.copy(center);
 controls.update();
 controls.saveState();
-camera.position.set(center.x, 1000, center.z);
-camera.up.set(0, 1, 0);
-camera.updateProjectionMatrix();
+orthoCamera.position.set(center.x, 1000, center.z);
+orthoCamera.up.set(0, 1, 0);
+orthoCamera.updateProjectionMatrix();
 
 const scene = new THREE.Scene();
 
@@ -81,7 +81,7 @@ scene.add(group0);
 
 {
   const _resolution = new THREE.Vector2(width, height);
-  viewportResizeDispatcher.addResizeEventListener(({ message: { rwidth, rheight } }) => _resolution.set(rwidth, rheight));
+  ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().addResizeEventListener(({ message: { rendererWidth, rendererHeight } }) => _resolution.set(rendererWidth, rendererHeight));
 
   // 线
   {
@@ -109,7 +109,7 @@ scene.add(group0);
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
           // 埃及这里做一个切口用于修改 MeshLineMaterial 在使用世界位置时的处理
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
         }),
 
       window
@@ -200,7 +200,7 @@ import { getXZPosition } from "@source/inMap/utils/pointerCoordinates";
 {
   const coordinatesEl = document.querySelector("#coordinates");
   ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().viewportElement.addEventListener("mousemove", (e) => {
-    const pos = getXZPosition(e, camera, renderer);
+    const pos = getXZPosition(e, orthoCamera, renderer);
     coordinatesEl.innerHTML = `${pos.x.toFixed(2)}, ${pos.z.toFixed(2)}`;
   });
 }
@@ -213,8 +213,8 @@ const animate = () => {
 
   // 渲染地图
 
-  camera.layers.set(0);
-  renderer.render(scene, camera);
+  orthoCamera.layers.set(0);
+  renderer.render(scene, orthoCamera);
 
   renderer.autoClearColor = false;
   renderer.autoClearDepth = true;
