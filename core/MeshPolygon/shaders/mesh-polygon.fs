@@ -5,7 +5,7 @@ uniform float uOpacity;
 uniform vec2 uResolution;
 
 uniform float uUseShadow;         // 是否启用打阴影线的模式
-uniform float uShadowArray[2];    // 阴影间隔 
+uniform vec2 uShadowArray;    // 阴影间隔 
 
 void main() {
 
@@ -16,8 +16,8 @@ void main() {
     vec2 fragPos = gl_FragCoord.xy - vec2(0.5); // fragPos ∈ [0, width-1] × [0, height-1]; 左下角为 0, 0
     // vec2 fragUv = gl_FragCoord.xy / uResolution; // fragUv ∈ [0, 1] × [0, 1]; 归一化到uv, 左下角为 0, 0
 
-    float shadowLength = uShadowArray[0];
-    float gapLength = uShadowArray[1];
+    float shadowLength = uShadowArray.x;
+    float gapLength = uShadowArray.y;
     float period = shadowLength + gapLength;
 
     // 打45°斜线

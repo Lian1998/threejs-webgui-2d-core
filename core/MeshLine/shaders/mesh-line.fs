@@ -5,13 +5,13 @@ precision highp float;
 uniform vec3 uColor;
 uniform float uOpacity;
 uniform vec2 uResolution;
+uniform float uLineWidth;
 
 uniform float uUseDash;         // 是否启用虚线
-uniform float uDashArray[2];
+uniform vec2 uDashArray;
 
 uniform float uUseBox;          // 是否启用小方格线
-uniform float uBoxArray[2];
-uniform float uLineWidth;       // 线宽
+uniform vec2 uBoxArray;
 
 varying vec2 vUv;
 varying float vCounter;
@@ -32,8 +32,8 @@ void main() {
     float offset = dot(cameraPosition, vec3(1.0, 0.0, 1.0)) * 0.05; // 希望视角移动的时候重绘虚线
 
     // 计算每段虚线的实际长度, 直接基于世界空间
-    float dashLength = uDashArray[0];
-    float gapLength = uDashArray[1];
+    float dashLength = uDashArray.x;
+    float gapLength = uDashArray.y;
     float period = dashLength + gapLength;
     float phase = fract(vLineDistance / period) * period;
 
@@ -51,10 +51,10 @@ void main() {
     // diffuseColor *= vec4(vec3(axisYFactor), 1.0); // debug1: 沿线法线的vUv.y从-1.0~1.0
     // 用vUv画线条
     float aspect = uResolution.x / uResolution.y;
-    float boxLineWidth = uBoxArray[0];
+    float boxLineWidth = uBoxArray.x;
     float lineLimit = boxLineWidth / uLineWidth; // 线条粗细在uv中的比例
-    float connectorLength = uBoxArray[1] / 3. * 4.; // 恒定四个单位的连接符 三个单位的盒
-    float boxStepLength = uBoxArray[1];
+    float connectorLength = uBoxArray.y / 3. * 4.; // 恒定四个单位的连接符 三个单位的盒
+    float boxStepLength = uBoxArray.y;
     float period = connectorLength + boxStepLength;
     float stripeXFactor = fract(vLineDistance / period) * period; // 当前x坐标在段落中的位置
     float boxMask = step(connectorLength, stripeXFactor); // 当前是否处于盒部分
