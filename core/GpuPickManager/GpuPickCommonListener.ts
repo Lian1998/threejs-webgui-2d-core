@@ -24,11 +24,11 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
   private resizeObserver: ResizeObserver = undefined;
   manager: GpuPickManager = undefined;
   renderer: THREE.WebGLRenderer = undefined;
-  scene: THREE.Scene | THREE.Group = undefined;
+  scene: THREE.Object3D = undefined;
   camera: THREE.Camera = undefined;
 
-  /** mousePosition 存储局部 canvas 坐标 (x, y) 和 canvas 左上角的 client 坐标 (clientX, clientY) */
-  mousePosition = { x: 0.0, y: 0.0, clientX: 0.0, clientY: 0.0 };
+  viewportRect = { clientX: 0.0, clientY: 0.0 };
+  mousePosition = { x: 0.0, y: 0.0 };
 
   constructor(...params: Parameters<GpuPickCommonListener["register"]>) {
     super();
@@ -41,7 +41,7 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
    * @param scene THREE.Scene
    * @param camera THREE.Camera
    */
-  register(renderer: THREE.WebGLRenderer, scene: THREE.Scene | THREE.Group, camera: THREE.Camera) {
+  register(renderer: THREE.WebGLRenderer, scene: THREE.Object3D, camera: THREE.Camera) {
     if (!this.manager) this.manager = new GpuPickManager();
     this.dispose();
 
@@ -83,10 +83,10 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
   private inspected: Record<string, GpuPickFeature> = { featurePointer: undefined, lastMoveinFeaturePointer: undefined, lastSelectedFeaturePointer: undefined };
 
   private _onDetect = () => {
-    const { scene, camera, mousePosition, inspected } = this;
+    const { scene, camera, viewportRect, mousePosition, inspected } = this;
 
     this.manager.rendPickBuffer(this.renderer, scene, camera);
-    const { pickid, meshLike, featureData, exactFeature } = this.manager.readPickBuffer({ x: mousePosition.x, y: mousePosition.y });
+    const { pickid, meshLike, featureData, exactFeature } = this.manager.readPickBuffer({ x: mousePosition.x - viewportRect.clientX, y: mousePosition.y - viewportRect.clientY });
 
     inspected.featurePointer = exactFeature;
 
@@ -151,16 +151,16 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
 
   private _onDomResize = () => {
     const { x, y } = this.viewportElement.getBoundingClientRect();
-    this.mousePosition.clientX = x;
-    this.mousePosition.clientY = y;
+    this.viewportRect.clientX = x;
+    this.viewportRect.clientY = y;
   };
 
   private onDomResize = throttle(this._onDomResize, 128, { leading: false, trailing: true });
 
   private onDomMousemove = (e: MouseEvent) => {
     // 计算局部 canvas 坐标 (相对于 canvas 左上角)
-    this.mousePosition.x = e.clientX - this.mousePosition.clientX;
-    this.mousePosition.y = e.clientY - this.mousePosition.clientY;
+    this.mousePosition.x = e.clientX;
+    this.mousePosition.y = e.clientY;
     this.onDetect();
   };
 

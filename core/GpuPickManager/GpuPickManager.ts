@@ -5,8 +5,6 @@ import { DEBUG_PICK_BUFFER_FRAME } from "./index";
 import { DEBUG_PICK_BUFFER_RENDER_PERFORMANCE } from "./index";
 import { channel } from "./debug/";
 
-declare type MeshLike = THREE.Mesh | THREE.InstancedMesh;
-
 /**
  * GpuPickCore 是一个基于 GPU 离屏渲染(RenderTarget)颜色编码 实现的 Three.js 物体拾取管理器;
  * **其核心思路是: 将每个已注册的 MeshLike 映射为唯一的颜色值, 通过渲染到专用缓冲区并读取像素颜色, 从而反向解析得到被点击的对象;**
@@ -25,9 +23,9 @@ declare type MeshLike = THREE.Mesh | THREE.InstancedMesh;
 export class GpuPickManager {
   static PickBufferLayer = 31;
   static readonly className = "GpuPickManager";
-  static positiveMap: Map<number, MeshLike> = new Map(); // pickid => MeshLike
-  static negativeMap: WeakMap<MeshLike, number> = new WeakMap(); // MeshLike => pickid
-  static featureDataMap: WeakMap<MeshLike, ReturnType<typeof this._generateFeatureData>> = new WeakMap(); // MeshLike => Feature
+  static positiveMap: Map<number, THREE.MeshLike> = new Map(); // pickid => MeshLike
+  static negativeMap: WeakMap<THREE.MeshLike, number> = new WeakMap(); // MeshLike => pickid
+  static featureDataMap: WeakMap<THREE.MeshLike, ReturnType<typeof this._generateFeatureData>> = new WeakMap(); // MeshLike => Feature
   static maxId = 0;
   renderer: THREE.WebGLRenderer = undefined;
   renderTarget: THREE.WebGLRenderTarget = undefined;
@@ -82,11 +80,11 @@ export class GpuPickManager {
 
   /**
    * 注册一个需要拾取的 meshLike
-   * @param {MeshLike} meshLike 需要被注册的 meshLike
+   * @param {THREE.MeshLike} meshLike 需要被注册的 meshLike
    * @param {GpuPickFeature | GpuPickFeature[]} feature 该 meshLike 对应的 Feature 类
    * @returns 起始pickid
    */
-  static register(meshLike: MeshLike, feature: GpuPickFeature | GpuPickFeature[]): number {
+  static register(meshLike: THREE.MeshLike, feature: GpuPickFeature | GpuPickFeature[]): number {
     if (!meshLike) return 0;
     if (!((meshLike as THREE.Mesh).isMesh || (meshLike as THREE.InstancedMesh).isInstancedMesh)) throw new Error("GpuPickManager 目前仅支持 Mesh 和 InstancedMesh");
     if (GpuPickManager.negativeMap.has(meshLike)) return GpuPickManager.negativeMap.get(meshLike); // 如果已经注册过了
@@ -150,7 +148,7 @@ export class GpuPickManager {
    * 注销一个需要拾取的图元
    * @param {MeshLike} meshLike 需要被注销的object3d
    */
-  static unregister(meshLike: MeshLike) {
+  static unregister(meshLike: THREE.MeshLike) {
     const pickid = GpuPickManager.negativeMap.get(meshLike);
     if (!pickid) return;
 
@@ -164,10 +162,10 @@ export class GpuPickManager {
   /**
    * 渲染PickBuffer
    * @param {THREE.WebGLRenderer} renderer 渲染器
-   * @param {THREE.Scene | THREE.Group} scene 场景
+   * @param {THREE.Object3D} scene 场景
    * @param {THREE.Camera} camera 相机
    */
-  rendPickBuffer(renderer: THREE.WebGLRenderer, scene: THREE.Scene | THREE.Group, camera: THREE.Camera) {
+  rendPickBuffer(renderer: THREE.WebGLRenderer, scene: THREE.Object3D, camera: THREE.Camera) {
     DEBUG_PICK_BUFFER_RENDER_PERFORMANCE && console.time(`GPUPickManager.pick render pickBuffer`);
 
     this.renderer = renderer;
