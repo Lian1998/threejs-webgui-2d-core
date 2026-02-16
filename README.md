@@ -46,7 +46,7 @@
 2. 封装二维平面贴图精灵 Sprite2D
    1. mpp: (meter per pixel) 自动计算投影(实际)大小与生成几何面片
    2. depth: threejs Object3D renderOrder
-   3. USE_CUSTOM_MULTICOLOR: 是否启用贴图混合色算法
+   3. USE_MULTICOLOR: 是否启用贴图混合色算法
 3. 封装基于 GPUBuffer 的拾取类 GpuPickManager
    1. 注册: 将Object3D注册到类内部, 使用内部自定义的自增 pickBaseId 的分配Object3D的id
    2. 渲染阶段, 渲染一个场景的 pickBuffer

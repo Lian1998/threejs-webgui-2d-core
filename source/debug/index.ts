@@ -67,7 +67,7 @@ import { MeshPolygonMaterial } from "@core/MeshPolygon/";
     ThreejsGroups.BaseMap.add(mesh);
   });
   getMultiLineFromFile("/mapshaper-qinzhou/temple_block.json").then((meshLineGeometry) => {
-    const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 3.2, uUseDash: 1, uDashArray: [15, 10], uColor: new THREE.Color("rgb(255, 0, 0)") });
+    const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 3.2, uUseDash: 1, uDashArray: new THREE.Vector2(15, 10), uColor: new THREE.Color("rgb(255, 0, 0)") });
     const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
     ThreejsGroups.BaseMap.add(mesh);
   });
@@ -168,11 +168,15 @@ const clock = new THREE.Clock();
 const animate = () => {
   requestAnimationFrame(animate);
 
+  // 渲染底图
   renderer.render(ThreejsGroups.BaseMap, orthoCamera);
-
   renderer.autoClearColor = false;
   renderer.autoClearDepth = true;
   renderer.autoClearStencil = true;
+
+  // 渲染可以批量的设备元素
+
+  // 渲染单个设备
   renderer.render(ThreejsGroups.Devices, orthoCamera);
 };
 

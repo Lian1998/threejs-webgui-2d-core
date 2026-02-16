@@ -889,6 +889,12 @@ function WebGLProgram( renderer, cacheKey, parameters, bindingStates ) {
 	const vertexGlsl = versionString + prefixVertex + vertexShader;
 	const fragmentGlsl = versionString + prefixFragment + fragmentShader;
 
+  try {
+    if (import.meta.env.DEV) {
+      parameters.__vertexGlsl = vertexGlsl;
+      parameters.__fragmentGlsl = fragmentGlsl;
+    }
+  } catch(err) {}
 	// console.log( '*VERTEX*', vertexGlsl );
 	// console.log( '*FRAGMENT*', fragmentGlsl );
 

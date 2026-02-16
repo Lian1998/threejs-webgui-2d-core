@@ -2,10 +2,14 @@ import * as THREE from "three";
 
 import { GpuPickManager } from "./GpuPickManager";
 
-import { insertUniformBeforeMain } from "@core/utils/shader_insertUniformBeforeMain";
-import { appendAfterLastFragColor } from "@core/utils/shader_appendAfterLastFragColor";
-
-const shaderCache: Record<string, { vertexShader?: string; fragmentShader?: string }> = {};
+/**
+ * 这里使用一个对象 PickBufferShaderCache 来缓存一类材质编译之后的结果
+ *
+ * `console.log(window.PickBufferShaderCache['Sprite2DShaderMaterial'].shaderObject.__vertexGlsl)`
+ * `console.log(window.PickBufferShaderCache['Sprite2DShaderMaterial'].shaderObject.__fragmentGlsl)`
+ */
+const PickBufferShaderCache: Record<string, THREE.WebGLProgramParametersWithUniforms> = {};
+window["PickBufferShaderCache"] = PickBufferShaderCache;
 
 /**
  * 将传入的Object3D对应的材质转化成PickBuffer渲染材质, 在这个函数中进行shader片段的处理
@@ -16,7 +20,6 @@ const shaderCache: Record<string, { vertexShader?: string; fragmentShader?: stri
 export const trans2PickBufferMaterial = (meshLike: THREE.MeshLike, materialIn: THREE.Material, materialOut: THREE.Material) => {
   const featureData = GpuPickManager.featureDataMap.get(meshLike);
 
-  // DEF
   materialOut.defines["USE_PICK_BUFFER"] = 1;
 
   // Mesh
@@ -24,37 +27,10 @@ export const trans2PickBufferMaterial = (meshLike: THREE.MeshLike, materialIn: T
     materialOut.onBeforeCompile = (shaderObject: THREE.WebGLProgramParametersWithUniforms) => {
       shaderObject.uniforms["uPickColor"] = featureData.uniforms.uPickColor;
 
-      // Sprite2DShaderMaterial
-      if (materialIn.name === "Sprite2DShaderMaterial") {
-        if (!shaderCache["Sprite2DShaderMaterial"]) shaderCache["Sprite2DShaderMaterial"] = {};
-        const shaderCacheE = shaderCache["Sprite2DShaderMaterial"];
-        if (!shaderCacheE.fragmentShader) {
-          let _fragmentShader = shaderObject.fragmentShader;
-          _fragmentShader = insertUniformBeforeMain(_fragmentShader, "uniform vec3 uPickColor;");
-          _fragmentShader = appendAfterLastFragColor(
-            _fragmentShader,
-            // prettier-ignore
-            "if (gl_FragColor.a == 0.0) {",
-            "  discard;",
-            "}",
-            "gl_FragColor = vec4(uPickColor, 1.0);",
-          );
-          shaderCacheE.fragmentShader = _fragmentShader;
-        }
-        shaderObject.fragmentShader = shaderCacheE.fragmentShader;
-      }
-      // SDFText2DShaderMaterial
-      else if (materialIn.name === "SDFText2DShaderMaterial") {
-        if (!shaderCache["SDFText2DShaderMaterial"]) shaderCache["SDFText2DShaderMaterial"] = {};
-        const shaderCacheE = shaderCache["SDFText2DShaderMaterial"];
-        if (!shaderCacheE.fragmentShader) {
-          let _fragmentShader = shaderObject.fragmentShader;
-          _fragmentShader = insertUniformBeforeMain(_fragmentShader, "uniform vec3 uPickColor;");
-          _fragmentShader = appendAfterLastFragColor(_fragmentShader, "gl_FragColor = vec4(uPickColor, 1.0);");
-          shaderCacheE.fragmentShader = _fragmentShader;
-        }
-        shaderObject.fragmentShader = shaderCacheE.fragmentShader;
-      }
+      // Sprite2DShaderMaterial => USE_PICK_BUFFER
+      if (materialIn.name === "Sprite2DShaderMaterial") return;
+      // SDFText2DShaderMaterial => USE_PICK_BUFFER
+      else if (materialIn.name === "SDFText2DShaderMaterial") return;
     };
   }
 
