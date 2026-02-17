@@ -27,7 +27,7 @@ export class AGV implements GpuPickFeature {
       texture: texture_agvBase,
       mpp: calculateMPP(15, 2330),
       renderOrder: ThreejsRenderOrder.AGV_BASE,
-      color: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
+      multiplyColor: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
     });
 
     const agvHeader = new Sprite2D({

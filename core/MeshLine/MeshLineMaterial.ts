@@ -12,13 +12,13 @@ export interface MeshLineMaterialParameters extends THREE.ShaderMaterialParamete
   uOpacity?: number;
 
   /** 是否启用虚线(默认值0) */
-  uUseDash?: number;
+  uUseDash?: 0 | 1;
 
   /** 虚线的样式(默认值[4.0, 4.0]): 先实部占用4.0个单位, 再是虚部占用4.0个单位 */
   uDashArray?: THREE.Vector2;
 
   /** 是否启用小方格线(默认值0) */
-  uUseBox?: number;
+  uUseBox?: 0 | 1;
 
   /** 虚线的样式(默认值[1.0, 5.0]): 线条的宽度为1.0, 小方格的大小为5.0, 线条与小方格的比例恒定为4:3 */
   uBoxArray?: THREE.Vector2;
@@ -76,7 +76,7 @@ export class MeshLineMaterial extends THREE.ShaderMaterial {
   get uUseDash() {
     return this.uniforms.uUseDash.value;
   }
-  set uUseDash(v: number) {
+  set uUseDash(v: 0 | 1) {
     this.uniforms.uUseDash.value = v;
   }
 
@@ -90,7 +90,7 @@ export class MeshLineMaterial extends THREE.ShaderMaterial {
   get uUseBox() {
     return this.uniforms.uUseBox.value;
   }
-  set uUseBox(v: number) {
+  set uUseBox(v: 0 | 1) {
     this.uniforms.uUseBox.value = v;
     this.updateBoxState();
   }

@@ -29,7 +29,7 @@ void main() {
 
     // 如果超出黑线区域, 舍弃片元
     if (phase > shadowLength / period) {
-      discard;
+      diffuseColor.a = 0.0;
     }
   }
 

@@ -10,7 +10,7 @@ export interface MeshPolygonMaterialParameters extends THREE.ShaderMaterialParam
   uOpacity?: number;
 
   /** 是否启用阴影斜线(默认值0) */
-  uUseShadow?: number;
+  uUseShadow?: 0 | 1;
 
   /** 阴影斜线的样式(默认值[1.0, 3.0]): 先是实部占用1.0个单位, 再是虚部占用3.0个单位 */
   uShadowArray?: THREE.Vector2;
@@ -58,7 +58,7 @@ export class MeshPolygonMaterial extends THREE.ShaderMaterial {
   get uUseShadow() {
     return this.uniforms.uUseShadow.value;
   }
-  set uUseShadow(v: number) {
+  set uUseShadow(v: 0 | 1) {
     this.uniforms.uUseShadow.value = v;
   }
 

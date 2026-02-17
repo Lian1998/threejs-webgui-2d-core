@@ -39,7 +39,7 @@ void main() {
 
     // 直接使用世界空间距离vLineDistance来计算
     if (phase > dashLength) {
-      discard; // 丢弃片元 形成虚线效果
+      diffuseColor.a = 0.0; // 形成虚线效果
     }
   } 
 

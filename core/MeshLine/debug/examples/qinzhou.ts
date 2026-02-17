@@ -136,7 +136,7 @@ scene.add(group0);
         .fetch("/mapshaper-qinzhou/temple_block.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 3.2, uUseDash: 1, uDashArray: new THREE.Vector2(15, 10), uColor: new THREE.Color("rgb(255, 0, 0)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 3.2, uUseDash: 1, uDashArray: new THREE.Vector2(15.0, 10.0), uColor: new THREE.Color("rgb(255, 0, 0)") });
         }),
     ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
   }

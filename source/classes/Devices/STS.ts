@@ -31,7 +31,7 @@ export class STS implements GpuPickFeature {
       texture: textrues.STS_Gantry,
       mpp: calculateMPP(35, 610),
       renderOrder: ThreejsRenderOrder.STS_GANTRY,
-      color: colorRuntime.threejsColor,
+      multiplyColor: colorRuntime.threejsColor,
     });
 
     const stsMtPviot = new THREE.Object3D();
@@ -40,7 +40,7 @@ export class STS implements GpuPickFeature {
       texture: textrues.STS_Trolley,
       mpp: calculateMPP(18, 87),
       renderOrder: ThreejsRenderOrder.STS_TROLLEY,
-      color: new THREE.Color(Tinycolor(colorRuntime.tinyColor.getOriginalInput()).darken(10).toHexString()),
+      multiplyColor: new THREE.Color(Tinycolor(colorRuntime.tinyColor.getOriginalInput()).darken(10).toHexString()),
     });
     stsMtPviot.add(stsMT);
 
@@ -50,7 +50,7 @@ export class STS implements GpuPickFeature {
       texture: textrues.STS_Trolley,
       mpp: calculateMPP(18, 87),
       renderOrder: ThreejsRenderOrder.STS_TROLLEY,
-      color: new THREE.Color(Tinycolor(colorRuntime.tinyColor.getOriginalInput()).darken(10).toHexString()),
+      multiplyColor: new THREE.Color(Tinycolor(colorRuntime.tinyColor.getOriginalInput()).darken(10).toHexString()),
     });
     stsPTPviot.add(stsPT);
 

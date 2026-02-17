@@ -4,7 +4,7 @@ import vs from "./shaders/sdfText2d.vs?raw";
 import fs from "./shaders/sdfText2d.fs?raw";
 import TinySDF from "tiny-sdf";
 
-import { Sprite2DGeometry } from "@core/Sprite2D/index";
+import { SpriteXZRectGeometry } from "@core/Sprite2D/index";
 
 import { gen as genTinySDFCanvas2D } from "./gen/TinySDF.Canvas2D";
 
@@ -29,39 +29,35 @@ const tinySdf = new TinySDF({
 });
 
 export interface SDFText2DParameters {
+  /** 文字内容 */
   text: string;
+
+  /** THREE.Object3D.renderOrder */
   renderOrder: number;
 }
 
-/** 缓存文字字符串生成过的贴图 */
-const canvasCache = new Map<string, HTMLCanvasElement>();
-
-export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
-  text: string;
-  texture: THREE.Texture;
+export class SDFText2D extends THREE.Mesh {
+  /** 缓存文字字符串生成过的贴图 */
+  static canvasCache = new Map<string, HTMLCanvasElement>();
 
   constructor({ text = "?", renderOrder = 1 }: SDFText2DParameters) {
     super();
 
-    let canvas = canvasCache.get(text);
+    let canvas = SDFText2D.canvasCache.get(text);
     if (!canvas) {
       canvas = genTinySDFCanvas2D(tinySdf, text);
-      canvasCache.set(text, canvas);
+      SDFText2D.canvasCache.set(text, canvas);
     }
 
     const texture = new THREE.Texture(canvas);
     texture.flipY = false;
-    texture.minFilter = THREE.LinearFilter; // THREE.NearestFilter
+    texture.minFilter = THREE.LinearFilter;
     texture.magFilter = THREE.LinearFilter;
     texture.generateMipmaps = false;
-    texture.format = THREE.RedFormat; // 注意兼容性
     texture.needsUpdate = true;
 
-    this.texture = texture;
-    this.renderOrder = renderOrder;
-
     // 生成几何
-    const geometry = new Sprite2DGeometry(canvas.width, canvas.height);
+    const geometry = new SpriteXZRectGeometry(canvas.width, canvas.height);
 
     // 生成材质
     const material = new THREE.ShaderMaterial({
@@ -89,5 +85,11 @@ export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
 
     this.geometry = geometry;
     this.material = material;
+    this.renderOrder = renderOrder ?? -1;
+  }
+
+  /** (暂时)注销原生的基于cpu判断拾取的方法 */
+  override raycast(raycaster: THREE.Raycaster, intersects: THREE.Intersection[]) {
+    return;
   }
 }

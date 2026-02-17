@@ -122,7 +122,7 @@ scene.add(group0);
         .fetch("/mapshaper-egypt/03_fence.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseBox: 1, uBoxArray: new THREE.Vector2(1, 5) });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseBox: 1, uBoxArray: new THREE.Vector2(1.5, 5.0) });
         }),
 
       window
@@ -150,7 +150,7 @@ scene.add(group0);
         .fetch("/mapshaper-egypt/05_road_lane_dash.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uUseDash: 1, uDashArray: new THREE.Vector2(8, 4), uColor: new THREE.Color("rgb(155, 155, 155)") });
+          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uUseDash: 1, uDashArray: new THREE.Vector2(8.0, 4.0), uColor: new THREE.Color("rgb(155, 155, 155)") });
         }),
 
       window

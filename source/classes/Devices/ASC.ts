@@ -28,7 +28,7 @@ export class ASC implements GpuPickFeature {
       texture: texture_ascGantry,
       mpp: calculateMPP(54, 6594),
       renderOrder: ThreejsRenderOrder.ASC_GANTRY,
-      color: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
+      multiplyColor: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
     });
 
     const ascMtPviot = new THREE.Object3D();
@@ -37,7 +37,7 @@ export class ASC implements GpuPickFeature {
       texture: texture_ascTrolley,
       mpp: calculateMPP(18, 87),
       renderOrder: ThreejsRenderOrder.ASC_TROLLEY,
-      color: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
+      multiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
     });
     ascMT.rotateY(Math.PI / 2);
     ascMtPviot.add(ascMT);
