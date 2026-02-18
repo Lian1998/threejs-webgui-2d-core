@@ -11,8 +11,8 @@ import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
 import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
 
 const textrues = {
-  STS_Gantry: await new THREE.TextureLoader().loadAsync("/resources/STS_Gantry.png"),
-  STS_Trolley: await new THREE.TextureLoader().loadAsync("/resources/STS_Trolley.png"),
+  STS_Gantry: await new THREE.TextureLoader().loadAsync("/resource/device/STS_Gantry.png"),
+  STS_Trolley: await new THREE.TextureLoader().loadAsync("/resource/device/STS_Trolley.png"),
 };
 
 /** Ship-to-Shore Crane 岸边集装箱起重机 */
@@ -63,7 +63,7 @@ export class STS implements GpuPickFeature {
     stsLabelPviot.add(stsLabel);
     stsLabel.onBeforeRender = () => {
       const scale = MAP_DEFAULT_ZOOM / orthoCamera.zoom;
-      const scalar = Math.max(Math.min(scale, 1.0), 1.5);
+      const scalar = THREE.MathUtils.clamp(scale, 1.0, 1.5);
       stsLabel.scale.setScalar(scalar);
     };
 

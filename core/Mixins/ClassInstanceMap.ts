@@ -13,9 +13,8 @@ type Constructor<T = {}> = abstract new (...args: any[]) => T;
  * }
  * const vd1 = new ViewportDispatcher("QC01");
  * const vd2 = new ViewportDispatcher("QC02");
- * const _vd = ViewportDispatcher.classInstanceMap.get("default");
  *
- * console.log(ViewportDispatcher.classInstanceMap.get(0)["customName"], vd1 === _vd); // "QC01", true
+ * console.log(ViewportDispatcher.classInstanceMap.get(0)["customName"]); // "QC01"
  * console.log(ViewportDispatcher.classInstanceMap.get(1)["customName"]); // "QC02"
  * ```
  * **注意: 此混合函数导致实例无法回收, 不要用此函数混合一些需要不断回收实例的类**
@@ -24,21 +23,20 @@ type Constructor<T = {}> = abstract new (...args: any[]) => T;
  */
 export const WithClassInstanceMap = <TBase extends Constructor>(Base: TBase) => {
   abstract class WithInstanceMap extends Base {
-    private static sequence = 1;
-    static classInstanceMap: Map<any, WithInstanceMap> = new Map();
+    private static sequence = 0;
+    static classInstanceMap: Map<number, WithInstanceMap> = new Map();
 
     constructor(...args: any[]) {
       super(...args);
 
       const ctor = this.constructor as TBase & {
         sequence: number;
-        classInstanceMap: Map<any, WithInstanceMap>;
+        classInstanceMap: Map<number, WithInstanceMap>;
       };
 
       //
       const instance = this as unknown as ThisType<WithInstanceMap>;
-      if (!ctor.classInstanceMap.has("default")) {
-        ctor.classInstanceMap.set("default", instance);
+      if (!ctor.classInstanceMap.has(0)) {
         ctor.classInstanceMap.set(0, instance);
       } else {
         ctor.classInstanceMap.set(ctor.sequence, instance);
@@ -46,7 +44,7 @@ export const WithClassInstanceMap = <TBase extends Constructor>(Base: TBase) => 
       }
     }
 
-    static getClassInstance<T>(key: any = "default") {
+    static getClassInstance<T>(key: number = 0) {
       return this.classInstanceMap.get(key) as T;
     }
 

@@ -10,8 +10,8 @@ import { orthoCamera } from "@source/inMap/viewport";
 import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
 import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
 
-const texture_ascGantry = await new THREE.TextureLoader().loadAsync("/resources/ASC_Gantry.png");
-const texture_ascTrolley = await new THREE.TextureLoader().loadAsync("/resources/STS_Trolley.png");
+const texture_ascGantry = await new THREE.TextureLoader().loadAsync("/resource/device/ASC_Gantry.png");
+const texture_ascTrolley = await new THREE.TextureLoader().loadAsync("/resource/device/STS_Trolley.png");
 
 /** Automated Stacking Crane 自动化堆场起重机 */
 export class ASC implements GpuPickFeature {
@@ -50,7 +50,7 @@ export class ASC implements GpuPickFeature {
     ascLabelPviot.add(ascLabel);
     ascLabel.onBeforeRender = () => {
       const scale = MAP_DEFAULT_ZOOM / orthoCamera.zoom;
-      const scalar = Math.max(Math.min(scale, 1.0), 1.5);
+      const scalar = THREE.MathUtils.clamp(scale, 1.0, 1.5);
       ascLabel.scale.setScalar(scalar);
     };
 

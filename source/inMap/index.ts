@@ -4,7 +4,12 @@ import { GpuPickManager } from "@core/GpuPickManager";
 export const ThreejsGroups = {
   BaseMap: new THREE.Group(),
   Devices: new THREE.Group(),
+  Instanced: new THREE.Group(),
 };
+
+ThreejsGroups.BaseMap.name = "BaseMap";
+ThreejsGroups.Devices.name = "Devices";
+ThreejsGroups.Instanced.name = "Instanced";
 
 export enum ThreejsLayers {
   PickBufferLayer = GpuPickManager.PickBufferLayer,

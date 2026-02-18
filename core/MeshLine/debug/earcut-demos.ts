@@ -8,7 +8,7 @@ import earcut, { flatten, deviation } from "earcut";
   const fixture = params.get("fixture") || "water";
 
   // 请求文件
-  const testPoints = await (await fetch(`/fixtures/${fixture}.json`)).json();
+  const testPoints = await (await fetch(`/earcut/fixtures/${fixture}.json`)).json();
 
   // 处理旋转
   const rotation = Number.parseInt(params.get("rotation")) || 0;

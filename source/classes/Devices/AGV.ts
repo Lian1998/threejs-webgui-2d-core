@@ -9,8 +9,8 @@ import { orthoCamera } from "@source/inMap/viewport";
 import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
 import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
 
-const texture_agvBase = await new THREE.TextureLoader().loadAsync("/resources/AGV_Base.png");
-const texture_agvHeader = await new THREE.TextureLoader().loadAsync("/resources/AGV_Header.png");
+const texture_agvBase = await new THREE.TextureLoader().loadAsync("/resource/device/AGV_Base.png");
+const texture_agvHeader = await new THREE.TextureLoader().loadAsync("/resource/device/AGV_Header.png");
 
 /** Automated Guided Vehicle 自动导引运输车 */
 export class AGV implements GpuPickFeature {
@@ -46,7 +46,7 @@ export class AGV implements GpuPickFeature {
     const invQuat = new THREE.Quaternion();
     agvLabel.onBeforeRender = () => {
       const scale = MAP_DEFAULT_ZOOM / orthoCamera.zoom;
-      const scalar = 0.6 * Math.max(Math.min(scale, 1.0), 1.5);
+      const scalar = 0.6 * THREE.MathUtils.clamp(scale, 1.0, 1.5);
       agvLabel.scale.setScalar(scalar);
 
       agvLabel.position.copy(agvLabelPviot.position);
