@@ -36,7 +36,6 @@ import HistoryReplaypage from "@source/onMap/InfoCards/HistoryReplay/page/index.
 
 import { onMounted } from "vue";
 import { onUnmounted } from "vue";
-import { initializationInMapPart } from "@source/inMap/index";
 const _onMounted = () => {
   const containerEl = document.getElementById("gui-container");
   const viewportEl = document.getElementById("gui-viewport");
@@ -52,7 +51,7 @@ const _onMounted = () => {
   spyEl.style.bottom = "0";
   DOMElements.spyEl = spyEl;
 
-  initializationInMapPart(viewportEl as HTMLDivElement, spyEl as HTMLDivElement); // 初始化 openlayers
+  import("@source/inMap/index");
 
   historyReplayInfoCardRef.value.openInfoCard();
 };

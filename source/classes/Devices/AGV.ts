@@ -1,7 +1,7 @@
 import * as THREE from "three";
+import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
 import { GpuPickManager } from "@core/GpuPickManager/";
-import { GpuPickFeature } from "@core/GpuPickManager/";
-import { ThreejsRenderOrder } from "@source/inMap/index";
+import { ThreejsRenderOrder } from "@source/inMap/variables";
 import { SDFText2D } from "@core/index";
 import { Sprite2D } from "@core/index";
 import { calculateMPP } from "@source/inMap/utils/ratio";
@@ -9,14 +9,27 @@ import { orthoCamera } from "@source/inMap/viewport";
 import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
 import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
 
-const texture_agvBase = await new THREE.TextureLoader().loadAsync("/resource/device/AGV_Base.png");
-const texture_agvHeader = await new THREE.TextureLoader().loadAsync("/resource/device/AGV_Header.png");
+const textures = {
+  AGV_Base: new THREE.TextureLoader().load("/resource/device/AGV_Base.png"),
+  AGV_Header: new THREE.TextureLoader().load("/resource/device/AGV_Header.png"),
+};
+
+const textureKey = Object.keys(textures);
+for (const key of textureKey) {
+  const texture = textures[key];
+  texture.flipY = false;
+  texture.colorSpace = THREE.NoColorSpace;
+  texture.premultiplyAlpha = false; //
+  texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
+  texture.repeat.set(1, 1); // 设置纹理左右不重复
+}
 
 /** Automated Guided Vehicle 自动导引运输车 */
 export class AGV implements GpuPickFeature {
-  isGpuPickFeature: true;
-  code: string = "";
   static codeSelected = undefined;
+  code: string = "";
+
+  isGpuPickFeature: true;
   pool: Record<string, THREE.Mesh> = {};
 
   constructor(code: string) {
@@ -24,14 +37,14 @@ export class AGV implements GpuPickFeature {
 
     // 生成图元
     const agvBase = new Sprite2D({
-      texture: texture_agvBase,
+      texture: textures.AGV_Base,
       mpp: calculateMPP(15, 2330),
       renderOrder: ThreejsRenderOrder.AGV_BASE,
       multiplyColor: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
     });
 
     const agvHeader = new Sprite2D({
-      texture: texture_agvHeader,
+      texture: textures.AGV_Header,
       mpp: calculateMPP(15, 2330),
       renderOrder: ThreejsRenderOrder.AGV_HEADER,
     });
@@ -54,12 +67,12 @@ export class AGV implements GpuPickFeature {
       agvLabel.quaternion.copy(invQuat);
     };
 
-    // 绑定关系
+    // 绑定关系, 计算包围盒
     agvBase.add(agvHeader);
     agvBase.add(agvLabel);
     agvBase.geometry.computeBoundingBox();
-    agvLabel.geometry.computeBoundingBox();
     agvHeader.geometry.boundingBox = agvBase.geometry.boundingBox.clone();
+    agvLabel.geometry.boundingBox = agvBase.geometry.boundingBox.clone();
 
     // 绑定指针
     this.pool.agvBase = agvBase;

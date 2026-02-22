@@ -1,4 +1,4 @@
-import { BlockMap } from "@source/data/index";
+import { YardMap } from "@source/data/index";
 
 // 左上角坐标值小, 右下角坐标值大
 
@@ -55,10 +55,9 @@ for (let i = 0; i < keys.length; i++) {
 }
 
 export const handleYardData = async () => {
-  BlockMap.clear();
+  YardMap.clear();
 
   for (const key of Object.keys(BLOCK_DEFS)) {
-    const blockDef = BLOCK_DEFS[key];
-    BlockMap.set(key, { defs: blockDef });
+    YardMap.set(key, { defs: BLOCK_DEFS[key] });
   }
 };

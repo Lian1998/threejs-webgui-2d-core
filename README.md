@@ -100,7 +100,7 @@ Sprite2D在Shader中定义偏移量导致的boundingbox错位问题;
 GpuPickManager的数值读取bug, threejs渲染到canvas后, 再用readPixel拾取canvas中像素点, 发现rgba(0,0,0,x)在读取rgb时变成类似 (64,64,64);
 解决措施: 
   1. 开启blendMode的某种混合后导致的问题, 使用默认即可
-  2. Sprite2DShaderMaterial 替换材质过程优化, 即便物体透明, 在上层的点击事件也不应该穿透下去, pickbuffer覆盖渲染即可
+  2. Sprite2DMaterial 替换材质过程优化, 即便物体透明, 在上层的点击事件也不应该穿透下去, pickbuffer覆盖渲染即可
 
 MeshLine虚线绘制问题, 通过x轴坐标加y轴坐标以计算line部分和dash部分效果很差, 在转弯处完全无法维持虚线观感;
 解决措施: 
@@ -128,7 +128,15 @@ MeshLine使用SpectorJs监视drawcall, 渲染效率存在问题;
 
 ## TODO-LIST(2026-02-12)
 按照AI回答内容优化GpuPickManager
-1. `samples: 4` 不安全
-2. renderer 状态保存不完整
-3. register 直接修改 object.userData 污染外部对象, 数据不会自动同步, 删除 object 时无清理逻辑 **并且由于双视口选中我自己也认为是不妥的???**, 使用 WeakMap 存储所有状态
-4. pickScene 分离; 用 `Set` 或者 `Threejs.Layers` 或 `单独的Three.Scene` 统计所有注册进来的 Object3D
+1. `samples: 4` 不安全(已删除)
+2. renderer 状态保存不完整(暂时不变)
+3. register 直接修改 object.userData 污染外部对象, 数据不会自动同步, 删除 object 时无清理逻辑 **并且由于双视口选中我自己也认为是不妥的???**, 使用 WeakMap 存储所有状态(底层逻辑改变, 看下面这点)
+4. pickScene 分离; 用 `Set` 或者 `Threejs.Layers` 或 `单独的Three.Scene` 统计所有注册进来的 Object3D(最终选用Layers做分隔)
+
+## TODO-LIST 2026-02-17
+研究在当前需求下进行合批渲染, threejs 的 BatchedMesh 和 InstancedMesh 哪个更加合适?
+**BatchedMesh**是在业务规则允许的情况下, 我将所有可以合批的材质放到一个BatchedMesh中, threejs 在cpu处理阶段帮我整理好buffer, 最终根据材质设置好渲染状态, 调用一次drawElements把所有三角面都渲染好;  
+**InstancedMesh**是真正用了显卡API的特性, 这个特性可以让使用者只需要输入一个顶点buffer(以及一个或者多个per-instanced attributes)让显卡使用特性来来同时画多个面;  
+对于当前的需求:
+1. 贴图是放在uniforms中, 因此除非使用雪碧图, 否则无法将所有的贴图材质都合并到一张图中, 或者说我得先研究雪碧图???
+2. 

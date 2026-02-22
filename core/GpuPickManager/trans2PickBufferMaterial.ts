@@ -5,8 +5,8 @@ import { GpuPickManager } from "./GpuPickManager";
 /**
  * 这里使用一个对象 PickBufferShaderCache 来缓存一类材质编译之后的结果
  *
- * `console.log(window.PickBufferShaderCache['Sprite2DShaderMaterial'].shaderObject.__vertexGlsl)`
- * `console.log(window.PickBufferShaderCache['Sprite2DShaderMaterial'].shaderObject.__fragmentGlsl)`
+ * `console.log(window.PickBufferShaderCache['Sprite2DMaterial'].shaderObject.__vertexGlsl)`
+ * `console.log(window.PickBufferShaderCache['Sprite2DMaterial'].shaderObject.__fragmentGlsl)`
  */
 const PickBufferShaderCache: Record<string, THREE.WebGLProgramParametersWithUniforms> = {};
 window["PickBufferShaderCache"] = PickBufferShaderCache;
@@ -27,10 +27,10 @@ export const trans2PickBufferMaterial = (meshLike: THREE.MeshLike, materialIn: T
     materialOut.onBeforeCompile = (shaderObject: THREE.WebGLProgramParametersWithUniforms) => {
       shaderObject.uniforms["uPickColor"] = featureData.uniforms.uPickColor;
 
-      // Sprite2DShaderMaterial => USE_PICK_BUFFER
-      if (materialIn.name === "Sprite2DShaderMaterial") return;
-      // SDFText2DShaderMaterial => USE_PICK_BUFFER
-      else if (materialIn.name === "SDFText2DShaderMaterial") return;
+      // Sprite2DMaterial => USE_PICK_BUFFER
+      if (materialIn.name === "Sprite2DMaterial") return;
+      // SDFText2DMaterial => USE_PICK_BUFFER
+      else if (materialIn.name === "SDFText2DMaterial") return;
     };
   }
 

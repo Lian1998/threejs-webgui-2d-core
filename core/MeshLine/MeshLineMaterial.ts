@@ -40,7 +40,7 @@ export class MeshLineMaterial extends THREE.ShaderMaterial {
   constructor(parameters: MeshLineMaterialParameters) {
     super({
       name: "MeshLineMaterial",
-      uniforms: THREE.UniformsUtils.clone({
+      uniforms: {
         uColor: { value: new THREE.Color(0x000000) },
         uOpacity: { value: 1.0 },
         uUseDash: { value: 0 },
@@ -51,7 +51,7 @@ export class MeshLineMaterial extends THREE.ShaderMaterial {
         uSizeAttenuation: { value: 0 },
         uLineWidth: { value: 1.0 },
         uPixelRatio: { value: 1.0 },
-      }),
+      },
       vertexShader,
       fragmentShader,
     });

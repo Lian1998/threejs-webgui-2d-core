@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
 import { GpuPickManager } from "@core/GpuPickManager";
-import { GpuPickFeature } from "@core/GpuPickManager";
+import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
 import throttle from "@libs/lodash/src/throttle";
 
 /**
@@ -26,6 +26,7 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
   renderer: THREE.WebGLRenderer = undefined;
   scene: THREE.Object3D = undefined;
   camera: THREE.Camera = undefined;
+  enabled = false;
 
   viewportRect = { clientX: 0.0, clientY: 0.0 };
   mousePosition = { x: 0.0, y: 0.0 };
@@ -158,6 +159,7 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
   private onDomResize = throttle(this._onDomResize, 256, { leading: false, trailing: true });
 
   private onDomMousemove = (e: MouseEvent) => {
+    if (!this.enabled) return;
     // 计算局部 canvas 坐标 (相对于 canvas 左上角)
     this.mousePosition.x = e.clientX;
     this.mousePosition.y = e.clientY;
@@ -167,14 +169,17 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
   private _clickEvent = undefined;
 
   private onDomClick = (e: MouseEvent) => {
+    if (!this.enabled) return;
     if (this._clickEvent) {
       window.clearTimeout(this._clickEvent);
       this._clickEvent = undefined;
     }
+
     this._clickEvent = window.setTimeout(this.singleClick, 120);
   };
 
   private onDomDoubleClick = (e: MouseEvent) => {
+    if (!this.enabled) return;
     window.clearTimeout(this._clickEvent);
     const { inspected } = this;
     GpuPickCommonListener.callFeatureFunction(inspected.featurePointer, "onDoubleClicked");

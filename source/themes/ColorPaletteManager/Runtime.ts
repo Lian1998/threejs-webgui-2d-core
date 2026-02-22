@@ -5,16 +5,17 @@ import { DEFAULT_COLOR } from "./ColorItems";
 import { ITEMS_DEV_KEY } from "./ColorItems";
 import { ColorPaletteManager } from "./ColorPaletteManager";
 
-type ColorRuntime = {
-  tinyColor: Tinycolor.Instance;
-  threejsColor: THREE.Color;
-  alpha: { value: number };
-  alphaPercentage: { value: number };
-};
+const ColorItemsRuntime = new Map<
+  ITEMS_DEV_KEY,
+  {
+    tinyColor: Tinycolor.Instance;
+    threejsColor: THREE.Color;
+    alpha: { value: number };
+    alphaPercentage: { value: number };
+  }
+>();
 
-const ColorItemsRuntime = new Map<ITEMS_DEV_KEY, ColorRuntime>();
-
-export const getColorRuntime = (key: ITEMS_DEV_KEY) => {
+export const getColorRuntime = (key: ITEMS_DEV_KEY): MapTypeV<typeof ColorItemsRuntime> => {
   if (!ColorItemsRuntime.get(key)) {
     const value = ColorPaletteManager.itemsMap.get(key) ?? DEFAULT_COLOR;
     const tinyColor = Tinycolor(value);

@@ -1,93 +1,140 @@
 import * as THREE from "three";
 import Tinycolor from "tinycolor2";
+import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
 import { GpuPickManager } from "@core/GpuPickManager/";
-import { GpuPickFeature } from "@core/GpuPickManager/";
-import { ThreejsRenderOrder } from "@source/inMap/index";
+import { ThreejsGroups } from "@source/inMap/variables";
+import { ThreejsRenderOrder } from "@source/inMap/variables";
 import { SDFText2D } from "@core/index";
 import { Sprite2D } from "@core/index";
 import { calculateMPP } from "@source/inMap/utils/ratio";
 import { orthoCamera } from "@source/inMap/viewport";
 import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
 import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
+import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
+import { IActor } from "@core/interfaces/IActor";
 
-const textrues = {
-  STS_Gantry: await new THREE.TextureLoader().loadAsync("/resource/device/STS_Gantry.png"),
-  STS_Trolley: await new THREE.TextureLoader().loadAsync("/resource/device/STS_Trolley.png"),
+const textures = {
+  stsGantry: new THREE.TextureLoader().load("/resource/device/STS_Gantry.png"),
+  stsTrolley: new THREE.TextureLoader().load("/resource/device/STS_Trolley.png"),
 };
 
+const textureKey = Object.keys(textures);
+for (const key of textureKey) {
+  const texture = textures[key];
+  texture.flipY = false;
+  texture.colorSpace = THREE.NoColorSpace;
+  texture.premultiplyAlpha = false; //
+  texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
+  texture.repeat.set(1, 1); // 设置纹理左右不重复
+}
+
 /** Ship-to-Shore Crane 岸边集装箱起重机 */
-export class STS implements GpuPickFeature {
-  isGpuPickFeature: true;
-  code: string = "";
+export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature, IActor {
   static codeSelected = undefined;
-  pool: Record<string, THREE.Mesh> = {};
+  code: string = "";
+
+  isGpuPickFeature: true;
+  represents: Record<string, THREE.Object3D> = undefined;
+  private meshes: Record<string, THREE.Mesh> = undefined;
 
   constructor(code: string) {
-    this.code = code;
-    const colorRuntime = getColorRuntime("VARS.DEVICE_STATUS.NORMAL");
+    super();
 
-    // 生成图元
-    const stsGantry = new Sprite2D({
-      texture: textrues.STS_Gantry,
-      mpp: calculateMPP(35, 610),
-      renderOrder: ThreejsRenderOrder.STS_GANTRY,
-      multiplyColor: colorRuntime.threejsColor,
-    });
+    this.code = code;
+
+    // 生成关系对象
+    const stsGantryRepresent = new THREE.Object3D();
 
     const stsMtPviot = new THREE.Object3D();
+    const stsMtRepresent = new THREE.Object3D();
     stsMtPviot.position.z = 60.0;
-    const stsMT = new Sprite2D({
-      texture: textrues.STS_Trolley,
-      mpp: calculateMPP(18, 87),
-      renderOrder: ThreejsRenderOrder.STS_TROLLEY,
-      multiplyColor: new THREE.Color(Tinycolor(colorRuntime.tinyColor.getOriginalInput()).darken(10).toHexString()),
-    });
-    stsMtPviot.add(stsMT);
 
     const stsPTPviot = new THREE.Object3D();
+    const stsPtRepresent = new THREE.Object3D();
     stsPTPviot.position.z = 40.0;
-    const stsPT = new Sprite2D({
-      texture: textrues.STS_Trolley,
-      mpp: calculateMPP(18, 87),
-      renderOrder: ThreejsRenderOrder.STS_TROLLEY,
-      multiplyColor: new THREE.Color(Tinycolor(colorRuntime.tinyColor.getOriginalInput()).darken(10).toHexString()),
-    });
-    stsPTPviot.add(stsPT);
 
     const stsLabelPviot = new THREE.Object3D();
+    const stsLabelRepresent = new THREE.Object3D();
     stsLabelPviot.position.z = 8;
+
+    stsGantryRepresent.add(stsMtPviot);
+    stsMtPviot.add(stsMtRepresent);
+    stsGantryRepresent.add(stsPTPviot);
+    stsPTPviot.add(stsPtRepresent);
+    stsGantryRepresent.add(stsLabelPviot);
+    stsLabelPviot.add(stsLabelRepresent);
+
+    // 生成网格
+    const stsGantry = new Sprite2D({
+      texture: textures.stsGantry,
+      mpp: calculateMPP(35, 610),
+      renderOrder: ThreejsRenderOrder.STS_GANTRY,
+      multiplyColor: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
+    });
+    const stsMT = new Sprite2D({
+      texture: textures.stsTrolley,
+      mpp: calculateMPP(18, 87),
+      renderOrder: ThreejsRenderOrder.STS_TROLLEY,
+      multiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
+    });
+    const stsPT = new Sprite2D({
+      texture: textures.stsTrolley,
+      mpp: calculateMPP(18, 87),
+      renderOrder: ThreejsRenderOrder.STS_TROLLEY,
+      multiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
+    });
     const stsLabel = new SDFText2D({
       text: this.code,
       renderOrder: ThreejsRenderOrder.STS_LABEL,
     });
-    stsLabelPviot.add(stsLabel);
-    stsLabel.onBeforeRender = () => {
-      const scale = MAP_DEFAULT_ZOOM / orthoCamera.zoom;
-      const scalar = THREE.MathUtils.clamp(scale, 1.0, 1.5);
-      stsLabel.scale.setScalar(scalar);
-    };
-
-    // 绑定关系
-    stsGantry.add(stsMtPviot);
-    stsGantry.add(stsPTPviot);
-    stsGantry.add(stsLabelPviot);
-    stsGantry.geometry.computeBoundingBox();
-    stsMT.geometry.boundingBox = stsGantry.geometry.boundingBox.clone();
-    stsPT.geometry.boundingBox = stsGantry.geometry.boundingBox.clone();
 
     // 绑定指针
-    this.pool.stsGantry = stsGantry;
-    this.pool.stsMT = stsMT;
-    this.pool.stsPT = stsPT;
-    this.pool.stsLabel = stsLabel;
-
-    // 注册拾取
-    for (const key of Object.keys(this.pool)) GpuPickManager.register(this.pool[key], this);
+    this.meshes = { stsGantry, stsMT, stsPT, stsLabel };
+    this.represents = { stsGantry: stsGantryRepresent, stsMT: stsMtRepresent, stsPT: stsPtRepresent, stsLabel: stsLabelRepresent };
   }
+
+  onInit() {
+    // 添加所有 represent 到场景
+    ThreejsGroups.Represents.add(this.represents.stsGantry);
+
+    // 添加所有 mesh 到场景
+    for (const key of Object.keys(this.meshes)) {
+      const mesh = this.meshes[key];
+
+      mesh.matrixAutoUpdate = false; // 关闭矩阵自动同步
+      GpuPickManager.register(mesh, this); // 注册拾取
+
+      ThreejsGroups.Meshes.add(this.meshes[key]);
+    }
+  }
+
+  onUpdate(deltaTime: number, elapsedTime: number) {
+    const scale = MAP_DEFAULT_ZOOM / orthoCamera.zoom;
+    const scalar = THREE.MathUtils.clamp(scale, 1.0, 1.5);
+    this.represents.stsLabel.scale.setScalar(scalar);
+
+    for (const key of Object.keys(this.meshes)) {
+      const mesh = this.meshes[key];
+      const represent = this.represents[key];
+      if (represent) mesh.matrix.copy(represent.matrixWorld);
+    }
+  }
+
+  focused = () => {
+    this.meshes.stsLabel.material["uniforms"].uBackgroundColor.value.set(0xffff00);
+    this.meshes.stsLabel.renderOrder = ThreejsRenderOrder.ACTIVE_LABEL;
+  };
+
+  unfocused = () => {
+    this.meshes.stsLabel.material["uniforms"].uBackgroundColor.value.set(0xffffff);
+    this.meshes.stsLabel.renderOrder = ThreejsRenderOrder.STS_LABEL;
+  };
 
   onSelected() {
     STS.codeSelected = this.code;
     this.focused();
+
+    console.warn(`${this.code} onSelected`);
   }
 
   onCancelSelected() {
@@ -109,13 +156,23 @@ export class STS implements GpuPickFeature {
 
   onZoomTo() {}
 
-  focused = () => {
-    this.pool.stsLabel.material["uniforms"].uBackgroundColor.value.set(0xffff00);
-    this.pool.stsLabel.renderOrder = ThreejsRenderOrder.ACTIVE_LABEL;
+  dispose(): void {}
+
+  ///////////////////////////////////////////// 业务逻辑API ///////////////////////////////////////////////
+
+  static configuration = {
+    gantryPosX: 567297.0,
+    gantryPosDirection: -1.0,
+    gantryPosY: -(2397641.79 + 2397676.79) / 2.0 - 21.0,
+    gantryPosUnit: "cm",
   };
 
-  unfocused = () => {
-    this.pool.stsLabel.material["uniforms"].uBackgroundColor.value.set(0xffffff);
-    this.pool.stsLabel.renderOrder = ThreejsRenderOrder.STS_LABEL;
+  setGantryPos = (value: number) => {
+    // prettier-ignore
+    this.represents.stsGantry.position.set(
+      STS.configuration.gantryPosX + STS.configuration.gantryPosDirection * value / 100.0,
+      0.0,
+      STS.configuration.gantryPosY
+    );
   };
 }

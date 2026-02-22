@@ -5,17 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- http://localhost:5173/debug/GpuPickManager.html -->
     <title>DEBUG GpuPickManager</title>
-
-    <style>
-      #viewport {
-        border: 1px solid black;
-        overflow: clip;
-      }
-    </style>
   </head>
   <body>
     <canvas id="viewport"></canvas>
     <script type="module">
+      import "normalize.css";
       import { initialization } from "@core/GpuPickManager/debug/";
       initialization();
     </script>

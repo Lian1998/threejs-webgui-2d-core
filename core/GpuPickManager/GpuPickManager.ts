@@ -1,6 +1,6 @@
 import * as THREE from "three";
+import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
 import { trans2PickBufferMaterial } from "./trans2PickBufferMaterial";
-import { GpuPickFeature } from "./index";
 import { DEBUG_PICK_BUFFER_FRAME } from "./index";
 import { DEBUG_PICK_BUFFER_RENDER_PERFORMANCE } from "./index";
 import { channel } from "./debug/";

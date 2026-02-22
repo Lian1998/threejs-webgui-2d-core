@@ -64,14 +64,14 @@ const scene = new THREE.Scene();
 import type { FeatureCollection } from "geojson";
 import type { LineString } from "geojson";
 
-import { convertPoints } from "@core/MeshLine/";
-import { MeshLineGeometry } from "@core/MeshLine/";
-import { MeshLineMaterial } from "@core/MeshLine/";
-import type { MeshLineMaterialParameters } from "@core/MeshLine/";
+import { convertPoints } from "@core/index";
+import { MeshLineGeometry } from "@core/index";
+import { MeshLineMaterial } from "@core/index";
+import type { MeshLineMaterialParameters } from "@core/index";
 
-import { MeshPolygonGeometry } from "@core/MeshPolygon/";
-import { MeshPolygonMaterial } from "@core/MeshPolygon/";
-import type { MeshPolygonMaterialParameters } from "@core/MeshPolygon/";
+import { MeshPolygonGeometry } from "@core/index";
+import { MeshPolygonMaterial } from "@core/index";
+import type { MeshPolygonMaterialParameters } from "@core/index";
 import earcut from "earcut";
 import { flatten } from "earcut";
 

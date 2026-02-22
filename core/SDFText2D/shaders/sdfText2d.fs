@@ -7,7 +7,7 @@ uniform float uBackgroundAlpha;
 uniform float uThreshold; // 描边内边
 uniform float uOutlineThreshold; // 描边外边
 uniform float uSmoothing; // 描边过渡
-uniform float opacity;
+uniform float uOpacity;
 
 #ifdef USE_PICK_BUFFER
 uniform vec3 uPickColor;
@@ -48,7 +48,7 @@ void main() {
 
   float finalAlpha = clamp(textFactor +
     outlineFactor +
-    bgFactor * uBackgroundAlpha, 0.0, 1.0) * opacity;
+    bgFactor * uBackgroundAlpha, 0.0, 1.0) * uOpacity;
 
   gl_FragColor = vec4(color, finalAlpha);
 

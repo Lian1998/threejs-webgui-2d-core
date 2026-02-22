@@ -26,14 +26,14 @@ export class MeshPolygonMaterial extends THREE.ShaderMaterial {
   constructor(parameters: MeshPolygonMaterialParameters) {
     super({
       name: "MeshPolygonMaterial",
-      uniforms: THREE.UniformsUtils.clone({
+      uniforms: {
         uColor: { value: new THREE.Color(0x000000) },
         uOpacity: { value: 1.0 },
         uUseShadow: { value: 0 },
         uShadowArray: { value: new THREE.Vector2(1.0, 3.0) },
         uResolution: { value: new THREE.Vector2(1920.0, 1080.0) },
         uPixelRatio: { value: 1.0 },
-      }),
+      },
       vertexShader,
       fragmentShader,
     });

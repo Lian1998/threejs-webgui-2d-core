@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import Tinycolor from "tinycolor2";
+import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
 import { GpuPickManager } from "@core/GpuPickManager/";
-import { GpuPickFeature } from "@core/GpuPickManager/";
-import { ThreejsRenderOrder } from "@source/inMap/index";
+import { ThreejsRenderOrder } from "@source/inMap/variables";
 import { SDFText2D } from "@core/index";
 import { Sprite2D } from "@core/index";
 import { calculateMPP } from "@source/inMap/utils/ratio";
@@ -10,14 +10,27 @@ import { orthoCamera } from "@source/inMap/viewport";
 import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
 import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
 
-const texture_ascGantry = await new THREE.TextureLoader().loadAsync("/resource/device/ASC_Gantry.png");
-const texture_ascTrolley = await new THREE.TextureLoader().loadAsync("/resource/device/STS_Trolley.png");
+const textures = {
+  ASC_Gantry: new THREE.TextureLoader().load("/resource/device/ASC_Gantry.png"),
+  ASC_Trolley: new THREE.TextureLoader().load("/resource/device/STS_Trolley.png"),
+};
+
+const textureKey = Object.keys(textures);
+for (const key of textureKey) {
+  const texture = textures[key];
+  texture.flipY = false;
+  texture.colorSpace = THREE.NoColorSpace;
+  texture.premultiplyAlpha = false; //
+  texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
+  texture.repeat.set(1, 1); // 设置纹理左右不重复
+}
 
 /** Automated Stacking Crane 自动化堆场起重机 */
 export class ASC implements GpuPickFeature {
-  isGpuPickFeature: true;
-  code: string = "";
   static codeSelected = undefined;
+  code: string = "";
+
+  isGpuPickFeature: true;
   pool: Record<string, THREE.Mesh> = {};
 
   constructor(code: string) {
@@ -25,7 +38,7 @@ export class ASC implements GpuPickFeature {
 
     // 生成图元
     const ascGantry = new Sprite2D({
-      texture: texture_ascGantry,
+      texture: textures.ASC_Gantry,
       mpp: calculateMPP(54, 6594),
       renderOrder: ThreejsRenderOrder.ASC_GANTRY,
       multiplyColor: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
@@ -34,7 +47,7 @@ export class ASC implements GpuPickFeature {
     const ascMtPviot = new THREE.Object3D();
     ascMtPviot.position.x = -26.0;
     const ascMT = new Sprite2D({
-      texture: texture_ascTrolley,
+      texture: textures.ASC_Trolley,
       mpp: calculateMPP(18, 87),
       renderOrder: ThreejsRenderOrder.ASC_TROLLEY,
       multiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),

@@ -1,10 +1,13 @@
 declare type MapTypeK<T> = T extends Map<infer K, any> ? K : never;
 declare type MapTypeV<T> = T extends Map<any, infer V> ? V : never;
+declare type RecordTypeK<T> = T extends Record<infer K, any> ? K : never;
+declare type RecordTypeV<T> = T extends Record<any, infer V> ? V : never;
 
-declare type Array2<T> = [T, T];
-declare type Array3<T> = [T, T, T];
-declare type Array4<T> = [T, T, T, T];
-declare type Array5<T> = [T, T, T, T, T];
+type ArrayLike = ArrayConstructor<T> | T[];
+declare type Array2<T> = [T, T] | ArrayLike;
+declare type Array3<T> = [T, T, T] | ArrayLike;
+declare type Array4<T> = [T, T, T, T] | ArrayLike;
+declare type Array5<T> = [T, T, T, T, T] | ArrayLike;
 
 /** 通过工具类进行索引查找 */
 declare type Findable = {

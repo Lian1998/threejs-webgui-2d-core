@@ -3,7 +3,7 @@ import * as THREE from "three";
 const MAP_CENTER = [565816.5, -2397680.7]; // 地图中心点
 const MAP_VIEW_SIZE = 300; // 正交相机初始化显示范围
 
-const viewport = document.querySelector<HTMLDivElement>("#viewport");
+const viewport = document.querySelector<HTMLDivElement>("#viewport") ?? document.querySelector<HTMLDivElement>("#gui-viewport");
 const { width, height } = viewport.getBoundingClientRect();
 const aspect = width / height;
 
@@ -55,3 +55,16 @@ export { MAP_VIEW_SIZE };
 export { MAP_DEFAULT_ZOOM };
 export { orthoCamera };
 export { mapControls };
+
+import { ViewportResizeDispatcher } from "@core/EventDispathcers/ViewportResizeDispatcher";
+const registerOrthoCameraOnResize = () => {
+  ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().addResizeEventListener(({ message: { containerWidth, containerHeight } }) => {
+    const aspect = containerWidth / containerHeight;
+    orthoCamera.left = -MAP_VIEW_SIZE * aspect;
+    orthoCamera.right = MAP_VIEW_SIZE * aspect;
+    orthoCamera.top = MAP_VIEW_SIZE;
+    orthoCamera.bottom = -MAP_VIEW_SIZE;
+    orthoCamera.updateProjectionMatrix();
+  });
+};
+export { registerOrthoCameraOnResize };

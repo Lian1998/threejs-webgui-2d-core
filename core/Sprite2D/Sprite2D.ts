@@ -1,12 +1,10 @@
 import * as THREE from "three";
 
 import { SpriteXZRectGeometry } from "./SpriteXZRectGeometry";
-
-import vertexShader from "./shaders/sprite2d.vs?raw";
-import fragmentShader from "./shaders/sprite2d.fs?raw";
+import { Sprite2DMaterial } from "./Sprite2DMaterial";
 
 type Sprite2DParameters = {
-  /** 对应的材质贴图 */
+  /** 贴图 */
   texture: THREE.Texture;
 
   /** 材质计算对应threejs世界的比例尺 */
@@ -16,21 +14,28 @@ type Sprite2DParameters = {
   multiplyColor?: THREE.Color;
 
   /** THREE.Object3D.renderOrder */
-  renderOrder?: number;
+  renderOrder?: THREE.Object3D["renderOrder"];
 };
 
-export class Sprite2D extends THREE.Mesh {
+export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
   isSprite2D = true;
 
-  constructor({ texture, mpp, multiplyColor, renderOrder }: Sprite2DParameters) {
-    super();
+  texture: THREE.Texture = undefined;
+  mpp: number = undefined;
+  multiplyColor: THREE.Color = undefined;
 
-    if (texture === undefined) throw new Error("请指定 Sprite2D 的纹理贴图, 在使用Sprite2D时请务必提前加载材质贴图");
-    texture.flipY = false;
-    texture.colorSpace = THREE.NoColorSpace;
-    texture.premultiplyAlpha = false; //
-    texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
-    texture.repeat.set(1, 1); // 设置纹理左右不重复
+  constructor(parameters: Sprite2DParameters) {
+    super();
+    this.setParameters(parameters);
+  }
+
+  private setParameters(parameters: Sprite2DParameters) {
+    const { texture, mpp, multiplyColor, renderOrder } = parameters;
+
+    this.texture = texture;
+    this.mpp = mpp;
+    this.multiplyColor = multiplyColor;
+
     if (mpp === undefined) throw new Error("请指定 Sprite2D 的真实比例");
     const { naturalWidth, naturalHeight } = texture.image; // 贴图像素大小
 
@@ -39,28 +44,13 @@ export class Sprite2D extends THREE.Mesh {
 
     // 生成材质
     const useMultplyColor = multiplyColor !== undefined; // 是否启用材质叠加混合色
-    const material = new THREE.ShaderMaterial({
-      name: "Sprite2DShaderMaterial",
-      side: THREE.FrontSide,
-      transparent: true,
-      depthWrite: false,
-      depthTest: true,
-      uniforms: {
-        uTexture: { value: texture }, // 贴图
-        uMultiplyColor: { value: useMultplyColor ? multiplyColor : new THREE.Color() }, // 混合
-      },
-      vertexShader,
-      fragmentShader,
+    const material = new Sprite2DMaterial({
+      uTexture: texture,
+      uMultiplyColor: useMultplyColor ? multiplyColor : null,
     });
-    material.defines["USE_MULTIPLYCOLOR"] = useMultplyColor ? 1 : 0;
 
     this.geometry = geometry;
     this.material = material;
     this.renderOrder = renderOrder ?? -1;
-  }
-
-  /** (暂时)注销原生的基于cpu判断拾取的方法 */
-  override raycast(raycaster: THREE.Raycaster, intersects: THREE.Intersection[]) {
-    return;
   }
 }

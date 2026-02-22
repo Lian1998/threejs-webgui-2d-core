@@ -9,7 +9,7 @@ const position = new THREE.Vector3();
 const rotation = new THREE.Euler();
 const quaternion = new THREE.Quaternion();
 const scale = new THREE.Vector3();
-function randomizeMatrix(matrix) {
+const randomizeMatrix = (matrix) => {
   position.x = Math.random() * 40 - 20;
   position.y = Math.random() * 40 - 20;
   position.z = Math.random() * 40 - 20;
@@ -23,16 +23,16 @@ function randomizeMatrix(matrix) {
   scale.x = scale.y = scale.z = 0.5 + Math.random() * 0.5;
 
   return matrix.compose(position, quaternion, scale);
-}
+};
 
-function randomizeRotationSpeed(rotation) {
+const randomizeRotationSpeed = (rotation) => {
   rotation.x = Math.random() * 0.01;
   rotation.y = Math.random() * 0.01;
   rotation.z = Math.random() * 0.01;
   return rotation;
-}
+};
 
-function animateMeshes() {
+const animateMeshes = () => {
   const loopNum = Math.min(count, dynamic);
 
   for (let i = 0; i < loopNum; i++) {
@@ -43,7 +43,7 @@ function animateMeshes() {
     matrix.multiply(rotationMatrix);
     mesh.setMatrixAt(id, matrix);
   }
-}
+};
 
 //////////////////////////////////////////
 
@@ -96,7 +96,7 @@ const animate = () => {
 
   mesh.sortObjects = true;
   mesh.perObjectFrustumCulled = true;
-  // mesh.setCustomSort(api.useCustomSort ? sortFunction : null);
+  // mesh.setCustomSort((list, camera) => {});
 
   renderer.render(scene, camera);
 

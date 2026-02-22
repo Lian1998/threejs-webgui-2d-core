@@ -9,7 +9,7 @@ const position = new THREE.Vector3();
 const rotation = new THREE.Euler();
 const quaternion = new THREE.Quaternion();
 const scale = new THREE.Vector3();
-function randomizeMatrix(matrix) {
+const randomizeMatrix = (matrix) => {
   position.x = Math.random() * 40 - 20;
   position.y = Math.random() * 40 - 20;
   position.z = Math.random() * 40 - 20;
@@ -23,16 +23,16 @@ function randomizeMatrix(matrix) {
   scale.x = scale.y = scale.z = 0.5 + Math.random() * 0.5;
 
   return matrix.compose(position, quaternion, scale);
-}
+};
 
-function randomizeRotationSpeed(rotation) {
+const randomizeRotationSpeed = (rotation) => {
   rotation.x = Math.random() * 0.01;
   rotation.y = Math.random() * 0.01;
   rotation.z = Math.random() * 0.01;
   return rotation;
-}
+};
 
-function animateMeshes() {
+const animateMeshes = () => {
   const loopNum = Math.min(count, dynamic);
 
   for (let i = 0; i < loopNum; i++) {
@@ -40,13 +40,12 @@ function animateMeshes() {
     const rotationMatrix = represent.userData.rotationSpeeds;
     const id = represent.userData.id;
 
-    mesh.getMatrixAt(id, matrix);
-    matrix.multiply(rotationMatrix);
-    mesh.setMatrixAt(id, matrix);
+    represent.matrix.multiply(rotationMatrix);
+    mesh.setMatrixAt(id, represent.matrix);
   }
 
   mesh.instanceMatrix.needsUpdate = true;
-}
+};
 
 ///////////////////////////////////////////
 
@@ -82,33 +81,18 @@ for (let i = 0; i < count; i++) {
   randomizeMatrix(matrix);
   represent.matrix.copy(matrix);
   represents.push(represent);
+  mesh.setMatrixAt(i, represent.matrix);
+}
 
+for (let i = 0; i < represents.length; i++) {
+  const represent = represents[i];
   const rotationMatrix = new THREE.Matrix4();
   rotationMatrix.makeRotationFromEuler(randomizeRotationSpeed(euler));
   represent.userData.id = i;
   represent.userData.rotationSpeeds = rotationMatrix;
-  mesh.setMatrixAt(i, matrix);
 }
 
 scene.add(mesh);
-
-// const randomizeMatrix = (matrix) => {
-//   const position = new THREE.Vector3();
-//   const quaternion = new THREE.Quaternion();
-//   const scale = new THREE.Vector3();
-
-//   return (matrix) => {
-//     position.x = Math.random() * 40 - 20;
-//     position.y = Math.random() * 40 - 20;
-//     position.z = Math.random() * 40 - 20;
-
-//     quaternion.random();
-
-//     scale.x = scale.y = scale.z = Math.random() * 1;
-
-//     matrix.compose(position, quaternion, scale);
-//   };
-// })();
 
 const animate = () => {
   animateMeshes();
