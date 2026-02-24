@@ -38,7 +38,6 @@ export class GpuPickManager {
   private static _generateFeatureData = (
     count: number,
   ): {
-    type: THREE.Mesh["type"] | THREE.InstancedMesh["type"];
     feature: GpuPickFeature;
     features: GpuPickFeature[];
     originMaterial: THREE.Material;
@@ -47,7 +46,6 @@ export class GpuPickManager {
     attributes: { aPickColor: THREE.BufferAttribute };
   } => {
     return {
-      type: undefined,
       originMaterial: undefined,
       pickBufferMaterial: undefined,
       uniforms: { uPickColor: { value: undefined } },
@@ -100,7 +98,6 @@ export class GpuPickManager {
     if (!featureData.originMaterial) throw new Error("GpuPickManager 注册前请绑定网格的材质"); // 在注册object3d到此类时必须保证其拥有基础材质
 
     meshLike.layers.enable(GpuPickManager.PickBufferLayer);
-    featureData.type = meshLike.type;
 
     // Mesh
     if ((meshLike as THREE.Mesh).isMesh) {

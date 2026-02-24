@@ -104,3 +104,10 @@ const animate = () => {
 };
 
 animate();
+
+//////////////////////////////////////// drawcall监听 ////////////////////////////////////////
+import "@libs/Spector.js/distt/spector.bundle.js";
+
+// @ts-ignore
+const spector = new SPECTOR.Spector();
+spector.displayUI();

@@ -134,9 +134,13 @@ MeshLine使用SpectorJs监视drawcall, 渲染效率存在问题;
 4. pickScene 分离; 用 `Set` 或者 `Threejs.Layers` 或 `单独的Three.Scene` 统计所有注册进来的 Object3D(最终选用Layers做分隔)
 
 ## TODO-LIST 2026-02-17
-研究在当前需求下进行合批渲染, threejs 的 BatchedMesh 和 InstancedMesh 哪个更加合适?
-**BatchedMesh**是在业务规则允许的情况下, 我将所有可以合批的材质放到一个BatchedMesh中, threejs 在cpu处理阶段帮我整理好buffer, 最终根据材质设置好渲染状态, 调用一次drawElements把所有三角面都渲染好;  
-**InstancedMesh**是真正用了显卡API的特性, 这个特性可以让使用者只需要输入一个顶点buffer(以及一个或者多个per-instanced attributes)让显卡使用特性来来同时画多个面;  
-对于当前的需求:
-1. 贴图是放在uniforms中, 因此除非使用雪碧图, 否则无法将所有的贴图材质都合并到一张图中, 或者说我得先研究雪碧图???
-2. 
+1. GpuPickBuffer的合理性 `1920 * 1080 = 207360` << `256 ^ 3 = 16777216`
+2. 合批渲染所有方案研究
+
+整理当前的所有图元
+1. 底图线条(多三角面), 车道线, 车道中心线, 围网
+2. 底图面(多三角面), 斑马线, 车道标志
+3. 贴图类型(双三角面), 设备/状态 => (改)
+4. 文字类型(双三角面), 编号 => (改)多三角面, cpu重排文字+atalas
+
+pick 共顶点逻辑检查, pickBuffer共名与自动生成检查

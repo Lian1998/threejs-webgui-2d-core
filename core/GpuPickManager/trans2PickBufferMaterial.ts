@@ -20,17 +20,24 @@ window["PickBufferShaderCache"] = PickBufferShaderCache;
 export const trans2PickBufferMaterial = (meshLike: THREE.MeshLike, materialIn: THREE.Material, materialOut: THREE.Material) => {
   const featureData = GpuPickManager.featureDataMap.get(meshLike);
 
-  materialOut.defines["USE_PICK_BUFFER"] = 1;
-
   // Mesh
   if ((meshLike as THREE.Mesh).isMesh) {
     materialOut.onBeforeCompile = (shaderObject: THREE.WebGLProgramParametersWithUniforms) => {
       shaderObject.uniforms["uPickColor"] = featureData.uniforms.uPickColor;
 
-      // Sprite2DMaterial => USE_PICK_BUFFER
-      if (materialIn.name === "Sprite2DMaterial") return;
-      // SDFText2DMaterial => USE_PICK_BUFFER
-      else if (materialIn.name === "SDFText2DMaterial") return;
+      if (shaderObject.shaderName === "Sprite2DMaterial") {
+        materialOut.defines["USE_PICK_BUFFER"] = 1;
+        return;
+      } else if (shaderObject.shaderName === "SDFText2DMaterial") {
+        materialOut.defines["USE_PICK_BUFFER"] = 1;
+        return;
+      } else if (shaderObject.shaderName === "MeshLineMaterial") {
+        materialOut.defines["USE_PICK_BUFFER"] = 1;
+        return;
+      } else if (shaderObject.shaderName === "MeshPolygonMaterial") {
+        materialOut.defines["USE_PICK_BUFFER"] = 1;
+        return;
+      }
     };
   }
 
