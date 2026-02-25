@@ -2,9 +2,9 @@ import * as THREE from "three";
 
 import { SpriteXZRectGeometry } from "@core/Sprite2D/index";
 import { SDFText2DMaterial } from "./SDFText2DMaterial";
-import { gen as genTinySDFCanvas2D } from "./gen/TinySDF.Canvas2D";
-import { tinySdfInstance } from "./index";
-import { fontSize } from "./index";
+import { gen as genTinySDFCanvas2D } from "./debug/gen/TinySDF.Canvas2D";
+import { tinySdfInstance } from "./font-atlas/tinySdfWrapper";
+import { SDF_FONT_SIZE } from "./font-atlas/tinySdfWrapper";
 
 const canvasCache = new Map<string, HTMLCanvasElement>(); // 缓存文字字符串生成过的贴图
 
@@ -37,7 +37,7 @@ export class SDFText2D extends THREE.Mesh {
     }
 
     // 生成几何
-    const scaleFactor = 4.0 / fontSize;
+    const scaleFactor = 4.0 / SDF_FONT_SIZE;
     const geometry = new SpriteXZRectGeometry(canvas.width * scaleFactor, canvas.height * scaleFactor);
 
     const texture = new THREE.Texture(canvas);

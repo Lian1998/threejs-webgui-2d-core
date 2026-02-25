@@ -3,12 +3,24 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- http://localhost:5173/debug/SDFText2D.html -->
-    <title>DEBUG SDFText2D</title>
+    <!-- http://localhost:5173/debug/SDFText2D/gen.html -->
+    <title>DEBUG SDFText2D gen</title>
+
+    <!-- 
+      v1 逻辑:
+      1. 固定 tinySdfIntance 实例生成字形贴图的素质
+      2. 使用一个缓存容器存储生成过的单个字形素质
+      3. 用户输入字符串, 字符串匹配搜索单个字形数据库, 烘焙整串字符到字符串贴图材质
+      4. 计算 双三角面矩形的长度和宽度提交几何buffer, 提交贴图 给 threejs 渲染
+    -->
+    <!-- 
+      此测试页面为, 在处理第三点时, 存在 Canvas2D API 和 WebGL2 API 两种方式烘焙到 canvas 以获取材质:
+      经过测试, 生成字符串字形贴图时, 使用 Canvas2D API 速度比使用 WebGL2 API 更快
+    -->
   </head>
   <body>
     <script type="module">
-      import { initialization } from "@core/SDFText2D/debug/";
+      import { initialization } from "@core/SDFText2D/debug/gen/index.ts";
       initialization();
     </script>
   </body>
