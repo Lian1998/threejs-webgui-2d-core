@@ -13,13 +13,13 @@ import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
 import { orthoCamera } from "@source/inMap/viewport";
 import { mapControls } from "@source/inMap/viewport";
 
-import { isWebGL2Available } from "@source/inMap/utils/common";
+import { ensureWebGL2Available } from "@source/inMap/utils/common";
 import { registerOrthoCameraOnResize } from "@source/inMap/viewport";
 
 import { ViewportResizeDispatcher } from "@core/index";
 import { GpuPickCommonListener } from "@core/index";
 
-isWebGL2Available();
+ensureWebGL2Available();
 
 const viewport = document.querySelector("#viewport") ?? document.querySelector("#gui-viewport");
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: true });

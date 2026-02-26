@@ -32,7 +32,11 @@ export class TinySDFAtlas {
   static prepared: boolean = false;
 
   /** 常用基础字形(会自动合并到 prepareGlyph 的输入中) */
-  static readonly commonGlyph = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789▢ ";
+  static readonly Charactor_Common = "▢ ";
+  static readonly Charactor_Number = "0123456789";
+  static readonly Charactor_EN = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  static readonly Synbol_EN = ".,:;!?\"'`-_()[]{}/\\@#$%^&*+=<>|";
+  static readonly Synbol_ZH = "，。！？：；“”‘’（）【】《》—…";
 
   private static _instance: TinySDFAtlas | null = null;
 
@@ -78,7 +82,7 @@ export class TinySDFAtlas {
    * 预加载字形并烘焙到 atlas(只能被调用一次)
    * @param characters 用户自定义的字形, 会和 TinySDFAtlas.commonGlyph 合并
    */
-  prepareGlyph(characters: string = "你好世界!岸桥场桥:装船卸船移箱集装箱主小车门架小车任务指令状态数值％角度°速度故障模式~，。（）-繁华声遁入空门折煞了世人"): void {
+  prepareGlyph(characters: string = ""): void {
     console.time("TinySDFAtlas: 生成基础字形贴图");
     if (TinySDFAtlas.prepared) {
       console.warn("TinySDFAtlas.prepareGlyph 已经被调用过(prepared), 此次调用将被忽略。");
@@ -87,7 +91,7 @@ export class TinySDFAtlas {
     }
 
     // 合并并去重字符
-    const combined = TinySDFAtlas.commonGlyph + characters;
+    const combined = TinySDFAtlas.Charactor_Common + TinySDFAtlas.Charactor_Number + TinySDFAtlas.Charactor_EN + TinySDFAtlas.Synbol_EN + characters;
     const uniqueChars = Array.from(new Set(combined.split("")));
 
     // packing状态, 以当前页最后位置为起点
