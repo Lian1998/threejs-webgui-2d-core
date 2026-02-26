@@ -1,3 +1,4 @@
+/** 支持项目生命周期回调 */
 export interface IActor {
   /** 工程初始化阶段: 创建geometry/material/mesh, 注册事件, 申请资源, 添加到scene */
   onInit?(): void | Promise<void>;

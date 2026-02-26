@@ -45,7 +45,7 @@ initialization_BaseMap();
 //////////////////////////////////////// 业务代码(设备)逻辑 ////////////////////////////////////////
 import { IActor } from "@core/interfaces/IActor";
 import { SpriteXZRectGeometry } from "@core/index";
-import { SDFText2DMaterial } from "@core/index";
+import { SDFText2DGenMaterial } from "@core/index";
 import { MeshPolygonGeometry } from "@core/index";
 import { MeshPolygonMaterial } from "@core/index";
 import { MeshLineGeometry } from "@core/index";
@@ -59,7 +59,7 @@ import { AGV } from "@source/classes/Devices/AGV";
 import { ASC } from "@source/classes/Devices/ASC";
 
 import { YardMap } from "@source/data";
-import { SDFText2D } from "@core/index";
+import { SDFText2DGen } from "@core/index";
 import { handleYardData } from "@source/data/handleYardData";
 
 const LOGIC_CENTER = [567485.3, -2397835];
@@ -96,7 +96,7 @@ Promise.all([
     .then((data) => {
       console.warn("preDefBlockList", data);
 
-      const polygons = [];
+      const positions = [];
       const lines = [];
       for (let i = 0; i < data.length; i++) {
         const element = data[i];
@@ -107,7 +107,7 @@ Promise.all([
         const a3 = [coordinates[0] + element.hl / 1000.0 / 2.0, 0.0, coordinates[1] + element.hw / 1000.0 / 2.0];
         const a4 = [coordinates[0] + element.hl / 1000.0 / 2.0, 0.0, coordinates[1] - element.hw / 1000.0 / 2.0];
 
-        polygons.push(...a1, ...a2, ...a3, ...a3, ...a4, ...a1);
+        positions.push(...a1, ...a2, ...a3, ...a3, ...a4, ...a1);
         lines.push([...a1, ...a2, ...a3, ...a4, ...a1]);
 
         // // 文字描述
@@ -120,7 +120,7 @@ Promise.all([
 
       // 几何面
       const polygonGeometry = new MeshPolygonGeometry();
-      polygonGeometry.setPolygons(polygons);
+      polygonGeometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(positions), 3));
       const polygonMaterial = new MeshPolygonMaterial({ uResolution: new THREE.Vector2(1024, 768), uColor: new THREE.Color("#000000"), uOpacity: 0.4 });
       const polygonMesh = new THREE.Mesh(polygonGeometry, polygonMaterial);
       polygonMesh.frustumCulled = false;

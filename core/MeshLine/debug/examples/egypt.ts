@@ -64,16 +64,11 @@ const scene = new THREE.Scene();
 import type { FeatureCollection } from "geojson";
 import type { LineString } from "geojson";
 
-import { convertPoints } from "@core/MeshLine/";
 import { MeshLineGeometry } from "@core/MeshLine/";
 import { MeshLineMaterial } from "@core/MeshLine/";
-import type { MeshLineMaterialParameters } from "@core/MeshLine/";
 
 import { MeshPolygonGeometry } from "@core/MeshPolygon/";
 import { MeshPolygonMaterial } from "@core/MeshPolygon/";
-import type { MeshPolygonMaterialParameters } from "@core/MeshPolygon/";
-import earcut from "earcut";
-import { flatten } from "earcut";
 
 const group0 = new THREE.Group();
 group0.layers.set(0);
@@ -85,119 +80,130 @@ scene.add(group0);
 
   // 线
   {
-    const mapshaper3HanldeWrapper = (p: [number, number, number]): number[] => [p[0], 0.0, -p[2]];
-    const handleMapShaperFile = (_data: any, materialConfiguration: MeshLineMaterialParameters) => {
-      const data = _data as FeatureCollection<LineString>;
-      const _coordinates = [];
-      for (let i = 0; i < data.features.length; i++) {
-        const feature = data.features[i];
-        const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
-        const coordinates = convertPoints(featureGeometryCoordinates, mapshaper3HanldeWrapper);
-        _coordinates.push(coordinates);
-      }
-      const meshLineGeometry = new MeshLineGeometry();
-      meshLineGeometry.setMultiLine(_coordinates);
-      const meshLineMaterial = new MeshLineMaterial(materialConfiguration);
-      const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
-      mesh.frustumCulled = false;
-      group0.add(mesh);
-    };
-
     Promise.all([
       window
         .fetch("/mapshaper-egypt/01_coastline_and_buildings.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
+          const meshLineGeometry = new MeshLineGeometry();
+          meshLineGeometry.setFromMapShaperFeatureCollection(data);
+          const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(225, 225, 225)") });
+          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
 
       window
         .fetch("/mapshaper-egypt/02_rails.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.8, uColor: new THREE.Color("rgb(195, 195, 195)") });
+          const meshLineGeometry = new MeshLineGeometry();
+          meshLineGeometry.setFromMapShaperFeatureCollection(data);
+          const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 0.8, uColor: new THREE.Color("rgb(195, 195, 195)") });
+          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
 
       window
         .fetch("/mapshaper-egypt/03_fence.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseBox: 1, uBoxArray: new THREE.Vector2(1.5, 5.0) });
+          const meshLineGeometry = new MeshLineGeometry();
+          meshLineGeometry.setFromMapShaperFeatureCollection(data);
+          const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseBox: 1, uBoxArray: new THREE.Vector2(1.5, 5.0) });
+          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
 
       window
         .fetch("/mapshaper-egypt/04_yard_containers.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(245, 245, 245)") });
+          const meshLineGeometry = new MeshLineGeometry();
+          meshLineGeometry.setFromMapShaperFeatureCollection(data);
+          const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(245, 245, 245)") });
+          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
 
       window
         .fetch("/mapshaper-egypt/04_yard_reefer.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(245, 245, 245)") });
+          const meshLineGeometry = new MeshLineGeometry();
+          meshLineGeometry.setFromMapShaperFeatureCollection(data);
+          const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 0.5, uColor: new THREE.Color("rgb(245, 245, 245)") });
+          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
 
       window
         .fetch("/mapshaper-egypt/05_road_edge.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
+          const meshLineGeometry = new MeshLineGeometry();
+          meshLineGeometry.setFromMapShaperFeatureCollection(data);
+          const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 2.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
+          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
 
       window
         .fetch("/mapshaper-egypt/05_road_lane_dash.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uUseDash: 1, uDashArray: new THREE.Vector2(8.0, 4.0), uColor: new THREE.Color("rgb(155, 155, 155)") });
+          const meshLineGeometry = new MeshLineGeometry();
+          meshLineGeometry.setFromMapShaperFeatureCollection(data);
+          const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 1.0, uUseDash: 1, uDashArray: new THREE.Vector2(8.0, 4.0), uColor: new THREE.Color("rgb(155, 155, 155)") });
+          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
 
       window
         .fetch("/mapshaper-egypt/05_road_lane_solid.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(155, 155, 155)") });
+          const meshLineGeometry = new MeshLineGeometry();
+          meshLineGeometry.setFromMapShaperFeatureCollection(data);
+          const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(155, 155, 155)") });
+          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
 
       window
         .fetch("/mapshaper-egypt/08_zebra.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
+          const meshLineGeometry = new MeshLineGeometry();
+          meshLineGeometry.setFromMapShaperFeatureCollection(data);
+          const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 1.0, uColor: new THREE.Color("rgb(0, 0, 0)") });
+          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
     ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
   }
 
   // 面
   {
-    const handleMapShaperFile = (_data: any, materialConfiguration: MeshPolygonMaterialParameters) => {
-      const _triangles = [];
-      const meshPolygonGeometry = new MeshPolygonGeometry();
-      const meshPolygonMaterial = new MeshPolygonMaterial(materialConfiguration);
-
-      const data = _data as FeatureCollection<LineString>;
-      for (let i = 0; i < data.features.length; i++) {
-        const feature = data.features[i];
-        const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
-        const _flatten = flatten([featureGeometryCoordinates]);
-        const _earcut = earcut(_flatten.vertices, _flatten.holes, _flatten.dimensions);
-        for (const index of _earcut) {
-          _triangles.push([_flatten.vertices[index * _flatten.dimensions], 0.0, -_flatten.vertices[index * _flatten.dimensions + 1]]);
-        }
-      }
-      meshPolygonGeometry.setPolygons(_triangles.flat());
-      const mesh = new THREE.Mesh(meshPolygonGeometry, meshPolygonMaterial);
-      mesh.frustumCulled = false;
-      group0.add(mesh);
-    };
-
     Promise.all([
       window
         .fetch("/mapshaper-egypt/07_marks.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)") });
+          const meshPolygonGeometry = new MeshPolygonGeometry();
+          meshPolygonGeometry.setFromMapShaperFeatureCollection(data);
+          const meshPolygonMaterial = new MeshPolygonMaterial({ uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)") });
+          const mesh = new THREE.Mesh(meshPolygonGeometry, meshPolygonMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
     ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
 
@@ -206,7 +212,12 @@ scene.add(group0);
         .fetch("/mapshaper-egypt/08_zebra.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseShadow: 1, uShadowArray: new THREE.Vector2(1, 4) });
+          const meshPolygonGeometry = new MeshPolygonGeometry();
+          meshPolygonGeometry.setFromMapShaperFeatureCollection(data);
+          const meshPolygonMaterial = new MeshPolygonMaterial({ uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)"), uUseShadow: 1, uShadowArray: new THREE.Vector2(1, 4) });
+          const mesh = new THREE.Mesh(meshPolygonGeometry, meshPolygonMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
     ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
   }

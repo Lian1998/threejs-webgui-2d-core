@@ -5,6 +5,8 @@ import { SDF_SIZE } from "./tinySdfWrapper";
 import { tinySdfInstance } from "./tinySdfWrapper";
 import { makeRGBAImageData } from "@core/utils/canvas2d_buffers";
 
+import { DEBUG_SDF_ATLAS_BUFFER_RENDER_PERFORMANCE } from "@core/SDFText2D/index";
+
 export const ATLAS_TEXTURE_SIZE = 1024; // 同你原始代码的常量
 
 /** atlas 基本属性 */
@@ -83,10 +85,10 @@ export class TinySDFAtlas {
    * @param characters 用户自定义的字形, 会和 TinySDFAtlas.commonGlyph 合并
    */
   prepareGlyph(characters: string = ""): void {
-    console.time("TinySDFAtlas: 生成基础字形贴图");
+    DEBUG_SDF_ATLAS_BUFFER_RENDER_PERFORMANCE && console.time("TinySDFAtlas: 生成基础字形贴图");
     if (TinySDFAtlas.prepared) {
       console.warn("TinySDFAtlas.prepareGlyph 已经被调用过(prepared), 此次调用将被忽略。");
-      console.timeEnd("生成基础字形贴图");
+      DEBUG_SDF_ATLAS_BUFFER_RENDER_PERFORMANCE && console.timeEnd("生成基础字形贴图");
       return;
     }
 
@@ -147,7 +149,7 @@ export class TinySDFAtlas {
     }
 
     TinySDFAtlas.prepared = true;
-    console.timeEnd("TinySDFAtlas: 生成基础字形贴图");
+    DEBUG_SDF_ATLAS_BUFFER_RENDER_PERFORMANCE && console.timeEnd("TinySDFAtlas: 生成基础字形贴图");
 
     console.info(`TinySDFAtlas:  glyphMap size ${this.glyphMap.size}`);
   }

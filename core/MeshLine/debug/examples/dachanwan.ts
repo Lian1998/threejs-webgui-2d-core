@@ -64,16 +64,11 @@ const scene = new THREE.Scene();
 import type { FeatureCollection } from "geojson";
 import type { LineString } from "geojson";
 
-import { convertPoints } from "@core/index";
-import { MeshLineGeometry } from "@core/index";
-import { MeshLineMaterial } from "@core/index";
-import type { MeshLineMaterialParameters } from "@core/index";
+import { MeshLineGeometry } from "@core/MeshLine/";
+import { MeshLineMaterial } from "@core/MeshLine/";
 
-import { MeshPolygonGeometry } from "@core/index";
-import { MeshPolygonMaterial } from "@core/index";
-import type { MeshPolygonMaterialParameters } from "@core/index";
-import earcut from "earcut";
-import { flatten } from "earcut";
+import { MeshPolygonGeometry } from "@core/MeshPolygon/";
+import { MeshPolygonMaterial } from "@core/MeshPolygon/";
 
 const group0 = new THREE.Group();
 group0.layers.set(0);
@@ -85,133 +80,82 @@ scene.add(group0);
 
   // 线
   {
-    const mapshaper3HanldeWrapper = (p: [number, number, number]): number[] => [p[0], 0.0, -p[2]];
-    const handleMapShaperFile = (_data: any, materialConfiguration: MeshLineMaterialParameters) => {
-      const isFeatureCollection = _data.type === "FeatureCollection";
-      if (!isFeatureCollection) {
-        throw new Error(`[GeoCollectionLoader][handleMapShaperFile] ${_data.name ? _data.name : ""}!FeatureCollection`);
-      }
-      const FeatureGeometryType = _data.features[0].geometry.type;
-      switch (FeatureGeometryType) {
-        case "LineString": {
-          // 1. 每次drawcall绘制单条线段
-          // const data = _data as FeatureCollection<LineString>;
-          // for (let i = 0; i < data.features.length; i++) {
-          //   const feature = data.features[i];
-          //   const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
-          //   const coordinates = convertPoints(featureGeometryCoordinates, mapshaper3HanldeWrapper);
-          //   const meshLineGeometry = new MeshLineGeometry();
-          //   meshLineGeometry.setLine(coordinates);
-          //   const meshLineMaterial = new MeshLineMaterial(materialConfiguration);
-          //   const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
-          //   mesh.frustumCulled = false;
-          //   group0.add(mesh);
-          // }
-
-          // 2. (错误的)不做线段之间的顶点断点冗余, 直接设置单条线段
-          // const data = _data as FeatureCollection<LineString>;
-          // const _coordinates = [];
-          // for (let i = 0; i < data.features.length; i++) {
-          //   const feature = data.features[i];
-          //   const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
-          //   const coordinates = convertPoints(featureGeometryCoordinates, mapshaper3HanldeWrapper);
-          //   _coordinates.push(...coordinates);
-          // }
-          // const meshLineGeometry = new MeshLineGeometry();
-          // meshLineGeometry.setLine(_coordinates);
-          // const meshLineMaterial = new MeshLineMaterial(materialConfiguration);
-          // const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
-          // mesh.frustumCulled = false;
-          // group0.add(mesh);
-
-          // 3. 用断点顶点冗余, 做多条线段(drawcall优化)
-          const data = _data as FeatureCollection<LineString>;
-          const _coordinates = [];
-          for (let i = 0; i < data.features.length; i++) {
-            const feature = data.features[i];
-            const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
-            const coordinates = convertPoints(featureGeometryCoordinates, mapshaper3HanldeWrapper);
-            _coordinates.push(coordinates);
-          }
-          const meshLineGeometry = new MeshLineGeometry();
-          meshLineGeometry.setMultiLine(_coordinates);
-          const meshLineMaterial = new MeshLineMaterial(materialConfiguration);
-          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
-          mesh.frustumCulled = false;
-          group0.add(mesh);
-
-          break;
-        }
-      }
-    };
-
     Promise.all([
       window
         .fetch("/mapshaper-dachanwan/01_coastline_and_buildings.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.6, uColor: new THREE.Color("rgb(225, 225, 225)") });
+          const meshLineGeometry = new MeshLineGeometry();
+          meshLineGeometry.setFromMapShaperFeatureCollection(data);
+          const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 1.2, uColor: new THREE.Color("rgb(225, 225, 225)") });
+          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
 
       window
         .fetch("/mapshaper-dachanwan/02_rails.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.64, uColor: new THREE.Color("rgb(195, 195, 195)") });
+          const meshLineGeometry = new MeshLineGeometry();
+          meshLineGeometry.setFromMapShaperFeatureCollection(data);
+          const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 0.64, uColor: new THREE.Color("rgb(195, 195, 195)") });
+          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
 
       window
         .fetch("/mapshaper-dachanwan/05_road_edge.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 1.6, uColor: new THREE.Color("rgb(0, 0, 0)") });
+          const meshLineGeometry = new MeshLineGeometry();
+          meshLineGeometry.setFromMapShaperFeatureCollection(data);
+          const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 1.6, uColor: new THREE.Color("rgb(0, 0, 0)") });
+          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
 
       window
         .fetch("/mapshaper-dachanwan/05_road_lane_dash.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.8, uUseDash: 1, uDashArray: new THREE.Vector2(8.0, 4.0), uColor: new THREE.Color("rgb(155, 155, 155)") });
+          const meshLineGeometry = new MeshLineGeometry();
+          meshLineGeometry.setFromMapShaperFeatureCollection(data);
+          const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 0.8, uUseDash: 1, uDashArray: new THREE.Vector2(8.0, 4.0), uColor: new THREE.Color("rgb(155, 155, 155)") });
+          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
 
       window
         .fetch("/mapshaper-dachanwan/05_road_lane_solid.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uLineWidth: 0.8, uColor: new THREE.Color("rgb(155, 155, 155)") });
+          const meshLineGeometry = new MeshLineGeometry();
+          meshLineGeometry.setFromMapShaperFeatureCollection(data);
+          const meshLineMaterial = new MeshLineMaterial({ uResolution: _resolution, uLineWidth: 0.8, uColor: new THREE.Color("rgb(155, 155, 155)") });
+          const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
     ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
   }
 
   // 面
   {
-    const handleMapShaperFile = (_data: any, materialConfiguration: MeshPolygonMaterialParameters) => {
-      const _triangles = [];
-      const meshPolygonGeometry = new MeshPolygonGeometry();
-      const meshPolygonMaterial = new MeshPolygonMaterial(materialConfiguration);
-
-      const data = _data as FeatureCollection<LineString>;
-      for (let i = 0; i < data.features.length; i++) {
-        const feature = data.features[i];
-        const featureGeometryCoordinates = feature.geometry.coordinates as THREE.Vector3Tuple[] | THREE.Vector2Tuple[];
-        const _flatten = flatten([featureGeometryCoordinates]);
-        const _earcut = earcut(_flatten.vertices, _flatten.holes, _flatten.dimensions);
-        for (const index of _earcut) {
-          _triangles.push([_flatten.vertices[index * _flatten.dimensions], 0.0, -_flatten.vertices[index * _flatten.dimensions + 1]]);
-        }
-      }
-      meshPolygonGeometry.setPolygons(_triangles.flat());
-      const mesh = new THREE.Mesh(meshPolygonGeometry, meshPolygonMaterial);
-      mesh.frustumCulled = false;
-      group0.add(mesh);
-    };
-
     Promise.all([
       window
         .fetch("/mapshaper-dachanwan/07_marks.json")
         .then((response) => response.json())
         .then((data: FeatureCollection<LineString>) => {
-          handleMapShaperFile(data, { uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)") });
+          const meshPolygonGeometry = new MeshPolygonGeometry();
+          meshPolygonGeometry.setFromMapShaperFeatureCollection(data);
+          const meshPolygonMaterial = new MeshPolygonMaterial({ uResolution: _resolution, uColor: new THREE.Color("rgb(0, 0, 0)") });
+          const mesh = new THREE.Mesh(meshPolygonGeometry, meshPolygonMaterial);
+          mesh.frustumCulled = false;
+          group0.add(mesh);
         }),
     ]).finally(() => group0.traverse((object3D) => object3D.layers.set(0)));
   }

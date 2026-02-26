@@ -1,6 +1,4 @@
-/**
- * 类实例需要支持拾取
- */
+/** 支持GpuPickBuffer拾取 */
 export interface GpuPickFeature {
   isGpuPickFeature: true;
 

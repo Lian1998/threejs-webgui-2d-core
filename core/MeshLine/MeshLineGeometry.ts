@@ -1,76 +1,62 @@
 import * as THREE from "three";
+import type { FeatureCollection, GeometryCollection } from "geojson";
+import type { LineString } from "geojson";
 
-/** 所有传入的点可能的类型 */
-export type PointsRepresentation = THREE.Vector3[] | THREE.Vector2[] | THREE.Vector3Tuple[] | THREE.Vector2Tuple[] | number[];
-
-/**
- * 格式兼容性处理函数
- * @param {PointsRepresentation} points 点
- * @returns {Float32Array | number[]}
- */
-export const convertPoints = (points: PointsRepresentation, hanldeWrapper?: (p: [number, number, number]) => number[]): number[] => {
-  return points
-    .map((p: any) => {
-      const isArray = Array.isArray(p);
-      // 先将各种原始数组的格式转化成 Array3<number>
-      if (p instanceof THREE.Vector3) p = [p.x, p.y, p.z];
-      else if (p instanceof THREE.Vector2) p = [p.x, 0.0, p.y];
-      else if (isArray && p.length === 3) p = [p[0], p[1], p[2]];
-      else if (isArray && p.length === 2) p = [p[0], 0.0, p[1]]; // 此函数现在默认只处理mapshaper导出的json文件
-      // 这里是需要特殊处理的格式
-      if (hanldeWrapper) return hanldeWrapper(p); // geojson的Z坐标和threejs的Z坐标是反的
-      return p;
-    })
-    .flat();
-};
+import { convert2Vertex2D } from "@core/utils/vertex";
 
 /**
- * 将线段点通过API传入, 通过计算函数扩充成面片
- * 注: 在 CPU 端只是将连续点扩充, 形成 (1*3*2)*n 的buffer(线的骨架), 而真正的面展开与厚度扩充过程是在 GPU 阶段完成的
+ * 在 CPU 阶段计算必要参数:
+ * 1. 多线段首尾扩充重复顶点, 在shader中判断`lineBreakpoint`是否渲染
+ * 2. 重复一份线段顶点`position`, 在shader中线段上某顶点的两份拷贝根据 `side` 分别向法线的两个方向扩充宽度
+ * 3. 遍历过程中计算 `prev` `next`, 以在shader中计算法线方向
+ * 4. `uv` u代表线段进度, v代表沿着法线扩充程度(法线正方向为0, 法线负方向为1)
+ * 5. `counter` 代表顶点对应当前线段的线段进度(0 ~ 1)
+ * 6. `lineDistance` 代表顶点在线段的总距离
+ *
+ *| Attribute       | Type                   | ItemSize |
+ *|----------------|-------------------------|----------|
+ *| position       | THREE.BufferAttribute   | 3        |
+ *| index          | THREE.BufferAttribute   | 1        |
+ *| prev           | THREE.BufferAttribute   | 3        |
+ *| next           | THREE.BufferAttribute   | 3        |
+ *| side           | THREE.BufferAttribute   | 1        |
+ *| uv             | THREE.BufferAttribute   | 2        |
+ *| counter        | THREE.BufferAttribute   | 1        |
+ *| lineDistance   | THREE.BufferAttribute   | 1        |
+ *| lineBreakpoint | THREE.BufferAttribute   | 1        |
  */
 export class MeshLineGeometry extends THREE.BufferGeometry {
-  override type = "MeshLine";
-  isMeshLine = true;
+  override type = "MeshLineBufferGeometry";
+  isMeshLineGeometry = true;
 
   position: number[] = [];
+  indices_array: number[] = [];
   prev: number[] = [];
   next: number[] = [];
   side: number[] = [];
-  indices_array: number[] = [];
   uv: number[] = [];
   counter: number[] = [];
   lineDistance: number[] = []; // 顶点在线段中的累计长度
   lineBreakpoint: number[] = []; // 顶点是否为断点
-
-  _attributes!: {
-    position: THREE.BufferAttribute;
-    prev: THREE.BufferAttribute;
-    next: THREE.BufferAttribute;
-    side: THREE.BufferAttribute;
-    uv: THREE.BufferAttribute;
-    index: THREE.BufferAttribute;
-    counter: THREE.BufferAttribute;
-    lineDistance: THREE.BufferAttribute;
-    lineBreakpoint: THREE.BufferAttribute;
-  };
 
   constructor() {
     super();
   }
 
   /**
-   * 设置线段
-   * @param points 线条端点
+   * 将此geometry设置为单条线段
+   * @param points [x1, y1, x2, y2...]
    */
   setLine(points: number[]): void {
-    if (points.length % 3 !== 0) throw new Error("[MeshLineGeometry]: 输入的线段顶点必须是三维坐标");
-    this.position.length = 0; // this.position => A(a, b, c), A(a, b, c), B(a, b, c), B(a, b, c)
-    this.counter.length = 0; // 0 ~ 1
+    this.dispose();
+    if (points.length % 3 !== 0) throw new Error("MeshLineGeometry: 输入的线段顶点必须是三维顶点坐标");
+    this.position.length = 0;
+    this.counter.length = 0;
     this.lineDistance.length = 0;
     this.lineBreakpoint.length = 0;
 
     const l = points.length;
-    if (l < 2) throw new Error("[MeshLineGeometry]: 单个顶点无法组成线段");
+    if (l < 2) throw new Error("MeshLineGeometry: 单个顶点无法组成线段");
     let dist = 0;
     for (let i = 0; i < l; i += 3) {
       const c = i / (l - 1);
@@ -90,25 +76,17 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
   }
 
   /**
-   * 设置线多条线段
-   *
-   * 线段1:
-   * 1 0 === 0 === 0 === 0 1
-   * 1 0 === 0 === 0 === 0 1
-   *
-   * 线段2:
-   * 1 0 === 0 1
-   * 1 0 === 0 1
-   * @param lines 多条线段的端点
-   * @param wcb 线宽衰减函数 https://iquilezles.org/articles/functions/
+   * 将此geometry设置为多条线段
+   * @param lines [[x1, y1, x2, y2 ...], [x1, y1, x2, y2 ... ]]
    */
   setMultiLine(lines: number[][]): void {
+    this.dispose();
     if (lines.length <= 1) {
       this.setLine(lines[0]);
       return;
     }
-    this.position.length = 0; // this.position => A(a, b, c), A(a, b, c), B(a, b, c), B(a, b, c)
-    this.counter.length = 0; // 0 ~ 1
+    this.position.length = 0;
+    this.counter.length = 0;
     this.lineDistance.length = 0;
     this.lineBreakpoint.length = 0;
 
@@ -151,13 +129,7 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
     this.process();
   }
 
-  /** 从posisitons中拷贝出对应index的数据 */
-  copyV3(a: number): THREE.Vector3Tuple {
-    const aa = a * 6;
-    return [this.position[aa], this.position[aa + 1], this.position[aa + 2]];
-  }
-
-  /** 核心算法, 整理顶点面序, 整理prev和next用于在shader中计算方向向量 */
+  /** 核心算法, 根据设置线段的顶点计算出必要属性 */
   process(): void {
     this.prev = []; // 每个顶点对应的 "上个顶点"
     this.next = []; // 每个顶点对应的 "下个顶点"
@@ -170,7 +142,7 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
     let _v: THREE.Vector3Tuple; // 临时变量, 用于存放复制的顶点坐标
 
     // 第一个点的prev是自身, 第一个线段通过 next - prev 得到方向向量
-    _v = this.copyV3(0);
+    _v = this._copyV3(0);
     this.prev.push(_v[0], _v[1], _v[2], _v[0], _v[1], _v[2]);
 
     // 遍历所有线段点
@@ -185,7 +157,7 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
 
       // 生成中间顶点的 prev 和 next
       if (j < l - 1) {
-        _v = this.copyV3(j);
+        _v = this._copyV3(j);
         this.prev.push(_v[0], _v[1], _v[2], _v[0], _v[1], _v[2]);
 
         // 生成面索引 indices
@@ -195,57 +167,93 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
         this.indices_array.push(n, n + 1, n + 2, n + 2, n + 1, n + 3);
       }
       if (j > 0) {
-        _v = this.copyV3(j);
+        _v = this._copyV3(j);
         this.next.push(_v[0], _v[1], _v[2], _v[0], _v[1], _v[2]);
       }
     }
 
     // 最后一个点的next是自身
-    _v = this.copyV3(l - 1);
+    _v = this._copyV3(l - 1);
     this.next.push(_v[0], _v[1], _v[2], _v[0], _v[1], _v[2]);
 
     // 将所有计算结果转为 BufferAttribute
+    this.setAttribute("position", new THREE.BufferAttribute(new Float32Array(this.position), 3));
+    this.setAttribute("prev", new THREE.BufferAttribute(new Float32Array(this.prev), 3));
+    this.setAttribute("next", new THREE.BufferAttribute(new Float32Array(this.next), 3));
+    this.setAttribute("side", new THREE.BufferAttribute(new Float32Array(this.side), 1));
+    this.setAttribute("uv", new THREE.BufferAttribute(new Float32Array(this.uv), 2));
+    this.setAttribute("counter", new THREE.BufferAttribute(new Float32Array(this.counter), 1));
+    this.setAttribute("lineDistance", new THREE.BufferAttribute(new Float32Array(this.lineDistance), 1));
+    this.setAttribute("lineBreakpoint", new THREE.BufferAttribute(new Float32Array(this.lineBreakpoint), 1));
+    this.setIndex(new THREE.BufferAttribute(new Uint16Array(this.indices_array), 1));
+  }
 
-    if (!this._attributes) {
-      this._attributes = {
-        position: new THREE.BufferAttribute(new Float32Array(this.position), 3),
-        prev: new THREE.BufferAttribute(new Float32Array(this.prev), 3),
-        next: new THREE.BufferAttribute(new Float32Array(this.next), 3),
-        side: new THREE.BufferAttribute(new Float32Array(this.side), 1),
-        uv: new THREE.BufferAttribute(new Float32Array(this.uv), 2),
-        index: new THREE.BufferAttribute(new Uint16Array(this.indices_array), 1),
-        counter: new THREE.BufferAttribute(new Float32Array(this.counter), 1),
-        lineDistance: new THREE.BufferAttribute(new Float32Array(this.lineDistance), 1),
-        lineBreakpoint: new THREE.BufferAttribute(new Float32Array(this.lineBreakpoint), 1),
-      };
-    } else {
-      this._attributes.position.copyArray(new Float32Array(this.position));
-      this._attributes.position.needsUpdate = true;
-      this._attributes.prev.copyArray(new Float32Array(this.prev));
-      this._attributes.prev.needsUpdate = true;
-      this._attributes.next.copyArray(new Float32Array(this.next));
-      this._attributes.next.needsUpdate = true;
-      this._attributes.side.copyArray(new Float32Array(this.side));
-      this._attributes.side.needsUpdate = true;
-      this._attributes.uv.copyArray(new Float32Array(this.uv));
-      this._attributes.uv.needsUpdate = true;
-      this._attributes.index.copyArray(new Uint16Array(this.indices_array));
-      this._attributes.index.needsUpdate = true;
-      this._attributes.lineDistance.copyArray(new Float32Array(this.lineDistance));
-      this._attributes.lineDistance.needsUpdate = true;
-      this._attributes.lineBreakpoint.copyArray(new Float32Array(this.lineBreakpoint));
-      this._attributes.lineBreakpoint.needsUpdate = true;
+  /**
+   * 根据 index 从类属性positions中拷贝出顶点数据
+   * @param a 索引
+   * @returns
+   */
+  private _copyV3(a: number): THREE.Vector3Tuple {
+    const aa = a * 6;
+    return [this.position[aa], this.position[aa + 1], this.position[aa + 2]];
+  }
+
+  /**
+   * 从 FeatureCollection<LineString> 类型数据结构中获取多条线段
+   *
+   * ```
+   * {
+   *  "type":"FeatureCollection", "features": [
+   *   ...
+   * }
+   * ``
+   * @param data FeatureCollection<LineString> 类型数据结构
+   */
+  setFromMapShaperFeatureCollection(data: FeatureCollection<LineString>) {
+    this.dispose();
+
+    const hanldeWrapper = (p: [number, number, number]): number[] => [p[0], 0.0, -p[2]]; // cad => qgis => mapshaper => geojson y(z)轴需要翻转一下
+    const _coordinates = [];
+    for (let i = 0; i < data.features.length; i++) {
+      const feature = data.features[i];
+      if (feature.geometry.type !== "LineString") {
+        console.warn("MeshLineGeometry.setFromMapShaperFeatureCollection: 数据结构中存在非LineString类型Feature");
+        continue;
+      }
+      const featureGeometryCoordinates = feature.geometry.coordinates; // THREE.Vector2Tuple[] | THREE.Vector3Tuple[]
+      const coordinates = convert2Vertex2D(featureGeometryCoordinates, hanldeWrapper); // [[x1, 0.0, z1], [x2, 0.0, z2], ...]
+      _coordinates.push(coordinates.flat()); // [x1, 0.0, z1, x2, 0.0, z2, ...]
     }
 
-    this.setAttribute("position", this._attributes.position);
-    this.setAttribute("prev", this._attributes.prev);
-    this.setAttribute("next", this._attributes.next);
-    this.setAttribute("side", this._attributes.side);
-    this.setAttribute("uv", this._attributes.uv);
-    this.setAttribute("counter", this._attributes.counter);
-    this.setAttribute("lineDistance", this._attributes.lineDistance);
-    this.setAttribute("lineBreakpoint", this._attributes.lineBreakpoint);
+    this.setMultiLine(_coordinates);
+  }
 
-    this.setIndex(this._attributes.index);
+  /**
+   * 从 GeometryCollection<LineString> 类型数据结构中获取多条线段
+   *
+   * ```
+   * {
+   *  "type":"GeometryCollection", "features": [
+   *   ...
+   * }
+   * ``
+   * @param data GeometryCollection<LineString> 类型数据结构
+   */
+  setFromMapShaperGeometryCollection(data: GeometryCollection<LineString>) {
+    this.dispose();
+    const hanldeWrapper = (p: [number, number, number]): number[] => [p[0], 0.0, -p[2]]; // cad => qgis => mapshaper => geojson y(z)轴需要翻转一下
+    const _coordinates = [];
+    for (let i = 0; i < data.geometries.length; i++) {
+      const feature = data.geometries[i];
+      if (feature.type !== "LineString") {
+        console.warn("MeshLineGeometry.setFromMapShaperGeometryCollection: 数据结构中存在非LineString类型Feature");
+        continue;
+      }
+      const featureGeometryCoordinates = feature.coordinates; // THREE.Vector2Tuple[] | THREE.Vector3Tuple[]
+      const coordinates = convert2Vertex2D(featureGeometryCoordinates, hanldeWrapper); // [[x1, 0.0, z1], [x2, 0.0, z2], ...]
+      _coordinates.push(coordinates.flat()); // [x1, 0.0, z1, x2, 0.0, z2, ...]
+    }
+
+    this.setMultiLine(_coordinates);
   }
 }
