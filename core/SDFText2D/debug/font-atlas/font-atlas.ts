@@ -52,56 +52,97 @@ const createSDFMaterial = (textureArray: THREE.DataArrayTexture) => {
     depthWrite: false,
     depthTest: false,
     side: THREE.FrontSide,
-    blending: THREE.CustomBlending,
-    blendEquation: THREE.MaxEquation,
-    blendSrc: THREE.OneFactor,
-    blendDst: THREE.OneFactor,
     uniforms: {
       uAtlas: { value: textureArray },
       uColor: { value: new THREE.Color(0xffffff) },
+      uBgColor: { value: new THREE.Color(0x1565c0) },
       uThreshold: { value: 0.5 },
       uSmoothing: { value: 0.1 },
+      uRadius: { value: 0.15 },
     },
     vertexShader: /*glsl*/ `
       in vec3 position;
       in vec2 uv;
-      in float page;
+      in float aPage;
+      in float aType;
+      in vec2 aLocalPos;
+      in float aLocalAspect;
 
       out vec2 vUv;
       flat out int vPage;
+      flat out float vType;
+      out vec2 vLocalPos;
+      out float vLocalAspect;
 
       uniform mat4 modelViewMatrix;
       uniform mat4 projectionMatrix;
 
       void main() {
         vUv = uv;
-        vPage = int(page);
+        vPage = int(aPage);
+        vType = aType;
+        vLocalPos = aLocalPos;
+        vLocalAspect = aLocalAspect;
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
       }
     `,
     fragmentShader: /*glsl*/ `
       precision highp float;
       precision highp sampler2DArray;
-      
+
       uniform sampler2DArray uAtlas;
+      uniform vec3 uColor;
+      uniform vec3 uBgColor;
+      uniform float uThreshold;
+      uniform float uSmoothing;
+      uniform float uRadius;
 
       in vec2 vUv;
       flat in int vPage;
-
-      uniform vec3 uColor;
-      uniform float uThreshold;
-      uniform float uSmoothing;
+      flat in float vType;
+      in vec2 vLocalPos;
+      in float vLocalAspect;
 
       out vec4 outColor;
 
+      float roundedBoxSDF(vec2 p, vec2 b, float r) {
+        vec2 q = abs(p) - b + r;
+        return length(max(q, 0.0)) - r;
+      }
+
+      // 计算方法：先将空间在 y 方向缩放（p2, b2, r2），
+      /// 在缩放空间计算 SDF，再将距离除以 aspect 还原。
+      float roundedBoxSDF_aspect(vec2 p, vec2 b, float r, float aspect) {
+        // scale coordinates in y
+        vec2 p2 = vec2(p.x, p.y * aspect);
+        vec2 b2 = vec2(b.x, b.y * aspect);
+        float r2 = r * aspect;
+
+        vec2 q = abs(p2) - b2 + r2;
+        float d = length(max(q, 0.0)) - r2;
+
+        // 把距离映射回原始空间
+        return d / aspect;
+      }
+
       void main() { 
+        if (vType < 0.5) {
+          vec2 halfSize = vec2(0.5); 
+          // float rbmask = roundedBoxSDF(vLocalPos, halfSize, uRadius);
+          float rbmask = roundedBoxSDF_aspect(vLocalPos, halfSize, uRadius, vLocalAspect);
+          float edge = 0.005; // 控制边缘软硬
+          float rbmaskF = 1.0 - smoothstep(0.0, edge, rbmask);
+          outColor = vec4(uBgColor, rbmaskF);
+          return;
+        }
+        
         // sample SDF from texture array (R channel)
         float dist = texture(uAtlas, vec3(vUv, float(vPage))).r;
 
         // smoothstep around threshold; note uSmoothing should be small (e.g. 0.02..0.08)
         float alpha = smoothstep(uThreshold - uSmoothing, uThreshold + uSmoothing, dist);
 
-        outColor = vec4(vec3(dist), 1.);
+        outColor = vec4(vec3(dist), alpha);
       }
     `,
   });
@@ -111,7 +152,7 @@ const createSDFMaterial = (textureArray: THREE.DataArrayTexture) => {
  * 根据输入字符串和设置创建网格（单一合并 mesh）
  * 说明：
  *  - 每个 glyph 产生 4 顶点（一个 quad）
- *  - 我们为每个顶点写 position(3), uv(2), page(1)
+ *  - 我们为每个顶点写 position(3), uv(2), aPage(1)
  */
 const createTextMesh = (text: string, fontSize: number = 4, lineHeight: number = 5) => {
   // 环境检查：是否支持 WebGL2（必需：sampler2DArray）
@@ -124,14 +165,22 @@ const createTextMesh = (text: string, fontSize: number = 4, lineHeight: number =
   const uvs: number[] = [];
   const indices: number[] = [];
   const pages: number[] = [];
+  const types: number[] = [];
+  const localPos: number[] = [];
+  const localAspect: number[] = [];
+
+  const padding = [4.0, 4.0, 4.0, 4.0];
 
   let cursorColumn = 0; // 当前光标在的column
   let cursorX = 0;
   let cursorZ = 0;
-  let indexOffset = 0;
-
+  let cursorX_max = 0.0;
+  let cursorZ_max = 0.0;
+  let indexOffset = 4; // 0
   const scale = fontSize / SDF_FONT_SIZE; // tinySdfInstance["size"];
+  const offset = Math.log2(SDF_FONT_SIZE) * scale;
 
+  // 生成字形
   for (const ch of text) {
     if (ch === "\n") {
       cursorColumn = 0;
@@ -149,26 +198,56 @@ const createTextMesh = (text: string, fontSize: number = 4, lineHeight: number =
 
     const { page, glyph, u0, v0, u1, v1 } = glyphAtlas;
     const { data, width, height, glyphWidth, glyphHeight, glyphLeft, glyphTop, glyphAdvance } = glyph;
-    let offset = 0.0;
     const w = width * scale;
     const h = height * scale;
-    const x = cursorX + offset;
+    const x = cursorX;
     const y = cursorZ - glyphTop * scale;
 
     positions.push(x, 0, y, x + w, 0, y, x + w, 0, y + h, x, 0, y + h); // vertex
     uvs.push(u0, v0, u1, v0, u1, v1, u0, v1); // uv
-    indices.push(indexOffset, indexOffset + 2, indexOffset + 1, indexOffset, indexOffset + 3, indexOffset + 2); // indices
+    indices.push(indexOffset, indexOffset + 2, indexOffset + 1, indexOffset, indexOffset + 3, indexOffset + 2);
     pages.push(page, page, page, page);
+    types.push(1, 1, 1, 1);
+    localPos.push(0, 0, 0, 0, 0, 0, 0, 0);
+    localAspect.push(0, 0, 0, 0);
     indexOffset += 4;
 
     cursorColumn += 1;
-    cursorX += glyphAdvance * scale;
+    cursorX += glyphAdvance * scale + offset;
+    cursorX_max = Math.max(cursorX_max, cursorX);
+    cursorZ_max = Math.max(cursorZ_max, cursorZ);
   }
 
+  // 生成背景
+  const halfSDF = (SDF_SIZE * scale) / 2.0;
+  const halfFont = fontSize / 2.0;
+  const paddingTop = padding[0];
+  const paddingRight = padding[1];
+  const paddingBottom = padding[2];
+  const paddingLeft = padding[3];
+  const a1 = [0.0 - paddingLeft, 0.0, 0.0 - paddingBottom - halfSDF]; // 左下
+  const a2 = [cursorX_max + paddingRight + halfFont, 0.0, 0.0 - paddingBottom - halfSDF];
+  const a3 = [cursorX_max + paddingRight + halfFont, 0.0, cursorZ_max + paddingTop + halfSDF]; // 右上
+  const a4 = [0.0 - paddingLeft, 0.0, cursorZ_max + paddingTop + halfSDF];
+  const aspect = (cursorZ_max + paddingTop + halfSDF - (-paddingBottom - halfSDF)) / (cursorX_max + paddingRight + halfFont - (0.0 - paddingLeft)); // z / x
+  // console.log(aspect);
+  positions.unshift(...a1, ...a2, ...a3, ...a4);
+  // console.log(...a1, ...a2, ...a3, ...a4);
+  uvs.unshift(0, 0, 0, 0, 0, 0, 0, 0);
+  indices.unshift(0, 2, 1, 0, 3, 2);
+  pages.unshift(0, 0, 0, 0);
+  types.unshift(0, 0, 0, 0);
+  localPos.unshift(-0.5, -0.5, 0.5, -0.5, 0.5, 0.5, -0.5, 0.5);
+  localAspect.unshift(aspect, aspect, aspect, aspect);
+
+  // 绑定buffer
   const geometry = new THREE.BufferGeometry();
   geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
   geometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
-  geometry.setAttribute("page", new THREE.Float32BufferAttribute(pages, 1));
+  geometry.setAttribute("aPage", new THREE.Float32BufferAttribute(pages, 1));
+  geometry.setAttribute("aType", new THREE.Float32BufferAttribute(types, 1));
+  geometry.setAttribute("aLocalPos", new THREE.Float32BufferAttribute(localPos, 2)); // 局部空间, 用于计算背景
+  geometry.setAttribute("aLocalAspect", new THREE.Float32BufferAttribute(localAspect, 1)); // 局部空间, 用于计算背景
   geometry.setIndex(indices);
 
   geometry.computeBoundingBox();
