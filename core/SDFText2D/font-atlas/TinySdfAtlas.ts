@@ -30,15 +30,13 @@ export type AtlasProperty = {
 };
 
 export class TinySDFAtlas {
-  /** 单例标记(全局只生成一次) */
-  static prepared: boolean = false;
+  /** 烘焙贴图标记 */ static prepared: boolean = false;
 
-  /** 常用基础字形(会自动合并到 prepareGlyph 的输入中) */
-  static readonly Charactor_Common = "▢ ";
-  static readonly Charactor_Number = "0123456789";
-  static readonly Charactor_EN = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-  static readonly Synbol_EN = ".,:;!?\"'`-_()[]{}/\\@#$%^&*+=<>|";
-  static readonly Synbol_ZH = "，。！？：；“”‘’（）【】《》—…";
+  /**  必须字符 */ static readonly Charactor_Basic = "▢ ";
+  /**  数字字符 */ static readonly Charactor_Number = "0123456789";
+  /**  英文字符 */ static readonly Charactor_EN = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  /**  英文标点 */ static readonly Synbol_EN = ".,:;!?\"'`-_()[]{}/\\@#$%^&*+=<>|";
+  /**  中文标点 */ static readonly Synbol_ZH = "，。！？：；“”‘’（）【】《》—…";
 
   private static _instance: TinySDFAtlas | null = null;
 
@@ -93,7 +91,7 @@ export class TinySDFAtlas {
     }
 
     // 合并并去重字符
-    const combined = TinySDFAtlas.Charactor_Common + TinySDFAtlas.Charactor_Number + TinySDFAtlas.Charactor_EN + TinySDFAtlas.Synbol_EN + characters;
+    const combined = TinySDFAtlas.Charactor_Basic + TinySDFAtlas.Charactor_Number + TinySDFAtlas.Charactor_EN + TinySDFAtlas.Synbol_EN + characters;
     const uniqueChars = Array.from(new Set(combined.split("")));
 
     // packing状态, 以当前页最后位置为起点

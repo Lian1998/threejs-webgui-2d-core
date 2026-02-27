@@ -17,17 +17,18 @@ const pages = tinySDFAtlas.getAllPages();
 const size = ATLAS_TEXTURE_SIZE;
 const layerSize = size * size;
 const data = new Uint8Array(layerSize * pages.length);
-for (let i = 0; i < pages.length; i++) {
-  const canvas = pages[i];
+for (let p = 0; p < pages.length; p++) {
+  const canvas = pages[p];
   const ctx = canvas.getContext("2d");
   const imageData = ctx.getImageData(0, 0, size, size);
   const rgba = imageData.data;
-  const pageOffset = i * layerSize;
-  for (let i = 0; i < layerSize; i++) {
-    data[pageOffset + i] = rgba[i * 4];
+  const pageOffset = p * layerSize;
+
+  for (let j = 0; j < layerSize; j++) {
+    data[pageOffset + j] = rgba[j * 4 + 0]; // R 通道
   }
 }
-const textureArray = new THREE.DataArrayTexture(data, size, size, pages.length);
+const textureArray = new THREE.DataArrayTexture(data, size, size, pages.length); // 准备threejs DataArrayTexture (字形数据存储在红色通道)
 textureArray.flipY = false;
 textureArray.format = THREE.RedFormat;
 textureArray.type = THREE.UnsignedByteType;
@@ -41,9 +42,8 @@ import { SDF_BUFFER } from "@core/SDFText2D/font-atlas/tinySdfWrapper";
 import { SDF_SIZE } from "@core/SDFText2D/font-atlas/tinySdfWrapper";
 
 /**
- * 创建材质
- * @param texture
- * @returns
+ * 创建材质 (确保 #version 300 es + glslVersion: THREE.GLSL3)
+ *  NOTE: 使用 RawShaderMaterial + GLSL3 (Texture2DArray 需要 WebGL2)
  */
 const createSDFMaterial = (textureArray: THREE.DataArrayTexture) => {
   return new THREE.RawShaderMaterial({
@@ -94,9 +94,13 @@ const createSDFMaterial = (textureArray: THREE.DataArrayTexture) => {
 
       out vec4 outColor;
 
-      void main() {
+      void main() { 
+        // sample SDF from texture array (R channel)
         float dist = texture(uAtlas, vec3(vUv, float(vPage))).r;
+
+        // smoothstep around threshold; note uSmoothing should be small (e.g. 0.02..0.08)
         float alpha = smoothstep(uThreshold - uSmoothing, uThreshold + uSmoothing, dist);
+
         outColor = vec4(vec3(dist), 1.);
       }
     `,
@@ -104,13 +108,16 @@ const createSDFMaterial = (textureArray: THREE.DataArrayTexture) => {
 };
 
 /**
- * 根据输入字符串和设置创建网格
- * @param text
- * @param fontSize
- * @param lineHeight
- * @returns
+ * 根据输入字符串和设置创建网格（单一合并 mesh）
+ * 说明：
+ *  - 每个 glyph 产生 4 顶点（一个 quad）
+ *  - 我们为每个顶点写 position(3), uv(2), page(1)
  */
 const createTextMesh = (text: string, fontSize: number = 4, lineHeight: number = 5) => {
+  // 环境检查：是否支持 WebGL2（必需：sampler2DArray）
+  // 这里不能访问 renderer yet；如果需要，可外部检查 renderer.capabilities.isWebGL2
+  // console.warn(renderer.capabilities.isWebGL2);
+
   const material = createSDFMaterial(textureArray);
 
   const positions: number[] = [];
@@ -165,7 +172,12 @@ const createTextMesh = (text: string, fontSize: number = 4, lineHeight: number =
   geometry.setIndex(indices);
 
   geometry.computeBoundingBox();
-  geometry.center(); // 居中一下几何体
+  geometry.translate(
+    // 居中 XZ 轴 (避免改变 Y)
+    -(geometry.boundingBox.max.x + geometry.boundingBox.min.x) / 2,
+    0,
+    -(geometry.boundingBox.max.z + geometry.boundingBox.min.z) / 2,
+  );
 
   return new THREE.Mesh(geometry, material);
 };
@@ -200,9 +212,6 @@ const animate = () => {
   requestAnimationFrame(animate);
   const deltaTime = clock.getDelta();
   const elapsedTime = clock.getElapsedTime();
-
-  // mesh.rotation.x += 0.01;
-  // mesh.rotation.y += 0.01;
 
   renderer.render(scene, camera);
 
