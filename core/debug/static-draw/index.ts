@@ -14,10 +14,6 @@ import { orthoCamera } from "@source/inMap/viewport";
 import { mapControls } from "@source/inMap/viewport";
 
 import { ensureWebGL2Available } from "@source/inMap/utils/common";
-import { registerOrthoCameraOnResize } from "@source/inMap/viewport";
-
-import { ViewportResizeDispatcher } from "@core/index";
-import { GpuPickCommonListener } from "@core/index";
 
 ensureWebGL2Available();
 
@@ -27,25 +23,30 @@ renderer.setClearColor(0xffffff, 0.0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 viewport.appendChild(renderer.domElement);
 
+// 烘焙材质贴图
+import { tinySDFAtlas } from "@core/SDFText2D/font-atlas/TinySdfAtlas";
+tinySDFAtlas.prepareGlyph("你好世界!岸桥场桥:装船卸船移箱集装箱主小车门架小车任务指令状态数值％角度°速度故障模式~，。（）-繁华声遁入空门折煞了世人");
+
 // 挂载resize事件通知
+import { ViewportResizeDispatcher } from "@core/index";
 new ViewportResizeDispatcher(renderer);
 
 // 挂载resize视角改变函数
+import { registerOrthoCameraOnResize } from "@source/inMap/viewport";
 registerOrthoCameraOnResize();
 
 // 挂载基于GPUBuffer的图元拾取核心
+import { GpuPickCommonListener } from "@core/index";
 const gpuPickCommonListener = new GpuPickCommonListener(renderer, ThreejsGroups.Meshes, orthoCamera);
 mapControls.addEventListener("start", () => (gpuPickCommonListener.enabled = false));
 mapControls.addEventListener("end", () => (gpuPickCommonListener.enabled = true));
 
-import { initialization_BaseMap } from "@source/inMap/baseMap";
 // 初始化底图
+import { initialization_BaseMap } from "@source/inMap/baseMap";
 initialization_BaseMap();
 
 //////////////////////////////////////// 业务代码(设备)逻辑 ////////////////////////////////////////
 import { IActor } from "@core/interfaces/IActor";
-import { SpriteXZRectGeometry } from "@core/index";
-import { SDFText2DGenMaterial } from "@core/index";
 import { MeshPolygonGeometry } from "@core/index";
 import { MeshPolygonMaterial } from "@core/index";
 import { MeshLineGeometry } from "@core/index";
@@ -54,12 +55,14 @@ import { MeshLineMaterial } from "@core/index";
 import { ColorPaletteManager } from "@source/themes/ColorPaletteManager/";
 await ColorPaletteManager.instance.initialization();
 
-import { STS } from "@source/classes/Devices/STS";
-import { AGV } from "@source/classes/Devices/AGV";
-import { ASC } from "@source/classes/Devices/ASC";
+// import { STS } from "@source/classes/Devices/STS";
+// import { AGV } from "@source/classes/Devices/AGV";
+// import { ASC } from "@source/classes/Devices/ASC";
+
+import { SDFText2DGeometry } from "@core/index";
+import { SDFText2DMaterial } from "@core/index";
 
 import { YardMap } from "@source/data";
-import { SDFText2DGen } from "@core/index";
 import { handleYardData } from "@source/data/handleYardData";
 
 const LOGIC_CENTER = [567485.3, -2397835];
@@ -70,12 +73,12 @@ Promise.all([
     .then((response) => response.json())
     .then((data) => {
       console.warn("initDevice", data);
-      const STSRailsAnchorY = -(2397641.79 + 2397676.79) / 2.0 - 21.0;
-      // STS
-      for (const itemValue of data[0].itemValue) {
-        const sts = new STS(itemValue.cheId);
-        sts.represents.stsGantry.position.set(567297.0 - itemValue.GantryPos / 100.0, 0.0, STSRailsAnchorY);
-      }
+      // const STSRailsAnchorY = -(2397641.79 + 2397676.79) / 2.0 - 21.0;
+      // // STS
+      // for (const itemValue of data[0].itemValue) {
+      //   const sts = new STS(itemValue.cheId);
+      //   sts.represents.stsGantry.position.set(567297.0 - itemValue.GantryPos / 100.0, 0.0, STSRailsAnchorY);
+      // }
 
       // // AGV
       // for (const itemValue of data[1].itemValue) {
@@ -110,12 +113,17 @@ Promise.all([
         positions.push(...a1, ...a2, ...a3, ...a3, ...a4, ...a1);
         lines.push([...a1, ...a2, ...a3, ...a4, ...a1]);
 
-        // // 文字描述
-        // const label = new SDFText2D({ text: element.areaName, renderOrder: ThreejsRenderOrder.BLOCK_PREDEFINE_LABEL });
-        // label.position.set(coordinates[0], 0.0, coordinates[1]);
-        // label.scale.setScalar(0.5);
-        // (label.material as SDFText2DMaterial).uBackgroundAlpha = 0.0;
-        // ThreejsGroups.Meshes.add(label);
+        // 文字描述
+        const labelGeometry = new SDFText2DGeometry();
+        labelGeometry.setFromText({ text: element.areaName });
+        const labelMaterial = new SDFText2DMaterial({ uBackgroundAlpha: 0.0, uOutlineColor: new THREE.Color(0xff0000) });
+        const label = new THREE.Mesh(labelGeometry, labelMaterial);
+        label.renderOrder = ThreejsRenderOrder.BLOCK_PREDEFINE_LABEL;
+        label.name = element.areaName;
+        label.position.set(coordinates[0], 0.0, coordinates[1]);
+        label.scale.setScalar(0.5);
+        (label.material as SDFText2DMaterial).uBackgroundAlpha = 0.0;
+        ThreejsGroups.Meshes.add(label);
       }
 
       // 几何面
@@ -170,7 +178,7 @@ Promise.all([
     //   };
     // }
 
-    for (const [seq, instance] of STS.classInstanceMap) (instance as IActor)?.onInit();
+    // for (const [seq, instance] of STS.classInstanceMap) (instance as IActor)?.onInit();
     console.log(ThreejsGroups.BaseMap);
     console.log(ThreejsGroups.Meshes);
 
@@ -198,7 +206,7 @@ const animate = () => {
   ThreejsGroups.Represents.updateMatrixWorld();
 
   // STS.getClassInstance<STS>(0).represents.stsGantry.position.x -= 0.05; // QC072
-  for (const [seq, instance] of STS.classInstanceMap) (instance as IActor)?.onUpdate(deltaTime, elapsedTime);
+  // for (const [seq, instance] of STS.classInstanceMap) (instance as IActor)?.onUpdate(deltaTime, elapsedTime);
 
   // 渲染图元
   renderer.render(ThreejsGroups.Meshes, orthoCamera);

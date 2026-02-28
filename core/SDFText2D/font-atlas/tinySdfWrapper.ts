@@ -1,6 +1,6 @@
 import TinySDF from "tiny-sdf";
 
-export const SDF_FONT_SIZE = 64; // 渲染字体的实际大小
+export const SDF_FONT_SIZE = 128; // 渲染字体的实际大小
 export const SDF_BUFFER = Math.ceil(SDF_FONT_SIZE / 4); // 字符周围空白区域, 留一定的距离可以保证渲染完整
 export const SDF_SIZE = SDF_FONT_SIZE + SDF_BUFFER * 2.0; // 生成Buffer的实际大小
 export const SDF_RADIUS = Math.max(Math.ceil(SDF_FONT_SIZE / 3), 8); // 边缘到外部的发散

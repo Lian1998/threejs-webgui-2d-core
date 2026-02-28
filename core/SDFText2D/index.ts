@@ -1,4 +1,4 @@
-export * from "./SDFText2DGen";
+// export * from "./SDFText2DGen";
 
 export * from "./SDFText2DGeometry";
 export * from "./SDFText2DMaterial";
