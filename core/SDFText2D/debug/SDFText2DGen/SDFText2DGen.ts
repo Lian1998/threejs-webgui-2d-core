@@ -3,8 +3,8 @@ import * as THREE from "three";
 import { SpriteXZRectGeometry } from "@core/Sprite2D/index";
 import { SDFText2DGenMaterial } from "./SDFText2DGenMaterial";
 
-import { SDF_FONT_SIZE } from "@core/SDFText2D/font-atlas/tinySdfWrapper";
-import { tinySdfInstance } from "@core/SDFText2D/font-atlas/tinySdfWrapper";
+import { SDF_FONT_SIZE } from "@core/SDFText2D/TinySdfAtlas";
+import { tinySdfInstance } from "@core/SDFText2D/TinySdfAtlas";
 
 import { gen as genTinySDFCanvas2D } from "@core/SDFText2D/debug/gen/TinySDF.Canvas2D";
 

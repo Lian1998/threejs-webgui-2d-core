@@ -1,10 +1,10 @@
 import * as THREE from "three";
 
-import { tinySDFAtlas } from "@core/SDFText2D/font-atlas/TinySdfAtlas";
-import { ATLAS_TEXTURE_SIZE } from "@core/SDFText2D/font-atlas/TinySdfAtlas";
-import { SDF_FONT_SIZE } from "@core/SDFText2D/font-atlas/tinySdfWrapper";
-import { SDF_BUFFER } from "@core/SDFText2D/font-atlas/tinySdfWrapper";
-import { SDF_SIZE } from "@core/SDFText2D/font-atlas/tinySdfWrapper";
+import { tinySDFAtlas } from "@core/SDFText2D/TinySdfAtlas";
+import { ATLAS_TEXTURE_SIZE } from "@core/SDFText2D/TinySdfAtlas";
+import { SDF_FONT_SIZE } from "@core/SDFText2D/TinySdfAtlas";
+import { SDF_BUFFER } from "@core/SDFText2D/TinySdfAtlas";
+import { SDF_SIZE } from "@core/SDFText2D/TinySdfAtlas";
 
 interface SDFText2DGeometryParameters {
   text: string;
@@ -15,8 +15,8 @@ interface SDFText2DGeometryParameters {
 }
 
 /**
- * 根据输入字符串和设置创建网格（单一合并 mesh）
- *  每个 glyph 产生 4 顶点（一个 quad）
+ * 根据输入字符串和设置创建网格(单一合并 mesh)
+ *  每个 glyph 产生 4 顶点(一个 quad)
  */
 export class SDFText2DGeometry extends THREE.BufferGeometry {
   constructor() {
@@ -24,9 +24,9 @@ export class SDFText2DGeometry extends THREE.BufferGeometry {
   }
 
   /**
-   * 根据输入字符串和设置创建网格（单一合并 mesh）
-   * 说明：
-   *  - 每个 glyph 产生 4 顶点（一个 quad）
+   * 根据输入字符串和设置创建网格(单一合并 mesh)
+   * 说明:
+   *  - 每个 glyph 产生 4 顶点(一个 quad)
    *  - 我们为每个顶点写 position(3), uv(2), aPage(1)
    */
   setFromText(parameters: SDFText2DGeometryParameters) {

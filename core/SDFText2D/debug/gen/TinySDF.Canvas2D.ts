@@ -1,12 +1,12 @@
 import TinySDF from "tiny-sdf";
 import { makeRGBAImageData } from "@core/utils/canvas2d_buffers";
-import { DEBUG_SDF_BUFFER_RENDER_PERFORMANCE } from "@core/SDFText2D/index";
+import { DEBUG_SDF_GEN_BUFFER_RENDER_PERFORMANCE } from "@core/SDFText2D/index";
 
 /** 缓存通过TinySDF生成过的字形 */
 export const glyphsCache = new Map<string, ReturnType<TinySDF["draw"]>>();
 
 export const gen = (tinySdf: TinySDF, text: string): HTMLCanvasElement => {
-  DEBUG_SDF_BUFFER_RENDER_PERFORMANCE && console.time(`TinySDF.Canvas2D.gen`);
+  DEBUG_SDF_GEN_BUFFER_RENDER_PERFORMANCE && console.time(`TinySDF.Canvas2D.gen`);
 
   // 生成字形, 并计算text的整体长度和高度
   const chars = Array.from(text);
@@ -62,7 +62,7 @@ export const gen = (tinySdf: TinySDF, text: string): HTMLCanvasElement => {
     x += glyphAdvance;
   }
 
-  DEBUG_SDF_BUFFER_RENDER_PERFORMANCE && console.timeEnd(`TinySDF.Canvas2D.gen`);
+  DEBUG_SDF_GEN_BUFFER_RENDER_PERFORMANCE && console.timeEnd(`TinySDF.Canvas2D.gen`);
 
   return canvas;
 };

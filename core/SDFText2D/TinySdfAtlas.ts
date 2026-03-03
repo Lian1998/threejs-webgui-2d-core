@@ -1,16 +1,33 @@
 import TinySDF from "tiny-sdf";
-import { SDF_FONT_SIZE } from "./tinySdfWrapper";
-import { SDF_BUFFER } from "./tinySdfWrapper";
-import { SDF_SIZE } from "./tinySdfWrapper";
-import { tinySdfInstance } from "./tinySdfWrapper";
+
+export const SDF_FONT_SIZE = 128; // 渲染字体的实际大小
+export const SDF_BUFFER = Math.ceil(SDF_FONT_SIZE / 4); // 字符周围空白区域, 留一定的距离可以保证渲染完整
+export const SDF_SIZE = SDF_FONT_SIZE + SDF_BUFFER * 2.0; // 生成Buffer的实际大小
+export const SDF_RADIUS = Math.max(Math.ceil(SDF_FONT_SIZE / 3), 8); // 边缘到外部的发散
+export const SDF_CUTOFF = 0.25; // 中心到边缘的发散
+export const ATLAS_TEXTURE_SIZE = 1024;
+
+// 通过 tiny-sdf 获取字形相关信息
+// repo: https://github.com/mapbox/tiny-sdf
+// demo: https://github.com/mapbox/tiny-sdf/blob/main/index.html
+// demo-page: https://mapbox.github.io/tiny-sdf/
+// sdf in webgl: https://cs.brown.edu/people/pfelzens/papers/dt-final.pdf
+export const tinySdfInstance = new TinySDF({
+  fontFamily: "sans-serif", // CSS font-family
+  fontWeight: "normal", // CSS font-weight
+  fontStyle: "normal", // CSS font-style
+  fontSize: SDF_FONT_SIZE,
+  buffer: SDF_BUFFER,
+  radius: SDF_RADIUS,
+  cutoff: SDF_CUTOFF,
+});
+
 import { makeRGBAImageData } from "@core/utils/canvas2d_buffers";
 
 import { DEBUG_SDF_ATLAS_BUFFER_RENDER_PERFORMANCE } from "@core/SDFText2D/index";
 
-export const ATLAS_TEXTURE_SIZE = 1024; // 同你原始代码的常量
-
 /** atlas 基本属性 */
-export type AtlasProperty = {
+type SDFAtlasProperty = {
   page: number;
   u0: number;
   v0: number;
@@ -29,7 +46,7 @@ export type AtlasProperty = {
   // glyphAdvance: 绘制完当前字形后, 光标应当右移的距离
 };
 
-export class TinySDFAtlas {
+class TinySDFAtlas {
   /** 烘焙贴图标记 */ static prepared: boolean = false;
 
   /**  必须字符 */ static readonly Charactor_Basic = "▢ ";
@@ -45,11 +62,10 @@ export class TinySDFAtlas {
   private atlasCtxs: (CanvasRenderingContext2D | null)[] = [];
 
   /** glyph 映射表 */
-  glyphMap: Map<string, AtlasProperty> = new Map();
+  glyphMap: Map<string, SDFAtlasProperty> = new Map();
 
   private constructor() {
-    // 初始创建第一页
-    this.createNewPage();
+    this.createNewPage(); // 初始创建第一页
   }
 
   /** 获取单例 */
@@ -58,6 +74,7 @@ export class TinySDFAtlas {
     return TinySDFAtlas._instance;
   }
 
+  /** 保证资源被初始化 */
   private static ensurePrepared() {
     if (!TinySDFAtlas.prepared) {
       throw new Error("TinySDFAtlas: 还未生成 tinysdf 的 glyph atlas 贴图, 请先调用 prepareGlyph()");
@@ -149,7 +166,7 @@ export class TinySDFAtlas {
     TinySDFAtlas.prepared = true;
     DEBUG_SDF_ATLAS_BUFFER_RENDER_PERFORMANCE && console.timeEnd("TinySDFAtlas: 生成基础字形贴图");
 
-    console.info(`TinySDFAtlas:  glyphMap size ${this.glyphMap.size}`);
+    console.info(`TinySDFAtlas: glyphMap size ${this.glyphMap.size}`);
   }
 
   /** 检查是否包含某字形 */
@@ -157,8 +174,8 @@ export class TinySDFAtlas {
     return this.glyphMap.has(ch);
   }
 
-  /** 获取字形信息(确保已 prepare) */
-  getGlyphAtlas(ch: string): AtlasProperty {
+  /** 获取字形信息 */
+  getGlyphAtlas(ch: string): SDFAtlasProperty {
     TinySDFAtlas.ensurePrepared();
     if (this.glyphMap.has(ch)) return this.glyphMap.get(ch);
     return this.glyphMap.get("▢");

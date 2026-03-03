@@ -3,16 +3,13 @@ import * as THREE from "three";
 import vertexShader from "./shaders/sdfText2d.vs?raw";
 import fragmentShader from "./shaders/sdfText2d.fs?raw";
 
-import { tinySDFAtlas } from "@core/SDFText2D/font-atlas/TinySdfAtlas";
-import { ATLAS_TEXTURE_SIZE } from "@core/SDFText2D/font-atlas/TinySdfAtlas";
-import { SDF_FONT_SIZE } from "@core/SDFText2D/font-atlas/tinySdfWrapper";
-import { SDF_BUFFER } from "@core/SDFText2D/font-atlas/tinySdfWrapper";
-import { SDF_SIZE } from "@core/SDFText2D/font-atlas/tinySdfWrapper";
+import { tinySDFAtlas } from "@core/SDFText2D/TinySdfAtlas";
+import { ATLAS_TEXTURE_SIZE } from "@core/SDFText2D/TinySdfAtlas";
+import { SDF_FONT_SIZE } from "@core/SDFText2D/TinySdfAtlas";
+import { SDF_BUFFER } from "@core/SDFText2D/TinySdfAtlas";
+import { SDF_SIZE } from "@core/SDFText2D/TinySdfAtlas";
 
 export interface SDFText2DMaterialParameters extends THREE.ShaderMaterialParameters {
-  /** 字符串贴图 */
-  uAtlas?: THREE.DataArrayTexture;
-
   /** 字体颜色, 默认为黑 */
   uTextColor?: THREE.Color;
 

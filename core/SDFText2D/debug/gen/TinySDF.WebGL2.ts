@@ -1,6 +1,6 @@
 import TinySDF from "tiny-sdf";
 import { makeRGBAImageData } from "@core/utils/canvas2d_buffers";
-import { DEBUG_SDF_BUFFER_RENDER_PERFORMANCE } from "@core/SDFText2D/index";
+import { DEBUG_SDF_GEN_BUFFER_RENDER_PERFORMANCE } from "@core/SDFText2D/index";
 
 export const glyphs = new Map<string, ReturnType<TinySDF["draw"]>>();
 
@@ -54,7 +54,7 @@ const createProgram = (gl: WebGLRenderingContext, vsSource: string, fsSource: st
 };
 
 export const gen = (tinySdf: TinySDF, text: string) => {
-  DEBUG_SDF_BUFFER_RENDER_PERFORMANCE && console.time(`TinySDF.Canvas2D.gen`);
+  DEBUG_SDF_GEN_BUFFER_RENDER_PERFORMANCE && console.time(`TinySDF.Canvas2D.gen`);
 
   const chars = Array.from(text);
 
@@ -155,7 +155,7 @@ export const gen = (tinySdf: TinySDF, text: string) => {
     x += glyphAdvance;
   }
 
-  DEBUG_SDF_BUFFER_RENDER_PERFORMANCE && console.timeEnd(`TinySDF.Canvas2D.gen`);
+  DEBUG_SDF_GEN_BUFFER_RENDER_PERFORMANCE && console.timeEnd(`TinySDF.Canvas2D.gen`);
 
   return canvas;
 };

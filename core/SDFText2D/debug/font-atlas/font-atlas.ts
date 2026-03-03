@@ -2,8 +2,8 @@ import "normalize.css";
 import * as THREE from "three";
 
 //  准备atlas贴图, 并将atlas贴图展示到网页上
-import { tinySDFAtlas } from "@core/SDFText2D/font-atlas/TinySdfAtlas";
-import { ATLAS_TEXTURE_SIZE } from "@core/SDFText2D/font-atlas/TinySdfAtlas";
+import { tinySDFAtlas } from "@core/SDFText2D/TinySdfAtlas";
+import { ATLAS_TEXTURE_SIZE } from "@core/SDFText2D/TinySdfAtlas";
 
 tinySDFAtlas.prepareGlyph("你好世界!岸桥场桥:装船卸船移箱集装箱主小车门架小车任务指令状态数值％角度°速度故障模式~，。（）-繁华声遁入空门折煞了世人");
 const canvasEls = tinySDFAtlas.getAllPages();
@@ -37,9 +37,9 @@ textureArray.magFilter = THREE.LinearFilter;
 textureArray.generateMipmaps = false;
 textureArray.needsUpdate = true;
 
-import { SDF_FONT_SIZE } from "@core/SDFText2D/font-atlas/tinySdfWrapper";
-import { SDF_BUFFER } from "@core/SDFText2D/font-atlas/tinySdfWrapper";
-import { SDF_SIZE } from "@core/SDFText2D/font-atlas/tinySdfWrapper";
+import { SDF_FONT_SIZE } from "@core/SDFText2D/TinySdfAtlas";
+import { SDF_BUFFER } from "@core/SDFText2D/TinySdfAtlas";
+import { SDF_SIZE } from "@core/SDFText2D/TinySdfAtlas";
 
 /**
  * 创建材质 (确保 #version 300 es + glslVersion: THREE.GLSL3)
@@ -110,8 +110,8 @@ const createSDFMaterial = (textureArray: THREE.DataArrayTexture) => {
         return length(max(q, 0.0)) - r;
       }
 
-      // 计算方法：先将空间在 y 方向缩放（p2, b2, r2），
-      /// 在缩放空间计算 SDF，再将距离除以 aspect 还原。
+      // 计算方法: 先将空间在 y 方向缩放(p2, b2, r2)
+      /// 在缩放空间计算 SDF, 再将距离除以 aspect 还原.
       float roundedBoxSDF_aspect(vec2 p, vec2 b, float r, float aspect) {
         // scale coordinates in y
         vec2 p2 = vec2(p.x, p.y * aspect);
@@ -149,13 +149,13 @@ const createSDFMaterial = (textureArray: THREE.DataArrayTexture) => {
 };
 
 /**
- * 根据输入字符串和设置创建网格（单一合并 mesh）
- * 说明：
- *  - 每个 glyph 产生 4 顶点（一个 quad）
+ * 根据输入字符串和设置创建网格(单一合并 mesh)
+ * 说明:
+ *  - 每个 glyph 产生 4 顶点(一个 quad)
  *  - 我们为每个顶点写 position(3), uv(2), aPage(1)
  */
 const createTextMesh = (text: string, fontSize: number = 4, lineHeight: number = 5) => {
-  // 环境检查：是否支持 WebGL2（必需：sampler2DArray）
+  // 环境检查: 是否支持 WebGL2(必需: sampler2DArray)
   // 这里不能访问 renderer yet；如果需要，可外部检查 renderer.capabilities.isWebGL2
   // console.warn(renderer.capabilities.isWebGL2);
 

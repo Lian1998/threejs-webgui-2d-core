@@ -24,7 +24,7 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 viewport.appendChild(renderer.domElement);
 
 // 烘焙材质贴图
-import { tinySDFAtlas } from "@core/SDFText2D/font-atlas/TinySdfAtlas";
+import { tinySDFAtlas } from "@core/SDFText2D/TinySdfAtlas";
 tinySDFAtlas.prepareGlyph("你好世界!岸桥场桥:装船卸船移箱集装箱主小车门架小车任务指令状态数值％角度°速度故障模式~，。（）-繁华声遁入空门折煞了世人");
 
 // 挂载resize事件通知

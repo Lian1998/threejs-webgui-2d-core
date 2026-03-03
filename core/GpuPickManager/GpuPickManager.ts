@@ -11,12 +11,12 @@ import { channel } from "./debug/";
  *
  * > 该类打造适用于需要高性能, 支持复杂材质与实例化网格(InstancedMesh)的场景拾取; 支持 Mesh 与 InstancedMesh; 可用于复杂 shader / 自定义材质场景; 基于颜色编码, 理论支持 16,777,215 个对象;
  *
- * 说明：
+ * 说明:
  * - 每个注册对象 (Mesh / InstancedMesh) 会被分配连续的 pickid (从 1 开始, 0 表示未命中)
- * - 对于普通 Mesh：为该 Mesh 分配一个 pickid (对应单一 feature)
- * - 对于 InstancedMesh：为每个实例分配连续 id, 并在 geometry 中设置 aPickColor 属性
+ * - 对于普通 Mesh: 为该 Mesh 分配一个 pickid (对应单一 feature)
+ * - 对于 InstancedMesh: 为每个实例分配连续 id, 并在 geometry 中设置 aPickColor 属性
  *
- * 使用约定：
+ * 使用约定:
  * - 在注册前 mesh 必须有 geometry 和 material (且 material 不能是数组)
  * - trans2PickBufferMaterial 必须能将原始材质转换为仅输出 pick color 的材质
  */

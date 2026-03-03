@@ -8,6 +8,9 @@ in float aLocalAspect;
 flat in vec3 aPickColor;
 #endif
 
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+
 out vec2 vUv;
 flat out int vPage;
 flat out float vType;
@@ -16,9 +19,6 @@ out float vLocalAspect;
 #ifdef USE_PICK_BUFFER
 flat out vec3 vPickColor;
 #endif
-
-uniform mat4 modelViewMatrix;
-uniform mat4 projectionMatrix;
 
 void main() {
   vUv = uv;

@@ -1,10 +1,5 @@
 import "normalize.css";
-import { tinySdfInstance } from "@core/SDFText2D/font-atlas/tinySdfWrapper";
-
-// 生成 TinySDF 实例
-console.warn("tinySdfInstance", tinySdfInstance);
-
-import { tinySDFAtlas } from "@core/SDFText2D/font-atlas/TinySdfAtlas";
+import { tinySDFAtlas } from "@core/SDFText2D/TinySdfAtlas";
 
 window.addEventListener("load", () => {
   tinySDFAtlas.prepareGlyph();
@@ -16,5 +11,5 @@ window.addEventListener("load", () => {
     document.body.appendChild(canvasEl);
   }
 
-  console.log(tinySDFAtlas.glyphMap);
+  console.warn(tinySDFAtlas.glyphMap);
 });
