@@ -50,7 +50,7 @@ export default defineConfig(({ command, mode }) => {
     plugins: [vue(), vueJsx()],
 
     server: {
-      port: 5173,
+      port: 8056,
       host: true,
       strictPort: true,           // 固定端口(不会由于占用而自动顺延端口)
 

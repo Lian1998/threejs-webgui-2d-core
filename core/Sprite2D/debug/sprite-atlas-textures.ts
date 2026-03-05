@@ -2,17 +2,16 @@ import "normalize.css";
 import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
 
 window.addEventListener("load", async () => {
-  // prettier-ignore
   await spriteAtlas.prepareSprite([
-    "/resource/device/AGV_Base.png",
-    "/resource/device/AGV_Header.png",
-    "/resource/device/AGV_Pin.png",
-    "/resource/device/AGV_Recharge.png",
-    "/resource/device/ASC_Gantry.png",
-    "/resource/device/STS_Gantry.png",
-    "/resource/device/STS_Trolley.png",
-    "/resource/device/TRUCK.png",
-  ]);
+    "/resource/sprites/AGV_Base.png",
+    "/resource/sprites/AGV_Header.png",
+    "/resource/sprites/AGV_Pin.png",
+    "/resource/sprites/AGV_Recharge.png",
+    "/resource/sprites/ASC_Gantry.png",
+    "/resource/sprites/STS_Gantry.png",
+    "/resource/sprites/STS_Trolley.png",
+    "/resource/sprites/TRUCK.png",
+  ]); // prettier-ignore
 
   const canvasEls = spriteAtlas.getAllPages();
 

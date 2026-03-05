@@ -5,7 +5,7 @@ import { GpuPickManager } from "@core/GpuPickManager/";
 import { ThreejsRenderOrder } from "@source/inMap/variables";
 import { SDFText2D } from "@core/index";
 import { Sprite2D } from "@core/index";
-import { calculateMPP } from "@source/inMap/utils/ratio";
+import { calculateMpp } from "@source/inMap/utils/ratio";
 import { orthoCamera } from "@source/inMap/viewport";
 import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
 import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
@@ -39,7 +39,7 @@ export class ASC implements GpuPickFeature {
     // 生成图元
     const ascGantry = new Sprite2D({
       texture: textures.ASC_Gantry,
-      mpp: calculateMPP(54, 6594),
+      mpp: calculateMpp(54, 6594),
       renderOrder: ThreejsRenderOrder.ASC_GANTRY,
       multiplyColor: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
     });
@@ -48,7 +48,7 @@ export class ASC implements GpuPickFeature {
     ascMtPviot.position.x = -26.0;
     const ascMT = new Sprite2D({
       texture: textures.ASC_Trolley,
-      mpp: calculateMPP(18, 87),
+      mpp: calculateMpp(18, 87),
       renderOrder: ThreejsRenderOrder.ASC_TROLLEY,
       multiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
     });

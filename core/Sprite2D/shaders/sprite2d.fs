@@ -33,7 +33,7 @@ void main() {
 
 #ifdef USE_PICK_BUFFER
   // 在贴图计算的颜色中判断透明度, 如果片元是透明的, 那么直接舍弃片元
-  if (gl_FragColor.a == 0.0) {
+  if (outColor.a == 0.0) {
     discard;
   }
 

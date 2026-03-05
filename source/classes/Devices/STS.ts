@@ -1,32 +1,19 @@
 import * as THREE from "three";
 import Tinycolor from "tinycolor2";
+import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
+import { IActor } from "@core/interfaces/IActor";
 import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
 import { GpuPickManager } from "@core/GpuPickManager/";
+import { Sprite2D } from "@core/Sprite2D/index";
+import { SDFText2DGeometry } from "@core/index";
+import { SDFText2DMaterial } from "@core/index";
+
 import { ThreejsGroups } from "@source/inMap/variables";
 import { ThreejsRenderOrder } from "@source/inMap/variables";
-import { SDFText2D } from "@core/index";
-import { Sprite2D } from "@core/index";
-import { calculateMPP } from "@source/inMap/utils/ratio";
+import { calculateMpp } from "@source/inMap/utils/ratio";
 import { orthoCamera } from "@source/inMap/viewport";
 import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
 import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
-import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
-import { IActor } from "@core/interfaces/IActor";
-
-const textures = {
-  stsGantry: new THREE.TextureLoader().load("/resource/device/STS_Gantry.png"),
-  stsTrolley: new THREE.TextureLoader().load("/resource/device/STS_Trolley.png"),
-};
-
-const textureKey = Object.keys(textures);
-for (const key of textureKey) {
-  const texture = textures[key];
-  texture.flipY = false;
-  texture.colorSpace = THREE.NoColorSpace;
-  texture.premultiplyAlpha = false; //
-  texture.wrapS = texture.wrapT = THREE.ClampToEdgeWrapping;
-  texture.repeat.set(1, 1); // 设置纹理左右不重复
-}
 
 /** Ship-to-Shore Crane 岸边集装箱起重机 */
 export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature, IActor {
@@ -66,27 +53,29 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
 
     // 生成网格
     const stsGantry = new Sprite2D({
-      texture: textures.stsGantry,
-      mpp: calculateMPP(35, 610),
+      spriteUrl: "/resource/sprites/STS_Gantry.png",
+      spriteMpp: calculateMpp(35, 610),
+      spriteMultiplyColor: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
       renderOrder: ThreejsRenderOrder.STS_GANTRY,
-      multiplyColor: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
     });
     const stsMT = new Sprite2D({
-      texture: textures.stsTrolley,
-      mpp: calculateMPP(18, 87),
+      spriteUrl: "/resource/sprites/STS_Trolley.png",
+      spriteMpp: calculateMpp(18, 87),
+      spriteMultiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
       renderOrder: ThreejsRenderOrder.STS_TROLLEY,
-      multiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
     });
     const stsPT = new Sprite2D({
-      texture: textures.stsTrolley,
-      mpp: calculateMPP(18, 87),
+      spriteUrl: "/resource/sprites/STS_Trolley.png",
+      spriteMpp: calculateMpp(18, 87),
+      spriteMultiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
       renderOrder: ThreejsRenderOrder.STS_TROLLEY,
-      multiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
     });
-    const stsLabel = new SDFText2D({
-      text: this.code,
-      renderOrder: ThreejsRenderOrder.STS_LABEL,
-    });
+
+    const stsLabelGeometry = new SDFText2DGeometry();
+    stsLabelGeometry.setFromText({ text: this.code });
+    const stsLabelMaterial = new SDFText2DMaterial({});
+    const stsLabel = new THREE.Mesh(stsLabelGeometry, stsLabelMaterial);
+    stsLabel.renderOrder = ThreejsRenderOrder.STS_LABEL;
 
     // 绑定指针
     this.meshes = { stsGantry, stsMT, stsPT, stsLabel };
@@ -102,7 +91,7 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
       const mesh = this.meshes[key];
 
       mesh.matrixAutoUpdate = false; // 关闭矩阵自动同步
-      GpuPickManager.register(mesh, this); // 注册拾取
+      // GpuPickManager.register(mesh, this); // 注册拾取
 
       ThreejsGroups.Meshes.add(this.meshes[key]);
     }

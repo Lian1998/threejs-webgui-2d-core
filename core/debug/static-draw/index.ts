@@ -23,9 +23,22 @@ renderer.setClearColor(0xffffff, 0.0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 viewport.appendChild(renderer.domElement);
 
-// 烘焙材质贴图
+// 烘焙字符材质贴图
 import { tinySDFAtlas } from "@core/SDFText2D/TinySdfAtlas";
-tinySDFAtlas.prepareGlyph("你好世界!岸桥场桥:装船卸船移箱集装箱主小车门架小车任务指令状态数值％角度°速度故障模式~，。（）-繁华声遁入空门折煞了世人");
+tinySDFAtlas.prepareGlyph("你好世界!岸桥场桥:装船卸船移箱集装箱主小车门架小车任务指令状态数值％角度°速度故障模式~，。（）-");
+
+// 烘焙精灵材质贴图
+import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
+await spriteAtlas.prepareSprite([
+  "/resource/sprites/AGV_Base.png",
+  "/resource/sprites/AGV_Header.png",
+  "/resource/sprites/AGV_Pin.png",
+  "/resource/sprites/AGV_Recharge.png",
+  "/resource/sprites/ASC_Gantry.png",
+  "/resource/sprites/STS_Gantry.png",
+  "/resource/sprites/STS_Trolley.png",
+  "/resource/sprites/TRUCK.png",
+]); // prettier-ignore
 
 // 挂载resize事件通知
 import { ViewportResizeDispatcher } from "@core/index";
@@ -55,7 +68,7 @@ import { MeshLineMaterial } from "@core/index";
 import { ColorPaletteManager } from "@source/themes/ColorPaletteManager/";
 await ColorPaletteManager.instance.initialization();
 
-// import { STS } from "@source/classes/Devices/STS";
+import { STS } from "@source/classes/Devices/STS";
 // import { AGV } from "@source/classes/Devices/AGV";
 // import { ASC } from "@source/classes/Devices/ASC";
 
@@ -73,12 +86,12 @@ Promise.all([
     .then((response) => response.json())
     .then((data) => {
       console.warn("initDevice", data);
-      // const STSRailsAnchorY = -(2397641.79 + 2397676.79) / 2.0 - 21.0;
-      // // STS
-      // for (const itemValue of data[0].itemValue) {
-      //   const sts = new STS(itemValue.cheId);
-      //   sts.represents.stsGantry.position.set(567297.0 - itemValue.GantryPos / 100.0, 0.0, STSRailsAnchorY);
-      // }
+      const STSRailsAnchorY = -(2397641.79 + 2397676.79) / 2.0 - 21.0;
+      // STS
+      for (const itemValue of data[0].itemValue) {
+        const sts = new STS(itemValue.cheId);
+        sts.represents.stsGantry.position.set(567297.0 - itemValue.GantryPos / 100.0, 0.0, STSRailsAnchorY);
+      }
 
       // // AGV
       // for (const itemValue of data[1].itemValue) {
@@ -178,7 +191,7 @@ Promise.all([
     //   };
     // }
 
-    // for (const [seq, instance] of STS.classInstanceMap) (instance as IActor)?.onInit();
+    for (const [seq, instance] of STS.classInstanceMap) (instance as IActor)?.onInit();
     console.log(ThreejsGroups.BaseMap);
     console.log(ThreejsGroups.Meshes);
 
@@ -205,8 +218,8 @@ const animate = () => {
   // 同步一下逻辑矩阵
   ThreejsGroups.Represents.updateMatrixWorld();
 
-  // STS.getClassInstance<STS>(0).represents.stsGantry.position.x -= 0.05; // QC072
-  // for (const [seq, instance] of STS.classInstanceMap) (instance as IActor)?.onUpdate(deltaTime, elapsedTime);
+  STS.getClassInstance<STS>(0).represents.stsGantry.position.x -= 0.05; // QC072
+  for (const [seq, instance] of STS.classInstanceMap) (instance as IActor)?.onUpdate(deltaTime, elapsedTime);
 
   // 渲染图元
   renderer.render(ThreejsGroups.Meshes, orthoCamera);

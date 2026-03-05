@@ -1,7 +1,7 @@
 precision highp float;
 
 // /docs/index.html?q=WebGLPro#api/en/renderers/webgl/WebGLProgram
-// uniform vec3 cameraPosition;
+uniform vec3 cameraPosition;
 uniform vec3 uColor;
 uniform float uOpacity;
 uniform vec2 uResolution;
@@ -13,10 +13,12 @@ uniform vec2 uDashArray;
 uniform float uUseBox;          // 是否启用小方格线
 uniform vec2 uBoxArray;
 
-varying vec2 vUv;
-varying float vCounter;
-varying float vLineDistance;
-varying float vLineBreakPoint;
+in vec2 vUv;
+in float vCounter;
+in float vLineDistance;
+in float vLineBreakPoint;
+
+out vec4 outColor;
 
 void main() {
 
@@ -86,5 +88,5 @@ void main() {
   // 测试: cpu阶段合并几何并用冗余线头线尾顶点来表示断点
   // diffuseColor = vec4(vec3(vLineBreakPoint), 1.0);
 
-  gl_FragColor = diffuseColor;
+  outColor = diffuseColor;
 }

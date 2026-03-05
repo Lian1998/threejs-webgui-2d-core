@@ -194,7 +194,6 @@ const createTextMesh = (text: string, fontSize: number = 4, lineHeight: number =
     }
 
     const glyphAtlas = tinySDFAtlas.getGlyphAtlas(ch);
-    console.warn(ch, glyphAtlas);
 
     const { page, glyph, u0, v0, u1, v1 } = glyphAtlas;
     const { data, width, height, glyphWidth, glyphHeight, glyphLeft, glyphTop, glyphAdvance } = glyph;

@@ -69,6 +69,7 @@ export class SDFText2DMaterial extends THREE.RawShaderMaterial {
   }
 
   constructor(parameters: SDFText2DMaterialParameters) {
+    if (!SDFText2DMaterial.textureArray) SDFText2DMaterial.getTextureArray(); // 准备材质内容
     super({
       name: "SDFText2DMaterial",
       glslVersion: THREE.GLSL3,
@@ -94,7 +95,6 @@ export class SDFText2DMaterial extends THREE.RawShaderMaterial {
       fragmentShader,
     });
 
-    if (!SDFText2DMaterial.textureArray) SDFText2DMaterial.getTextureArray(); // 准备材质内容
     this.setValues(parameters);
   }
 

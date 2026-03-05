@@ -17,7 +17,7 @@ export const makeRGBAImageData = (alphaChannel: Uint8ClampedArray, width: number
     imageData[j + 0] = alphaChannel[i]; // R
     imageData[j + 1] = alphaChannel[i]; // G
     imageData[j + 2] = alphaChannel[i]; // B
-    imageData[j + 3] = 255; // A
+    imageData[j + 3] = alphaChannel[i]; // A
   }
 
   return imageData;

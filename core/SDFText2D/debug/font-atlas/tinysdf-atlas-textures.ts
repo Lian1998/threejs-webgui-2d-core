@@ -8,6 +8,7 @@ window.addEventListener("load", () => {
 
   for (let i = 0; i < canvasEls.length; i++) {
     const canvasEl = canvasEls[i];
+    canvasEl.style.border = "1px solid black";
     document.body.appendChild(canvasEl);
   }
 

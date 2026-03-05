@@ -45,7 +45,7 @@ export class SDFText2DGen extends THREE.Mesh {
 
     // 生成几何
     const scaleFactor = 4.0 / SDF_FONT_SIZE;
-    const geometry = new SpriteXZRectGeometry(canvas.width * scaleFactor, canvas.height * scaleFactor);
+    const geometry = new SpriteXZRectGeometry({ x: canvas.width * scaleFactor, z: canvas.height * scaleFactor });
 
     const texture = new THREE.Texture(canvas);
     texture.flipY = false;

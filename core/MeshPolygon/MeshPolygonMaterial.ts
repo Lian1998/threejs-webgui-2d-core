@@ -22,10 +22,15 @@ export interface MeshPolygonMaterialParameters extends THREE.ShaderMaterialParam
   uPixelRatio?: number;
 }
 
-export class MeshPolygonMaterial extends THREE.ShaderMaterial {
+export class MeshPolygonMaterial extends THREE.RawShaderMaterial {
   constructor(parameters: MeshPolygonMaterialParameters) {
     super({
       name: "MeshPolygonMaterial",
+      glslVersion: THREE.GLSL3,
+      transparent: true,
+      depthWrite: false,
+      depthTest: false,
+      side: THREE.FrontSide,
       uniforms: {
         uColor: { value: new THREE.Color(0x000000) },
         uOpacity: { value: 1.0 },

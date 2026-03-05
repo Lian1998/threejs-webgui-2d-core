@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- http://localhost:5173/debug/SDFText2D/gen.html -->
+    <!-- http://localhost:8056/debug/SDFText2D/gen.html -->
     <title>DEBUG SDFText2D gen</title>
 
     <!-- 
@@ -14,7 +14,7 @@
       4. 计算 双三角面矩形的长度和宽度提交几何buffer, 提交贴图 给 threejs 渲染
     -->
     <!-- 
-      此测试页面为, 在处理第三点时, 存在 Canvas2D API 和 WebGL2 API 两种方式烘焙到 canvas 以获取材质:
+      此测试页面为处理(v1 逻辑)第三点时, 目前浏览器存在 Canvas2D API 和 WebGL2 API 两种方式烘焙到 canvas 以获取材质:
       经过测试, 生成字符串字形贴图时, 使用 Canvas2D API 速度比使用 WebGL2 API 更快
     -->
   </head>

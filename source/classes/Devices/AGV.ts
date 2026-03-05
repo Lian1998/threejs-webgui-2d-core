@@ -4,7 +4,7 @@ import { GpuPickManager } from "@core/GpuPickManager/";
 import { ThreejsRenderOrder } from "@source/inMap/variables";
 import { SDFText2D } from "@core/index";
 import { Sprite2D } from "@core/index";
-import { calculateMPP } from "@source/inMap/utils/ratio";
+import { calculateMpp } from "@source/inMap/utils/ratio";
 import { orthoCamera } from "@source/inMap/viewport";
 import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
 import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
@@ -38,14 +38,14 @@ export class AGV implements GpuPickFeature {
     // 生成图元
     const agvBase = new Sprite2D({
       texture: textures.AGV_Base,
-      mpp: calculateMPP(15, 2330),
+      mpp: calculateMpp(15, 2330),
       renderOrder: ThreejsRenderOrder.AGV_BASE,
       multiplyColor: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
     });
 
     const agvHeader = new Sprite2D({
       texture: textures.AGV_Header,
-      mpp: calculateMPP(15, 2330),
+      mpp: calculateMpp(15, 2330),
       renderOrder: ThreejsRenderOrder.AGV_HEADER,
     });
 

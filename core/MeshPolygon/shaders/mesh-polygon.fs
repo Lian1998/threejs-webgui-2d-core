@@ -7,6 +7,8 @@ uniform vec2 uResolution;
 uniform float uUseShadow;         // 是否启用打阴影线的模式
 uniform vec2 uShadowArray;    // 阴影间隔 
 
+out vec4 outColor;
+
 void main() {
 
   vec4 diffuseColor = vec4(uColor, uOpacity);
@@ -33,5 +35,5 @@ void main() {
     }
   }
 
-  gl_FragColor = diffuseColor;
+  outColor = diffuseColor;
 }

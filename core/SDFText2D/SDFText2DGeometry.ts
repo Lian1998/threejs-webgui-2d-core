@@ -68,7 +68,6 @@ export class SDFText2DGeometry extends THREE.BufferGeometry {
       }
 
       const glyphAtlas = tinySDFAtlas.getGlyphAtlas(ch);
-      console.warn(ch, glyphAtlas);
 
       const { page, glyph, u0, v0, u1, v1 } = glyphAtlas;
       const { data, width, height, glyphWidth, glyphHeight, glyphLeft, glyphTop, glyphAdvance } = glyph;
@@ -99,14 +98,12 @@ export class SDFText2DGeometry extends THREE.BufferGeometry {
     const paddingRight = padding[1];
     const paddingBottom = padding[2];
     const paddingLeft = padding[3];
-    const a1 = [0.0 - paddingLeft, 0.0, 0.0 - paddingBottom - halfSDF]; // 左下
-    const a2 = [cursorX_max + paddingRight + halfFont, 0.0, 0.0 - paddingBottom - halfSDF];
-    const a3 = [cursorX_max + paddingRight + halfFont, 0.0, cursorZ_max + paddingTop + halfSDF]; // 右上
-    const a4 = [0.0 - paddingLeft, 0.0, cursorZ_max + paddingTop + halfSDF];
-    const aspect = (cursorZ_max + paddingTop + halfSDF - (-paddingBottom - halfSDF)) / (cursorX_max + paddingRight + halfFont - (0.0 - paddingLeft)); // z / x
-    // console.log(aspect);
-    positions.unshift(...a1, ...a2, ...a3, ...a4);
-    // console.log(...a1, ...a2, ...a3, ...a4);
+    const xMin = 0.0 - paddingLeft;
+    const xMax = cursorX_max + paddingRight + halfFont;
+    const zMin = 0.0 - paddingBottom - halfSDF;
+    const zMax = cursorZ_max + paddingTop + halfSDF;
+    const aspect = (zMax - zMin) / (xMax - xMin); // z / x
+    positions.unshift(xMin, 0.0, zMin, xMax, 0.0, zMin, xMax, 0.0, zMax, xMin, 0.0, zMax); // 左下 右下 右上 左上
     uvs.unshift(0, 0, 0, 0, 0, 0, 0, 0);
     indices.unshift(0, 2, 1, 0, 3, 2);
     pages.unshift(0, 0, 0, 0);
@@ -115,22 +112,17 @@ export class SDFText2DGeometry extends THREE.BufferGeometry {
     localAspect.unshift(aspect, aspect, aspect, aspect);
 
     // 绑定buffer
-    this.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
-    this.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2));
-    this.setAttribute("aPage", new THREE.Float32BufferAttribute(pages, 1));
-    this.setAttribute("aType", new THREE.Float32BufferAttribute(types, 1));
-    this.setAttribute("aLocalPos", new THREE.Float32BufferAttribute(localPos, 2)); // 局部空间, 用于计算背景
-    this.setAttribute("aLocalAspect", new THREE.Float32BufferAttribute(localAspect, 1)); // 局部空间, 用于计算背景
+    this.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3).setUsage(THREE.StaticDrawUsage));
+    this.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2).setUsage(THREE.StaticDrawUsage));
+    this.setAttribute("aPage", new THREE.Float32BufferAttribute(pages, 1).setUsage(THREE.StaticDrawUsage));
+    this.setAttribute("aType", new THREE.Float32BufferAttribute(types, 1).setUsage(THREE.StaticDrawUsage));
+    this.setAttribute("aLocalPos", new THREE.Float32BufferAttribute(localPos, 2).setUsage(THREE.StaticDrawUsage)); // 局部空间, 用于计算背景
+    this.setAttribute("aLocalAspect", new THREE.Float32BufferAttribute(localAspect, 1).setUsage(THREE.StaticDrawUsage)); // 局部空间, 用于计算背景
     this.setIndex(indices);
 
-    // 几何体整体居中
+    // 居中 XZ 轴 (避免改变 Y)
+    this.translate(-(xMax + xMin) / 2.0, 0.0, -(zMax + zMin) / 2.0);
     this.computeBoundingBox();
-    this.translate(
-      // 居中 XZ 轴 (避免改变 Y)
-      -(this.boundingBox.max.x + this.boundingBox.min.x) / 2,
-      0,
-      -(this.boundingBox.max.z + this.boundingBox.min.z) / 2,
-    );
   }
 
   private padding = [0.0, 0.0, 0.0, 0.0]; // top right bottom left

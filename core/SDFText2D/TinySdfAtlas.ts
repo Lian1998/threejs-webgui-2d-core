@@ -87,7 +87,7 @@ class TinySDFAtlas {
     canvas.height = ATLAS_TEXTURE_SIZE;
     const ctx = canvas.getContext("2d");
     if (!ctx) throw new Error("TinySDFAtlas: 当前浏览器不支持 Canvas 2D API, 无法获取 Canvas 2D Context");
-    ctx.fillStyle = "black"; // 背景设为黑, 有字形的地方有数值
+    ctx.fillStyle = "transparent";
     ctx.fillRect(0, 0, ATLAS_TEXTURE_SIZE, ATLAS_TEXTURE_SIZE);
 
     this.atlasCanvases.push(canvas);
