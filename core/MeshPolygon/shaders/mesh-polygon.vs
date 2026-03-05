@@ -1,7 +1,7 @@
-in vec3 position;
-
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
+
+in vec3 position;
 
 void main() {
 

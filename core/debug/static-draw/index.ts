@@ -86,7 +86,7 @@ Promise.all([
     .then((response) => response.json())
     .then((data) => {
       console.warn("initDevice", data);
-      const STSRailsAnchorY = -(2397641.79 + 2397676.79) / 2.0 - 21.0;
+      const STSRailsAnchorY = -(2397641.79 + 2397676.79) / 2.0;
       // STS
       for (const itemValue of data[0].itemValue) {
         const sts = new STS(itemValue.cheId);
@@ -129,13 +129,12 @@ Promise.all([
         // 文字描述
         const labelGeometry = new SDFText2DGeometry();
         labelGeometry.setFromText({ text: element.areaName });
-        const labelMaterial = new SDFText2DMaterial({ uBackgroundAlpha: 0.0, uOutlineColor: new THREE.Color(0xff0000) });
+        const labelMaterial = new SDFText2DMaterial({ uOutlineColor: new THREE.Color(0xff0000) });
         const label = new THREE.Mesh(labelGeometry, labelMaterial);
         label.renderOrder = ThreejsRenderOrder.BLOCK_PREDEFINE_LABEL;
         label.name = element.areaName;
         label.position.set(coordinates[0], 0.0, coordinates[1]);
         label.scale.setScalar(0.5);
-        (label.material as SDFText2DMaterial).uBackgroundAlpha = 0.0;
         ThreejsGroups.Meshes.add(label);
       }
 
@@ -266,11 +265,11 @@ import { getXZPosition } from "@source/inMap/utils/pointerCoordinates";
 }
 
 //////////////////////////////////////// drawcall监听 ////////////////////////////////////////
-import "@libs/Spector.js/distt/spector.bundle.js";
+// import "@libs/Spector.js/distt/spector.bundle.js";
 
-// @ts-ignore
-const spector = new SPECTOR.Spector();
-spector.displayUI();
+// // @ts-ignore
+// const spector = new SPECTOR.Spector();
+// spector.displayUI();
 
 //////////////////////////////////////// 打印上下文 ////////////////////////////////////////
 

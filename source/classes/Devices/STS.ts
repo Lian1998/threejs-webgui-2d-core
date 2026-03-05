@@ -55,21 +55,23 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
     const stsGantry = new Sprite2D({
       spriteUrl: "/resource/sprites/STS_Gantry.png",
       spriteMpp: calculateMpp(35, 610),
+      spriteOffset: [-21.0, 0.0],
+      spriteRotate: -Math.PI / 2,
       spriteMultiplyColor: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
       renderOrder: ThreejsRenderOrder.STS_GANTRY,
     });
-    const stsMT = new Sprite2D({
-      spriteUrl: "/resource/sprites/STS_Trolley.png",
-      spriteMpp: calculateMpp(18, 87),
-      spriteMultiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
-      renderOrder: ThreejsRenderOrder.STS_TROLLEY,
-    });
-    const stsPT = new Sprite2D({
-      spriteUrl: "/resource/sprites/STS_Trolley.png",
-      spriteMpp: calculateMpp(18, 87),
-      spriteMultiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
-      renderOrder: ThreejsRenderOrder.STS_TROLLEY,
-    });
+    // const stsMT = new Sprite2D({
+    //   spriteUrl: "/resource/sprites/STS_Trolley.png",
+    //   spriteMpp: calculateMpp(18, 87),
+    //   spriteMultiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
+    //   renderOrder: ThreejsRenderOrder.STS_TROLLEY,
+    // });
+    // const stsPT = new Sprite2D({
+    //   spriteUrl: "/resource/sprites/STS_Trolley.png",
+    //   spriteMpp: calculateMpp(18, 87),
+    //   spriteMultiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
+    //   renderOrder: ThreejsRenderOrder.STS_TROLLEY,
+    // });
 
     const stsLabelGeometry = new SDFText2DGeometry();
     stsLabelGeometry.setFromText({ text: this.code });
@@ -78,8 +80,8 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
     stsLabel.renderOrder = ThreejsRenderOrder.STS_LABEL;
 
     // 绑定指针
-    this.meshes = { stsGantry, stsMT, stsPT, stsLabel };
-    this.represents = { stsGantry: stsGantryRepresent, stsMT: stsMtRepresent, stsPT: stsPtRepresent, stsLabel: stsLabelRepresent };
+    this.meshes = { stsGantry }; // , stsMT, stsPT, stsLabel
+    this.represents = { stsGantry: stsGantryRepresent }; // , stsMT: stsMtRepresent, stsPT: stsPtRepresent, stsLabel: stsLabelRepresent
   }
 
   onInit() {
@@ -98,9 +100,9 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
   }
 
   onUpdate(deltaTime: number, elapsedTime: number) {
-    const scale = MAP_DEFAULT_ZOOM / orthoCamera.zoom;
-    const scalar = THREE.MathUtils.clamp(scale, 1.0, 1.5);
-    this.represents.stsLabel.scale.setScalar(scalar);
+    // const scale = MAP_DEFAULT_ZOOM / orthoCamera.zoom;
+    // const scalar = THREE.MathUtils.clamp(scale, 1.0, 1.5);
+    // this.represents.stsLabel.scale.setScalar(scalar);
 
     for (const key of Object.keys(this.meshes)) {
       const mesh = this.meshes[key];

@@ -8,14 +8,14 @@ in float aType;
 in vec2 aLocalPos;
 in float aLocalAspect;
 #ifdef USE_PICK_BUFFER
-flat in vec3 aPickColor;
+in vec3 aPickColor;
 #endif
 
 out vec2 vUv;
 flat out int vPage;
 flat out float vType;
 out vec2 vLocalPos;
-out float vLocalAspect;
+flat out float vLocalAspect;
 #ifdef USE_PICK_BUFFER
 flat out vec3 vPickColor;
 #endif

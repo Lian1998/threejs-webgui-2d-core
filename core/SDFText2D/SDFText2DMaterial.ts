@@ -23,7 +23,7 @@ export interface SDFText2DMaterialParameters extends THREE.ShaderMaterialParamet
   uBackgroundAlpha?: number;
 
   /** 几何背景色圆角, 默认值为 0.15 */
-  uBackgroundRadius?: { value: 0.15 };
+  uBackgroundRadius?: 0.15;
 
   /** 字体外边缘, 默认为 0.7 */
   uThreshold?: number;
@@ -44,16 +44,16 @@ export class SDFText2DMaterial extends THREE.RawShaderMaterial {
     const pages = tinySDFAtlas.getAllPages();
     const size = ATLAS_TEXTURE_SIZE;
     const layerSize = size * size;
-    const data = new Uint8Array(layerSize * pages.length);
+    const data = new Uint8Array(layerSize * pages.length); // 单通道贴图
     for (let p = 0; p < pages.length; p++) {
       const canvas = pages[p];
       const ctx = canvas.getContext("2d");
       const imageData = ctx.getImageData(0, 0, size, size);
-      const rgba = imageData.data;
-      const pageOffset = p * layerSize;
+      const imageDataRGBA = imageData.data;
 
+      const pageOffset = p * layerSize;
       for (let j = 0; j < layerSize; j++) {
-        data[pageOffset + j] = rgba[j * 4 + 0]; // R 通道
+        data[pageOffset + j * 1 + 0] = imageDataRGBA[j * 4 + 0]; // R 通道
       }
     }
 

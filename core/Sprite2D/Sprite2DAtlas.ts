@@ -68,6 +68,8 @@ export class SpriteAtlas {
   }
 
   async prepareSprite(urls: string[] = []): Promise<void> {
+    DEBUG_SPRITE_ATLAS_BUFFER_RENDER_PERFORMANCE && console.time("SpriteAtlas: 生成基础精灵贴图");
+
     if (!urls || urls.length === 0) {
       SpriteAtlas.prepared = true;
       return;
@@ -177,6 +179,9 @@ export class SpriteAtlas {
     }
 
     SpriteAtlas.prepared = true;
+
+    DEBUG_SPRITE_ATLAS_BUFFER_RENDER_PERFORMANCE && console.timeEnd("SpriteAtlas: 生成基础精灵贴图");
+    console.info(`SpriteAtlas: spriteMap size ${this.spriteMap.size}`);
   }
 
   /** 检查是否包含某贴图 */

@@ -6,7 +6,7 @@ uniform sampler2DArray uAtlas;
 in vec2 vUv;
 flat in int vPage;
 #ifdef USE_MULTIPLY_COLOR
-flat in int vMultiplyColor;
+flat in vec3 vMultiplyColor;
 #endif
 #ifdef USE_PICK_BUFFER
 flat in vec3 vPickColor;

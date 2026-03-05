@@ -8,27 +8,25 @@ import { ATLAS_TEXTURE_SIZE } from "@core/Sprite2D/Sprite2DAtlas";
 
 export interface Sprite2DMaterialParameters extends THREE.ShaderMaterialParameters {}
 
-export class Sprite2DMaterial extends THREE.ShaderMaterial {
+export class Sprite2DMaterial extends THREE.RawShaderMaterial {
   static textureArray: THREE.DataArrayTexture | null = null;
   private static getTextureArray() {
     const pages = spriteAtlas.getAllPages();
     const size = ATLAS_TEXTURE_SIZE;
     const layerSize = size * size;
-    const data = new Uint8Array(layerSize * pages.length);
+    const data = new Uint8Array(layerSize * pages.length * 4); // 四通道贴图
     for (let p = 0; p < pages.length; p++) {
       const canvas = pages[p];
       const ctx = canvas.getContext("2d");
       const imageData = ctx.getImageData(0, 0, size, size);
-      const rgba = imageData.data;
+      const imageDataRGBA = imageData.data;
 
-      const pageOffset = p * layerSize;
+      const pageOffset = p * layerSize * 4;
       for (let j = 0; j < layerSize; j++) {
-        const srcOffset = j * 4;
-        const dstOffset = (pageOffset + j) * 4;
-        data[dstOffset + 0] = rgba[srcOffset + 0]; // R 通道
-        data[dstOffset + 1] = rgba[srcOffset + 1]; // G 通道
-        data[dstOffset + 2] = rgba[srcOffset + 2]; // B 通道
-        data[dstOffset + 3] = rgba[srcOffset + 3]; // A 通道
+        data[pageOffset + j * 4 + 0] = imageDataRGBA[j * 4 + 0]; // R 通道
+        data[pageOffset + j * 4 + 1] = imageDataRGBA[j * 4 + 1]; // G 通道
+        data[pageOffset + j * 4 + 2] = imageDataRGBA[j * 4 + 2]; // B 通道
+        data[pageOffset + j * 4 + 3] = imageDataRGBA[j * 4 + 3]; // A 通道
       }
     }
 
@@ -36,8 +34,9 @@ export class Sprite2DMaterial extends THREE.ShaderMaterial {
     textureArray.flipY = false;
     textureArray.format = THREE.RGBAFormat;
     textureArray.type = THREE.UnsignedByteType;
-    textureArray.minFilter = THREE.NearestFilter;
-    textureArray.magFilter = THREE.NearestFilter;
+    textureArray.minFilter = THREE.LinearFilter;
+    textureArray.magFilter = THREE.LinearFilter;
+    textureArray.generateMipmaps = true;
     textureArray.needsUpdate = true;
     Sprite2DMaterial.textureArray = textureArray;
   }
@@ -54,9 +53,6 @@ export class Sprite2DMaterial extends THREE.ShaderMaterial {
       uniforms: {
         uAtlas: { value: Sprite2DMaterial.textureArray },
       },
-      defines: {
-        USE_MULTIPLY_COLOR: 0,
-      },
       vertexShader,
       fragmentShader,
     });
@@ -69,7 +65,7 @@ export class Sprite2DMaterial extends THREE.ShaderMaterial {
   }
   set useMultiplyColor(v: boolean) {
     if (v) this.defines.USE_MULTIPLY_COLOR = 1;
-    else this.defines.USE_MULTIPLY_COLOR = 0;
+    else delete this.defines.USE_MULTIPLY_COLOR;
 
     this.needsUpdate = true;
   }

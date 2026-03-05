@@ -27,9 +27,9 @@ type Sprite2DParameters = {
 /**
  * 一个XZ平面的二维贴图精灵
  * - spriteUrl: 材质贴图的链接, 内部使用threejsTextureLoader读取图片
- * - spriteMpp: 材质图像素与threejs世界空间的比例(miter/pixcel)
- * - spriteOffset: 材质图偏移量, 一般用于确定sprite贴图中心点(miter)
- * - spriteRotate: 材质图旋转
+ * - spriteMpp: (miter/pixcel)材质图像素与threejs世界空间的比例
+ * - spriteOffset: (miter)材质图偏移量, 一般用于确定sprite贴图中心点
+ * - spriteRotate: (radians)材质图旋转
  * - spriteMultiplyColor: 材质叠加混合色
  * - renderOrder: THREE.Object3D.renderOrder
  */
@@ -62,8 +62,9 @@ export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
     if (spriteMpp === undefined) throw new Error("Sprite2D: 请指定 Sprite2D 的 mpp 以获取真实几何比例");
 
     // 生成材质(如果是第一次会生成atlas)
-    if (!this.material) this.material = new Sprite2DMaterial();
-    (this.material as Sprite2DMaterial).useMultiplyColor = true;
+    // console.log(this.material);
+    // if (!this.material)
+    this.material = new Sprite2DMaterial();
 
     // 找到贴图Atlas对应的内容
     const spriteItem = spriteAtlas.getSpriteAtlas(spriteUrl); // 这里spriteAtlas会帮忙try catch
@@ -73,22 +74,23 @@ export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
 
     // 生成几何
     if (this.geometry) this.geometry.dispose();
-    this.geometry = new SpriteXZRectGeometry({ x: spriteMpp * width, z: spriteMpp * height, u0, v0, u1, v1, center: true, offset: spriteOffset, rotate: spriteRotate });
+    this.geometry = new SpriteXZRectGeometry({ x: spriteMpp * width, z: spriteMpp * height, u0, v0, u1, v1, offset: spriteOffset, rotate: spriteRotate });
+    const count = this.geometry.attributes.position.count;
 
     // set aPage attribute (float per vertex, value = page)
-    const aPageArr = new Float32Array(4);
-    for (let i = 0; i < 4; i++) aPageArr[i] = page;
-    this.geometry.setAttribute("aPage", new THREE.BufferAttribute(aPageArr, 1).setUsage(THREE.StaticDrawUsage));
+    const aPageArr = new Float32Array(count * 1);
+    for (let i = 0; i < count; i++) aPageArr[i * 1 + 0] = page;
+    this.geometry.setAttribute("aPage", new THREE.Float32BufferAttribute(aPageArr, 1).setUsage(THREE.StaticDrawUsage));
 
     // set aMultiplyColor attribute (vec3 per vertex)
     if (spriteMultiplyColor) {
-      const aMultiplyColorArr = new Float32Array(4 * 3);
-      for (let i = 0; i < aMultiplyColorArr.length; i++) {
+      const aMultiplyColorArr = new Float32Array(count * 3);
+      for (let i = 0; i < count; i++) {
         aMultiplyColorArr[i * 3 + 0] = spriteMultiplyColor.r;
         aMultiplyColorArr[i * 3 + 1] = spriteMultiplyColor.g;
         aMultiplyColorArr[i * 3 + 2] = spriteMultiplyColor.b;
       }
-      this.geometry.setAttribute("aMultiplyColor", new THREE.BufferAttribute(aMultiplyColorArr, 3).setUsage(THREE.StaticDrawUsage));
+      this.geometry.setAttribute("aMultiplyColor", new THREE.Float32BufferAttribute(aMultiplyColorArr, 3).setUsage(THREE.StaticDrawUsage));
 
       (this.material as Sprite2DMaterial).useMultiplyColor = true;
     }
