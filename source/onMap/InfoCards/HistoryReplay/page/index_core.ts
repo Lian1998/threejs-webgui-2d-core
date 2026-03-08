@@ -1,8 +1,8 @@
+﻿import type { SocketioDispatchEvent } from "@source/classes/SocketioHelper";
 import { SocketioMainModule } from "@source/classes/SocketioHelper";
 import { socketioMainModule } from "@source/classes/SocketioHelper";
 import { getTimeStampForSocketReq } from "@source/classes/SocketioHelper";
 import dayjs from "dayjs";
-
 import { reactive } from "vue";
 import { historyReplayDefine_doms } from "./define_doms";
 // import { historyReplayDefine_layers } from "./define_layers";
@@ -29,6 +29,14 @@ type TickResponse = Partial<{
   timestamp: number;
   dbTimestamp: number;
 }>;
+
+const getEventResponse = (event: SocketioDispatchEvent) => event.detail?.response;
+const getEventItemValue = (event: SocketioDispatchEvent) => event.detail?.itemValue;
+const setEventPayload = (event: SocketioDispatchEvent, response: any, itemValue: any) => {
+  if (!event.detail) event.detail = { response: undefined, itemValue: undefined };
+  event.detail.response = response;
+  event.detail.itemValue = itemValue;
+};
 
 // 帧数据容器
 export const iticksMap = new Map<number, TickResponse[]>();
@@ -190,16 +198,16 @@ const clearHistories = () => {
     const event = pointMapping.event;
     for (let i = 0; i < pointMapping.eventTargets.length; i++) {
       const eventTarget = pointMapping.eventTargets[i];
+      const eventResponse = getEventResponse(event);
+      const eventValue = getEventItemValue(event);
 
       // 如果接收过数据, 并且数据是数组类型
-      if (event.detail.value !== undefined) {
-        if (Array.isArray(event.detail.value)) {
-          event.detail.value = [];
-          eventTarget.dispatchEvent(event);
-          continue;
-        }
+      if (eventValue !== undefined && Array.isArray(eventValue)) {
+        setEventPayload(event, [], eventResponse);
+        eventTarget.dispatchEvent(event);
+        continue;
       }
-      event.detail.value = undefined; // 默认发送undefined
+      setEventPayload(event, eventResponse, undefined); // 默认发送undefined
       eventTarget.dispatchEvent(event);
       continue;
     }
@@ -353,8 +361,7 @@ export const dispatchResponsesBatch = (mainModule: SocketioMainModule, responses
       const itemValue = element["itemValue"];
       const pointMapping = mainModule.mapping.get(itemName);
       if (pointMapping) {
-        pointMapping.event.detail.value = itemValue;
-        pointMapping.event.detail.response = response;
+        setEventPayload(pointMapping.event, response, itemValue);
         _dispatchResponsesBatchC.add(pointMapping); // 这里不需要判断是否已经加入过容器, 因为Set是直接通过指针进行设置的
       }
     }

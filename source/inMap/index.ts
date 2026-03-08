@@ -37,7 +37,19 @@ import { initialization_BaseMap } from "@source/inMap/baseMap";
 initialization_BaseMap();
 
 import { initRestfulData } from "@source/data/initRestfulData";
-initRestfulData().then((response) => {});
+import { socketioSubModule_map } from "@source/data/initWebSocketData";
+initRestfulData().then((response) => {
+  socketioSubModule_map.registerListener<{
+    updated: number; // 1750297273983;
+    AGVX: number; // 20600;
+    AGVY: number; // 23600;
+    Heading: number; // 9000;
+  }>(`DF.VMS.V001.AhtRealStatus`, (itemValue, response) => {
+    console.log(`DF.VMS.V001.AhtRealStatus`, itemValue, response);
+  });
+
+  socketioSubModule_map.subReal(undefined, `DF.VMS.V001.AhtRealStatus`);
+});
 
 //////////////////////////////////////// 渲染循环 ////////////////////////////////////////
 
