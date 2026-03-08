@@ -21,6 +21,9 @@ export enum ThreejsRenderOrder {
 
   BLOCK_NO,
 
+  BLOCK_PREDEFINE, // 预设禁行区
+  BLOCK_PREDEFINE_LABEL, // 预设禁行区
+
   AGV_BASE,
   AGV_HEADER,
 
@@ -35,7 +38,4 @@ export enum ThreejsRenderOrder {
   AGV_LABEL,
 
   ACTIVE_LABEL, // 当前hover的Label
-
-  BLOCK_PREDEFINE, // 预设禁行区
-  BLOCK_PREDEFINE_LABEL, // 预设禁行区
 }

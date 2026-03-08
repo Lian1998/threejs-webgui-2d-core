@@ -5,14 +5,14 @@ import { ThreejsGroups } from "@source/inMap/variables";
 import { ThreejsLayers } from "@source/inMap/variables";
 import { ThreejsRenderOrder } from "@source/inMap/variables";
 
-import { ensureWebGL2Available } from "@source/inMap/utils/common";
-import { mapControls } from "@source/inMap/viewport";
+import { MAP_CENTER } from "@source/inMap/viewport";
+import { MAP_VIEW_SIZE } from "@source/inMap/viewport";
+import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
 import { orthoCamera } from "@source/inMap/viewport";
-import { registerOrthoCameraOnResize } from "@source/inMap/viewport";
+import { mapControls } from "@source/inMap/viewport";
 
-import { ViewportResizeDispatcher } from "@core/index";
-import { GpuPickCommonListener } from "@core/index";
-
+// 确保WebGL2
+import { ensureWebGL2Available } from "@source/inMap/utils/common";
 ensureWebGL2Available();
 
 const viewport = document.querySelector("#viewport") ?? document.querySelector("#gui-viewport");
@@ -25,15 +25,21 @@ viewport.appendChild(renderer.domElement);
 new ViewportResizeDispatcher(renderer);
 
 // 挂载resize视角改变函数
+import { ViewportResizeDispatcher } from "@core/index";
+new ViewportResizeDispatcher(renderer);
+
+// 挂载resize视角改变函数
+import { registerOrthoCameraOnResize } from "@source/inMap/viewport";
 registerOrthoCameraOnResize();
 
 // 挂载基于GPUBuffer的图元拾取核心
+import { GpuPickCommonListener } from "@core/index";
 const gpuPickCommonListener = new GpuPickCommonListener(renderer, ThreejsGroups.Meshes, orthoCamera);
 mapControls.addEventListener("start", () => (gpuPickCommonListener.enabled = false));
 mapControls.addEventListener("end", () => (gpuPickCommonListener.enabled = true));
 
-import { initialization_BaseMap } from "@source/inMap/baseMap";
 // 初始化底图
+import { initialization_BaseMap } from "@source/inMap/baseMap";
 initialization_BaseMap();
 
 import { initRestfulData } from "@source/data/initRestfulData";

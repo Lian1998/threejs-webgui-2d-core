@@ -34,15 +34,15 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
 
     const stsMtPviot = new THREE.Object3D();
     const stsMtRepresent = new THREE.Object3D();
-    stsMtPviot.position.z = 60.0;
+    stsMtPviot.position.z = 36.5;
 
     const stsPTPviot = new THREE.Object3D();
     const stsPtRepresent = new THREE.Object3D();
-    stsPTPviot.position.z = 40.0;
+    stsPTPviot.position.z = 45.0;
 
     const stsLabelPviot = new THREE.Object3D();
     const stsLabelRepresent = new THREE.Object3D();
-    stsLabelPviot.position.z = 8;
+    stsLabelPviot.position.z = -12;
 
     stsGantryRepresent.add(stsMtPviot);
     stsMtPviot.add(stsMtRepresent);
@@ -60,18 +60,18 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
       spriteMultiplyColor: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
       renderOrder: ThreejsRenderOrder.STS_GANTRY,
     });
-    // const stsMT = new Sprite2D({
-    //   spriteUrl: "/resource/sprites/STS_Trolley.png",
-    //   spriteMpp: calculateMpp(18, 87),
-    //   spriteMultiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
-    //   renderOrder: ThreejsRenderOrder.STS_TROLLEY,
-    // });
-    // const stsPT = new Sprite2D({
-    //   spriteUrl: "/resource/sprites/STS_Trolley.png",
-    //   spriteMpp: calculateMpp(18, 87),
-    //   spriteMultiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
-    //   renderOrder: ThreejsRenderOrder.STS_TROLLEY,
-    // });
+    const stsMT = new Sprite2D({
+      spriteUrl: "/resource/sprites/STS_Trolley.png",
+      spriteMpp: calculateMpp(18, 522),
+      spriteMultiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
+      renderOrder: ThreejsRenderOrder.STS_TROLLEY,
+    });
+    const stsPT = new Sprite2D({
+      spriteUrl: "/resource/sprites/STS_Trolley.png",
+      spriteMpp: calculateMpp(18, 522),
+      spriteMultiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
+      renderOrder: ThreejsRenderOrder.STS_TROLLEY,
+    });
 
     const stsLabelGeometry = new SDFText2DGeometry();
     stsLabelGeometry.setFromText({ text: this.code });
@@ -80,8 +80,8 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
     stsLabel.renderOrder = ThreejsRenderOrder.STS_LABEL;
 
     // 绑定指针
-    this.meshes = { stsGantry }; // , stsMT, stsPT, stsLabel
-    this.represents = { stsGantry: stsGantryRepresent }; // , stsMT: stsMtRepresent, stsPT: stsPtRepresent, stsLabel: stsLabelRepresent
+    this.meshes = { stsGantry, stsMT, stsPT, stsLabel };
+    this.represents = { stsGantry: stsGantryRepresent, stsMT: stsMtRepresent, stsPT: stsPtRepresent, stsLabel: stsLabelRepresent };
   }
 
   onInit() {

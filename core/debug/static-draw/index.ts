@@ -13,8 +13,8 @@ import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
 import { orthoCamera } from "@source/inMap/viewport";
 import { mapControls } from "@source/inMap/viewport";
 
+// 确保WebGL2
 import { ensureWebGL2Available } from "@source/inMap/utils/common";
-
 ensureWebGL2Available();
 
 const viewport = document.querySelector("#viewport") ?? document.querySelector("#gui-viewport");
