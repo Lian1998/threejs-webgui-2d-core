@@ -17,10 +17,21 @@ in vec2 vUv;
 in float vCounter;
 in float vLineDistance;
 in float vLineBreakPoint;
+#if defined(USE_PICK_BUFFER_ATTRIBUTE) || defined(USE_PICK_BUFFER_UNIFORM)
+flat in vec3 vPickColor;
+#endif
 
 out vec4 outColor;
 
 void main() {
+
+#ifdef USE_PICK_BUFFER
+  if (vLineBreakPoint > 1e-6) {
+    discard;
+  }
+  outColor = vec4(vPickColor, 1.0);
+  return;
+#endif
 
   vec4 diffuseColor = vec4(uColor, uOpacity);
 
@@ -81,7 +92,7 @@ void main() {
       float mask3 = 1.0 - smoothstep(connectorLength + edge2, connectorLength, stripeXFactor); // 让命中的部分为0
 
       float mask4 = mask1 * mask2 * mask3;
-      diffuseColor.a *= 1.0 - mask4; // Mask;
+      diffuseColor.a *= 1.0 - mask4;
     }
   }
 

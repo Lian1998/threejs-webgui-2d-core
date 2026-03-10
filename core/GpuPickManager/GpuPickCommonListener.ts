@@ -3,6 +3,7 @@ import * as THREE from "three";
 import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
 import { GpuPickManager } from "@core/GpuPickManager";
 import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
+import { GpuPickEvent } from "@core/interfaces/GpuPickFeature";
 import throttle from "@libs/lodash/src/throttle";
 
 /**
@@ -15,9 +16,6 @@ import throttle from "@libs/lodash/src/throttle";
  * 1. 通过读取渲染到离屏 pick buffer 的像素来确定当前鼠标所在的 feature;
  * 2. 使用 ResizeObserver 监听 canvas 大小和位移变更 (更可靠的元素尺寸检测);
  * 3. 对检测函数做节流 (throttle) 以减少频繁的 GPU 读像素开销;
- *
- * 使用:
- * const listener = new GpuPickCommonListener(renderer, scene, camera);
  */
 export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
   viewportElement: HTMLDivElement = undefined;
@@ -81,7 +79,31 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
     }
   }
 
-  private inspected: Record<string, GpuPickFeature> = { featurePointer: undefined, lastMoveinFeaturePointer: undefined, lastSelectedFeaturePointer: undefined };
+  private inspected: {
+    pickid: number;
+    meshLike: THREE.MeshLike;
+    featurePointer: GpuPickFeature;
+    lastMoveinFeaturePointer: GpuPickFeature;
+    lastSelectedFeaturePointer: GpuPickFeature;
+  } = {
+    pickid: 0,
+    meshLike: undefined,
+    featurePointer: undefined,
+    lastMoveinFeaturePointer: undefined,
+    lastSelectedFeaturePointer: undefined,
+  };
+
+  private buildEvent(type: GpuPickEvent["type"]): GpuPickEvent {
+    return {
+      type,
+      pickid: this.inspected.pickid,
+      meshLike: this.inspected.meshLike,
+      screen: {
+        x: this.mousePosition.x - this.viewportRect.clientX,
+        y: this.mousePosition.y - this.viewportRect.clientY,
+      },
+    };
+  }
 
   private _onDetect = () => {
     const { scene, camera, viewportRect, mousePosition, inspected } = this;
@@ -89,6 +111,8 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
     this.manager.rendPickBuffer(this.renderer, scene, camera);
     const { pickid, meshLike, featureData, exactFeature } = this.manager.readPickBuffer({ x: mousePosition.x - viewportRect.clientX, y: mousePosition.y - viewportRect.clientY });
 
+    inspected.pickid = pickid;
+    inspected.meshLike = meshLike;
     inspected.featurePointer = exactFeature;
 
     let moveInFlag = false;
@@ -116,12 +140,12 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
     }
 
     if (moveOutFlag) {
-      GpuPickCommonListener.callFeatureFunction(inspected.lastMoveinFeaturePointer, "onMoveout");
+      GpuPickCommonListener.callFeatureFunction(inspected.lastMoveinFeaturePointer, "onMoveout", this.buildEvent("moveout"));
       inspected.lastMoveinFeaturePointer = undefined;
     }
     if (moveInFlag) {
       inspected.lastMoveinFeaturePointer = inspected.featurePointer;
-      GpuPickCommonListener.callFeatureFunction(inspected.lastMoveinFeaturePointer, "onMovein");
+      GpuPickCommonListener.callFeatureFunction(inspected.lastMoveinFeaturePointer, "onMovein", this.buildEvent("movein"));
     }
   };
 
@@ -138,13 +162,13 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
         cancelSelectedFlag = true; // 点了空的
       }
       if (cancelSelectedFlag) {
-        GpuPickCommonListener.callFeatureFunction(inspected.lastSelectedFeaturePointer, "onCancelSelected"); // 触发 cancelSelected
+        GpuPickCommonListener.callFeatureFunction(inspected.lastSelectedFeaturePointer, "onCancelSelected", this.buildEvent("cancelSelected"));
         inspected.lastSelectedFeaturePointer = undefined;
       }
     }
 
     // 触发新选中回调 (允许 featurePointer 为 undefined, callFeatureFunction 会安全处理)
-    GpuPickCommonListener.callFeatureFunction(inspected.featurePointer, "onSelected");
+    GpuPickCommonListener.callFeatureFunction(inspected.featurePointer, "onSelected", this.buildEvent("selected"));
     inspected.lastSelectedFeaturePointer = inspected.featurePointer;
   };
 
@@ -163,26 +187,28 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
     // 计算局部 canvas 坐标 (相对于 canvas 左上角)
     this.mousePosition.x = e.clientX;
     this.mousePosition.y = e.clientY;
-    this.onDetect();
+    this.onDetect(e);
   };
 
   private _clickEvent = undefined;
 
   private onDomClick = (e: MouseEvent) => {
     if (!this.enabled) return;
+
     if (this._clickEvent) {
       window.clearTimeout(this._clickEvent);
       this._clickEvent = undefined;
     }
 
-    this._clickEvent = window.setTimeout(this.singleClick, 120);
+    this._clickEvent = window.setTimeout(() => this.singleClick, 120);
   };
 
   private onDomDoubleClick = (e: MouseEvent) => {
     if (!this.enabled) return;
+
     window.clearTimeout(this._clickEvent);
     const { inspected } = this;
-    GpuPickCommonListener.callFeatureFunction(inspected.featurePointer, "onDoubleClicked");
+    GpuPickCommonListener.callFeatureFunction(inspected.featurePointer, "onDoubleClicked", this.buildEvent("doubleClicked"));
   };
 
   ////////////////////////////////////// 工具 //////////////////////////////////////
@@ -192,8 +218,8 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
    * @param feature GpuPickFeature
    * @param callback keyof GpuPickFeature
    */
-  private static callFeatureFunction(feature: GpuPickFeature, callback: keyof GpuPickFeature) {
+  private static callFeatureFunction(feature: GpuPickFeature, callback: keyof GpuPickFeature, event: GpuPickEvent) {
     const fn = feature?.[callback];
-    typeof fn === "function" && fn.call(feature);
+    typeof fn === "function" && fn.call(feature, event);
   }
 }

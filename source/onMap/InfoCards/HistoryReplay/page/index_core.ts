@@ -1,4 +1,4 @@
-﻿import type { SocketioDispatchEvent } from "@source/classes/SocketioHelper";
+import type { SocketioDispatchEvent } from "@source/classes/SocketioHelper";
 import { SocketioMainModule } from "@source/classes/SocketioHelper";
 import { socketioMainModule } from "@source/classes/SocketioHelper";
 import { getTimeStampForSocketReq } from "@source/classes/SocketioHelper";

@@ -8,7 +8,7 @@ flat in int vPage;
 #ifdef USE_MULTIPLY_COLOR
 flat in vec3 vMultiplyColor;
 #endif
-#ifdef USE_PICK_BUFFER
+#if defined(USE_PICK_BUFFER_ATTRIBUTE) || defined(USE_PICK_BUFFER_UNIFORM)
 flat in vec3 vPickColor;
 #endif
 

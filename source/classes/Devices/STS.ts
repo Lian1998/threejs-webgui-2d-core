@@ -4,9 +4,8 @@ import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
 import { IActor } from "@core/interfaces/IActor";
 import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
 import { GpuPickManager } from "@core/GpuPickManager/";
-import { Sprite2D } from "@core/Sprite2D/index";
-import { SDFText2DGeometry } from "@core/index";
-import { SDFText2DMaterial } from "@core/index";
+import { Sprite2D } from "@core/index";
+import { SDFText2D } from "@core/index";
 
 import { ThreejsGroups } from "@source/inMap/variables";
 import { ThreejsRenderOrder } from "@source/inMap/variables";
@@ -52,34 +51,35 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
     stsLabelPviot.add(stsLabelRepresent);
 
     // 生成网格
+    const stsColor = getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor;
+    const stsColorDarken = new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString());
+
     const stsGantry = new Sprite2D({
       spriteUrl: "/resource/sprites/STS_Gantry.png",
       spriteMpp: calculateMpp(35, 610),
       spriteOffset: [-21.0, 0.0],
       spriteRotate: -Math.PI / 2,
-      spriteMultiplyColor: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
+      spriteMultiplyColor: stsColor,
       renderOrder: ThreejsRenderOrder.STS_GANTRY,
     });
     const stsMT = new Sprite2D({
       spriteUrl: "/resource/sprites/STS_Trolley.png",
       spriteMpp: calculateMpp(18, 522),
-      spriteMultiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
+      spriteMultiplyColor: stsColorDarken,
       renderOrder: ThreejsRenderOrder.STS_TROLLEY,
     });
     const stsPT = new Sprite2D({
       spriteUrl: "/resource/sprites/STS_Trolley.png",
       spriteMpp: calculateMpp(18, 522),
-      spriteMultiplyColor: new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString()),
+      spriteMultiplyColor: stsColorDarken,
       renderOrder: ThreejsRenderOrder.STS_TROLLEY,
     });
 
-    const stsLabelGeometry = new SDFText2DGeometry();
-    stsLabelGeometry.setFromText({ text: this.code });
-    const stsLabelMaterial = new SDFText2DMaterial({});
-    const stsLabel = new THREE.Mesh(stsLabelGeometry, stsLabelMaterial);
-    stsLabel.renderOrder = ThreejsRenderOrder.STS_LABEL;
+    const stsLabel = new SDFText2D({
+      text: this.code,
+      renderOrder: ThreejsRenderOrder.STS_LABEL,
+    });
 
-    // 绑定指针
     this.meshes = { stsGantry, stsMT, stsPT, stsLabel };
     this.represents = { stsGantry: stsGantryRepresent, stsMT: stsMtRepresent, stsPT: stsPtRepresent, stsLabel: stsLabelRepresent };
   }
@@ -93,16 +93,16 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
       const mesh = this.meshes[key];
 
       mesh.matrixAutoUpdate = false; // 关闭矩阵自动同步
-      // GpuPickManager.register(mesh, this); // 注册拾取
+      GpuPickManager.register(mesh, this); // 注册拾取
 
-      ThreejsGroups.Meshes.add(this.meshes[key]);
+      ThreejsGroups.Meshes.add(mesh);
     }
   }
 
   onUpdate(deltaTime: number, elapsedTime: number) {
-    // const scale = MAP_DEFAULT_ZOOM / orthoCamera.zoom;
-    // const scalar = THREE.MathUtils.clamp(scale, 1.0, 1.5);
-    // this.represents.stsLabel.scale.setScalar(scalar);
+    const scale = MAP_DEFAULT_ZOOM / orthoCamera.zoom;
+    const scalar = THREE.MathUtils.clamp(scale, 1.0, 1.5);
+    this.represents.stsLabel.scale.setScalar(scalar);
 
     for (const key of Object.keys(this.meshes)) {
       const mesh = this.meshes[key];
@@ -147,23 +147,40 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
 
   onZoomTo() {}
 
-  dispose(): void {}
-
-  ///////////////////////////////////////////// 业务逻辑API ///////////////////////////////////////////////
-
-  static configuration = {
-    gantryPosX: 567297.0,
-    gantryPosDirection: -1.0,
-    gantryPosY: -(2397641.79 + 2397676.79) / 2.0 - 21.0,
-    gantryPosUnit: "cm",
-  };
-
-  setGantryPos = (value: number) => {
-    // prettier-ignore
-    this.represents.stsGantry.position.set(
-      STS.configuration.gantryPosX + STS.configuration.gantryPosDirection * value / 100.0,
-      0.0,
-      STS.configuration.gantryPosY
-    );
-  };
+  dispose(): void {
+    for (const key of Object.keys(this.meshes)) {
+      const mesh = this.meshes[key];
+      mesh.removeFromParent();
+      mesh.geometry?.dispose();
+      if (Array.isArray(mesh.material)) {
+        for (const material of mesh.material) material.dispose();
+      } else {
+        mesh.material?.dispose();
+      }
+    }
+    this.represents.stsGantry.removeFromParent();
+    this.unregisterClassInstanceMap();
+  }
 }
+
+// 业务逻辑封装
+
+// static configuration = {
+//   gantryPosX: 567297.0,
+//   gantryPosDirection: -1.0,
+//   gantryPosY: -(2397641.79 + 2397676.79) / 2.0 - 21.0,
+//   gantryPosUnit: "cm",
+// };
+
+// /**
+//  * 业务逻辑: 设置大车位置
+//  * @param value
+//  */
+// setGantryPos = (value: number) => {
+//   // prettier-ignore
+//   this.represents.stsGantry.position.set(
+//     STS.configuration.gantryPosX + STS.configuration.gantryPosDirection * value / 100.0,
+//     0.0,
+//     STS.configuration.gantryPosY
+//   );
+// };

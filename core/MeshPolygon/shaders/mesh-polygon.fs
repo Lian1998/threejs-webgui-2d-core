@@ -6,10 +6,18 @@ uniform vec2 uShadowArray;    // 阴影间隔
 uniform vec3 uColor;
 uniform float uOpacity;
 uniform vec2 uResolution;
+#if defined(USE_PICK_BUFFER_ATTRIBUTE) || defined(USE_PICK_BUFFER_UNIFORM)
+flat in vec3 vPickColor;
+#endif
 
 out vec4 outColor;
 
 void main() {
+
+#ifdef USE_PICK_BUFFER
+  outColor = vec4(vPickColor, 1.0);
+  return;
+#endif
 
   vec4 diffuseColor = vec4(uColor, uOpacity);
 

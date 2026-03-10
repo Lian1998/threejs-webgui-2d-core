@@ -1,47 +1,35 @@
 import * as THREE from "three";
 
-import { GpuPickManager } from "./GpuPickManager";
+import type { GpuPickFeatureData } from "./GpuPickManager";
 
-/**
- * 这里使用一个对象 PickBufferShaderCache 来缓存一类材质编译之后的结果
- *
- * `console.log(window.PickBufferShaderCache['Sprite2DMaterial'].shaderObject.__vertexGlsl)`
- * `console.log(window.PickBufferShaderCache['Sprite2DMaterial'].shaderObject.__fragmentGlsl)`
- */
 const PickBufferShaderCache: Record<string, THREE.WebGLProgramParametersWithUniforms> = {};
 window["PickBufferShaderCache"] = PickBufferShaderCache;
 
+const PICKABLE_SHADER_NAMES = new Set(["Sprite2DMaterial", "SDFText2DMaterial", "MeshLineMaterial", "MeshPolygonMaterial"]);
+
 /**
- * 将传入的Object3D对应的材质转化成PickBuffer渲染材质, 在这个函数中进行shader片段的处理
- * @param {THREE.MeshLike} meshLike 需要转换的Object3D, 这里保证是个会被渲染的Mesh
- * @param {THREE.Material} materialIn Object3D原本的材质
- * @param {THREE.Material} materialOut 用于渲染PickBuffer的材质
+ * 将原材质转换为 pickBuffer 材质。
  */
-export const trans2PickBufferMaterial = (meshLike: THREE.MeshLike, materialIn: THREE.Material, materialOut: THREE.Material) => {
-  const featureData = GpuPickManager.featureDataMap.get(meshLike);
+export const trans2PickBufferMaterial = (meshLike: THREE.MeshLike, materialIn: THREE.Material, materialOut: THREE.Material, featureData: GpuPickFeatureData) => {
+  materialOut.defines = { ...(materialOut.defines ?? {}), USE_PICK_BUFFER: 1 };
 
-  // Mesh
-  if ((meshLike as THREE.Mesh).isMesh) {
-    materialOut.onBeforeCompile = (shaderObject: THREE.WebGLProgramParametersWithUniforms) => {
+  if (featureData.mode === "uniform") {
+    materialOut.defines.USE_PICK_BUFFER_UNIFORM = 1;
+    delete materialOut.defines.USE_PICK_BUFFER_ATTRIBUTE;
+  } else {
+    materialOut.defines.USE_PICK_BUFFER_ATTRIBUTE = 1;
+    delete materialOut.defines.USE_PICK_BUFFER_UNIFORM;
+  }
+
+  materialOut.onBeforeCompile = (shaderObject: THREE.WebGLProgramParametersWithUniforms) => {
+    if (featureData.mode === "uniform") {
       shaderObject.uniforms["uPickColor"] = featureData.uniforms.uPickColor;
+    }
 
-      if (shaderObject.shaderName === "Sprite2DMaterial") {
-        materialOut.defines["USE_PICK_BUFFER"] = 1;
-        return;
-      } else if (shaderObject.shaderName === "SDFText2DMaterial") {
-        materialOut.defines["USE_PICK_BUFFER"] = 1;
-        return;
-      } else if (shaderObject.shaderName === "MeshLineMaterial") {
-        materialOut.defines["USE_PICK_BUFFER"] = 1;
-        return;
-      } else if (shaderObject.shaderName === "MeshPolygonMaterial") {
-        materialOut.defines["USE_PICK_BUFFER"] = 1;
-        return;
-      }
-    };
-  }
+    if (PICKABLE_SHADER_NAMES.has(shaderObject.shaderName)) {
+      PickBufferShaderCache[shaderObject.shaderName] = shaderObject;
+    }
+  };
 
-  // InstancedMesh
-  else if ((meshLike as THREE.InstancedMesh).isInstancedMesh) {
-  }
+  materialOut.needsUpdate = true;
 };

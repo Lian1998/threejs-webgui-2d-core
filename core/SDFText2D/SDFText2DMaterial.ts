@@ -23,7 +23,7 @@ export interface SDFText2DMaterialParameters extends THREE.ShaderMaterialParamet
   uBackgroundAlpha?: number;
 
   /** 几何背景色圆角, 默认值为 0.15 */
-  uBackgroundRadius?: 0.15;
+  uBackgroundRadius?: number;
 
   /** 字体外边缘, 默认为 0.7 */
   uThreshold?: number;
@@ -68,7 +68,7 @@ export class SDFText2DMaterial extends THREE.RawShaderMaterial {
     SDFText2DMaterial.textureArray = textureArray;
   }
 
-  constructor(parameters: SDFText2DMaterialParameters) {
+  constructor(parameters: SDFText2DMaterialParameters = {}) {
     if (!SDFText2DMaterial.textureArray) SDFText2DMaterial.getTextureArray(); // 准备材质内容
     super({
       name: "SDFText2DMaterial",
@@ -124,6 +124,13 @@ export class SDFText2DMaterial extends THREE.RawShaderMaterial {
   }
   set uBackgroundAlpha(v: number) {
     this.uniforms.uBackgroundAlpha.value = v;
+  }
+
+  get uBackgroundRadius(): number {
+    return this.uniforms.uBackgroundRadius.value;
+  }
+  set uBackgroundRadius(v: number) {
+    this.uniforms.uBackgroundRadius.value = v;
   }
 
   get uThreshold(): number {

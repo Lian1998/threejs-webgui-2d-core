@@ -18,7 +18,7 @@ flat in int vPage;
 flat in float vType;
 in vec2 vLocalPos;
 flat in float vLocalAspect;
-#ifdef USE_PICK_BUFFER
+#if defined(USE_PICK_BUFFER_ATTRIBUTE) || defined(USE_PICK_BUFFER_UNIFORM)
 flat in vec3 vPickColor;
 #endif
 

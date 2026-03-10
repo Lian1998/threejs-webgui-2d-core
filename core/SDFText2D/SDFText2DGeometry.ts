@@ -6,7 +6,7 @@ import { SDF_FONT_SIZE } from "@core/SDFText2D/TinySdfAtlas";
 import { SDF_BUFFER } from "@core/SDFText2D/TinySdfAtlas";
 import { SDF_SIZE } from "@core/SDFText2D/TinySdfAtlas";
 
-interface SDFText2DGeometryParameters {
+export interface SDFText2DGeometryParameters {
   text: string;
   fontSize?: number;
   fontSpacingFactor?: number;
@@ -137,25 +137,25 @@ export class SDFText2DGeometry extends THREE.BufferGeometry {
     // 按照css规则设置
     else if (Array.isArray(parameters.padding)) {
       // 上 右 下 左
-      if ((parameters.padding.length = 4)) {
+      if (parameters.padding.length === 4) {
         for (let i = 0; i < 4; i++) this.padding[i] = parameters.padding[i];
         return;
       }
       // 上下 右左
-      else if ((parameters.padding.length = 2)) {
+      else if (parameters.padding.length === 2) {
         this.padding[0] = this.padding[2] = parameters.padding[0];
         this.padding[1] = this.padding[3] = parameters.padding[1];
         return;
       }
       //  上 右左 下
-      else if ((parameters.padding.length = 3)) {
+      else if (parameters.padding.length === 3) {
         this.padding[0] = parameters.padding[0];
         this.padding[1] = this.padding[3] = parameters.padding[1];
         this.padding[2] = parameters.padding[2];
         return;
       }
       // 上右下左
-      else if ((parameters.padding.length = 1)) {
+      else if (parameters.padding.length === 1) {
         this.padding[0] = this.padding[1] = this.padding[2] = this.padding[3] = parameters.padding[0];
         return;
       }

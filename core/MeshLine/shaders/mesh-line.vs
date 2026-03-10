@@ -4,6 +4,9 @@ uniform vec2 uResolution;        // 渲染素质(像素尺寸)
 uniform float uSizeAttenuation;  // 线宽是否随距离衰减(默认值0): 1 随与相机距离变化(世界空间); 0 不随距离变化(屏幕空间)
 uniform float uLineWidth;        // 线宽
 uniform float uPixelRatio;       // 当前浏览器的pixelRatio
+#ifdef USE_PICK_BUFFER_UNIFORM
+uniform vec3 uPickColor;
+#endif
 
 in vec3 position;
 in vec2 uv;
@@ -13,11 +16,17 @@ in float side;             // 当前顶点处于线条的哪一侧: +1: 顺着�
 in float counter;          // 当前顶点在线条中的进度
 in float lineDistance;     // 当前顶点在线条中的累计长度
 in float lineBreakpoint;   // 当前顶点在线条中的累计长度
+#ifdef USE_PICK_BUFFER_ATTRIBUTE
+in vec3 aPickColor;
+#endif
 
 out vec2 vUv;                // u 当前顶点在线条中的进度; v 当前顶点在线段宽度方向上是顺法线还是逆法线
 out float vCounter;
 out float vLineDistance;
 out float vLineBreakPoint;
+#if defined(USE_PICK_BUFFER_ATTRIBUTE) || defined(USE_PICK_BUFFER_UNIFORM)
+flat out vec3 vPickColor;
+#endif
 
 void main() {
 
@@ -25,18 +34,24 @@ void main() {
   vCounter = counter;
   vLineDistance = lineDistance;
   vLineBreakPoint = lineBreakpoint;
+#ifdef USE_PICK_BUFFER_ATTRIBUTE
+  vPickColor = aPickColor;
+#endif
+#ifdef USE_PICK_BUFFER_UNIFORM
+  vPickColor = uPickColor;
+#endif
 
-    // 世界坐标
+  // 世界坐标
   vec4 currMV = modelViewMatrix * vec4(position, 1.0);
   vec4 prevMV = modelViewMatrix * vec4(prev, 1.0);
   vec4 nextMV = modelViewMatrix * vec4(next, 1.0);
 
-    // 视锥平截头体坐标
+  // 视锥平截头体坐标
   vec4 currClip = projectionMatrix * currMV;
   vec4 prevClip = projectionMatrix * prevMV;
   vec4 nextClip = projectionMatrix * nextMV;
 
-    // NDC坐标
+  // NDC坐标
   vec2 currNDC = currClip.xy / currClip.w;
   vec2 prevNDC = prevClip.xy / prevClip.w;
   vec2 nextNDC = nextClip.xy / nextClip.w;
@@ -65,7 +80,7 @@ void main() {
     vec3 offset = normalWorld * side * uLineWidth * 0.5;
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position + offset, 1.0);
-  } 
+  }
 
   // 屏幕空间
   else {

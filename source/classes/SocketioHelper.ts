@@ -1,4 +1,4 @@
-﻿import { Socket } from "socket.io-client";
+import { Socket } from "socket.io-client";
 import { Manager } from "socket.io-client";
 import dayjs from "dayjs";
 import { EventDispatcher } from "three";

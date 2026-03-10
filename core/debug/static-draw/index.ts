@@ -60,10 +60,12 @@ initialization_BaseMap();
 
 //////////////////////////////////////// 业务代码(设备)逻辑 ////////////////////////////////////////
 import { IActor } from "@core/interfaces/IActor";
+import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
 import { MeshPolygonGeometry } from "@core/index";
 import { MeshPolygonMaterial } from "@core/index";
 import { MeshLineGeometry } from "@core/index";
 import { MeshLineMaterial } from "@core/index";
+import { SDFText2D } from "@core/index";
 
 import { ColorPaletteManager } from "@source/themes/ColorPaletteManager/";
 await ColorPaletteManager.instance.initialization();
@@ -71,6 +73,8 @@ await ColorPaletteManager.instance.initialization();
 import { STS } from "@source/classes/Devices/STS";
 // import { AGV } from "@source/classes/Devices/AGV";
 // import { ASC } from "@source/classes/Devices/ASC";
+
+import { rebuildPreDefBlockLayer } from "@source/classes/Devices/PredefineArea";
 
 import { SDFText2DGeometry } from "@core/index";
 import { SDFText2DMaterial } from "@core/index";
@@ -80,6 +84,7 @@ import { handleYardData } from "@source/data/handleYardData";
 
 const LOGIC_CENTER = [567485.3, -2397835];
 const coordinateTrans_mm = (x: number, y: number) => [LOGIC_CENTER[0] - x / 1000.0, LOGIC_CENTER[1] + y / 1000.0];
+
 Promise.all([
   // 设备位置初始化
   fetch("/restful-qinzhou/initDevice.json")
@@ -111,49 +116,7 @@ Promise.all([
     .then((response) => response.json())
     .then((data) => {
       console.warn("preDefBlockList", data);
-
-      const positions = [];
-      const lines = [];
-      for (let i = 0; i < data.length; i++) {
-        const element = data[i];
-
-        const coordinates = coordinateTrans_mm(element.x, element.y);
-        const a1 = [coordinates[0] - element.hl / 1000.0 / 2.0, 0.0, coordinates[1] - element.hw / 1000.0 / 2.0];
-        const a2 = [coordinates[0] - element.hl / 1000.0 / 2.0, 0.0, coordinates[1] + element.hw / 1000.0 / 2.0];
-        const a3 = [coordinates[0] + element.hl / 1000.0 / 2.0, 0.0, coordinates[1] + element.hw / 1000.0 / 2.0];
-        const a4 = [coordinates[0] + element.hl / 1000.0 / 2.0, 0.0, coordinates[1] - element.hw / 1000.0 / 2.0];
-
-        positions.push(...a1, ...a2, ...a3, ...a3, ...a4, ...a1);
-        lines.push([...a1, ...a2, ...a3, ...a4, ...a1]);
-
-        // 文字描述
-        const labelGeometry = new SDFText2DGeometry();
-        labelGeometry.setFromText({ text: element.areaName });
-        const labelMaterial = new SDFText2DMaterial({ uOutlineColor: new THREE.Color(0xff0000) });
-        const label = new THREE.Mesh(labelGeometry, labelMaterial);
-        label.renderOrder = ThreejsRenderOrder.BLOCK_PREDEFINE_LABEL;
-        label.name = element.areaName;
-        label.position.set(coordinates[0], 0.0, coordinates[1]);
-        label.scale.setScalar(0.5);
-        ThreejsGroups.Meshes.add(label);
-      }
-
-      // 几何面
-      const polygonGeometry = new MeshPolygonGeometry();
-      polygonGeometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array(positions), 3));
-      const polygonMaterial = new MeshPolygonMaterial({ uResolution: new THREE.Vector2(1024, 768), uColor: new THREE.Color("#000000"), uOpacity: 0.4 });
-      const polygonMesh = new THREE.Mesh(polygonGeometry, polygonMaterial);
-      polygonMesh.frustumCulled = false;
-      ThreejsGroups.Meshes.add(polygonMesh);
-      // GpuPickManager.register(polygonMesh, { isGpuPickFeature: true, onSelected: () => console.log(element) });
-
-      // 描边
-      const lineGeometry = new MeshLineGeometry();
-      lineGeometry.setMultiLine(lines);
-      const lineMaterial = new MeshLineMaterial({ uResolution: new THREE.Vector2(1024, 768), uLineWidth: 1.0, uColor: new THREE.Color("#000000"), uUseDash: 1, uDashArray: new THREE.Vector2(1, 1) });
-      const outline = new THREE.Mesh(lineGeometry, lineMaterial);
-      outline.frustumCulled = false;
-      ThreejsGroups.Meshes.add(outline);
+      rebuildPreDefBlockLayer(data);
     }),
 ])
   .then((responses) => {
@@ -190,7 +153,7 @@ Promise.all([
     //   };
     // }
 
-    for (const [seq, instance] of STS.classInstanceMap) (instance as IActor)?.onInit();
+    for (const [seq, instance] of STS.classInstanceMap) (instance as STS as IActor)?.onInit();
     console.log(ThreejsGroups.BaseMap);
     console.log(ThreejsGroups.Meshes);
 
@@ -217,8 +180,9 @@ const animate = () => {
   // 同步一下逻辑矩阵
   ThreejsGroups.Represents.updateMatrixWorld();
 
-  STS.getClassInstance<STS>(0).represents.stsGantry.position.x -= 0.05; // QC072
-  for (const [seq, instance] of STS.classInstanceMap) (instance as IActor)?.onUpdate(deltaTime, elapsedTime);
+  const QC072 = STS.getClassInstance<STS>(0);
+  if (QC072) QC072.represents.stsGantry.position.x -= 0.05;
+  for (const [, instance] of STS.classInstanceMap) (instance as unknown as IActor)?.onUpdate(deltaTime, elapsedTime);
 
   // 渲染图元
   renderer.render(ThreejsGroups.Meshes, orthoCamera);

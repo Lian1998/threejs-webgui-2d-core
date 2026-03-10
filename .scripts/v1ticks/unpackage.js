@@ -118,8 +118,8 @@ class PagedJsonArrayWriter {
     this.itemsInPage = 0;
     const filePath = path.join(this.outputDir, `ticks_${String(this.pageIndex).padStart(4, "0")}.json`);
     this.stream = fs.createWriteStream(filePath, { encoding: "utf8" });
-    // Prefix UTF-8 BOM to avoid mojibake in Windows editors that guess ANSI/GBK.
-    await this.writeRaw("\uFEFF[\n");
+    // // Prefix UTF-8 BOM to avoid mojibake in Windows editors that guess ANSI/GBK.
+    // await this.writeRaw("\uFEFF[\n");
   }
 
   async closePage() {
