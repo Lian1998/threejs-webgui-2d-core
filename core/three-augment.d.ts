@@ -6,4 +6,7 @@ declare module "three" {
 
   /** threejs 泛二维(XZ平面)顶点类型 */
   declare type Vertex2DLike = THREE.Vector3[] | THREE.Vector2[] | THREE.Vector3Tuple[] | THREE.Vector2Tuple[] | number[];
+
+  /** threejs 泛颜色类型 */
+  declare type ColorLike = THREE.Color | THREE.ColorRepresentation | null | undefined;
 }

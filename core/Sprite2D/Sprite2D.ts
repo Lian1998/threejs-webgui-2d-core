@@ -3,57 +3,36 @@ import { SpriteXZRectGeometry } from "./SpriteXZRectGeometry";
 import { Sprite2DMaterial } from "./Sprite2DMaterial";
 import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
 
-export type Sprite2DColorLike = THREE.Color | THREE.ColorRepresentation | null | undefined;
-
 export interface Sprite2DParameters {
-  /** atlas 中预载的图片 url */
-  spriteUrl?: string;
-  /** 兼容旧字段 */
-  textureUrl?: string;
+  /** 贴图地址, 同时作为Atlas系统的索引 */
+  url: string;
 
-  /** meter per pixel */
-  spriteMpp?: number;
-  /** 兼容旧字段 */
+  /** 米 / 像素 */
   mpp?: number;
 
-  /** [x,z] 偏移，单位米 */
-  spriteOffset?: [number, number];
-  /** 兼容旧字段 */
+  /** 中心点 [x,z] 偏移, threejs世界单位 */
   offset?: [number, number];
 
-  /** 绕 y 轴旋转，弧度 */
-  spriteRotate?: number;
-  /** 兼容旧字段 */
+  /** 按中心点, 绕 y 轴旋转, 弧度 */
   rotate?: number;
 
   /** 乘色 */
-  spriteMultiplyColor?: Sprite2DColorLike;
-  /** 兼容旧字段 */
-  multiplyColor?: Sprite2DColorLike;
+  multiplyColor?: THREE.Color;
 
-  renderOrder?: THREE.Object3D["renderOrder"];
+  renderOrder?: number;
 }
-
-type SpriteState = {
-  spriteUrl: string;
-  spriteMpp: number;
-  spriteOffset: [number, number];
-  spriteRotate: number;
-  spriteMultiplyColor: THREE.Color | undefined;
-  renderOrder: THREE.Object3D["renderOrder"] | undefined;
-};
 
 /**
  * xz 平面 sprite。支持新旧参数别名，并可在运行时 update。
  */
-export class Sprite2D extends THREE.Mesh {
+export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
   isSprite2D = true;
 
-  spriteUrl = "";
-  spriteMpp = 1.0;
-  spriteOffset: [number, number] = [0.0, 0.0];
-  spriteRotate = 0.0;
-  spriteMultiplyColor: THREE.Color | undefined = undefined;
+  url: string;
+  mpp = 1.0;
+  offset: [number, number] = [0.0, 0.0];
+  rotate = 0.0;
+  multiplyColor: THREE.Color = undefined;
 
   constructor(parameters: Sprite2DParameters) {
     super();
@@ -61,77 +40,65 @@ export class Sprite2D extends THREE.Mesh {
     this.apply(parameters, true);
   }
 
-  /** 增量更新参数；涉及几何字段时会重建几何。 */
-  update(parameters: Partial<Sprite2DParameters>): this {
-    this.apply(parameters, false);
-    return this;
-  }
-
-  /** 一次性替换 sprite 核心参数。 */
-  setSprite(parameters: Sprite2DParameters): this {
-    this.apply(parameters, true);
-    return this;
-  }
-
-  setMultiplyColor(color: Sprite2DColorLike): this {
-    this.apply({ spriteMultiplyColor: color }, false);
-    return this;
-  }
-
-  private apply(parameters: Partial<Sprite2DParameters>, forceRebuildGeometry: boolean) {
+  /**
+   * 接受参数修改
+   * @param {Partial<Sprite2DParameters>} parameters 新的参数
+   * @param forceRebuildGeometry 是否强制重新计算 geometryBuffer
+   */
+  private apply(parameters: Partial<Sprite2DParameters>, forceRebuildGeometry: boolean = false) {
     const next = this.normalizeParameters(parameters);
-    const needRebuildGeometry = forceRebuildGeometry || next.spriteUrl !== this.spriteUrl || next.spriteMpp !== this.spriteMpp || next.spriteOffset[0] !== this.spriteOffset[0] || next.spriteOffset[1] !== this.spriteOffset[1] || next.spriteRotate !== this.spriteRotate;
+    const needRebuildGeometry = forceRebuildGeometry || next.url !== this.url || next.mpp !== this.mpp || next.offset[0] !== this.offset[0] || next.offset[1] !== this.offset[1] || next.rotate !== this.rotate;
+    const needRebuildMultiplyColor = needRebuildGeometry || !next.multiplyColor.equals(this.multiplyColor); // 综合条件判断是否需要重新计算 geometryBuffer
 
-    const needRebuildMultiplyColor = needRebuildGeometry || !this.isSameColor(next.spriteMultiplyColor, this.spriteMultiplyColor);
-
-    this.spriteUrl = next.spriteUrl;
-    this.spriteMpp = next.spriteMpp;
-    this.spriteOffset = [next.spriteOffset[0], next.spriteOffset[1]];
-    this.spriteRotate = next.spriteRotate;
-    this.spriteMultiplyColor = next.spriteMultiplyColor;
+    this.url = next.url;
+    this.mpp = next.mpp;
+    this.offset = [next.offset[0], next.offset[1]];
+    this.rotate = next.rotate;
+    this.multiplyColor = next.multiplyColor;
     this.renderOrder = next.renderOrder ?? this.renderOrder ?? -1;
 
-    if (needRebuildGeometry) this.rebuildGeometry();
+    if (needRebuildGeometry) this.rebuildGeometry(); // 重新计算 geometryBuffer
     if (needRebuildMultiplyColor) this.syncMultiplyColorAttribute();
   }
 
-  private normalizeParameters(parameters: Partial<Sprite2DParameters>): SpriteState {
-    const spriteUrl = parameters.spriteUrl ?? parameters.textureUrl ?? this.spriteUrl;
-    const spriteMpp = parameters.spriteMpp ?? parameters.mpp ?? this.spriteMpp;
-    const spriteOffset = parameters.spriteOffset ?? parameters.offset ?? this.spriteOffset;
-    const spriteRotate = parameters.spriteRotate ?? parameters.rotate ?? this.spriteRotate;
+  /** 校验并吸收参数 */
+  private normalizeParameters(parameters: Partial<Sprite2DParameters>): Sprite2DParameters {
+    const url = parameters.url ?? this.url;
+    const mpp = parameters.mpp ?? this.mpp;
+    const offset = parameters.offset ?? this.offset;
+    const rotate = parameters.rotate ?? this.rotate;
     const renderOrder = parameters.renderOrder ?? this.renderOrder;
-    const rawColor = parameters.spriteMultiplyColor ?? parameters.multiplyColor ?? this.spriteMultiplyColor;
+    const multiplyColor = parameters.multiplyColor ?? this.multiplyColor;
 
-    if (!spriteUrl) throw new Error("Sprite2D: missing spriteUrl");
-    if (spriteMpp === undefined) throw new Error("Sprite2D: missing spriteMpp");
-    if (!Number.isFinite(spriteMpp) || spriteMpp <= 0) throw new Error(`Sprite2D: invalid spriteMpp ${spriteMpp}`);
+    if (mpp === undefined) throw new Error("Sprite2D: 缺少缩放比");
+    if (!Number.isFinite(mpp) || mpp <= 0) throw new Error(`Sprite2D: 非法缩放比 ${mpp}`);
 
     return {
-      spriteUrl,
-      spriteMpp,
-      spriteOffset: [spriteOffset?.[0] ?? 0.0, spriteOffset?.[1] ?? 0.0],
-      spriteRotate: spriteRotate ?? 0.0,
-      spriteMultiplyColor: this.toColor(rawColor),
+      url,
+      mpp,
+      offset: [offset?.[0] ?? 0.0, offset?.[1] ?? 0.0],
+      rotate: rotate ?? 0.0,
+      multiplyColor: multiplyColor,
       renderOrder,
     };
   }
 
+  /** 重新计算 geometryBuffer */
   private rebuildGeometry() {
-    const spriteItem = spriteAtlas.getSpriteAtlas(this.spriteUrl);
+    const spriteItem = spriteAtlas.getSpriteAtlas(this.url);
     const { page, u0, v0, u1, v1, imageProps } = spriteItem;
     const { width, height } = imageProps;
 
     this.geometry?.dispose();
     this.geometry = new SpriteXZRectGeometry({
-      x: this.spriteMpp * width,
-      z: this.spriteMpp * height,
+      x: this.mpp * width,
+      z: this.mpp * height,
       u0,
       v0,
       u1,
       v1,
-      offset: this.spriteOffset,
-      rotate: this.spriteRotate,
+      offset: this.offset,
+      rotate: this.rotate,
     });
 
     const count = this.geometry.attributes.position.count;
@@ -140,18 +107,19 @@ export class Sprite2D extends THREE.Mesh {
     this.geometry.setAttribute("aPage", new THREE.Float32BufferAttribute(aPage, 1).setUsage(THREE.StaticDrawUsage));
   }
 
+  /** 重新计算 geometryBuffer 的 aMultiplyColor 属性 */
   private syncMultiplyColorAttribute() {
     const material = this.material as Sprite2DMaterial;
     if (!this.geometry) return;
 
-    if (!this.spriteMultiplyColor) {
+    if (!this.multiplyColor) {
       this.geometry.deleteAttribute("aMultiplyColor");
       material.useMultiplyColor = false;
       return;
     }
 
     const count = this.geometry.attributes.position.count;
-    const color = this.spriteMultiplyColor;
+    const color = this.multiplyColor;
     const arr = new Float32Array(count * 3);
     for (let i = 0; i < count; i++) {
       const o = i * 3;
@@ -163,14 +131,9 @@ export class Sprite2D extends THREE.Mesh {
     material.useMultiplyColor = true;
   }
 
-  private toColor(value: Sprite2DColorLike): THREE.Color | undefined {
-    if (value === undefined || value === null) return undefined;
-    return value instanceof THREE.Color ? value.clone() : new THREE.Color(value);
-  }
+  ///////////////////////////////////////////////////////////////
 
-  private isSameColor(a?: THREE.Color, b?: THREE.Color): boolean {
-    if (!a && !b) return true;
-    if (!a || !b) return false;
-    return a.equals(b);
+  set(parameters: Partial<Sprite2DParameters>) {
+    this.apply(parameters, false);
   }
 }

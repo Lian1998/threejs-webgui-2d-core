@@ -55,23 +55,23 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
     const stsColorDarken = new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString());
 
     const stsGantry = new Sprite2D({
-      spriteUrl: "/resource/sprites/STS_Gantry.png",
-      spriteMpp: calculateMpp(35, 610),
-      spriteOffset: [-21.0, 0.0],
-      spriteRotate: -Math.PI / 2,
-      spriteMultiplyColor: stsColor,
+      url: "/resource/sprites/STS_Gantry.png",
+      mpp: calculateMpp(35, 610),
+      offset: [-21.0, 0.0],
+      rotate: -Math.PI / 2,
+      multiplyColor: stsColor,
       renderOrder: ThreejsRenderOrder.STS_GANTRY,
     });
     const stsMT = new Sprite2D({
-      spriteUrl: "/resource/sprites/STS_Trolley.png",
-      spriteMpp: calculateMpp(18, 522),
-      spriteMultiplyColor: stsColorDarken,
+      url: "/resource/sprites/STS_Trolley.png",
+      mpp: calculateMpp(18, 522),
+      multiplyColor: stsColorDarken,
       renderOrder: ThreejsRenderOrder.STS_TROLLEY,
     });
     const stsPT = new Sprite2D({
-      spriteUrl: "/resource/sprites/STS_Trolley.png",
-      spriteMpp: calculateMpp(18, 522),
-      spriteMultiplyColor: stsColorDarken,
+      url: "/resource/sprites/STS_Trolley.png",
+      mpp: calculateMpp(18, 522),
+      multiplyColor: stsColorDarken,
       renderOrder: ThreejsRenderOrder.STS_TROLLEY,
     });
 
