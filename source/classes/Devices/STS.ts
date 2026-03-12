@@ -3,6 +3,7 @@ import Tinycolor from "tinycolor2";
 import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
 import { IActor } from "@core/interfaces/IActor";
 import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
+import { GpuBatchFeature } from "@core/interfaces/GpuBatchFeature";
 import { Sprite2D } from "@core/index";
 import { SDFText2D } from "@core/index";
 
@@ -13,86 +14,101 @@ import { orthoCamera } from "@source/inMap/viewport";
 import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
 import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
 
-/** Ship-to-Shore Crane 岸边集装箱起重机 */
-export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature, IActor {
-  static codeSelected = undefined;
-  code: string = "";
+// 生成网格
+const deviceColor = getColorRuntime("VARS.DEVICE_STATUS.NORMAL");
 
-  isGpuPickFeature: true;
-  represents: Record<string, THREE.Object3D> = undefined;
-  private meshes: Record<string, THREE.Mesh> = undefined;
+const labelColor = getColorRuntime("LABEL.QC.DEFAULT.TEXT");
+const labelBackground = getColorRuntime("LABEL.QC.DEFAULT.TEXT_BACKGROUND");
+
+const labelColor_selected = getColorRuntime("LABEL.QC.SELECTED.TEXT");
+const labelBackground_selected = getColorRuntime("LABEL.QC.SELECTED.TEXT_BACKGROUND");
+
+/** Ship-to-Shore Crane 岸边集装箱起重机 */
+export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature, GpuBatchFeature, IActor {
+  isGpuPickFeature: true = true;
+  isGpuBatchFeature: true = true;
+  primitives: Record<string, { ava: THREE.Object3D; mesh: THREE.Object3D }> = undefined;
+  primitiveKeys: string[];
+
+  code: string = ""; // 实例的code
+  static codeSelected = undefined; // 当前选择的code
 
   constructor(code: string) {
     super();
 
     this.code = code;
 
-    // 生成关系对象
-    const stsGantryRepresent = new THREE.Object3D();
+    // 生成关系
+
+    const stsGantryAva = new THREE.Object3D();
 
     const stsMtPviot = new THREE.Object3D();
-    const stsMtRepresent = new THREE.Object3D();
-    stsMtPviot.position.z = 36.5;
+    const stsMtAva = new THREE.Object3D();
+    stsMtPviot.position.z = 36.5; // 主小车相对于大车中心点的偏移量
 
     const stsPTPviot = new THREE.Object3D();
-    const stsPtRepresent = new THREE.Object3D();
-    stsPTPviot.position.z = 45.0;
+    const stsPtAva = new THREE.Object3D();
+    stsPTPviot.position.z = 45.0; // 门架小车相对于大车中心点的偏移量
 
     const stsLabelPviot = new THREE.Object3D();
-    const stsLabelRepresent = new THREE.Object3D();
-    stsLabelPviot.position.z = -12;
+    const stsLabelAva = new THREE.Object3D();
+    stsLabelPviot.position.z = -12; // 标签相对于大车中心点的偏移量
 
-    stsGantryRepresent.add(stsMtPviot);
-    stsMtPviot.add(stsMtRepresent);
-    stsGantryRepresent.add(stsPTPviot);
-    stsPTPviot.add(stsPtRepresent);
-    stsGantryRepresent.add(stsLabelPviot);
-    stsLabelPviot.add(stsLabelRepresent);
+    stsGantryAva.add(stsMtPviot);
+    stsMtPviot.add(stsMtAva);
+    stsGantryAva.add(stsPTPviot);
+    stsPTPviot.add(stsPtAva);
+    stsGantryAva.add(stsLabelPviot);
+    stsLabelPviot.add(stsLabelAva);
 
     // 生成网格
-    const stsColor = getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor;
-    const stsColorDarken = new THREE.Color(Tinycolor(getColorRuntime("VARS.DEVICE_STATUS.NORMAL").tinyColor.getOriginalInput()).darken(10).toHexString());
 
     const stsGantry = new Sprite2D({
       url: "/resource/sprites/STS_Gantry.png",
       mpp: calculateMpp(35, 610),
       offset: [-21.0, 0.0],
       rotate: -Math.PI / 2,
-      multiplyColor: stsColor,
+      multiplyColor: deviceColor.threejsColor,
       renderOrder: ThreejsRenderOrder.STS_GANTRY,
     });
     const stsMT = new Sprite2D({
       url: "/resource/sprites/STS_Trolley.png",
       mpp: calculateMpp(18, 522),
-      multiplyColor: stsColorDarken,
+      multiplyColor: new THREE.Color(Tinycolor(deviceColor.tinyColor.getOriginalInput()).darken(10).toHexString()),
       renderOrder: ThreejsRenderOrder.STS_TROLLEY,
     });
     const stsPT = new Sprite2D({
       url: "/resource/sprites/STS_Trolley.png",
       mpp: calculateMpp(18, 522),
-      multiplyColor: stsColorDarken,
+      multiplyColor: new THREE.Color(Tinycolor(deviceColor.tinyColor.getOriginalInput()).darken(10).toHexString()),
       renderOrder: ThreejsRenderOrder.STS_TROLLEY,
     });
-
     const stsLabel = new SDFText2D({
       text: this.code,
       renderOrder: ThreejsRenderOrder.STS_LABEL,
+      uTextColor: labelColor.threejsColor,
+      uBackgroundColor: labelBackground.threejsColor,
+      uBackgroundAlpha: labelBackground.alpha.value,
     });
 
-    this.meshes = { stsGantry, stsMT, stsPT, stsLabel };
-    this.represents = { stsGantry: stsGantryRepresent, stsMT: stsMtRepresent, stsPT: stsPtRepresent, stsLabel: stsLabelRepresent };
+    this.primitives = {
+      stsGantry: { ava: stsGantryAva, mesh: stsGantry },
+      stsMT: { ava: stsMtAva, mesh: stsMT },
+      stsPT: { ava: stsPtAva, mesh: stsPT },
+      stsLabel: { ava: stsLabelAva, mesh: stsLabel },
+    };
+
+    this.primitiveKeys = Object.keys(this.primitives);
   }
 
   onInit() {
-    // 添加所有 represent 到场景
-    ThreejsGroups.Represents.add(this.represents.stsGantry);
+    // 挂载根代表
+    ThreejsGroups.Void.add(this.primitives.stsGantry.ava);
 
     // 添加所有 mesh 到场景
-    for (const key of Object.keys(this.meshes)) {
-      const mesh = this.meshes[key];
-
+    for (const key of this.primitiveKeys) {
+      const mesh = this.primitives[key].mesh;
       mesh.matrixAutoUpdate = false; // 关闭矩阵自动同步
-
       ThreejsGroups.Meshes.add(mesh);
     }
   }
@@ -100,30 +116,40 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
   onUpdate(deltaTime: number, elapsedTime: number) {
     const scale = MAP_DEFAULT_ZOOM / orthoCamera.zoom;
     const scalar = THREE.MathUtils.clamp(scale, 1.0, 1.5);
-    this.represents.stsLabel.scale.setScalar(scalar);
 
-    for (const key of Object.keys(this.meshes)) {
-      const mesh = this.meshes[key];
-      const represent = this.represents[key];
-      if (represent) mesh.matrix.copy(represent.matrixWorld);
+    const stsLabel = this.primitives.stsLabel.mesh as SDFText2D;
+    stsLabel.scale.setScalar(scalar);
+
+    for (const key of this.primitiveKeys) {
+      const mesh = this.primitives[key].mesh;
+      const ava = this.primitives[key].ava;
+      mesh.matrix.copy(ava.matrixWorld);
     }
   }
 
   focused = () => {
-    (this.meshes.stsLabel as SDFText2D).setStyle({ uBackgroundColor: new THREE.Color(0xffff00) });
-    this.meshes.stsLabel.renderOrder = ThreejsRenderOrder.ACTIVE_LABEL;
+    const stsLabel = this.primitives.stsLabel.mesh as SDFText2D;
+    stsLabel.setStyle({
+      uTextColor: labelColor_selected.threejsColor,
+      uBackgroundColor: labelBackground_selected.threejsColor,
+      uBackgroundAlpha: labelBackground_selected.alpha.value,
+    });
+    stsLabel.renderOrder = ThreejsRenderOrder.ACTIVE_LABEL;
   };
 
   unfocused = () => {
-    (this.meshes.stsLabel as SDFText2D).setStyle({ uBackgroundColor: new THREE.Color(0xffffff) });
-    this.meshes.stsLabel.renderOrder = ThreejsRenderOrder.STS_LABEL;
+    const stsLabel = this.primitives.stsLabel.mesh as SDFText2D;
+    stsLabel.setStyle({
+      uTextColor: labelColor.threejsColor,
+      uBackgroundColor: labelBackground.threejsColor,
+      uBackgroundAlpha: labelBackground.alpha.value,
+    });
+    stsLabel.renderOrder = ThreejsRenderOrder.STS_LABEL;
   };
 
   onSelected() {
     STS.codeSelected = this.code;
     this.focused();
-
-    console.warn(`${this.code} onSelected`);
   }
 
   onCancelSelected() {
@@ -143,42 +169,11 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
     }
   }
 
-  onZoomTo() {}
-
-  dispose(): void {
-    for (const key of Object.keys(this.meshes)) {
-      const mesh = this.meshes[key];
-      mesh.removeFromParent();
-      mesh.geometry?.dispose();
-      if (Array.isArray(mesh.material)) {
-        for (const material of mesh.material) material.dispose();
-      } else {
-        mesh.material?.dispose();
-      }
-    }
-    this.represents.stsGantry.removeFromParent();
-    this.unregisterClassInstanceMap();
+  static batchInit() {
+    // 1. 取classInstanceMap中第一个实例的所有primitives
+    // 2. 每个primitives生成一个InstancedMesh, 几何就用第一个实例对应的
+    // 3. Sprite2D的属性全都在buffer中
+    // 4. SDFText2D取第一个实例对应的uniform, 再生成一个浮动的去盖
+    // 4.1 SDFText2D的属性也全部都写到buffer中
   }
 }
-
-// 业务逻辑封装
-
-// static configuration = {
-//   gantryPosX: 567297.0,
-//   gantryPosDirection: -1.0,
-//   gantryPosY: -(2397641.79 + 2397676.79) / 2.0 - 21.0,
-//   gantryPosUnit: "cm",
-// };
-
-// /**
-//  * 业务逻辑: 设置大车位置
-//  * @param value
-//  */
-// setGantryPos = (value: number) => {
-//   // prettier-ignore
-//   this.represents.stsGantry.position.set(
-//     STS.configuration.gantryPosX + STS.configuration.gantryPosDirection * value / 100.0,
-//     0.0,
-//     STS.configuration.gantryPosY
-//   );
-// };

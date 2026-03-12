@@ -14,10 +14,10 @@ const center = new THREE.Vector3(MAP_CENTER[0], 0, MAP_CENTER[1]);
 const mapControls = new MapControls(orthoCamera, viewport);
 
 // 视口平滑运动
-{
-  mapControls.enableDamping = true;
-  mapControls.dampingFactor = 0.25;
-}
+// {
+//   mapControls.enableDamping = true;
+//   mapControls.dampingFactor = 0.25;
+// }
 
 // 视口范围
 {

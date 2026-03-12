@@ -4,12 +4,12 @@ import { GpuPickManager } from "@core/index";
 
 export const ThreejsGroups = {
   BaseMap: new THREE.Group(),
-  Represents: new THREE.Group(),
+  Void: new THREE.Group(),
   Meshes: new THREE.Group(),
 };
 
 ThreejsGroups.BaseMap.name = "BaseMap";
-ThreejsGroups.Represents.name = "Represents";
+ThreejsGroups.Void.name = "Void";
 ThreejsGroups.Meshes.name = "Meshes";
 
 export enum ThreejsLayers {

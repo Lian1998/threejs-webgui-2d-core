@@ -95,7 +95,7 @@ Promise.all([
       // STS
       for (const itemValue of data[0].itemValue) {
         const sts = new STS(itemValue.cheId);
-        sts.represents.stsGantry.position.set(567297.0 - itemValue.GantryPos / 100.0, 0.0, STSRailsAnchorY);
+        sts.primitives.stsGantry.ava.position.set(567297.0 - itemValue.GantryPos / 100.0, 0.0, STSRailsAnchorY);
       }
 
       // // AGV
@@ -178,10 +178,10 @@ const animate = () => {
   renderer.autoClearStencil = true;
 
   // 同步一下逻辑矩阵
-  ThreejsGroups.Represents.updateMatrixWorld();
+  ThreejsGroups.Void.updateMatrixWorld();
 
   const QC072 = STS.getClassInstance<STS>(0);
-  if (QC072) QC072.represents.stsGantry.position.x -= 0.05;
+  if (QC072) QC072.primitives.stsGantry.mesh.position.x -= 0.05;
   for (const [, instance] of STS.classInstanceMap) (instance as unknown as IActor)?.onUpdate(deltaTime, elapsedTime);
 
   // 渲染图元

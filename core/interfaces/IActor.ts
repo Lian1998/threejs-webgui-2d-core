@@ -7,5 +7,5 @@ export interface IActor {
   onUpdate?(deltaTime?: number, elapsedTime?: number): void;
 
   /** 销毁 */
-  dispose(): void;
+  dispose?(): void;
 }
