@@ -3,7 +3,7 @@ import { SpriteXZRectGeometry } from "./SpriteXZRectGeometry";
 import { Sprite2DMaterial } from "./Sprite2DMaterial";
 import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
 
-export interface Sprite2DParameters {
+interface Sprite2DParameters {
   /** 贴图地址, 同时作为Atlas系统的索引 */
   url: string;
 
@@ -22,9 +22,7 @@ export interface Sprite2DParameters {
   renderOrder?: number;
 }
 
-/**
- * xz 平面 sprite。支持新旧参数别名，并可在运行时 update。
- */
+/** XZ平面贴图精灵 */
 export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
   isSprite2D = true;
 
@@ -55,10 +53,12 @@ export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
     this.offset = [next.offset[0], next.offset[1]];
     this.rotate = next.rotate;
     this.multiplyColor = next.multiplyColor;
-    this.renderOrder = next.renderOrder ?? this.renderOrder ?? -1;
 
     if (needRebuildGeometry) this.rebuildGeometry(); // 重新计算 geometryBuffer
     if (needRebuildMultiplyColor) this.syncMultiplyColorAttribute();
+
+    // 更新renderOrder
+    this.renderOrder = next.renderOrder ?? this.renderOrder ?? -1;
   }
 
   /** 校验并吸收参数 */

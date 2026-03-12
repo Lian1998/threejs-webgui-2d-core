@@ -24,6 +24,7 @@ type SpriteAtlasProperty = {
   imageProps: ImageProps;
 };
 
+/** 预加载精灵生成雪碧图并为Sprite2D提供参数 */
 export class SpriteAtlas {
   /** 烘焙贴图标记 */ static prepared: boolean = false;
 

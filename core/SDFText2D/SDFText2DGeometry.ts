@@ -23,6 +23,48 @@ export class SDFText2DGeometry extends THREE.BufferGeometry {
     super();
   }
 
+  /** 当前设置的padding */
+  private padding = [0.0, 0.0, 0.0, 0.0]; // top right bottom left
+
+  /** 从参数中解析出padding标准格式 */
+  private resolveParamtersPadding(parameters: SDFText2DGeometryParameters) {
+    for (let i = 0; i < 4; i++) this.padding[i] = 0.0; // 清空状态
+
+    // 直接设置
+    if (typeof parameters.padding === "number") {
+      this.padding[0] = this.padding[1] = this.padding[2] = this.padding[3] = parameters.padding;
+      return;
+    }
+    // 按照css规则设置
+    else if (Array.isArray(parameters.padding)) {
+      // 上 右 下 左
+      if (parameters.padding.length === 4) {
+        for (let i = 0; i < 4; i++) this.padding[i] = parameters.padding[i];
+        return;
+      }
+      // 上下 右左
+      else if (parameters.padding.length === 2) {
+        this.padding[0] = this.padding[2] = parameters.padding[0];
+        this.padding[1] = this.padding[3] = parameters.padding[1];
+        return;
+      }
+      //  上 右左 下
+      else if (parameters.padding.length === 3) {
+        this.padding[0] = parameters.padding[0];
+        this.padding[1] = this.padding[3] = parameters.padding[1];
+        this.padding[2] = parameters.padding[2];
+        return;
+      }
+      // 上右下左
+      else if (parameters.padding.length === 1) {
+        this.padding[0] = this.padding[1] = this.padding[2] = this.padding[3] = parameters.padding[0];
+        return;
+      }
+    }
+
+    throw new Error(`SDFText2DGeometry: ${parameters.text} padding 参数设置有误`);
+  }
+
   /**
    * 根据输入字符串和设置创建网格(单一合并 mesh)
    * 说明:
@@ -123,44 +165,5 @@ export class SDFText2DGeometry extends THREE.BufferGeometry {
     // 居中 XZ 轴 (避免改变 Y)
     this.translate(-(xMax + xMin) / 2.0, 0.0, -(zMax + zMin) / 2.0);
     this.computeBoundingBox();
-  }
-
-  private padding = [0.0, 0.0, 0.0, 0.0]; // top right bottom left
-  private resolveParamtersPadding(parameters: SDFText2DGeometryParameters) {
-    for (let i = 0; i < 4; i++) this.padding[i] = 0.0; // 清空状态
-
-    // 直接设置
-    if (typeof parameters.padding === "number") {
-      this.padding[0] = this.padding[1] = this.padding[2] = this.padding[3] = parameters.padding;
-      return;
-    }
-    // 按照css规则设置
-    else if (Array.isArray(parameters.padding)) {
-      // 上 右 下 左
-      if (parameters.padding.length === 4) {
-        for (let i = 0; i < 4; i++) this.padding[i] = parameters.padding[i];
-        return;
-      }
-      // 上下 右左
-      else if (parameters.padding.length === 2) {
-        this.padding[0] = this.padding[2] = parameters.padding[0];
-        this.padding[1] = this.padding[3] = parameters.padding[1];
-        return;
-      }
-      //  上 右左 下
-      else if (parameters.padding.length === 3) {
-        this.padding[0] = parameters.padding[0];
-        this.padding[1] = this.padding[3] = parameters.padding[1];
-        this.padding[2] = parameters.padding[2];
-        return;
-      }
-      // 上右下左
-      else if (parameters.padding.length === 1) {
-        this.padding[0] = this.padding[1] = this.padding[2] = this.padding[3] = parameters.padding[0];
-        return;
-      }
-    }
-
-    throw new Error(`SDFText2DGeometry: ${parameters.text} padding 参数设置有误`);
   }
 }

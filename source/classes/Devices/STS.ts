@@ -3,7 +3,6 @@ import Tinycolor from "tinycolor2";
 import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
 import { IActor } from "@core/interfaces/IActor";
 import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
-import { GpuPickManager } from "@core/GpuPickManager/";
 import { Sprite2D } from "@core/index";
 import { SDFText2D } from "@core/index";
 
@@ -93,7 +92,6 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
       const mesh = this.meshes[key];
 
       mesh.matrixAutoUpdate = false; // 关闭矩阵自动同步
-      GpuPickManager.register(mesh, this); // 注册拾取
 
       ThreejsGroups.Meshes.add(mesh);
     }
@@ -112,12 +110,12 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
   }
 
   focused = () => {
-    this.meshes.stsLabel.material["uniforms"].uBackgroundColor.value.set(0xffff00);
+    (this.meshes.stsLabel as SDFText2D).setStyle({ uBackgroundColor: new THREE.Color(0xffff00) });
     this.meshes.stsLabel.renderOrder = ThreejsRenderOrder.ACTIVE_LABEL;
   };
 
   unfocused = () => {
-    this.meshes.stsLabel.material["uniforms"].uBackgroundColor.value.set(0xffffff);
+    (this.meshes.stsLabel as SDFText2D).setStyle({ uBackgroundColor: new THREE.Color(0xffffff) });
     this.meshes.stsLabel.renderOrder = ThreejsRenderOrder.STS_LABEL;
   };
 

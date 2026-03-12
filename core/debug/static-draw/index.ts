@@ -74,7 +74,7 @@ import { STS } from "@source/classes/Devices/STS";
 // import { AGV } from "@source/classes/Devices/AGV";
 // import { ASC } from "@source/classes/Devices/ASC";
 
-import { rebuildPreDefBlockLayer } from "@source/classes/Devices/PredefineArea";
+// import { rebuildPreDefBlockLayer } from "@source/classes/Devices/PredefineArea";
 
 import { SDFText2DGeometry } from "@core/index";
 import { SDFText2DMaterial } from "@core/index";
@@ -116,7 +116,7 @@ Promise.all([
     .then((response) => response.json())
     .then((data) => {
       console.warn("preDefBlockList", data);
-      rebuildPreDefBlockLayer(data);
+      // rebuildPreDefBlockLayer(data);
     }),
 ])
   .then((responses) => {
