@@ -85,7 +85,7 @@ export const WithClassInstanceMap = <TBase extends Constructor>(Base: TBase) => 
       this._sequence = -1;
     }
 
-    /** 清理当前类所有实例索引，通常用于调试重置。 */
+    /** 清理当前类所有实例索引, 通常用于调试重置 */
     static clearClassInstanceMap() {
       this.classInstanceMap.clear();
       this.sequence = 0;

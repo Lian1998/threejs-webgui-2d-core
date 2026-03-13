@@ -53,7 +53,7 @@ class TinySDFAtlas {
   /**  数字字符 */ static readonly Charactor_Number = "0123456789";
   /**  英文字符 */ static readonly Charactor_EN = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   /**  英文标点 */ static readonly Synbol_EN = ".,:;!?\"'`-_()[]{}/\\@#$%^&*+=<>|";
-  /**  中文标点 */ static readonly Synbol_ZH = "，。！？：；“”‘’（）【】《》—…";
+  /**  中文标点 */ static readonly Synbol_ZH = "，、。！？：；“”‘’（）【】《》—…";
 
   private static _instance: TinySDFAtlas | null = null;
 
@@ -103,7 +103,7 @@ class TinySDFAtlas {
     DEBUG_SDF_ATLAS_BUFFER_RENDER_PERFORMANCE && console.time("TinySDFAtlas: 生成基础字形贴图");
 
     if (TinySDFAtlas.prepared) {
-      console.warn("TinySDFAtlas.prepareGlyph 已经被调用过(prepared), 此次调用将被忽略。");
+      console.warn("TinySDFAtlas.prepareGlyph 已经被调用过(prepared), 此次调用将被忽略");
       DEBUG_SDF_ATLAS_BUFFER_RENDER_PERFORMANCE && console.timeEnd("生成基础字形贴图");
       return;
     }

@@ -37,7 +37,7 @@ export interface GpuPickRegistrationToken {
  * GpuPickManager
  * - 支持 Mesh(单 feature)
  * - 支持 InstancedMesh(每实例一个 feature)
- * - 支持 MeshBatch(同一 mesh 多个 feature，通过 aPickColor 按顶点编码)
+ * - 支持 MeshBatch(同一 mesh 多个 feature, 通过 aPickColor 按顶点编码)
  */
 export class GpuPickManager {
   static PickBufferLayer = 31;
@@ -76,12 +76,12 @@ export class GpuPickManager {
     });
   }
 
-  /** 兼容旧 API，返回起始 pickid。 */
+  /** 兼容旧 API, 返回起始 pickid */
   static register(meshLike: THREE.MeshLike, feature: GpuPickFeature | GpuPickFeature[]): number {
     return this.registerWithToken(meshLike, feature).pickIds[0] ?? 0;
   }
 
-  /** 返回可直接调用的注销 token。 */
+  /** 返回可直接调用的注销 token */
   static registerWithToken(meshLike: THREE.MeshLike, feature: GpuPickFeature | GpuPickFeature[]): GpuPickRegistrationToken {
     if (!meshLike) return { meshLike, pickIds: [], unregister: () => void 0 };
 
@@ -132,7 +132,7 @@ export class GpuPickManager {
   }
 
   /**
-   * 为单个 Mesh 注册多 feature：
+   * 为单个 Mesh 注册多 feature:
    * - featureIndexByVertex 的长度必须等于 geometry.position.count
    * - 每个顶点写入所属 feature 的 pick color
    */

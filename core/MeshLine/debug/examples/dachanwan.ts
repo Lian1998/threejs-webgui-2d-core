@@ -192,7 +192,7 @@ const animate = () => {
 animate();
 
 //////////////////////////////////////// drawcall监听 ////////////////////////////////////////
-import "@libs/Spector.js/distt/spector.bundle.js";
+import "@libs/Spector.js/dist/spector.bundle.js";
 
 // @ts-ignore
 const spector = new SPECTOR.Spector();

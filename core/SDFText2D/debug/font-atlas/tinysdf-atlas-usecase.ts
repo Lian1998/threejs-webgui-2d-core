@@ -156,7 +156,7 @@ const createSDFMaterial = (textureArray: THREE.DataArrayTexture) => {
  */
 const createTextMesh = (text: string, fontSize: number = 4, lineHeight: number = 5) => {
   // 环境检查: 是否支持 WebGL2(必需: sampler2DArray)
-  // 这里不能访问 renderer yet；如果需要，可外部检查 renderer.capabilities.isWebGL2
+  // 这里不能访问 renderer; 如果需要, 可外部检查 renderer.capabilities.isWebGL2
   // console.warn(renderer.capabilities.isWebGL2);
 
   const material = createSDFMaterial(textureArray);

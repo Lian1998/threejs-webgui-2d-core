@@ -37,7 +37,7 @@ export class SpriteXZRectGeometry extends THREE.BufferGeometry {
     const xHalf = x / 2;
     const zHalf = z / 2;
 
-    // positions (XZ 平面，Y=0)
+    // positions (XZ 平面, Y=0)
     const positions = new Float32Array([
       -xHalf, 0, -zHalf,
       +xHalf, 0, -zHalf,

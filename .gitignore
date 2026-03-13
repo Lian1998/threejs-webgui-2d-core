@@ -1,7 +1,3 @@
-#output
-output/.scripts/v1ticks/**/ticks_*.json
-!output/.scripts/v1ticks/*/ticks_000[0-3].json
-
 # PipeLine
 .husky/_
 .vite
@@ -42,5 +38,12 @@ pnpm-lock.yaml
 *.sln
 *.sw?
 
-# Packages
+# 脚本输出物
+output/.scripts/v1ticks/**/ticks_*.json
+!output/.scripts/v1ticks/*/ticks_000[0-3].json
+
+# 离线(库)构建
+!libs/**/dist
+
+# Packages锁
 pnpm-lock.yaml

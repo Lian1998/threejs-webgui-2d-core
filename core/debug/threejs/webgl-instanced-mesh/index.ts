@@ -41,10 +41,10 @@ const animateMeshes = () => {
     const id = represent.userData.id;
 
     represent.matrix.multiply(rotationMatrix);
-    mesh.setMatrixAt(id, represent.matrix);
+    instancedMesh.setMatrixAt(id, represent.matrix);
   }
 
-  mesh.instanceMatrix.needsUpdate = true;
+  instancedMesh.instanceMatrix.needsUpdate = true;
 };
 
 ///////////////////////////////////////////
@@ -68,10 +68,60 @@ const controls = new OrbitControls(camera, renderer.domElement);
 
 const scene = new THREE.Scene();
 const loader = new THREE.BufferGeometryLoader();
-const material = new THREE.MeshNormalMaterial();
-const geometry = await loader.loadAsync("/threejs-examples/models/json/suzanne_buffergeometry.json");
-geometry.computeVertexNormals();
-const mesh = new THREE.InstancedMesh(geometry, material, count);
+const baseGeometry = await loader.loadAsync("/threejs-examples/models/json/suzanne_buffergeometry.json");
+baseGeometry.computeVertexNormals(); // 计算法线
+const instancedGeometry = new THREE.InstancedBufferGeometry(); // 这里其实不管用baseGeometry还是InstancedGeometry都一样, 只要最后 new InstancedMesh( threejs会自动帮忙转换
+instancedGeometry.index = baseGeometry.index;
+instancedGeometry.setAttribute("position", baseGeometry.attributes.position);
+instancedGeometry.setAttribute("normal", baseGeometry.attributes.normal);
+const aColorAttributes = new THREE.InstancedBufferAttribute(new Float32Array(count * 3), 3); // InstancedBuffer是每个实例一份
+instancedGeometry.setAttribute("aColor", aColorAttributes);
+// 方式一: 使用Normal材质
+// const normalMaterial = new THREE.MeshNormalMaterial();
+// const instancedMesh = new THREE.InstancedMesh(instancedGeometry, normalMaterial, count);
+
+// 方式二: 自己编写材质
+const customShaderMaterial = new THREE.RawShaderMaterial({
+  glslVersion: THREE.GLSL3,
+  side: THREE.FrontSide,
+  defines: { USE_INSTANCING: 1 },
+  uniforms: {},
+  vertexShader: `
+    uniform mat4 modelViewMatrix;
+    uniform mat4 projectionMatrix;
+
+    in vec3 position;
+    in vec3 aColor; // InstancedBufferAttribute 每个实例只会有一个值
+    #if defined(USE_INSTANCING)
+    in mat4 instanceMatrix;
+    #endif
+
+    flat out vec3 vColor;
+
+    void main() {
+      vColor = aColor;
+
+      vec4 localPosition = vec4(position, 1.0);
+      #if defined(USE_INSTANCING)
+      localPosition = instanceMatrix * localPosition;
+      #endif
+
+      gl_Position = projectionMatrix * modelViewMatrix * localPosition;
+    }
+  `,
+  fragmentShader: `
+  precision highp float;
+
+  flat in vec3 vColor;
+
+  out vec4 outColor;
+
+  void main() {
+    outColor = vec4(vColor, 1.0);
+  }
+  `,
+});
+const instancedMesh = new THREE.InstancedMesh(instancedGeometry, customShaderMaterial, count);
 
 const euler = new THREE.Euler();
 const matrix = new THREE.Matrix4();
@@ -81,18 +131,22 @@ for (let i = 0; i < count; i++) {
   randomizeMatrix(matrix);
   represent.matrix.copy(matrix);
   represents.push(represent);
-  mesh.setMatrixAt(i, represent.matrix);
+  instancedMesh.setMatrixAt(i, represent.matrix);
+
+  aColorAttributes.set([Math.random(), Math.random(), Math.random()], 3 * i);
+  aColorAttributes.setUsage(THREE.StaticDrawUsage);
 }
+aColorAttributes.needsUpdate = true;
 
 for (let i = 0; i < represents.length; i++) {
   const represent = represents[i];
   const rotationMatrix = new THREE.Matrix4();
   rotationMatrix.makeRotationFromEuler(randomizeRotationSpeed(euler));
   represent.userData.id = i;
-  represent.userData.rotationSpeeds = rotationMatrix;
+  represent.userData.rotationSpeeds = rotationMatrix; // 生成一个随机的旋转速度, 后续根据这个旋转速度更新矩阵
 }
 
-scene.add(mesh);
+scene.add(instancedMesh);
 
 const animate = () => {
   animateMeshes();
@@ -107,7 +161,7 @@ const animate = () => {
 animate();
 
 //////////////////////////////////////// drawcall监听 ////////////////////////////////////////
-import "@libs/Spector.js/distt/spector.bundle.js";
+import "@libs/Spector.js/dist/spector.bundle.js";
 
 // @ts-ignore
 const spector = new SPECTOR.Spector();
