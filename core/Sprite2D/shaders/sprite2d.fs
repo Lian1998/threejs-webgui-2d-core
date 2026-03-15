@@ -31,12 +31,12 @@ void main() {
   // 此shader对应材质需要外部 Material 传入的材质指定为线性读取
   outColor = vec4(sRGBTransferOETF(tColor).rgb, tColor.a);
 
-#ifdef USE_PICK_BUFFER
   // 在贴图计算的颜色中判断透明度, 如果片元是透明的, 那么直接舍弃片元
   if (outColor.a == 0.0) {
     discard;
   }
 
+#ifdef USE_PICK_BUFFER
   // 将pickid对应的拾取颜色渲染到画布上
   outColor = vec4(vPickColor, 1.0);
 #endif

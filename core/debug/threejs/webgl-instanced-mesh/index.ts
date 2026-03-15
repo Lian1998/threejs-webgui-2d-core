@@ -74,8 +74,8 @@ const instancedGeometry = new THREE.InstancedBufferGeometry(); // 这里其实�
 instancedGeometry.index = baseGeometry.index;
 instancedGeometry.setAttribute("position", baseGeometry.attributes.position);
 instancedGeometry.setAttribute("normal", baseGeometry.attributes.normal);
-const aColorAttributes = new THREE.InstancedBufferAttribute(new Float32Array(count * 3), 3); // InstancedBuffer是每个实例一份
-instancedGeometry.setAttribute("aColor", aColorAttributes);
+const aColorAttribute = new THREE.InstancedBufferAttribute(new Float32Array(count * 3), 3); // InstancedBuffer是每个实例一份
+instancedGeometry.setAttribute("aColor", aColorAttribute);
 // 方式一: 使用Normal材质
 // const normalMaterial = new THREE.MeshNormalMaterial();
 // const instancedMesh = new THREE.InstancedMesh(instancedGeometry, normalMaterial, count);
@@ -133,10 +133,10 @@ for (let i = 0; i < count; i++) {
   represents.push(represent);
   instancedMesh.setMatrixAt(i, represent.matrix);
 
-  aColorAttributes.set([Math.random(), Math.random(), Math.random()], 3 * i);
-  aColorAttributes.setUsage(THREE.StaticDrawUsage);
+  aColorAttribute.set([Math.random(), Math.random(), Math.random()], 3 * i);
+  aColorAttribute.setUsage(THREE.StaticDrawUsage);
 }
-aColorAttributes.needsUpdate = true;
+aColorAttribute.needsUpdate = true;
 
 for (let i = 0; i < represents.length; i++) {
   const represent = represents[i];

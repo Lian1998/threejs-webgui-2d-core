@@ -14,15 +14,6 @@ import { orthoCamera } from "@source/inMap/viewport";
 import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
 import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
 
-// 生成网格
-const deviceColor = getColorRuntime("VARS.DEVICE_STATUS.NORMAL");
-
-const labelColor = getColorRuntime("LABEL.QC.DEFAULT.TEXT");
-const labelBackground = getColorRuntime("LABEL.QC.DEFAULT.TEXT_BACKGROUND");
-
-const labelColor_selected = getColorRuntime("LABEL.QC.SELECTED.TEXT");
-const labelBackground_selected = getColorRuntime("LABEL.QC.SELECTED.TEXT_BACKGROUND");
-
 /** Ship-to-Shore Crane 岸边集装箱起重机 */
 export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature, GpuBatchFeature, IActor {
   isGpuPickFeature: true = true;
@@ -63,6 +54,7 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
 
     // 生成网格
 
+    const deviceColor = getColorRuntime("VARS.DEVICE_STATUS.NORMAL");
     const stsGantry = new Sprite2D({
       url: "/resource/sprites/STS_Gantry.png",
       mpp: calculateMpp(35, 610),
@@ -83,6 +75,8 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
       multiplyColor: new THREE.Color(Tinycolor(deviceColor.tinyColor.getOriginalInput()).darken(10).toHexString()),
       renderOrder: ThreejsRenderOrder.STS_TROLLEY,
     });
+    const labelColor = getColorRuntime("LABEL.QC.DEFAULT.TEXT");
+    const labelBackground = getColorRuntime("LABEL.QC.DEFAULT.TEXT_BACKGROUND");
     const stsLabel = new SDFText2D({
       text: this.code,
       renderOrder: ThreejsRenderOrder.STS_LABEL,
@@ -129,6 +123,8 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
 
   focused = () => {
     const stsLabel = this.primitives.stsLabel.mesh as SDFText2D;
+    const labelColor_selected = getColorRuntime("LABEL.QC.SELECTED.TEXT");
+    const labelBackground_selected = getColorRuntime("LABEL.QC.SELECTED.TEXT_BACKGROUND");
     stsLabel.setStyle({
       uTextColor: labelColor_selected.threejsColor,
       uBackgroundColor: labelBackground_selected.threejsColor,
@@ -139,6 +135,8 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
 
   unfocused = () => {
     const stsLabel = this.primitives.stsLabel.mesh as SDFText2D;
+    const labelColor = getColorRuntime("LABEL.QC.DEFAULT.TEXT");
+    const labelBackground = getColorRuntime("LABEL.QC.DEFAULT.TEXT_BACKGROUND");
     stsLabel.setStyle({
       uTextColor: labelColor.threejsColor,
       uBackgroundColor: labelBackground.threejsColor,

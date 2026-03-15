@@ -8,11 +8,12 @@
     <title>three.js webgl - instanced - mesh</title>
 
     <!-- threejs InstancedMesh 排盲 -->
-    <!-- 1. 在 new InstancedMesh(geo, mat, count); 时, geometry 或者 InstancedGeometry 都无所谓, 需要分清 BufferAttribute 比较关键 -->
+    <!-- 1. 在 new InstancedMesh(geo, mat, count); 时, geometry 或者 InstancedGeometry 都无所谓; (对 InstancedMesh 使用者来说分清 BufferAttribute 比较关键) -->
     <!-- 2. 创建 InstancedMesh 时, 其中的 instanceMatrix BufferAttribute 是内建的, 用于标记每个 Instance 的独立 T/R/S -->
     <!-- 3. 创建 InstancedMesh 时, 其中的 Color 和 Morph 除非被调用, 否则不会被初始化 -->
-    <!-- 4. InstancedBufferAttribute 代表每个 Instance 不同的 attribute -->
-    <!-- 5. geometry.attribute.xxx = ... 和 geometry.setAttribute("xxx", ...) 是等价的 -->
+    <!-- 4. 只有两种BufferAttribute, 一种是普通的BufferAttribute(每个顶点一个), 一种是 InstancedBufferAttribute (每个实例一个) -->
+    <!-- 5. 比如 position, 一个(有意义的)实例起码会有三个顶点, 所以 position 必不可能是一个 InstancedBufferAttribute -->
+    <!-- 6. geometry.attribute.xxx = ... 和 geometry.setAttribute("xxx", ...) 是等价的 -->
     <style>
       #viewport {
         width: 100%;
