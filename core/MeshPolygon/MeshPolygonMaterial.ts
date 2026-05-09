@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import vertexShader from "./shaders/mesh-polygon.vs?raw";
 import fragmentShader from "./shaders/mesh-polygon.fs?raw";
+import { DebugGui, WithDebugGui } from "@core/DebugGUI";
+import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 export interface MeshPolygonMaterialParameters extends THREE.ShaderMaterialParameters {
   /** 线条颜色 */
@@ -22,7 +24,7 @@ export interface MeshPolygonMaterialParameters extends THREE.ShaderMaterialParam
   uPixelRatio?: number;
 }
 
-export class MeshPolygonMaterial extends THREE.RawShaderMaterial {
+export class MeshPolygonMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
   constructor(parameters: MeshPolygonMaterialParameters) {
     super({
       name: "MeshPolygonMaterial",
@@ -46,32 +48,44 @@ export class MeshPolygonMaterial extends THREE.RawShaderMaterial {
     this.setValues(parameters);
   }
 
+  private invalidateRender(property: string) {
+    DirtyRenderScheduler.invalidateDefault(`MeshPolygonMaterial.${property}`);
+  }
+
+  @DebugGui.color({ name: "color", folder: "MeshPolygon" })
   get uColor() {
     return this.uniforms.uColor.value;
   }
   set uColor(v: THREE.Color) {
     this.uniforms.uColor.value.copy(v);
+    this.invalidateRender("uColor");
   }
 
+  @DebugGui.number({ name: "opacity", folder: "MeshPolygon", min: 0, max: 1, step: 0.01 })
   get uOpacity() {
     return this.uniforms.uOpacity.value;
   }
   set uOpacity(v: number) {
     this.uniforms.uOpacity.value = v;
+    this.invalidateRender("uOpacity");
   }
 
+  @DebugGui.number({ name: "shadow", folder: "MeshPolygon", min: 0, max: 1, step: 1 })
   get uUseShadow() {
     return this.uniforms.uUseShadow.value;
   }
   set uUseShadow(v: 0 | 1) {
     this.uniforms.uUseShadow.value = v;
+    this.invalidateRender("uUseShadow");
   }
 
+  @DebugGui.vector2({ name: "shadow array", folder: "MeshPolygon", min: 0, max: 128, step: 0.1 })
   get uShadowArray() {
     return this.uniforms.uShadowArray.value;
   }
   set uShadowArray(v: THREE.Vector2) {
     this.uniforms.uShadowArray.value.copy(v);
+    this.invalidateRender("uShadowArray");
   }
 
   get uResolution() {
@@ -79,6 +93,7 @@ export class MeshPolygonMaterial extends THREE.RawShaderMaterial {
   }
   set uResolution(v: THREE.Vector2) {
     this.uniforms.uResolution.value.copy(v);
+    this.invalidateRender("uResolution");
   }
 
   get uPixelRatio() {
@@ -86,6 +101,7 @@ export class MeshPolygonMaterial extends THREE.RawShaderMaterial {
   }
   set uPixelRatio(v: number) {
     this.uniforms.uPixelRatio.value = v;
+    this.invalidateRender("uPixelRatio");
   }
 
   override copy(source: MeshPolygonMaterial): this {

@@ -8,6 +8,8 @@ import { ATLAS_TEXTURE_SIZE } from "@core/SDFText2D/TinySdfAtlas";
 import { SDF_FONT_SIZE } from "@core/SDFText2D/TinySdfAtlas";
 import { SDF_BUFFER } from "@core/SDFText2D/TinySdfAtlas";
 import { SDF_SIZE } from "@core/SDFText2D/TinySdfAtlas";
+import { DebugGui, WithDebugGui } from "@core/DebugGUI";
+import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 export interface SDFText2DMaterialParameters extends THREE.ShaderMaterialParameters {
   /** 字体颜色, 默认为黑 */
@@ -36,9 +38,10 @@ export interface SDFText2DMaterialParameters extends THREE.ShaderMaterialParamet
 
   /** 透明度, 默认为 1.0 */
   uOpacity?: number;
+  uVisible?: number;
 }
 
-export class SDFText2DMaterial extends THREE.RawShaderMaterial {
+export class SDFText2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
   static textureArray: THREE.DataArrayTexture = undefined;
   private static getTextureArray() {
     const pages = tinySDFAtlas.getAllPages();
@@ -90,6 +93,7 @@ export class SDFText2DMaterial extends THREE.RawShaderMaterial {
         uSmoothing: { value: 0.02 },
 
         uOpacity: { value: 1.0 },
+        uVisible: { value: 1.0 },
       },
       vertexShader,
       fragmentShader,
@@ -98,66 +102,97 @@ export class SDFText2DMaterial extends THREE.RawShaderMaterial {
     this.setValues(parameters);
   }
 
+  private invalidateRender(property: string) {
+    DirtyRenderScheduler.invalidateDefault(`SDFText2DMaterial.${property}`);
+  }
+
+  @DebugGui.color({ name: "text color", folder: "SDFText2D" })
   get uTextColor(): THREE.Color {
     return this.uniforms.uTextColor.value;
   }
   set uTextColor(v: THREE.Color) {
     this.uniforms.uTextColor.value.copy(v);
+    this.invalidateRender("uTextColor");
   }
 
+  @DebugGui.color({ name: "outline color", folder: "SDFText2D" })
   get uOutlineColor(): THREE.Color {
     return this.uniforms.uOutlineColor.value;
   }
   set uOutlineColor(v: THREE.Color) {
     this.uniforms.uOutlineColor.value.copy(v);
+    this.invalidateRender("uOutlineColor");
   }
 
+  @DebugGui.color({ name: "background color", folder: "SDFText2D" })
   get uBackgroundColor(): THREE.Color {
     return this.uniforms.uBackgroundColor.value;
   }
   set uBackgroundColor(v: THREE.Color) {
     this.uniforms.uBackgroundColor.value.copy(v);
+    this.invalidateRender("uBackgroundColor");
   }
 
+  @DebugGui.number({ name: "background alpha", folder: "SDFText2D", min: 0, max: 1, step: 0.01 })
   get uBackgroundAlpha(): number {
     return this.uniforms.uBackgroundAlpha.value;
   }
   set uBackgroundAlpha(v: number) {
     this.uniforms.uBackgroundAlpha.value = v;
+    this.invalidateRender("uBackgroundAlpha");
   }
 
+  @DebugGui.number({ name: "background radius", folder: "SDFText2D", min: 0, max: 0.5, step: 0.005 })
   get uBackgroundRadius(): number {
     return this.uniforms.uBackgroundRadius.value;
   }
   set uBackgroundRadius(v: number) {
     this.uniforms.uBackgroundRadius.value = v;
+    this.invalidateRender("uBackgroundRadius");
   }
 
+  @DebugGui.number({ name: "threshold", folder: "SDFText2D", min: 0, max: 1, step: 0.001 })
   get uThreshold(): number {
     return this.uniforms.uThreshold.value;
   }
   set uThreshold(v: number) {
     this.uniforms.uThreshold.value = v;
+    this.invalidateRender("uThreshold");
   }
 
+  @DebugGui.number({ name: "outline threshold", folder: "SDFText2D", min: 0, max: 1, step: 0.001 })
   get uOutlineThreshold(): number {
     return this.uniforms.uOutlineThreshold.value;
   }
   set uOutlineThreshold(v: number) {
     this.uniforms.uOutlineThreshold.value = v;
+    this.invalidateRender("uOutlineThreshold");
   }
 
+  @DebugGui.number({ name: "smoothing", folder: "SDFText2D", min: 0, max: 0.2, step: 0.001 })
   get uSmoothing(): number {
     return this.uniforms.uSmoothing.value;
   }
   set uSmoothing(v: number) {
     this.uniforms.uSmoothing.value = v;
+    this.invalidateRender("uSmoothing");
   }
 
+  @DebugGui.number({ name: "opacity", folder: "SDFText2D", min: 0, max: 1, step: 0.01 })
   get uOpacity(): number {
     return this.uniforms.uOpacity.value;
   }
   set uOpacity(v: number) {
     this.uniforms.uOpacity.value = v;
+    this.invalidateRender("uOpacity");
+  }
+
+  @DebugGui.number({ name: "visible", folder: "SDFText2D", min: 0, max: 1, step: 1 })
+  get uVisible(): number {
+    return this.uniforms.uVisible.value;
+  }
+  set uVisible(v: number) {
+    this.uniforms.uVisible.value = v;
+    this.invalidateRender("uVisible");
   }
 }

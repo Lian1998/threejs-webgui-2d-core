@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import vertexShader from "./shaders/mesh-line.vs?raw";
 import fragmentShader from "./shaders/mesh-line.fs?raw";
+import { DebugGui, WithDebugGui } from "@core/DebugGUI";
+import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 // 参考项目: https://github.com/spite/THREE.MeshLine
 
@@ -36,7 +38,7 @@ export interface MeshLineMaterialParameters extends THREE.ShaderMaterialParamete
   uPixelRatio?: number;
 }
 
-export class MeshLineMaterial extends THREE.RawShaderMaterial {
+export class MeshLineMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
   constructor(parameters: MeshLineMaterialParameters) {
     super({
       name: "MeshLineMaterial",
@@ -64,48 +66,64 @@ export class MeshLineMaterial extends THREE.RawShaderMaterial {
     this.setValues(parameters);
   }
 
+  private invalidateRender(property: string) {
+    DirtyRenderScheduler.invalidateDefault(`MeshLineMaterial.${property}`);
+  }
+
+  @DebugGui.color({ name: "color", folder: "MeshLine" })
   get uColor() {
     return this.uniforms.uColor.value;
   }
   set uColor(v: THREE.Color) {
     this.uniforms.uColor.value.copy(v);
+    this.invalidateRender("uColor");
   }
 
+  @DebugGui.number({ name: "opacity", folder: "MeshLine", min: 0, max: 1, step: 0.01 })
   get uOpacity() {
     return this.uniforms.uOpacity.value;
   }
   set uOpacity(v: number) {
     this.uniforms.uOpacity.value = v;
+    this.invalidateRender("uOpacity");
   }
 
+  @DebugGui.number({ name: "dash", folder: "MeshLine", min: 0, max: 1, step: 1 })
   get uUseDash() {
     return this.uniforms.uUseDash.value;
   }
   set uUseDash(v: 0 | 1) {
     this.uniforms.uUseDash.value = v;
+    this.invalidateRender("uUseDash");
   }
 
+  @DebugGui.vector2({ name: "dash array", folder: "MeshLine", min: 0, max: 128, step: 0.1 })
   get uDashArray() {
     return this.uniforms.uDashArray.value;
   }
   set uDashArray(v: THREE.Vector2) {
     this.uniforms.uDashArray.value.copy(v);
+    this.invalidateRender("uDashArray");
   }
 
+  @DebugGui.number({ name: "box", folder: "MeshLine", min: 0, max: 1, step: 1 })
   get uUseBox() {
     return this.uniforms.uUseBox.value;
   }
   set uUseBox(v: 0 | 1) {
     this.uniforms.uUseBox.value = v;
     this.updateBoxState();
+    this.invalidateRender("uUseBox");
   }
 
+  @DebugGui.vector2({ name: "box array", folder: "MeshLine", min: 0, max: 128, step: 0.1 })
   get uBoxArray() {
     return this.uniforms.uBoxArray.value;
   }
   set uBoxArray(v: THREE.Vector2) {
     this.uniforms.uBoxArray.value.copy(v);
     this.updateBoxState();
+    this.invalidateRender("uBoxArray");
   }
   private updateBoxState() {
     if (this.uniforms.uUseBox.value !== 1) return;
@@ -123,20 +141,25 @@ export class MeshLineMaterial extends THREE.RawShaderMaterial {
   }
   set uResolution(v: THREE.Vector2) {
     this.uniforms.uResolution.value.copy(v);
+    this.invalidateRender("uResolution");
   }
 
+  @DebugGui.number({ name: "size attenuation", folder: "MeshLine", min: 0, max: 1, step: 1 })
   get uSizeAttenuation() {
     return this.uniforms.uSizeAttenuation.value;
   }
   set uSizeAttenuation(v: number) {
     this.uniforms.uSizeAttenuation.value = v;
+    this.invalidateRender("uSizeAttenuation");
   }
 
+  @DebugGui.number({ name: "line width", folder: "MeshLine", min: 0, max: 64, step: 0.1 })
   get uLineWidth() {
     return this.uniforms.uLineWidth.value;
   }
   set uLineWidth(v: number) {
     this.uniforms.uLineWidth.value = v;
+    this.invalidateRender("uLineWidth");
   }
 
   get uPixelRatio() {
@@ -144,6 +167,7 @@ export class MeshLineMaterial extends THREE.RawShaderMaterial {
   }
   set uPixelRatio(v: number) {
     this.uniforms.uPixelRatio.value = v;
+    this.invalidateRender("uPixelRatio");
   }
 
   override copy(source: MeshLineMaterial): this {

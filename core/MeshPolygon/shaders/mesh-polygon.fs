@@ -1,11 +1,11 @@
 precision highp float;
 
-uniform float uUseShadow;     // 是否启用打阴影线的模式
-uniform vec2 uShadowArray;    // 阴影间隔 
-
+uniform float uUseShadow;
+uniform vec2 uShadowArray;
 uniform vec3 uColor;
 uniform float uOpacity;
 uniform vec2 uResolution;
+
 #if defined(USE_PICK_BUFFER_ATTRIBUTE) || defined(USE_PICK_BUFFER_UNIFORM)
 flat in vec3 vPickColor;
 #endif
@@ -13,7 +13,6 @@ flat in vec3 vPickColor;
 out vec4 outColor;
 
 void main() {
-
 #ifdef USE_PICK_BUFFER
   outColor = vec4(vPickColor, 1.0);
   return;
@@ -22,25 +21,20 @@ void main() {
   vec4 diffuseColor = vec4(uColor, uOpacity);
 
   if (uUseShadow == 1.0) {
-    // gl_FragCoord: 0.5 ~ width * 0.5
-    vec2 fragPos = gl_FragCoord.xy - vec2(0.5); // fragPos ∈ [0, width-1] × [0, height-1]; 左下角为 0, 0
-    // vec2 fragUv = gl_FragCoord.xy / uResolution; // fragUv ∈ [0, 1] × [0, 1]; 归一化到uv, 左下角为 0, 0
-
-    float shadowLength = uShadowArray.x;
-    float gapLength = uShadowArray.y;
-    float period = shadowLength + gapLength;
-
-    // 打45°斜线
-    // float proj = fragPos.x - fragPos.y; // 按照思路应该是这样
-    float proj = (fragPos.x + uResolution.y + 1.) - fragPos.y; // 发现在接近0时出现很诡异的情况, 保证这个数字只能存在在单轴向上
-
-    // 归一化到 [0,1) 的周期位置
+    vec2 fragPos = gl_FragCoord.xy - vec2(0.5);
+    float shadowLength = max(uShadowArray.x, 0.0);
+    float gapLength = max(uShadowArray.y, 0.0);
+    float period = max(shadowLength + gapLength, 1e-6);
+    float proj = (fragPos.x + uResolution.y + 1.0) - fragPos.y;
     float phase = fract(proj / period) * period;
 
-    // 如果超出黑线区域, 舍弃片元
-    if (phase > shadowLength / period) {
+    if (phase > shadowLength) {
       diffuseColor.a = 0.0;
     }
+  }
+
+  if (diffuseColor.a <= 0.0) {
+    discard;
   }
 
   outColor = diffuseColor;

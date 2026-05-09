@@ -5,6 +5,7 @@ import { GpuPickManager } from "@core/GpuPickManager";
 import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
 import { GpuPickEvent } from "@core/interfaces/GpuPickFeature";
 import throttle from "@libs/lodash/src/throttle";
+import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 /**
  * GpuPickCommonListener
@@ -200,7 +201,7 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
       this._clickEvent = undefined;
     }
 
-    this._clickEvent = window.setTimeout(() => this.singleClick, 120);
+    this._clickEvent = window.setTimeout(() => this.singleClick(), 120);
   };
 
   private onDomDoubleClick = (e: MouseEvent) => {
@@ -220,6 +221,9 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
    */
   private static callFeatureFunction(feature: GpuPickFeature, callback: keyof GpuPickFeature, event: GpuPickEvent) {
     const fn = feature?.[callback];
-    typeof fn === "function" && fn.call(feature, event);
+    if (typeof fn === "function") {
+      fn.call(feature, event);
+      DirtyRenderScheduler.invalidateDefault(`pick:${String(callback)}`);
+    }
   }
 }

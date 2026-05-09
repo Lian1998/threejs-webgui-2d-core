@@ -5,10 +5,28 @@ import fragmentShader from "./shaders/sprite2d.fs?raw";
 
 import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
 import { ATLAS_TEXTURE_SIZE } from "@core/Sprite2D/Sprite2DAtlas";
+import { DebugGui, WithDebugGui } from "@core/DebugGUI";
+import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
-export interface Sprite2DMaterialParameters extends THREE.ShaderMaterialParameters {}
+export const Sprite2DBlendMode = {
+  multiply: 0,
+  tint: 1,
+  screen: 2,
+  "linear-dodge": 3,
+  overlay: 4,
+  "hard-light": 5,
+} as const;
 
-export class Sprite2DMaterial extends THREE.RawShaderMaterial {
+export type Sprite2DBlendModeName = keyof typeof Sprite2DBlendMode;
+
+export interface Sprite2DMaterialParameters extends THREE.ShaderMaterialParameters {
+  uBlendColor?: THREE.Color;
+  uBlendMode?: number;
+  uOpacity?: number;
+  uVisible?: number;
+}
+
+export class Sprite2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
   static textureArray: THREE.DataArrayTexture | null = null;
   private static getTextureArray() {
     const pages = spriteAtlas.getAllPages();
@@ -52,12 +70,56 @@ export class Sprite2DMaterial extends THREE.RawShaderMaterial {
       side: THREE.FrontSide,
       uniforms: {
         uAtlas: { value: Sprite2DMaterial.textureArray },
+        uBlendColor: { value: new THREE.Color(0xffffff) },
+        uBlendMode: { value: Sprite2DBlendMode.multiply },
+        uOpacity: { value: 1.0 },
+        uVisible: { value: 1.0 },
       },
       vertexShader,
       fragmentShader,
     });
 
     this.setValues(parameters);
+  }
+
+  private invalidateRender(property: string) {
+    DirtyRenderScheduler.invalidateDefault(`Sprite2DMaterial.${property}`);
+  }
+
+  @DebugGui.color({ name: "blend color", folder: "Sprite2D" })
+  get uBlendColor(): THREE.Color {
+    return this.uniforms.uBlendColor.value;
+  }
+  set uBlendColor(v: THREE.Color) {
+    this.uniforms.uBlendColor.value.copy(v);
+    this.invalidateRender("uBlendColor");
+  }
+
+  @DebugGui.number({ name: "blend mode", folder: "Sprite2D", min: 0, max: 5, step: 1 })
+  get uBlendMode(): number {
+    return this.uniforms.uBlendMode.value;
+  }
+  set uBlendMode(v: number) {
+    this.uniforms.uBlendMode.value = v;
+    this.invalidateRender("uBlendMode");
+  }
+
+  @DebugGui.number({ name: "opacity", folder: "Sprite2D", min: 0, max: 1, step: 0.01 })
+  get uOpacity(): number {
+    return this.uniforms.uOpacity.value;
+  }
+  set uOpacity(v: number) {
+    this.uniforms.uOpacity.value = v;
+    this.invalidateRender("uOpacity");
+  }
+
+  @DebugGui.number({ name: "visible", folder: "Sprite2D", min: 0, max: 1, step: 1 })
+  get uVisible(): number {
+    return this.uniforms.uVisible.value;
+  }
+  set uVisible(v: number) {
+    this.uniforms.uVisible.value = v;
+    this.invalidateRender("uVisible");
   }
 
   get useMultiplyColor(): boolean {
@@ -68,5 +130,6 @@ export class Sprite2DMaterial extends THREE.RawShaderMaterial {
     else delete this.defines.USE_MULTIPLY_COLOR;
 
     this.needsUpdate = true;
+    this.invalidateRender("useMultiplyColor");
   }
 }

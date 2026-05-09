@@ -12,6 +12,7 @@ uniform float uOutlineThreshold;
 uniform float uSmoothing;
 uniform float uBackgroundRadius;
 uniform float uOpacity;
+uniform float uVisible;
 
 in vec2 vUv;
 flat in int vPage;
@@ -44,6 +45,9 @@ float roundedBoxSDF_aspect(vec2 p, vec2 b, float r, float aspect) {
 }
 
 void main() {
+  if (uVisible < 0.5) {
+    discard;
+  }
 
 #ifdef USE_PICK_BUFFER
   outColor = vec4(vPickColor, 1.0);
@@ -57,7 +61,7 @@ void main() {
     float edge = 0.005; // 控制边缘软硬
     float rbmaskF = 1.0 - smoothstep(0.0, edge, rbmask);
 
-    outColor = vec4(uBackgroundColor, rbmaskF * uBackgroundAlpha);
+    outColor = vec4(uBackgroundColor, rbmaskF * uBackgroundAlpha * uOpacity);
     return;
   }
 

@@ -1,29 +1,44 @@
 import * as THREE from "three";
 import { SpriteXZRectGeometry } from "./SpriteXZRectGeometry";
-import { Sprite2DMaterial } from "./Sprite2DMaterial";
+import { Sprite2DMaterial, Sprite2DBlendMode } from "./Sprite2DMaterial";
+import type { Sprite2DBlendModeName } from "./Sprite2DMaterial";
 import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
+import { DebugGui, WithDebugGui } from "@core/DebugGUI";
+import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
-interface Sprite2DParameters {
-  /** 贴图地址, 同时作为Atlas系统的索引 */
+export interface Sprite2DParameters {
+  /** Atlas url/key. */
   url: string;
 
-  /** 米 / 像素 */
+  /** Three.js world units per source pixel. */
   mpp?: number;
 
-  /** 中心点 [x,z] 偏移, threejs世界单位 */
+  /** XZ center offset in world units. */
   offset?: [number, number];
 
-  /** 按中心点, 绕 y 轴旋转, 弧度 */
+  /** Rotation around the local center on Y axis, in radians. */
   rotate?: number;
 
-  /** 乘色 */
+  /** Compatibility alias for blendColor. */
   multiplyColor?: THREE.Color;
+
+  /** Shader blend color. */
+  blendColor?: THREE.Color;
+
+  /** Shader blend mode. */
+  blendMode?: Sprite2DBlendModeName | number;
+
+  /** Extra shader opacity. */
+  opacity?: number;
+
+  /** Shader-level visibility flag. */
+  shaderVisible?: boolean;
 
   renderOrder?: number;
 }
 
-/** XZ平面贴图精灵 */
-export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
+/** XZ-plane texture sprite backed by SpriteAtlas. */
+export class Sprite2D extends WithDebugGui(THREE.Mesh) implements Sprite2DParameters {
   isSprite2D = true;
 
   url: string;
@@ -31,6 +46,10 @@ export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
   offset: [number, number] = [0.0, 0.0];
   rotate = 0.0;
   multiplyColor: THREE.Color = undefined;
+  blendColor: THREE.Color = undefined;
+  blendMode: Sprite2DBlendModeName | number = "multiply";
+  opacity = 1.0;
+  shaderVisible = true;
 
   constructor(parameters: Sprite2DParameters) {
     super();
@@ -38,52 +57,59 @@ export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
     this.apply(parameters, true);
   }
 
-  /**
-   * 接受参数修改
-   * @param {Partial<Sprite2DParameters>} parameters 新的参数
-   * @param forceRebuildGeometry 是否强制重新计算 geometryBuffer
-   */
-  private apply(parameters: Partial<Sprite2DParameters>, forceRebuildGeometry: boolean = false) {
+  private apply(parameters: Partial<Sprite2DParameters>, forceRebuildGeometry = false) {
     const next = this.normalizeParameters(parameters);
     const needRebuildGeometry = forceRebuildGeometry || next.url !== this.url || next.mpp !== this.mpp || next.offset[0] !== this.offset[0] || next.offset[1] !== this.offset[1] || next.rotate !== this.rotate;
-    const needRebuildMultiplyColor = needRebuildGeometry || !next.multiplyColor.equals(this.multiplyColor); // 综合条件判断是否需要重新计算 geometryBuffer
+    const needRebuildColor = !this.multiplyColor || !next.multiplyColor.equals(this.multiplyColor);
 
     this.url = next.url;
     this.mpp = next.mpp;
     this.offset = [next.offset[0], next.offset[1]];
     this.rotate = next.rotate;
     this.multiplyColor = next.multiplyColor;
+    this.blendColor = next.blendColor;
+    this.blendMode = next.blendMode;
+    this.opacity = next.opacity;
+    this.shaderVisible = next.shaderVisible;
 
-    if (needRebuildGeometry) this.rebuildGeometry(); // 重新计算 geometryBuffer
-    if (needRebuildMultiplyColor) this.syncMultiplyColorAttribute();
+    if (needRebuildGeometry) this.rebuildGeometry();
+    if (needRebuildGeometry || needRebuildColor) this.syncMultiplyColorAttribute();
+    this.syncMaterialState();
 
-    // 更新renderOrder
     this.renderOrder = next.renderOrder ?? this.renderOrder ?? -1;
+    DirtyRenderScheduler.invalidateDefault("Sprite2D.apply");
   }
 
-  /** 校验并吸收参数 */
-  private normalizeParameters(parameters: Partial<Sprite2DParameters>): Sprite2DParameters {
+  private normalizeParameters(parameters: Partial<Sprite2DParameters>): Required<Sprite2DParameters> {
     const url = parameters.url ?? this.url;
     const mpp = parameters.mpp ?? this.mpp;
     const offset = parameters.offset ?? this.offset;
     const rotate = parameters.rotate ?? this.rotate;
     const renderOrder = parameters.renderOrder ?? this.renderOrder;
-    const multiplyColor = parameters.multiplyColor ?? this.multiplyColor;
+    const blendColor = parameters.blendColor ?? parameters.multiplyColor ?? this.blendColor ?? this.multiplyColor ?? new THREE.Color(0xffffff);
+    const multiplyColor = parameters.multiplyColor ?? parameters.blendColor ?? this.multiplyColor ?? this.blendColor ?? blendColor;
+    const blendMode = parameters.blendMode ?? this.blendMode ?? "multiply";
+    const opacity = parameters.opacity ?? this.opacity ?? 1.0;
+    const shaderVisible = parameters.shaderVisible ?? this.shaderVisible ?? true;
 
-    if (mpp === undefined) throw new Error("Sprite2D: 缺少缩放比");
-    if (!Number.isFinite(mpp) || mpp <= 0) throw new Error(`Sprite2D: 非法缩放比 ${mpp}`);
+    if (!url) throw new Error("Sprite2D: missing atlas url");
+    if (mpp === undefined) throw new Error("Sprite2D: missing mpp");
+    if (!Number.isFinite(mpp) || mpp <= 0) throw new Error(`Sprite2D: invalid mpp ${mpp}`);
 
     return {
       url,
       mpp,
       offset: [offset?.[0] ?? 0.0, offset?.[1] ?? 0.0],
       rotate: rotate ?? 0.0,
-      multiplyColor: multiplyColor,
+      multiplyColor,
+      blendColor,
+      blendMode,
+      opacity,
+      shaderVisible,
       renderOrder,
     };
   }
 
-  /** 重新计算 geometryBuffer */
   private rebuildGeometry() {
     const spriteItem = spriteAtlas.getSpriteAtlas(this.url);
     const { page, u0, v0, u1, v1, imageProps } = spriteItem;
@@ -107,7 +133,6 @@ export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
     this.geometry.setAttribute("aPage", new THREE.Float32BufferAttribute(aPage, 1).setUsage(THREE.StaticDrawUsage));
   }
 
-  /** 重新计算 geometryBuffer 的 aMultiplyColor 属性 */
   private syncMultiplyColorAttribute() {
     const material = this.material as Sprite2DMaterial;
     if (!this.geometry) return;
@@ -131,9 +156,48 @@ export class Sprite2D extends THREE.Mesh implements Sprite2DParameters {
     material.useMultiplyColor = true;
   }
 
-  ///////////////////////////////////////////////////////////////
+  private syncMaterialState() {
+    const material = this.material as Sprite2DMaterial;
+    material.uBlendColor = this.blendColor ?? this.multiplyColor ?? new THREE.Color(0xffffff);
+    material.uBlendMode = typeof this.blendMode === "number" ? this.blendMode : Sprite2DBlendMode[this.blendMode];
+    material.uOpacity = this.opacity;
+    material.uVisible = this.shaderVisible ? 1.0 : 0.0;
+  }
 
-  set(parameters: Partial<Sprite2DParameters>) {
+  @DebugGui.number({ name: "mpp", folder: "Sprite2D", min: 0.0001, max: 10, step: 0.0001 })
+  get debugMpp() {
+    return this.mpp;
+  }
+  set debugMpp(v: number) {
+    this.set({ mpp: v });
+  }
+
+  @DebugGui.number({ name: "rotate", folder: "Sprite2D", min: -Math.PI, max: Math.PI, step: 0.001 })
+  get debugRotate() {
+    return this.rotate;
+  }
+  set debugRotate(v: number) {
+    this.set({ rotate: v });
+  }
+
+  @DebugGui.number({ name: "opacity", folder: "Sprite2D", min: 0, max: 1, step: 0.01 })
+  get debugOpacity() {
+    return this.opacity;
+  }
+  set debugOpacity(v: number) {
+    this.set({ opacity: v });
+  }
+
+  @DebugGui.number({ name: "visible", folder: "Sprite2D", min: 0, max: 1, step: 1 })
+  get debugShaderVisible() {
+    return this.shaderVisible ? 1 : 0;
+  }
+  set debugShaderVisible(v: number) {
+    this.set({ shaderVisible: v === 1 });
+  }
+
+  set(parameters: Partial<Sprite2DParameters>): this {
     this.apply(parameters, false);
+    return this;
   }
 }

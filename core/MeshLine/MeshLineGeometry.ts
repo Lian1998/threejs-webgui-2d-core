@@ -56,10 +56,11 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
     this.lineBreakpoint.length = 0;
 
     const l = points.length;
-    if (l < 2) throw new Error("MeshLineGeometry: 单个顶点无法组成线段");
+    if (l < 6) throw new Error("MeshLineGeometry: 单个顶点无法组成线段");
+    const pointCount = l / 3;
     let dist = 0;
     for (let i = 0; i < l; i += 3) {
-      const c = i / (l - 1);
+      const c = pointCount <= 1 ? 0 : i / 3 / (pointCount - 1);
       if (i > 0) {
         const dx = points[i] - points[i - 3];
         const dy = points[i + 1] - points[i - 2];
@@ -94,10 +95,11 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
       const points = lines[j];
 
       const l = points.length;
-      if (l < 2) throw new Error("[MeshLineGeometry]: 单个顶点无法组成线段");
+      if (l < 6) throw new Error("[MeshLineGeometry]: 单个顶点无法组成线段");
+      const pointCount = l / 3;
       let dist = 0;
       for (let i = 0; i < l; i += 3) {
-        const c = i / (l - 1);
+        const c = pointCount <= 1 ? 0 : i / 3 / (pointCount - 1);
         // 首点多重复一遍
         if (i === 0) {
           this.position.push(points[i], points[i + 1], points[i + 2], points[i], points[i + 1], points[i + 2]);
@@ -185,7 +187,8 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
     this.setAttribute("counter", new THREE.BufferAttribute(new Float32Array(this.counter), 1));
     this.setAttribute("lineDistance", new THREE.BufferAttribute(new Float32Array(this.lineDistance), 1));
     this.setAttribute("lineBreakpoint", new THREE.BufferAttribute(new Float32Array(this.lineBreakpoint), 1));
-    this.setIndex(new THREE.BufferAttribute(new Uint16Array(this.indices_array), 1));
+    const IndexArray = this.position.length / 3 > 65535 ? Uint32Array : Uint16Array;
+    this.setIndex(new THREE.BufferAttribute(new IndexArray(this.indices_array), 1));
   }
 
   /**

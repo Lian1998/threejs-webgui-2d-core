@@ -6,7 +6,7 @@
  * @param {Array|Uint8ClampedArray} [rgb=[0,0,0]] - 可选的底色 (RGB)
  * @returns {Uint8ClampedArray} imageData 图片像素数据
  */
-export const makeRGBAImageData = (alphaChannel: Uint8ClampedArray, width: number, height: number): ImageDataArray => {
+export const makeRGBAImageData = (alphaChannel: Uint8ClampedArray, width: number, height: number): Uint8ClampedArray => {
   if (alphaChannel.length !== width * height) {
     throw new Error("alphaBuffer length does not match width * height");
   }
@@ -20,5 +20,5 @@ export const makeRGBAImageData = (alphaChannel: Uint8ClampedArray, width: number
     imageData[j + 3] = alphaChannel[i]; // A
   }
 
-  return imageData as ImageDataArray;
+  return imageData;
 };

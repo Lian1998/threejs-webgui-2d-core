@@ -1,77 +1,84 @@
 import * as THREE from "three";
-import { GpuPickManager } from "@core/GpuPickManager";
-
+import { DebugGuiManager, DirtyRenderScheduler, GpuPickCommonListener, ViewportResizeDispatcher } from "@core/index";
+import { tinySDFAtlas } from "@core/SDFText2D/TinySdfAtlas";
+import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
 import { ThreejsGroups } from "@source/inMap/variables";
-import { ThreejsLayers } from "@source/inMap/variables";
-import { ThreejsRenderOrder } from "@source/inMap/variables";
-
-import { MAP_CENTER } from "@source/inMap/viewport";
-import { MAP_VIEW_SIZE } from "@source/inMap/viewport";
-import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
-import { orthoCamera } from "@source/inMap/viewport";
-import { mapControls } from "@source/inMap/viewport";
-
-// 确保WebGL2
+import { orthoCamera, mapControls, registerOrthoCameraOnResize } from "@source/inMap/viewport";
 import { ensureWebGL2Available } from "@source/inMap/utils/common";
-ensureWebGL2Available();
-
-const viewport = document.querySelector("#viewport") ?? document.querySelector("#gui-viewport");
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: true });
-renderer.setClearColor(0xffffff, 0.0);
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-viewport.appendChild(renderer.domElement);
-
-// 挂载resize事件通知
-new ViewportResizeDispatcher(renderer);
-
-// 挂载resize视角改变函数
-import { ViewportResizeDispatcher } from "@core/index";
-new ViewportResizeDispatcher(renderer);
-
-// 挂载resize视角改变函数
-import { registerOrthoCameraOnResize } from "@source/inMap/viewport";
-registerOrthoCameraOnResize();
-
-// 挂载基于GPUBuffer的图元拾取核心
-import { GpuPickCommonListener } from "@core/index";
-const gpuPickCommonListener = new GpuPickCommonListener(renderer, ThreejsGroups.Meshes, orthoCamera);
-mapControls.addEventListener("start", () => (gpuPickCommonListener.enabled = false));
-mapControls.addEventListener("end", () => (gpuPickCommonListener.enabled = true));
-
-// 初始化底图
 import { initialization_BaseMap } from "@source/inMap/baseMap";
-initialization_BaseMap();
-
 import { initRestfulData } from "@source/data/initRestfulData";
 import { socketioSubModule_map } from "@source/data/initWebSocketData";
-initRestfulData().then((response) => {
-  socketioSubModule_map.registerListener<{
-    updated: number; // 1750297273983;
-    AGVX: number; // 20600;
-    AGVY: number; // 23600;
-    Heading: number; // 9000;
-  }>(`DF.VMS.V001.AhtRealStatus`, (itemValue, response) => {
-    console.log(`DF.VMS.V001.AhtRealStatus`, itemValue, response);
+
+void initializeInMap();
+
+async function initializeInMap() {
+  ensureWebGL2Available();
+
+  tinySDFAtlas.prepareGlyph("你好世界岸桥场桥装船卸船移箱集装箱主小车门架小车任务指令状态数值角度速度故障模式禁行区预定义区域ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:，。（）");
+  await spriteAtlas.prepareSprite(["/resource/sprites/AGV_Base.png", "/resource/sprites/AGV_Header.png", "/resource/sprites/AGV_Pin.png", "/resource/sprites/AGV_Recharge.png", "/resource/sprites/ASC_Gantry.png", "/resource/sprites/STS_Gantry.png", "/resource/sprites/STS_Trolley.png", "/resource/sprites/TRUCK.png"]);
+
+  const viewport = document.querySelector<HTMLDivElement>("#viewport") ?? document.querySelector<HTMLDivElement>("#gui-viewport");
+  if (!viewport) throw new Error("WebGUI: missing #viewport or #gui-viewport element");
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: true });
+  renderer.setClearColor(0xffffff, 0.0);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  viewport.appendChild(renderer.domElement);
+
+  const resizeDispatcher = new ViewportResizeDispatcher(renderer);
+  registerOrthoCameraOnResize();
+
+  const renderScheduler = new DirtyRenderScheduler({
+    renderer,
+    passes: [
+      {
+        name: "BaseMap",
+        scene: ThreejsGroups.BaseMap,
+        camera: orthoCamera,
+        autoClear: true,
+        autoClearColor: true,
+        autoClearDepth: true,
+        autoClearStencil: true,
+      },
+      {
+        name: "Meshes",
+        scene: ThreejsGroups.Meshes,
+        camera: orthoCamera,
+        autoClear: false,
+        autoClearColor: false,
+        autoClearDepth: true,
+        autoClearStencil: true,
+      },
+    ],
+  });
+  renderScheduler.bindControls(mapControls as any);
+  resizeDispatcher.addResizeEventListener(() => renderScheduler.invalidate("resize"));
+
+  if (import.meta.env.DEV) void DebugGuiManager.instance.mount({ title: "WebGUI Debug", width: 340, closed: true });
+
+  const gpuPickCommonListener = new GpuPickCommonListener(renderer, ThreejsGroups.Meshes, orthoCamera);
+  gpuPickCommonListener.enabled = true;
+  mapControls.addEventListener("start", () => (gpuPickCommonListener.enabled = false));
+  mapControls.addEventListener("end", () => {
+    gpuPickCommonListener.enabled = true;
+    renderScheduler.invalidate("controls-end");
   });
 
-  socketioSubModule_map.subReal(undefined, `DF.VMS.V001.AhtRealStatus`);
-});
+  initialization_BaseMap();
+  renderScheduler.invalidate("base-map-init");
 
-//////////////////////////////////////// 渲染循环 ////////////////////////////////////////
+  initRestfulData().then(() => {
+    renderScheduler.invalidate("restful-data");
 
-const clock = new THREE.Clock();
+    socketioSubModule_map.registerListener<{
+      updated: number;
+      AGVX: number;
+      AGVY: number;
+      Heading: number;
+    }>(`DF.VMS.V001.AhtRealStatus`, (itemValue, response) => {
+      console.log(`DF.VMS.V001.AhtRealStatus`, itemValue, response);
+      renderScheduler.invalidate("socket:DF.VMS.V001.AhtRealStatus");
+    });
 
-const animate = () => {
-  requestAnimationFrame(animate);
-
-  // 渲染底图
-  renderer.render(ThreejsGroups.BaseMap, orthoCamera);
-  renderer.autoClearColor = false;
-  renderer.autoClearDepth = true;
-  renderer.autoClearStencil = true;
-
-  // 渲染单个设备
-  renderer.render(ThreejsGroups.Meshes, orthoCamera);
-};
-
-animate();
+    socketioSubModule_map.subReal(undefined, `DF.VMS.V001.AhtRealStatus`);
+  });
+}

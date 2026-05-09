@@ -1,16 +1,15 @@
 precision highp float;
 
-// /docs/index.html?q=WebGLPro#api/en/renderers/webgl/WebGLProgram
 uniform vec3 cameraPosition;
 uniform vec3 uColor;
 uniform float uOpacity;
 uniform vec2 uResolution;
 uniform float uLineWidth;
 
-uniform float uUseDash;         // 是否启用虚线
+uniform float uUseDash;
 uniform vec2 uDashArray;
 
-uniform float uUseBox;          // 是否启用小方格线
+uniform float uUseBox;
 uniform vec2 uBoxArray;
 
 in vec2 vUv;
@@ -24,80 +23,56 @@ flat in vec3 vPickColor;
 out vec4 outColor;
 
 void main() {
-
-#ifdef USE_PICK_BUFFER
   if (vLineBreakPoint > 1e-6) {
     discard;
   }
+
+#ifdef USE_PICK_BUFFER
   outColor = vec4(vPickColor, 1.0);
   return;
 #endif
 
   vec4 diffuseColor = vec4(uColor, uOpacity);
 
-  // 断点(合并drawcall渲染多线段)
-  if (vLineBreakPoint > 1e-6) {
-    discard;
-  }
-
-  // 虚线模式
   if (uUseDash == 1.0) {
-    float offset = dot(cameraPosition, vec3(1.0, 0.0, 1.0)) * 0.05; // 希望视角移动的时候重绘虚线
-
-    // 计算每段虚线的实际长度, 直接基于世界空间
-    float dashLength = uDashArray.x;
-    float gapLength = uDashArray.y;
-    float period = dashLength + gapLength;
+    float dashLength = max(uDashArray.x, 0.0);
+    float gapLength = max(uDashArray.y, 0.0);
+    float period = max(dashLength + gapLength, 1e-6);
     float phase = fract(vLineDistance / period) * period;
 
-    // 直接使用世界空间距离vLineDistance来计算
     if (phase > dashLength) {
-      diffuseColor.a = 0.0; // 形成虚线效果
+      diffuseColor.a = 0.0;
     }
-  } 
-
-  // 盒线模式
-  else if (uUseBox == 1.0) {
-    // 在使用盒渲染模式时会强制使用屏幕空间
-    // diffuseColor = vec4(1., 1., 1., 1.); // debug
-    float axisYFactor = abs(vUv.y - 0.5) * 2.0; // 1.0 ~ 0.0 ~ 1.0
-    // diffuseColor *= vec4(vec3(axisYFactor), 1.0); // debug1: 沿线法线的vUv.y从-1.0~1.0
-    // 用vUv画线条
-    float aspect = uResolution.x / uResolution.y;
-    float boxLineWidth = uBoxArray.x;
-    float lineLimit = boxLineWidth / uLineWidth; // 线条粗细在uv中的比例
-    float connectorLength = uBoxArray.y / 3. * 4.; // 恒定四个单位的连接符 三个单位的盒
+  } else if (uUseBox == 1.0) {
+    float axisYFactor = abs(vUv.y - 0.5) * 2.0;
+    float boxLineWidth = max(uBoxArray.x, 0.0);
+    float lineLimit = boxLineWidth / max(uLineWidth, 1e-6);
+    float connectorLength = uBoxArray.y / 3.0 * 4.0;
     float boxStepLength = uBoxArray.y;
-    float period = connectorLength + boxStepLength;
-    float stripeXFactor = fract(vLineDistance / period) * period; // 当前x坐标在段落中的位置
-    float boxMask = step(connectorLength, stripeXFactor); // 当前是否处于盒部分
-    // diffuseColor *= vec4(vec3(boxMask), 1.0); // debug2: 白色部分是box位置
+    float period = max(connectorLength + boxStepLength, 1e-6);
+    float stripeXFactor = fract(vLineDistance / period) * period;
+    float boxMask = step(connectorLength, stripeXFactor);
 
-    // 连接部分
     if (boxMask < 1e-6) {
       float edge1 = lineLimit / 2.0;
       float mask1 = 1.0 - smoothstep(edge1 - axisYFactor, edge1 + axisYFactor, axisYFactor);
       diffuseColor.a *= mask1;
-    }
-    // 小盒部分
-    else {
-
-      // Y 方向(上下边框内侧挖空)
+    } else {
       float edge1 = 1.0 - (lineLimit / 2.0);
-      float mask1 = 1.0 - smoothstep(edge1 - axisYFactor, edge1 + axisYFactor, axisYFactor); // 让命中的部分为0
+      float mask1 = 1.0 - smoothstep(edge1 - axisYFactor, edge1 + axisYFactor, axisYFactor);
 
-      // X 方向(左右边框内侧挖空)
       float edge2 = lineLimit;
-      float mask2 = smoothstep(period, period - edge2, stripeXFactor); // 让命中的部分为0
-      float mask3 = 1.0 - smoothstep(connectorLength + edge2, connectorLength, stripeXFactor); // 让命中的部分为0
-
+      float mask2 = smoothstep(period, period - edge2, stripeXFactor);
+      float mask3 = 1.0 - smoothstep(connectorLength + edge2, connectorLength, stripeXFactor);
       float mask4 = mask1 * mask2 * mask3;
+
       diffuseColor.a *= 1.0 - mask4;
     }
   }
 
-  // 测试: cpu阶段合并几何并用冗余线头线尾顶点来表示断点
-  // diffuseColor = vec4(vec3(vLineBreakPoint), 1.0);
+  if (diffuseColor.a <= 0.0) {
+    discard;
+  }
 
   outColor = diffuseColor;
 }

@@ -3,15 +3,17 @@ import type { SDFText2DGeometryParameters } from "./SDFText2DGeometry";
 import { SDFText2DGeometry } from "./SDFText2DGeometry";
 import type { SDFText2DMaterialParameters } from "./SDFText2DMaterial";
 import { SDFText2DMaterial } from "./SDFText2DMaterial";
+import { DebugGui, WithDebugGui } from "@core/DebugGUI";
+import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
-type SDFText2DStyleParameters = Pick<SDFText2DMaterialParameters, "uTextColor" | "uOutlineColor" | "uBackgroundColor" | "uBackgroundAlpha" | "uBackgroundRadius" | "uThreshold" | "uOutlineThreshold" | "uSmoothing" | "uOpacity">;
+type SDFText2DStyleParameters = Pick<SDFText2DMaterialParameters, "uTextColor" | "uOutlineColor" | "uBackgroundColor" | "uBackgroundAlpha" | "uBackgroundRadius" | "uThreshold" | "uOutlineThreshold" | "uSmoothing" | "uOpacity" | "uVisible">;
 
-interface SDFText2DParameters extends SDFText2DGeometryParameters, SDFText2DStyleParameters {
+export interface SDFText2DParameters extends SDFText2DGeometryParameters, SDFText2DStyleParameters {
   renderOrder?: THREE.Object3D["renderOrder"];
 }
 
-/** xz平面SDF文本标签 */
-export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
+/** XZ-plane SDF text label. */
+export class SDFText2D extends WithDebugGui(THREE.Mesh) implements SDFText2DParameters {
   isSDFText2D = true;
 
   text = "";
@@ -32,32 +34,16 @@ export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
     return this;
   }
 
-  /**
-   * 改变 文本 或 文本排版属性
-   * @param text 文本
-   * @param geometryOptions 文本排版属性
-   * @returns
-   */
   setText(text: string, geometryOptions: Partial<Omit<SDFText2DGeometryParameters, "text">> = {}): this {
     this.apply({ ...geometryOptions, text }, true);
     return this;
   }
 
-  /**
-   * 改变 文本样式
-   * @param style 文本样式
-   * @returns
-   */
   setStyle(style: Partial<SDFText2DStyleParameters>): this {
     this.apply(style as Partial<SDFText2DParameters>, false);
     return this;
   }
 
-  /**
-   * 接受参数修改
-   * @param {Partial<SDFText2DParameters>} parameters 新的参数
-   * @param forceRebuildGeometry 是否强制重新计算 geometryBuffer
-   */
   private apply(parameters: Partial<SDFText2DParameters>, forceRebuildGeometry: boolean) {
     const prevPadding = this.padding;
     const nextPadding = parameters.padding ?? prevPadding;
@@ -75,7 +61,6 @@ export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
     this.lineHeight = parameters.lineHeight ?? this.lineHeight;
     this.padding = nextPadding;
 
-    // 重新计算 geometryBuffer
     if (needRebuildGeometry) {
       (this.geometry as SDFText2DGeometry).setFromText({
         text: this.text,
@@ -86,7 +71,6 @@ export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
       });
     }
 
-    // 更新材质属性
     const material = this.material as SDFText2DMaterial;
     if (parameters.uTextColor !== undefined) material.uTextColor = parameters.uTextColor;
     if (parameters.uOutlineColor !== undefined) material.uOutlineColor = parameters.uOutlineColor;
@@ -97,12 +81,13 @@ export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
     if (parameters.uOutlineThreshold !== undefined) material.uOutlineThreshold = parameters.uOutlineThreshold;
     if (parameters.uSmoothing !== undefined) material.uSmoothing = parameters.uSmoothing;
     if (parameters.uOpacity !== undefined) material.uOpacity = parameters.uOpacity;
+    if (parameters.uVisible !== undefined) material.uVisible = parameters.uVisible;
 
-    // 更新renderOrder
     if (parameters.renderOrder !== undefined) this.renderOrder = parameters.renderOrder;
+
+    DirtyRenderScheduler.invalidateDefault("SDFText2D.apply");
   }
 
-  /** 判断padding是否修改 */
   private isSamePadding(a: number | number[] | undefined, b: number | number[] | undefined): boolean {
     if (a === b) return true;
     if (typeof a === "number" || typeof b === "number") return false;
@@ -112,5 +97,29 @@ export class SDFText2D extends THREE.Mesh implements SDFText2DParameters {
       if (a[i] !== b[i]) return false;
     }
     return true;
+  }
+
+  @DebugGui.string({ name: "text", folder: "SDFText2D" })
+  get debugText() {
+    return this.text;
+  }
+  set debugText(v: string) {
+    this.setText(v);
+  }
+
+  @DebugGui.number({ name: "font size", folder: "SDFText2D", min: 0.1, max: 64, step: 0.1 })
+  get debugFontSize() {
+    return this.fontSize;
+  }
+  set debugFontSize(v: number) {
+    this.update({ fontSize: v });
+  }
+
+  @DebugGui.number({ name: "line height", folder: "SDFText2D", min: 0.1, max: 96, step: 0.1 })
+  get debugLineHeight() {
+    return this.lineHeight;
+  }
+  set debugLineHeight(v: number) {
+    this.update({ lineHeight: v });
   }
 }

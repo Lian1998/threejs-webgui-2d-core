@@ -1,5 +1,6 @@
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
+#include <batching_pars_vertex>
 #ifdef USE_PICK_BUFFER_UNIFORM
 uniform vec3 uPickColor;
 #endif
@@ -14,6 +15,13 @@ flat out vec3 vPickColor;
 #endif
 
 void main() {
+#ifdef USE_BATCHING
+  mat4 batchingMatrix = getBatchingMatrix(getIndirectIndex(gl_DrawID));
+  vec4 localPosition = batchingMatrix * vec4(position, 1.0);
+#else
+  vec4 localPosition = vec4(position, 1.0);
+#endif
+
 #ifdef USE_PICK_BUFFER_ATTRIBUTE
   vPickColor = aPickColor;
 #endif
@@ -21,6 +29,5 @@ void main() {
   vPickColor = uPickColor;
 #endif
 
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  gl_Position = projectionMatrix * modelViewMatrix * localPosition;
 }
-

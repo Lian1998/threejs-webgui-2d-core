@@ -18,6 +18,7 @@
     "isolatedModules": false,                   // 单文件模块隔离
     "noEmit": true,                             // 不输出任何文件
     "jsx": "preserve",                          // 保留jsx(交给vite插件处理)
+    "experimentalDecorators": true,             // DebugGUI uses lightweight decorator metadata
 
     /* Linting Rules */
     "strict": false,                    // 类型严格检查
