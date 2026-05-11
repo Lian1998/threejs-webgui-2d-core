@@ -15,9 +15,9 @@ import { DirtyRenderScheduler } from "@core/index";
 import { ThreejsGroups } from "@source/inMap/variables";
 
 /** 初始化WebGUI底图 */
-export const initialization_BaseMap = () => {
-  const _resolution = new THREE.Vector2(1.0, 1.0);
-  ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().addResizeEventListener(({ message: { rendererWidth, rendererHeight } }) => _resolution.set(rendererWidth, rendererHeight));
+export const initBaseMap = () => {
+  const viewport1 = ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>(0);
+  const _resolution = viewport1.rect.size;
 
   window
     .fetch("/mapshaper-qinzhou/01_coastline_and_buildings.json")

@@ -4,9 +4,9 @@ type Constructor<T = object> = abstract new (...args: any[]) => T;
 type GuiController = any;
 type GuiFolder = any;
 
-export type DebugGuiControlKind = "number" | "boolean" | "color" | "string" | "select" | "vector2" | "vector3" | "vector4" | "action";
+export type DebugGUIControlKind = "number" | "boolean" | "color" | "string" | "select" | "vector2" | "vector3" | "vector4" | "action";
 
-export interface DebugGuiControlOptions {
+export interface DebugGUIControlOptions {
   name?: string;
   folder?: string;
   min?: number;
@@ -20,12 +20,12 @@ export interface DebugGuiControlOptions {
   onFinishChange?: (value: any, instance: object, property: string) => void;
 }
 
-export interface DebugGuiControlMeta extends DebugGuiControlOptions {
-  kind: DebugGuiControlKind;
+export interface DebugGUIControlMeta extends DebugGUIControlOptions {
+  kind: DebugGUIControlKind;
   property: string;
 }
 
-export interface DebugGuiMountOptions {
+export interface DebugGUIMountOptions {
   title?: string;
   width?: number;
   container?: HTMLElement;
@@ -41,12 +41,12 @@ const DEBUG_GUI_METADATA = Symbol.for("webgui.debugGui.metadata");
 
 const isDevMode = () => Boolean(import.meta.env?.DEV);
 
-/** 只读取/创建当前类自己的元数据数组, 不直接混入父类, 继承合并由 getDebugGuiMetadata 统一处理。 */
-const getOwnMeta = (ctor: Function): DebugGuiControlMeta[] => {
+/** 只读取/创建当前类自己的元数据数组, 不直接混入父类, 继承合并由 getDebugGUIMetadata 统一处理。 */
+const getOwnMeta = (ctor: Function): DebugGUIControlMeta[] => {
   if (!Object.prototype.hasOwnProperty.call(ctor, DEBUG_GUI_METADATA)) {
     Object.defineProperty(ctor, DEBUG_GUI_METADATA, { value: [], enumerable: false });
   }
-  return ctor[DEBUG_GUI_METADATA] as DebugGuiControlMeta[];
+  return ctor[DEBUG_GUI_METADATA] as DebugGUIControlMeta[];
 };
 
 /**
@@ -54,7 +54,7 @@ const getOwnMeta = (ctor: Function): DebugGuiControlMeta[] => {
  * 从父类到子类依次合并, 这样 Mixin/继承链上的调试字段都能显示,
  * 子类同名字段也能覆盖或避免重复显示。
  */
-export const getDebugGuiMetadata = (instanceOrCtor: object | Function): DebugGuiControlMeta[] => {
+export const getDebugGUIMetadata = (instanceOrCtor: object | Function): DebugGUIControlMeta[] => {
   const ctor = typeof instanceOrCtor === "function" ? instanceOrCtor : instanceOrCtor.constructor;
   const chain: Function[] = [];
   let cursor: any = ctor;
@@ -65,11 +65,11 @@ export const getDebugGuiMetadata = (instanceOrCtor: object | Function): DebugGui
     cursor = proto?.constructor;
   }
 
-  const result: DebugGuiControlMeta[] = [];
+  const result: DebugGUIControlMeta[] = [];
   const used = new Set<string>();
 
   for (const item of chain) {
-    const list = (item as any)[DEBUG_GUI_METADATA] as DebugGuiControlMeta[] | undefined;
+    const list = (item as any)[DEBUG_GUI_METADATA] as DebugGUIControlMeta[] | undefined;
     if (!list) continue;
     for (const meta of list) {
       const key = `${meta.folder ?? ""}/${meta.property}`;
@@ -83,7 +83,7 @@ export const getDebugGuiMetadata = (instanceOrCtor: object | Function): DebugGui
 };
 
 /** 生成属性/方法装饰器, 装饰器本身只登记元数据, 不创建 lil-gui 控件。 */
-const createDecorator = (kind: DebugGuiControlKind, options: DebugGuiControlOptions = {}): PropertyDecorator & MethodDecorator => {
+const createDecorator = (kind: DebugGUIControlKind, options: DebugGUIControlOptions = {}): PropertyDecorator & MethodDecorator => {
   return (target: object, propertyKey: string | symbol) => {
     const ctor = target.constructor;
     const meta = getOwnMeta(ctor);
@@ -97,33 +97,33 @@ const createDecorator = (kind: DebugGuiControlKind, options: DebugGuiControlOpti
 };
 
 /** 对外暴露一组语义化装饰器, 使用时比手写 kind 字符串更直观。 */
-export const DebugGui = {
-  number: (options?: DebugGuiControlOptions) => createDecorator("number", options),
-  boolean: (options?: DebugGuiControlOptions) => createDecorator("boolean", options),
-  color: (options?: DebugGuiControlOptions) => createDecorator("color", options),
-  string: (options?: DebugGuiControlOptions) => createDecorator("string", options),
-  select: (options?: DebugGuiControlOptions) => createDecorator("select", options),
-  vector2: (options?: DebugGuiControlOptions) => createDecorator("vector2", options),
-  vector3: (options?: DebugGuiControlOptions) => createDecorator("vector3", options),
-  vector4: (options?: DebugGuiControlOptions) => createDecorator("vector4", options),
-  action: (options?: DebugGuiControlOptions) => createDecorator("action", options),
+export const DebugGUI = {
+  number: (options?: DebugGUIControlOptions) => createDecorator("number", options),
+  boolean: (options?: DebugGUIControlOptions) => createDecorator("boolean", options),
+  color: (options?: DebugGUIControlOptions) => createDecorator("color", options),
+  string: (options?: DebugGUIControlOptions) => createDecorator("string", options),
+  select: (options?: DebugGUIControlOptions) => createDecorator("select", options),
+  vector2: (options?: DebugGUIControlOptions) => createDecorator("vector2", options),
+  vector3: (options?: DebugGUIControlOptions) => createDecorator("vector3", options),
+  vector4: (options?: DebugGUIControlOptions) => createDecorator("vector4", options),
+  action: (options?: DebugGUIControlOptions) => createDecorator("action", options),
 };
 
-export const GuiNumber = DebugGui.number;
-export const GuiBoolean = DebugGui.boolean;
-export const GuiColor = DebugGui.color;
-export const GuiString = DebugGui.string;
-export const GuiSelect = DebugGui.select;
-export const GuiVector2 = DebugGui.vector2;
-export const GuiVector3 = DebugGui.vector3;
-export const GuiVector4 = DebugGui.vector4;
-export const GuiAction = DebugGui.action;
+export const GuiNumber = DebugGUI.number;
+export const GuiBoolean = DebugGUI.boolean;
+export const GuiColor = DebugGUI.color;
+export const GuiString = DebugGUI.string;
+export const GuiSelect = DebugGUI.select;
+export const GuiVector2 = DebugGUI.vector2;
+export const GuiVector3 = DebugGUI.vector3;
+export const GuiVector4 = DebugGUI.vector4;
+export const GuiAction = DebugGUI.action;
 
 /**
  * 开发环境实例注册容器。
  * 注意这里不负责实例生命周期业务逻辑, 只记录“可以被 GUI 扫描”的对象引用。
  */
-export class DebugGuiRegistry {
+export class DebugGUIRegistry {
   private static readonly instances = new Set<object>();
   private static readonly listeners = new Set<(instance: object) => void>();
 
@@ -150,37 +150,37 @@ export class DebugGuiRegistry {
 }
 
 /**
- * Mixin: 构造对象时自动注册到 DebugGuiRegistry。
+ * Mixin: 构造对象时自动注册到 DebugGUIRegistry。
  * 适合 Material、Mesh、业务设备类这类希望开发期自动出现在面板里的对象。
  */
-export const WithDebugGui = <TBase extends Constructor>(Base: TBase) => {
-  abstract class WithDebugGuiClass extends Base {
+export const WithDebugGUI = <TBase extends Constructor>(Base: TBase) => {
+  abstract class WithDebugGUIClass extends Base {
     constructor(...args: any[]) {
       super(...args);
-      DebugGuiRegistry.register(this);
+      DebugGUIRegistry.register(this);
     }
 
-    unregisterDebugGui(): void {
-      DebugGuiRegistry.unregister(this);
+    unregisterDebugGUI(): void {
+      DebugGUIRegistry.unregister(this);
     }
   }
 
-  return WithDebugGuiClass;
+  return WithDebugGUIClass;
 };
 
 /**
  * lil-gui 面板管理器。
  * 它负责把“装饰器元数据 + 已注册实例”转换成真实 GUI 控件。
  */
-export class DebugGuiManager {
-  static readonly instance = new DebugGuiManager();
+export class DebugGUIManager {
+  static readonly instance = new DebugGUIManager();
 
   gui: GuiFolder | undefined;
   private rootFolders = new Map<object, GuiFolder>();
   private folderCache = new WeakMap<GuiFolder, Map<string, GuiFolder>>();
   private unsubscribeRegister: (() => void) | undefined;
 
-  async mount(options: DebugGuiMountOptions = {}): Promise<this> {
+  async mount(options: DebugGUIMountOptions = {}): Promise<this> {
     if (!isDevMode()) return this;
     if (this.gui) return this;
 
@@ -196,8 +196,8 @@ export class DebugGuiManager {
     if (options.closed ?? false) this.gui.close();
 
     // mount 前已经创建的对象补建面板, mount 后创建的对象通过 onRegister 增量加入。
-    for (const instance of DebugGuiRegistry.getInstances()) this.addInstance(instance);
-    this.unsubscribeRegister = DebugGuiRegistry.onRegister((instance) => this.addInstance(instance));
+    for (const instance of DebugGUIRegistry.getInstances()) this.addInstance(instance);
+    this.unsubscribeRegister = DebugGUIRegistry.onRegister((instance) => this.addInstance(instance));
 
     return this;
   }
@@ -224,7 +224,7 @@ export class DebugGuiManager {
   private addInstance(instance: object): void {
     if (!this.gui || this.rootFolders.has(instance)) return;
 
-    const metadata = getDebugGuiMetadata(instance);
+    const metadata = getDebugGUIMetadata(instance);
     if (metadata.length === 0) return;
 
     const label = this.getInstanceLabel(instance);
@@ -269,7 +269,7 @@ export class DebugGuiManager {
     return cursor;
   }
 
-  private addControl(root: GuiFolder, instance: object, meta: DebugGuiControlMeta): void {
+  private addControl(root: GuiFolder, instance: object, meta: DebugGUIControlMeta): void {
     const folder = this.getFolder(root, meta.folder);
     const name = meta.name ?? meta.property;
     let controller: GuiController | undefined;
@@ -291,14 +291,14 @@ export class DebugGuiManager {
         controller = folder.add(instance, meta.property).name(name);
       }
     } catch (error) {
-      console.warn(`[DebugGui] skip ${meta.property}`, error);
+      console.warn(`[DebugGUI] skip ${meta.property}`, error);
       return;
     }
 
     this.configureController(controller, instance, meta);
   }
 
-  private addVectorControls(folder: GuiFolder, instance: object, meta: DebugGuiControlMeta, name: string): void {
+  private addVectorControls(folder: GuiFolder, instance: object, meta: DebugGUIControlMeta, name: string): void {
     const value = (instance as any)[meta.property];
     if (!value) return;
 
@@ -311,7 +311,7 @@ export class DebugGuiManager {
     }
   }
 
-  private configureController(controller: GuiController, instance: object, meta: DebugGuiControlMeta): void {
+  private configureController(controller: GuiController, instance: object, meta: DebugGUIControlMeta): void {
     controller.onChange?.((value: any) => {
       meta.onChange?.(value, instance, meta.property);
       // GUI 修改任何可视属性后都标记一帧, 面板调参时不需要业务代码手动 render。

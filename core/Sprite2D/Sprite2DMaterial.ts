@@ -5,7 +5,7 @@ import fragmentShader from "./shaders/sprite2d.fs?raw";
 
 import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
 import { ATLAS_TEXTURE_SIZE } from "@core/Sprite2D/Sprite2DAtlas";
-import { DebugGui, WithDebugGui } from "@core/DebugGUI";
+import { DebugGUI, WithDebugGUI } from "@core/Mixins";
 import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 export const Sprite2DBlendMode = {
@@ -26,7 +26,7 @@ export interface Sprite2DMaterialParameters extends THREE.ShaderMaterialParamete
   uVisible?: number;
 }
 
-export class Sprite2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
+export class Sprite2DMaterial extends WithDebugGUI(THREE.RawShaderMaterial) {
   static textureArray: THREE.DataArrayTexture | null = null;
   private static getTextureArray() {
     const pages = spriteAtlas.getAllPages();
@@ -86,7 +86,7 @@ export class Sprite2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     DirtyRenderScheduler.invalidateDefault(`Sprite2DMaterial.${property}`);
   }
 
-  @DebugGui.color({ name: "blend color", folder: "Sprite2D" })
+  @DebugGUI.color({ name: "blend color", folder: "Sprite2D" })
   get uBlendColor(): THREE.Color {
     return this.uniforms.uBlendColor.value;
   }
@@ -95,7 +95,7 @@ export class Sprite2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uBlendColor");
   }
 
-  @DebugGui.number({ name: "blend mode", folder: "Sprite2D", min: 0, max: 5, step: 1 })
+  @DebugGUI.number({ name: "blend mode", folder: "Sprite2D", min: 0, max: 5, step: 1 })
   get uBlendMode(): number {
     return this.uniforms.uBlendMode.value;
   }
@@ -104,7 +104,7 @@ export class Sprite2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uBlendMode");
   }
 
-  @DebugGui.number({ name: "opacity", folder: "Sprite2D", min: 0, max: 1, step: 0.01 })
+  @DebugGUI.number({ name: "opacity", folder: "Sprite2D", min: 0, max: 1, step: 0.01 })
   get uOpacity(): number {
     return this.uniforms.uOpacity.value;
   }
@@ -113,7 +113,7 @@ export class Sprite2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uOpacity");
   }
 
-  @DebugGui.number({ name: "visible", folder: "Sprite2D", min: 0, max: 1, step: 1 })
+  @DebugGUI.number({ name: "visible", folder: "Sprite2D", min: 0, max: 1, step: 1 })
   get uVisible(): number {
     return this.uniforms.uVisible.value;
   }

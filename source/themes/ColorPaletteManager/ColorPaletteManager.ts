@@ -3,6 +3,7 @@ import { ITEMS_DEV } from "./ColorItems";
 import type { ITEMS_DEV_KEY } from "./ColorItems";
 import { injectRootCssVars } from "@source/themes/injectRootCss";
 
+/** 调色盘插颜色管理器 */
 export class ColorPaletteManager {
   static #instance: ColorPaletteManager;
   public static get instance(): ColorPaletteManager {

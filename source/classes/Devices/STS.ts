@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import Tinycolor from "tinycolor2";
-import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
+import { WithClassInstanceMap } from "@core/Mixins/";
 import { IActor } from "@core/interfaces/IActor";
 import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
 import { GpuBatchFeature } from "@core/interfaces/GpuBatchFeature";

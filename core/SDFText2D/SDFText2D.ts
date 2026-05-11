@@ -3,7 +3,7 @@ import type { SDFText2DGeometryParameters } from "./SDFText2DGeometry";
 import { SDFText2DGeometry } from "./SDFText2DGeometry";
 import type { SDFText2DMaterialParameters } from "./SDFText2DMaterial";
 import { SDFText2DMaterial } from "./SDFText2DMaterial";
-import { DebugGui, WithDebugGui } from "@core/DebugGUI";
+import { DebugGUI, WithDebugGUI } from "@core/Mixins";
 import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 type SDFText2DStyleParameters = Pick<SDFText2DMaterialParameters, "uTextColor" | "uOutlineColor" | "uBackgroundColor" | "uBackgroundAlpha" | "uBackgroundRadius" | "uThreshold" | "uOutlineThreshold" | "uSmoothing" | "uOpacity" | "uVisible">;
@@ -13,7 +13,7 @@ export interface SDFText2DParameters extends SDFText2DGeometryParameters, SDFTex
 }
 
 /** XZ-plane SDF text label. */
-export class SDFText2D extends WithDebugGui(THREE.Mesh) implements SDFText2DParameters {
+export class SDFText2D extends WithDebugGUI(THREE.Mesh) implements SDFText2DParameters {
   isSDFText2D = true;
 
   text = "";
@@ -99,7 +99,7 @@ export class SDFText2D extends WithDebugGui(THREE.Mesh) implements SDFText2DPara
     return true;
   }
 
-  @DebugGui.string({ name: "text", folder: "SDFText2D" })
+  @DebugGUI.string({ name: "text", folder: "SDFText2D" })
   get debugText() {
     return this.text;
   }
@@ -107,7 +107,7 @@ export class SDFText2D extends WithDebugGui(THREE.Mesh) implements SDFText2DPara
     this.setText(v);
   }
 
-  @DebugGui.number({ name: "font size", folder: "SDFText2D", min: 0.1, max: 64, step: 0.1 })
+  @DebugGUI.number({ name: "font size", folder: "SDFText2D", min: 0.1, max: 64, step: 0.1 })
   get debugFontSize() {
     return this.fontSize;
   }
@@ -115,7 +115,7 @@ export class SDFText2D extends WithDebugGui(THREE.Mesh) implements SDFText2DPara
     this.update({ fontSize: v });
   }
 
-  @DebugGui.number({ name: "line height", folder: "SDFText2D", min: 0.1, max: 96, step: 0.1 })
+  @DebugGUI.number({ name: "line height", folder: "SDFText2D", min: 0.1, max: 96, step: 0.1 })
   get debugLineHeight() {
     return this.lineHeight;
   }

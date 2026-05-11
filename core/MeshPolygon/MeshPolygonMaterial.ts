@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import vertexShader from "./shaders/mesh-polygon.vs?raw";
 import fragmentShader from "./shaders/mesh-polygon.fs?raw";
-import { DebugGui, WithDebugGui } from "@core/DebugGUI";
+import { DebugGUI, WithDebugGUI } from "@core/Mixins";
 import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 export interface MeshPolygonMaterialParameters extends THREE.ShaderMaterialParameters {
@@ -24,7 +24,7 @@ export interface MeshPolygonMaterialParameters extends THREE.ShaderMaterialParam
   uPixelRatio?: number;
 }
 
-export class MeshPolygonMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
+export class MeshPolygonMaterial extends WithDebugGUI(THREE.RawShaderMaterial) {
   constructor(parameters: MeshPolygonMaterialParameters) {
     super({
       name: "MeshPolygonMaterial",
@@ -52,7 +52,7 @@ export class MeshPolygonMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     DirtyRenderScheduler.invalidateDefault(`MeshPolygonMaterial.${property}`);
   }
 
-  @DebugGui.color({ name: "color", folder: "MeshPolygon" })
+  @DebugGUI.color({ name: "color", folder: "MeshPolygon" })
   get uColor() {
     return this.uniforms.uColor.value;
   }
@@ -61,7 +61,7 @@ export class MeshPolygonMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uColor");
   }
 
-  @DebugGui.number({ name: "opacity", folder: "MeshPolygon", min: 0, max: 1, step: 0.01 })
+  @DebugGUI.number({ name: "opacity", folder: "MeshPolygon", min: 0, max: 1, step: 0.01 })
   get uOpacity() {
     return this.uniforms.uOpacity.value;
   }
@@ -70,7 +70,7 @@ export class MeshPolygonMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uOpacity");
   }
 
-  @DebugGui.number({ name: "shadow", folder: "MeshPolygon", min: 0, max: 1, step: 1 })
+  @DebugGUI.number({ name: "shadow", folder: "MeshPolygon", min: 0, max: 1, step: 1 })
   get uUseShadow() {
     return this.uniforms.uUseShadow.value;
   }
@@ -79,7 +79,7 @@ export class MeshPolygonMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uUseShadow");
   }
 
-  @DebugGui.vector2({ name: "shadow array", folder: "MeshPolygon", min: 0, max: 128, step: 0.1 })
+  @DebugGUI.vector2({ name: "shadow array", folder: "MeshPolygon", min: 0, max: 128, step: 0.1 })
   get uShadowArray() {
     return this.uniforms.uShadowArray.value;
   }

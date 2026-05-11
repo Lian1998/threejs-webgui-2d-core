@@ -3,7 +3,7 @@ import { SpriteXZRectGeometry } from "./SpriteXZRectGeometry";
 import { Sprite2DMaterial, Sprite2DBlendMode } from "./Sprite2DMaterial";
 import type { Sprite2DBlendModeName } from "./Sprite2DMaterial";
 import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
-import { DebugGui, WithDebugGui } from "@core/DebugGUI";
+import { DebugGUI, WithDebugGUI } from "@core/Mixins";
 import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 export interface Sprite2DParameters {
@@ -38,7 +38,7 @@ export interface Sprite2DParameters {
 }
 
 /** XZ-plane texture sprite backed by SpriteAtlas. */
-export class Sprite2D extends WithDebugGui(THREE.Mesh) implements Sprite2DParameters {
+export class Sprite2D extends WithDebugGUI(THREE.Mesh) implements Sprite2DParameters {
   isSprite2D = true;
 
   url: string;
@@ -164,7 +164,7 @@ export class Sprite2D extends WithDebugGui(THREE.Mesh) implements Sprite2DParame
     material.uVisible = this.shaderVisible ? 1.0 : 0.0;
   }
 
-  @DebugGui.number({ name: "mpp", folder: "Sprite2D", min: 0.0001, max: 10, step: 0.0001 })
+  @DebugGUI.number({ name: "mpp", folder: "Sprite2D", min: 0.0001, max: 10, step: 0.0001 })
   get debugMpp() {
     return this.mpp;
   }
@@ -172,7 +172,7 @@ export class Sprite2D extends WithDebugGui(THREE.Mesh) implements Sprite2DParame
     this.set({ mpp: v });
   }
 
-  @DebugGui.number({ name: "rotate", folder: "Sprite2D", min: -Math.PI, max: Math.PI, step: 0.001 })
+  @DebugGUI.number({ name: "rotate", folder: "Sprite2D", min: -Math.PI, max: Math.PI, step: 0.001 })
   get debugRotate() {
     return this.rotate;
   }
@@ -180,7 +180,7 @@ export class Sprite2D extends WithDebugGui(THREE.Mesh) implements Sprite2DParame
     this.set({ rotate: v });
   }
 
-  @DebugGui.number({ name: "opacity", folder: "Sprite2D", min: 0, max: 1, step: 0.01 })
+  @DebugGUI.number({ name: "opacity", folder: "Sprite2D", min: 0, max: 1, step: 0.01 })
   get debugOpacity() {
     return this.opacity;
   }
@@ -188,7 +188,7 @@ export class Sprite2D extends WithDebugGui(THREE.Mesh) implements Sprite2DParame
     this.set({ opacity: v });
   }
 
-  @DebugGui.number({ name: "visible", folder: "Sprite2D", min: 0, max: 1, step: 1 })
+  @DebugGUI.number({ name: "visible", folder: "Sprite2D", min: 0, max: 1, step: 1 })
   get debugShaderVisible() {
     return this.shaderVisible ? 1 : 0;
   }

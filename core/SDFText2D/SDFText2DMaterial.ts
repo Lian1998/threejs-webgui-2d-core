@@ -8,7 +8,7 @@ import { ATLAS_TEXTURE_SIZE } from "@core/SDFText2D/TinySdfAtlas";
 import { SDF_FONT_SIZE } from "@core/SDFText2D/TinySdfAtlas";
 import { SDF_BUFFER } from "@core/SDFText2D/TinySdfAtlas";
 import { SDF_SIZE } from "@core/SDFText2D/TinySdfAtlas";
-import { DebugGui, WithDebugGui } from "@core/DebugGUI";
+import { DebugGUI, WithDebugGUI } from "@core/Mixins";
 import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 export interface SDFText2DMaterialParameters extends THREE.ShaderMaterialParameters {
@@ -41,7 +41,7 @@ export interface SDFText2DMaterialParameters extends THREE.ShaderMaterialParamet
   uVisible?: number;
 }
 
-export class SDFText2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
+export class SDFText2DMaterial extends WithDebugGUI(THREE.RawShaderMaterial) {
   static textureArray: THREE.DataArrayTexture = undefined;
   private static getTextureArray() {
     const pages = tinySDFAtlas.getAllPages();
@@ -106,7 +106,7 @@ export class SDFText2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     DirtyRenderScheduler.invalidateDefault(`SDFText2DMaterial.${property}`);
   }
 
-  @DebugGui.color({ name: "text color", folder: "SDFText2D" })
+  @DebugGUI.color({ name: "text color", folder: "SDFText2D" })
   get uTextColor(): THREE.Color {
     return this.uniforms.uTextColor.value;
   }
@@ -115,7 +115,7 @@ export class SDFText2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uTextColor");
   }
 
-  @DebugGui.color({ name: "outline color", folder: "SDFText2D" })
+  @DebugGUI.color({ name: "outline color", folder: "SDFText2D" })
   get uOutlineColor(): THREE.Color {
     return this.uniforms.uOutlineColor.value;
   }
@@ -124,7 +124,7 @@ export class SDFText2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uOutlineColor");
   }
 
-  @DebugGui.color({ name: "background color", folder: "SDFText2D" })
+  @DebugGUI.color({ name: "background color", folder: "SDFText2D" })
   get uBackgroundColor(): THREE.Color {
     return this.uniforms.uBackgroundColor.value;
   }
@@ -133,7 +133,7 @@ export class SDFText2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uBackgroundColor");
   }
 
-  @DebugGui.number({ name: "background alpha", folder: "SDFText2D", min: 0, max: 1, step: 0.01 })
+  @DebugGUI.number({ name: "background alpha", folder: "SDFText2D", min: 0, max: 1, step: 0.01 })
   get uBackgroundAlpha(): number {
     return this.uniforms.uBackgroundAlpha.value;
   }
@@ -142,7 +142,7 @@ export class SDFText2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uBackgroundAlpha");
   }
 
-  @DebugGui.number({ name: "background radius", folder: "SDFText2D", min: 0, max: 0.5, step: 0.005 })
+  @DebugGUI.number({ name: "background radius", folder: "SDFText2D", min: 0, max: 0.5, step: 0.005 })
   get uBackgroundRadius(): number {
     return this.uniforms.uBackgroundRadius.value;
   }
@@ -151,7 +151,7 @@ export class SDFText2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uBackgroundRadius");
   }
 
-  @DebugGui.number({ name: "threshold", folder: "SDFText2D", min: 0, max: 1, step: 0.001 })
+  @DebugGUI.number({ name: "threshold", folder: "SDFText2D", min: 0, max: 1, step: 0.001 })
   get uThreshold(): number {
     return this.uniforms.uThreshold.value;
   }
@@ -160,7 +160,7 @@ export class SDFText2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uThreshold");
   }
 
-  @DebugGui.number({ name: "outline threshold", folder: "SDFText2D", min: 0, max: 1, step: 0.001 })
+  @DebugGUI.number({ name: "outline threshold", folder: "SDFText2D", min: 0, max: 1, step: 0.001 })
   get uOutlineThreshold(): number {
     return this.uniforms.uOutlineThreshold.value;
   }
@@ -169,7 +169,7 @@ export class SDFText2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uOutlineThreshold");
   }
 
-  @DebugGui.number({ name: "smoothing", folder: "SDFText2D", min: 0, max: 0.2, step: 0.001 })
+  @DebugGUI.number({ name: "smoothing", folder: "SDFText2D", min: 0, max: 0.2, step: 0.001 })
   get uSmoothing(): number {
     return this.uniforms.uSmoothing.value;
   }
@@ -178,7 +178,7 @@ export class SDFText2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uSmoothing");
   }
 
-  @DebugGui.number({ name: "opacity", folder: "SDFText2D", min: 0, max: 1, step: 0.01 })
+  @DebugGUI.number({ name: "opacity", folder: "SDFText2D", min: 0, max: 1, step: 0.01 })
   get uOpacity(): number {
     return this.uniforms.uOpacity.value;
   }
@@ -187,7 +187,7 @@ export class SDFText2DMaterial extends WithDebugGui(THREE.RawShaderMaterial) {
     this.invalidateRender("uOpacity");
   }
 
-  @DebugGui.number({ name: "visible", folder: "SDFText2D", min: 0, max: 1, step: 1 })
+  @DebugGUI.number({ name: "visible", folder: "SDFText2D", min: 0, max: 1, step: 1 })
   get uVisible(): number {
     return this.uniforms.uVisible.value;
   }

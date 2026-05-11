@@ -1,3 +1,5 @@
+// 在此文件中确定多视口如何绑定相机逻辑,
+
 import * as THREE from "three";
 
 const MAP_CENTER = [565816.5, -2397680.7]; // 地图中心点
@@ -53,13 +55,24 @@ const MAP_DEFAULT_ZOOM = orthoCamera.zoom;
 export { MAP_CENTER };
 export { MAP_VIEW_SIZE };
 export { MAP_DEFAULT_ZOOM };
-export { orthoCamera };
-export { mapControls };
 
 import { ViewportResizeDispatcher } from "@core/EventDispathcers/ViewportResizeDispatcher";
-const registerOrthoCameraOnResize = () => {
-  ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().addResizeEventListener(({ message: { containerWidth, containerHeight } }) => {
-    const aspect = containerWidth / containerHeight;
+export const boudingViewport = () => {
+  // 当前项目仅有一个视口
+  const viewport = document.querySelector<HTMLDivElement>("#viewport") ?? document.querySelector<HTMLDivElement>("#gui-viewport");
+  if (!viewport) throw new Error("无法找到id为 '#viewport' 或 '#gui-viewport' 的视口元素");
+
+  // 初始化渲染器
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, premultipliedAlpha: true });
+  renderer.setClearColor(0xffffff, 0.0);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  viewport.appendChild(renderer.domElement); // 挂载canvas
+
+  const viewport1 = new ViewportResizeDispatcher(renderer); // 创建对viewport视口的监听器
+  viewport1.camera = orthoCamera;
+  viewport1.controls = mapControls;
+  viewport1.addResizeEventListener(({ message: { width, height } }) => {
+    const aspect = width / height;
     orthoCamera.left = -MAP_VIEW_SIZE * aspect;
     orthoCamera.right = MAP_VIEW_SIZE * aspect;
     orthoCamera.top = MAP_VIEW_SIZE;
@@ -67,4 +80,3 @@ const registerOrthoCameraOnResize = () => {
     orthoCamera.updateProjectionMatrix();
   });
 };
-export { registerOrthoCameraOnResize };

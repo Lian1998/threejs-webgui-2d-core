@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { WithClassInstanceMap } from "@core/Mixins/ClassInstanceMap";
+import { WithClassInstanceMap } from "@core/Mixins/";
 import { GpuPickManager } from "@core/GpuPickManager";
 import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
 import { GpuPickEvent } from "@core/interfaces/GpuPickFeature";

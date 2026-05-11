@@ -5,7 +5,6 @@ export * from "./MeshLine/";
 export * from "./MeshPolygon/";
 export * from "./GpuPickManager/";
 export * from "./RenderScheduler/";
-export * from "./DebugGUI/";
 export * from "./ECS/";
 export * from "./Batching/";
 
