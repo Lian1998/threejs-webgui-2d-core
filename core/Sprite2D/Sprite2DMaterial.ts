@@ -6,7 +6,6 @@ import fragmentShader from "./shaders/sprite2d.fs?raw";
 import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
 import { ATLAS_TEXTURE_SIZE } from "@core/Sprite2D/Sprite2DAtlas";
 import { DebugGUI, WithDebugGUI } from "@core/Mixins";
-import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 export const Sprite2DBlendMode = {
   multiply: 0,
@@ -82,17 +81,12 @@ export class Sprite2DMaterial extends WithDebugGUI(THREE.RawShaderMaterial) {
     this.setValues(parameters);
   }
 
-  private invalidateRender(property: string) {
-    DirtyRenderScheduler.invalidateDefault(`Sprite2DMaterial.${property}`);
-  }
-
   @DebugGUI.color({ name: "blend color", folder: "Sprite2D" })
   get uBlendColor(): THREE.Color {
     return this.uniforms.uBlendColor.value;
   }
   set uBlendColor(v: THREE.Color) {
     this.uniforms.uBlendColor.value.copy(v);
-    this.invalidateRender("uBlendColor");
   }
 
   @DebugGUI.number({ name: "blend mode", folder: "Sprite2D", min: 0, max: 5, step: 1 })
@@ -101,7 +95,6 @@ export class Sprite2DMaterial extends WithDebugGUI(THREE.RawShaderMaterial) {
   }
   set uBlendMode(v: number) {
     this.uniforms.uBlendMode.value = v;
-    this.invalidateRender("uBlendMode");
   }
 
   @DebugGUI.number({ name: "opacity", folder: "Sprite2D", min: 0, max: 1, step: 0.01 })
@@ -110,7 +103,6 @@ export class Sprite2DMaterial extends WithDebugGUI(THREE.RawShaderMaterial) {
   }
   set uOpacity(v: number) {
     this.uniforms.uOpacity.value = v;
-    this.invalidateRender("uOpacity");
   }
 
   @DebugGUI.number({ name: "visible", folder: "Sprite2D", min: 0, max: 1, step: 1 })
@@ -119,7 +111,6 @@ export class Sprite2DMaterial extends WithDebugGUI(THREE.RawShaderMaterial) {
   }
   set uVisible(v: number) {
     this.uniforms.uVisible.value = v;
-    this.invalidateRender("uVisible");
   }
 
   get useMultiplyColor(): boolean {
@@ -130,6 +121,5 @@ export class Sprite2DMaterial extends WithDebugGUI(THREE.RawShaderMaterial) {
     else delete this.defines.USE_MULTIPLY_COLOR;
 
     this.needsUpdate = true;
-    this.invalidateRender("useMultiplyColor");
   }
 }

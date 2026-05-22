@@ -4,7 +4,6 @@ import { Sprite2DMaterial, Sprite2DBlendMode } from "./Sprite2DMaterial";
 import type { Sprite2DBlendModeName } from "./Sprite2DMaterial";
 import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
 import { DebugGUI, WithDebugGUI } from "@core/Mixins";
-import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 export interface Sprite2DParameters {
   /** Atlas url/key. */
@@ -77,7 +76,6 @@ export class Sprite2D extends WithDebugGUI(THREE.Mesh) implements Sprite2DParame
     this.syncMaterialState();
 
     this.renderOrder = next.renderOrder ?? this.renderOrder ?? -1;
-    DirtyRenderScheduler.invalidateDefault("Sprite2D.apply");
   }
 
   private normalizeParameters(parameters: Partial<Sprite2DParameters>): Required<Sprite2DParameters> {

@@ -1,3 +1,29 @@
+// 创建按需渲染调度器
+// const renderScheduler = new DirtyRenderScheduler({
+//   renderer,
+//   passes: [
+//     {
+//       name: "BaseMap",
+//       scene: ThreejsGroups.BaseMap,
+//       camera: orthoCamera,
+//       autoClear: true,
+//       autoClearColor: true,
+//       autoClearDepth: true,
+//       autoClearStencil: true,
+//     },
+//     {
+//       name: "Meshes",
+//       scene: ThreejsGroups.Meshes,
+//       camera: orthoCamera,
+//       autoClear: false,
+//       autoClearColor: false,
+//       autoClearDepth: true,
+//       autoClearStencil: true,
+//     },
+//   ],
+// });
+// renderScheduler.bindControls(mapControls as any);
+
 import * as THREE from "three";
 
 export type DirtyRenderReason = string | undefined;

@@ -6,7 +6,6 @@ import { MeshPolygonGeometry } from "@core/index";
 import { MeshPolygonMaterial } from "@core/index";
 import { MeshLineGeometry } from "@core/index";
 import { MeshLineMaterial } from "@core/index";
-import { DirtyRenderScheduler } from "@core/index";
 import { GpuPickManager } from "@core/GpuPickManager";
 import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
 
@@ -150,8 +149,6 @@ export const rebuildPreDefBlockLayer = (data: PreDefBlockItem[]) => {
   outline.frustumCulled = false;
   ThreejsGroups.Meshes.add(outline);
   preDefBlockLayer.outlineMesh = outline;
-
-  DirtyRenderScheduler.invalidateDefault("predef-block:rebuild");
 };
 
 export const removePreDefBlockByName = (areaName: string) => {

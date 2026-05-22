@@ -1,5 +1,3 @@
-import { DirtyRenderScheduler } from "@core/RenderScheduler";
-
 type Constructor<T = object> = abstract new (...args: any[]) => T;
 type GuiController = any;
 type GuiFolder = any;
@@ -314,13 +312,10 @@ export class DebugGUIManager {
   private configureController(controller: GuiController, instance: object, meta: DebugGUIControlMeta): void {
     controller.onChange?.((value: any) => {
       meta.onChange?.(value, instance, meta.property);
-      // GUI 修改任何可视属性后都标记一帧, 面板调参时不需要业务代码手动 render。
-      DirtyRenderScheduler.invalidateDefault(`gui:${instance.constructor?.name}.${meta.property}`);
     });
 
     controller.onFinishChange?.((value: any) => {
       meta.onFinishChange?.(value, instance, meta.property);
-      DirtyRenderScheduler.invalidateDefault(`gui-finish:${instance.constructor?.name}.${meta.property}`);
     });
 
     if (meta.listen) controller.listen?.();

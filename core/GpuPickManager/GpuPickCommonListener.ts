@@ -5,7 +5,6 @@ import { GpuPickManager } from "@core/GpuPickManager";
 import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
 import { GpuPickEvent } from "@core/interfaces/GpuPickFeature";
 import throttle from "@libs/lodash/src/throttle";
-import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 /**
  * GpuPickCommonListener
@@ -223,7 +222,6 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
     const fn = feature?.[callback];
     if (typeof fn === "function") {
       fn.call(feature, event);
-      DirtyRenderScheduler.invalidateDefault(`pick:${String(callback)}`);
     }
   }
 }

@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { DirtyRenderScheduler, GpuPickCommonListener, ViewportResizeDispatcher } from "@core/index";
+import { GpuPickCommonListener, ViewportResizeDispatcher } from "@core/index";
 import { DebugGUIManager } from "@core/Mixins";
 import { tinySDFAtlas } from "@core/SDFText2D/TinySdfAtlas";
 import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
@@ -26,32 +26,17 @@ async function initializeInMap() {
   console.log(resizeDispatcher);
   const { renderer, camera: orthoCamera, controls: mapControls } = resizeDispatcher;
 
-  // 创建按需渲染调度器
-  const renderScheduler = new DirtyRenderScheduler({
-    renderer,
-    passes: [
-      {
-        name: "BaseMap",
-        scene: ThreejsGroups.BaseMap,
-        camera: orthoCamera,
-        autoClear: true,
-        autoClearColor: true,
-        autoClearDepth: true,
-        autoClearStencil: true,
-      },
-      {
-        name: "Meshes",
-        scene: ThreejsGroups.Meshes,
-        camera: orthoCamera,
-        autoClear: false,
-        autoClearColor: false,
-        autoClearDepth: true,
-        autoClearStencil: true,
-      },
-    ],
-  });
-  renderScheduler.bindControls(mapControls as any);
-  resizeDispatcher.addResizeEventListener(() => renderScheduler.invalidate("resize")); // 当触发reszie事件时, 标记脏画面
+  const animate = () => {
+    renderer.render(ThreejsGroups.BaseMap, orthoCamera);
+
+    renderer.autoClear = false;
+    renderer.autoClearColor = false;
+    renderer.autoClearDepth = true;
+    renderer.autoClearStencil = true;
+
+    renderer.render(ThreejsGroups.Meshes, orthoCamera);
+    requestAnimationFrame(animate);
+  };
 
   // 启动调试面板(dev模式)
   if (import.meta.env.DEV) void DebugGUIManager.instance.mount({ title: "WebGUI Debug", width: 340, closed: true });
@@ -61,16 +46,12 @@ async function initializeInMap() {
   mapControls.addEventListener("start", () => (gpuPickCommonListener.enabled = false));
   mapControls.addEventListener("end", () => {
     gpuPickCommonListener.enabled = true;
-    renderScheduler.invalidate("controls-end");
   });
 
   // 初始化底图
   initBaseMap();
-  renderScheduler.invalidate("base-map-init");
 
   initRestfulData().then(() => {
-    renderScheduler.invalidate("restful-data");
-
     socketioSubModule_map.registerListener<{
       updated: number;
       AGVX: number;
@@ -78,9 +59,10 @@ async function initializeInMap() {
       Heading: number;
     }>(`DF.VMS.V001.AhtRealStatus`, (itemValue, response) => {
       console.log(`DF.VMS.V001.AhtRealStatus`, itemValue, response);
-      renderScheduler.invalidate("socket:DF.VMS.V001.AhtRealStatus");
     });
 
     socketioSubModule_map.subReal(undefined, `DF.VMS.V001.AhtRealStatus`);
   });
+
+  animate();
 }

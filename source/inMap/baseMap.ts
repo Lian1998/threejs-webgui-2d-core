@@ -10,7 +10,6 @@ import { MeshLineMaterial } from "@core/MeshLine/";
 
 import { MeshPolygonGeometry } from "@core/MeshPolygon/";
 import { MeshPolygonMaterial } from "@core/MeshPolygon/";
-import { DirtyRenderScheduler } from "@core/index";
 
 import { ThreejsGroups } from "@source/inMap/variables";
 
@@ -29,7 +28,6 @@ export const initBaseMap = () => {
       const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
       mesh.frustumCulled = false;
       ThreejsGroups.BaseMap.add(mesh);
-      DirtyRenderScheduler.invalidateDefault("base-map:coastline");
     });
 
   window
@@ -42,7 +40,6 @@ export const initBaseMap = () => {
       const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
       mesh.frustumCulled = false;
       ThreejsGroups.BaseMap.add(mesh);
-      DirtyRenderScheduler.invalidateDefault("base-map:rails");
     });
 
   window
@@ -55,7 +52,6 @@ export const initBaseMap = () => {
       const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
       mesh.frustumCulled = false;
       ThreejsGroups.BaseMap.add(mesh);
-      DirtyRenderScheduler.invalidateDefault("base-map:road-edge");
     });
 
   window
@@ -68,7 +64,6 @@ export const initBaseMap = () => {
       const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
       mesh.frustumCulled = false;
       ThreejsGroups.BaseMap.add(mesh);
-      DirtyRenderScheduler.invalidateDefault("base-map:road-lane-solid");
     });
 
   window
@@ -81,7 +76,6 @@ export const initBaseMap = () => {
       const mesh = new THREE.Mesh(meshLineGeometry, meshLineMaterial);
       mesh.frustumCulled = false;
       ThreejsGroups.BaseMap.add(mesh);
-      DirtyRenderScheduler.invalidateDefault("base-map:temple-block");
     });
 
   window
@@ -94,7 +88,6 @@ export const initBaseMap = () => {
       const mesh = new THREE.Mesh(meshPolygonGeometry, meshPolygonMaterial);
       mesh.frustumCulled = false;
       ThreejsGroups.BaseMap.add(mesh);
-      DirtyRenderScheduler.invalidateDefault("base-map:marks");
     });
 
   // 底图不需要进行剔除判断

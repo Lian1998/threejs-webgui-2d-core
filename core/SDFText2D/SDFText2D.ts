@@ -4,7 +4,6 @@ import { SDFText2DGeometry } from "./SDFText2DGeometry";
 import type { SDFText2DMaterialParameters } from "./SDFText2DMaterial";
 import { SDFText2DMaterial } from "./SDFText2DMaterial";
 import { DebugGUI, WithDebugGUI } from "@core/Mixins";
-import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 type SDFText2DStyleParameters = Pick<SDFText2DMaterialParameters, "uTextColor" | "uOutlineColor" | "uBackgroundColor" | "uBackgroundAlpha" | "uBackgroundRadius" | "uThreshold" | "uOutlineThreshold" | "uSmoothing" | "uOpacity" | "uVisible">;
 
@@ -84,8 +83,6 @@ export class SDFText2D extends WithDebugGUI(THREE.Mesh) implements SDFText2DPara
     if (parameters.uVisible !== undefined) material.uVisible = parameters.uVisible;
 
     if (parameters.renderOrder !== undefined) this.renderOrder = parameters.renderOrder;
-
-    DirtyRenderScheduler.invalidateDefault("SDFText2D.apply");
   }
 
   private isSamePadding(a: number | number[] | undefined, b: number | number[] | undefined): boolean {

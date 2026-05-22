@@ -2,7 +2,6 @@ import * as THREE from "three";
 import vertexShader from "./shaders/mesh-polygon.vs?raw";
 import fragmentShader from "./shaders/mesh-polygon.fs?raw";
 import { DebugGUI, WithDebugGUI } from "@core/Mixins";
-import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 export interface MeshPolygonMaterialParameters extends THREE.ShaderMaterialParameters {
   /** 线条颜色 */
@@ -48,17 +47,12 @@ export class MeshPolygonMaterial extends WithDebugGUI(THREE.RawShaderMaterial) {
     this.setValues(parameters);
   }
 
-  private invalidateRender(property: string) {
-    DirtyRenderScheduler.invalidateDefault(`MeshPolygonMaterial.${property}`);
-  }
-
   @DebugGUI.color({ name: "color", folder: "MeshPolygon" })
   get uColor() {
     return this.uniforms.uColor.value;
   }
   set uColor(v: THREE.Color) {
     this.uniforms.uColor.value.copy(v);
-    this.invalidateRender("uColor");
   }
 
   @DebugGUI.number({ name: "opacity", folder: "MeshPolygon", min: 0, max: 1, step: 0.01 })
@@ -67,7 +61,6 @@ export class MeshPolygonMaterial extends WithDebugGUI(THREE.RawShaderMaterial) {
   }
   set uOpacity(v: number) {
     this.uniforms.uOpacity.value = v;
-    this.invalidateRender("uOpacity");
   }
 
   @DebugGUI.number({ name: "shadow", folder: "MeshPolygon", min: 0, max: 1, step: 1 })
@@ -76,7 +69,6 @@ export class MeshPolygonMaterial extends WithDebugGUI(THREE.RawShaderMaterial) {
   }
   set uUseShadow(v: 0 | 1) {
     this.uniforms.uUseShadow.value = v;
-    this.invalidateRender("uUseShadow");
   }
 
   @DebugGUI.vector2({ name: "shadow array", folder: "MeshPolygon", min: 0, max: 128, step: 0.1 })
@@ -85,7 +77,6 @@ export class MeshPolygonMaterial extends WithDebugGUI(THREE.RawShaderMaterial) {
   }
   set uShadowArray(v: THREE.Vector2) {
     this.uniforms.uShadowArray.value.copy(v);
-    this.invalidateRender("uShadowArray");
   }
 
   get uResolution() {
@@ -93,7 +84,6 @@ export class MeshPolygonMaterial extends WithDebugGUI(THREE.RawShaderMaterial) {
   }
   set uResolution(v: THREE.Vector2) {
     this.uniforms.uResolution.value.copy(v);
-    this.invalidateRender("uResolution");
   }
 
   get uPixelRatio() {
@@ -101,7 +91,6 @@ export class MeshPolygonMaterial extends WithDebugGUI(THREE.RawShaderMaterial) {
   }
   set uPixelRatio(v: number) {
     this.uniforms.uPixelRatio.value = v;
-    this.invalidateRender("uPixelRatio");
   }
 
   override copy(source: MeshPolygonMaterial): this {

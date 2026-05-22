@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { DirtyRenderScheduler } from "@core/RenderScheduler";
 
 export interface BatchedMeshBuilderParameters {
   maxInstanceCount: number;
@@ -57,7 +56,6 @@ export class BatchedMeshBuilder {
 
     const geometryId = this.mesh.addGeometry(geometry, reservedVertexRange, reservedIndexRange);
     this.geometryIds.set(key, geometryId);
-    DirtyRenderScheduler.invalidateDefault(`batch:add-geometry:${key}`);
     return geometryId;
   }
 
@@ -80,21 +78,18 @@ export class BatchedMeshBuilder {
   /** 更新单个实例的局部矩阵, 适合 WebSocket 点位驱动设备移动。 */
   setMatrix(instanceId: number, matrix: THREE.Matrix4): this {
     this.mesh.setMatrixAt(instanceId, matrix);
-    DirtyRenderScheduler.invalidateDefault(`batch:matrix:${instanceId}`);
     return this;
   }
 
   /** 更新 BatchedMesh 自带的 instance color, shader 需支持 USE_BATCHING_COLOR 才能消费。 */
   setColor(instanceId: number, color: THREE.Color): this {
     this.mesh.setColorAt(instanceId, color);
-    DirtyRenderScheduler.invalidateDefault(`batch:color:${instanceId}`);
     return this;
   }
 
   /** Shader/renderer 级别的实例显隐, 不需要从场景树移除对象。 */
   setVisible(instanceId: number, visible: boolean): this {
     this.mesh.setVisibleAt(instanceId, visible);
-    DirtyRenderScheduler.invalidateDefault(`batch:visible:${instanceId}`);
     return this;
   }
 
@@ -102,7 +97,6 @@ export class BatchedMeshBuilder {
   deleteInstance(instanceId: number): this {
     this.mesh.deleteInstance(instanceId);
     this.instances.delete(instanceId);
-    DirtyRenderScheduler.invalidateDefault(`batch:delete-instance:${instanceId}`);
     return this;
   }
 
