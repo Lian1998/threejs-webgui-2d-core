@@ -183,7 +183,7 @@ export class DebugGUIManager {
     if (this.gui) return this;
 
     // 动态导入让 lil-gui 只在开发期需要时加载, 避免主包固定携带调试 UI。
-    const { GUI } = await import("three_addons/libs/lil-gui.module.min.js");
+    const { GUI } = await import("three/addons/libs/lil-gui.module.min.js");
     this.gui = new GUI({
       title: options.title ?? "WebGUI Debug",
       width: options.width ?? 320,

@@ -20,8 +20,8 @@ new ViewportResizeDispatcher(renderer);
 
 const viewSize = MAP_VIEW_SIZE;
 const orthoCamera = new THREE.OrthographicCamera(-viewSize * aspect, viewSize * aspect, viewSize, -viewSize, 0.1, 5000);
-ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().addResizeEventListener(({ message: { containerWidth, containerHeight } }) => {
-  const aspect = containerWidth / containerHeight;
+ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().addResizeEventListener(({ message: { width, height } }) => {
+  const aspect = width / height;
   orthoCamera.left = -MAP_VIEW_SIZE * aspect;
   orthoCamera.right = MAP_VIEW_SIZE * aspect;
   orthoCamera.top = MAP_VIEW_SIZE;
@@ -29,7 +29,7 @@ ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().addResizeE
   orthoCamera.updateProjectionMatrix();
 });
 
-import { MapControls } from "three_addons/controls/MapControls.js";
+import { MapControls } from "three/addons/controls/MapControls.js";
 const center = new THREE.Vector3(MAP_CENTER[0], 0, MAP_CENTER[1]);
 const controls = new MapControls(orthoCamera, viewport);
 
@@ -76,7 +76,7 @@ scene.add(group0);
 
 {
   const _resolution = new THREE.Vector2(width, height);
-  ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().addResizeEventListener(({ message: { rendererWidth, rendererHeight } }) => _resolution.set(rendererWidth, rendererHeight));
+  ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().addResizeEventListener(({ message: { width, height } }) => _resolution.set(width, height));
 
   // 线
   {

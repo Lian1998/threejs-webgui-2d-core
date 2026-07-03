@@ -36,15 +36,16 @@ export default defineConfig(({ command, mode }) => {
         "@core": _p("./core"),
         "@assets": _p("./assets"),
         "@libs": _p("./libs"),
+        "three/addons": _p("./libs/three.js-r170/examples/jsm"),
+        "three/src": _p("./libs/three.js-r170/src"),
         "three": _p("./libs/three.js-r170/src/Three.js"),
-        "three_addons": _p("./libs/three.js-r170/examples/jsm"),
         "earcut":  _p("./libs/earcut-3.0.2/src/earcut.js"),
         "tiny-sdf": _p("./libs/tiny-sdf-2.0.7/index.js"),
       },
     },
     
     optimizeDeps: {
-      include: ["three", "three_addons"],
+      include: ["three", "three/addons"],
     },
 
     plugins: [vue(), vueJsx()],

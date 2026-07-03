@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { WithClassInstanceMap } from "@core/Mixins/";
-import { MapControls } from "three_addons/controls/MapControls.js";
+import { MapControls } from "three/addons/controls/MapControls.js";
 
 type Viewport = {
   id: string;
@@ -19,7 +19,7 @@ type TEventMap = {
 };
 
 /**
- * ViewportResizeDispatcher: 用于监听某个视口大小的变化更新
+ * ViewportResizeDispatcher: 用于监听某个视口(在外部css驱动下)大小的变化更新
  *
  * **为什么需要此类?**
  * 假设将threejs的renderer.domElement手动挂载到div.container下, 再用css控制div.container下的这个canvas撑满div.container

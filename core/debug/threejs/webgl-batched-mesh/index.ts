@@ -1,7 +1,7 @@
 import "normalize.css";
 
 import * as THREE from "three";
-import { OrbitControls } from "three_addons/controls/OrbitControls.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 ///////////////////////////////////////////
 

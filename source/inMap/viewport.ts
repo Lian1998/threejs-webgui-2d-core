@@ -11,7 +11,7 @@ const aspect = width / height;
 
 const orthoCamera = new THREE.OrthographicCamera(-MAP_VIEW_SIZE * aspect, MAP_VIEW_SIZE * aspect, MAP_VIEW_SIZE, -MAP_VIEW_SIZE, 0.1, 5000);
 
-import { MapControls } from "three_addons/controls/MapControls.js";
+import { MapControls } from "three/addons/controls/MapControls.js";
 const center = new THREE.Vector3(MAP_CENTER[0], 0, MAP_CENTER[1]);
 const mapControls = new MapControls(orthoCamera, viewport);
 

@@ -260,7 +260,7 @@ const createTextMesh = (text: string, fontSize: number = 4, lineHeight: number =
   return new THREE.Mesh(geometry, material);
 };
 
-import { OrbitControls } from "three_addons/controls/OrbitControls.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const vWidth = 512;
 const vHeight = 512;
