@@ -24,7 +24,7 @@
 > => `CanvasVectorLayerRenderer<CanvasLayerRenderer<LayerRenderer>>.renderFrame` => renderWorlds(这里的 `executorGroup` 按 `图元zIndex` 和 `图元类型` 来调度绘制)
 
 3. openlayers 本身在项目定位上不像`cesium`, `mapbox`, 完全没有三维渲染能力, 无法让项目平滑过渡到web轻三维阶段
-4. openlayers 的GIS倾向API封装导致了很多, 我们专业(大场景工控WebGUI)的需求实现困难, 比如:
+4. openlayers 是一个针对GIS专业的框架, 它的API都是根据GIS专业进行封装的, 我们专业(大场景工控WebGUI)的需求用这一套API实现比较困难, 比如:
    1. 拾取管线(我做了一些上层封装优化了业务端的拾取管线API使用模式), 但是其核心拾取逻辑是依赖于openlayers的buffer优化后的extent的, 代码很深, 不太好优化
-   2. 对于贴图的缩放比例对齐(我封装额外的管线, 但是只能做到懒对齐并且性能较差无法平滑缩放设备贴图)
-   4. 在设备旁显示设备状态时逻辑比较复杂, 且当支持设备状态等细小图元支持拾取时非常复杂
+   2. 贴图的缩放比例很难对齐(我通过额外封装管线勉强实现懒对齐但性能较差, 无法平滑缩放设备贴图)
+   3. 在设备旁显示设备状态小图标时逻辑比较复杂, 且当支持设备状态等细小图元支持拾取时非常复杂
