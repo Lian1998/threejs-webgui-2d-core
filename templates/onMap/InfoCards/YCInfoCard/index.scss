@@ -1,0 +1,21 @@
+.yc-info-card {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+
+  .graphic-card {
+    .svg-window {
+      height: 230px;
+    }
+  }
+}
+
+.yc-info-card {
+  .information-card {
+    .ant-tabs {
+      .ant-tabs-content-holder {
+        height: 330px;
+      }
+    }
+  }
+}

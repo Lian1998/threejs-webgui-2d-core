@@ -1,0 +1,47 @@
+// 状态表格
+
+.gui-infocard {
+  .dynamic-form {
+    .dynamic-form-table {
+      // 普通翻页按钮
+      .ant-pagination {
+        .ant-pagination-item {
+          background-color: var(--overlay-background-darker);
+          a {
+            color: var(--overlay-font);
+          }
+        }
+
+        .ant-pagination-item-active {
+          background-color: var(--overlay-primary-color);
+          a {
+            color: var(--overlay-background);
+          }
+        }
+      }
+
+      // 前一页后一页
+      .ant-pagination {
+        .ant-pagination-prev {
+          background-color: var(--overlay-background-darker);
+          a {
+            color: var(--overlay-font);
+          }
+        }
+        .ant-pagination-next {
+          background-color: var(--overlay-background-darker);
+          a {
+            color: var(--overlay-font);
+          }
+        }
+      }
+
+      // 其他
+      .ant-pagination {
+        svg {
+          fill: var(--overlay-font);
+        }
+      }
+    }
+  }
+}

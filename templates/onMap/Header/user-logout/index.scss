@@ -1,0 +1,22 @@
+#gui-container {
+  #gui-header {
+    .header-right {
+      .tools {
+        .user-logout {
+          cursor: pointer;
+          svg {
+            fill: var(--ui-font);
+            width: 25px;
+            height: 25px;
+          }
+        }
+
+        .user-logout:hover {
+          svg {
+            fill: var(--ui-primary-font) !important;
+          }
+        }
+      }
+    }
+  }
+}

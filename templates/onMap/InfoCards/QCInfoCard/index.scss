@@ -1,0 +1,62 @@
+.qc-info-container {
+  display: flex;
+  flex-direction: column;
+  width: 580px;
+
+  .graphic-card {
+    .qc-details {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .svg-window {
+        height: 230px;
+      }
+    }
+
+    .status-bar {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+
+      .image-status {
+        margin-right: 3px;
+        user-select: none;
+        position: relative;
+
+        img {
+          width: 26px;
+        }
+
+        .image-status-tip-value {
+          top: 1px;
+          line-height: 26px;
+          width: 26px;
+          position: absolute;
+          pointer-events: none;
+          text-align: center;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+}
+
+.qc-info-container {
+  .information-card {
+    .ant-tabs {
+      .ant-tabs-content-holder {
+        height: 420px;
+        .ant-tabs-tabpane {
+          .ant-tabs {
+            .ant-tabs-content-holder {
+              height: 377px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

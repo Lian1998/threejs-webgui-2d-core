@@ -1,0 +1,144 @@
+// 设备弹窗
+
+.gui-infocard {
+  .graphic-card {
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    border: 1px solid var(--overlay-border);
+
+    .svg-window {
+      position: relative;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--overlay-background);
+
+      .svg-fullscreen {
+        cursor: pointer;
+        position: absolute;
+        left: 5px;
+        top: 5px;
+        fill: var(--overlay-font);
+        width: 20px !important;
+        height: 20px !important;
+      }
+
+      .svg-fullscreen:hover {
+        fill: var(--overlay-primary-font);
+      }
+    }
+
+    .svg-window:fullscreen {
+      .svg-fullscreen {
+        left: 36px;
+        top: 36px;
+        width: 54px !important;
+        height: 54px !important;
+      }
+    }
+
+    .status-bar {
+      width: 100%;
+      margin: 5px 0px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: nowrap;
+
+      .image-status {
+        position: relative;
+        margin-right: 1px;
+        user-select: none;
+
+        img {
+          width: 32px;
+          height: 32px;
+        }
+
+        .image-status-tip-value {
+          position: absolute;
+          top: 0;
+          left: 0;
+
+          width: 32px;
+          line-height: 32px;
+          pointer-events: none;
+          text-align: center;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+
+  .information-card {
+    margin: 5px;
+
+    // tab页类型弹窗
+    .ant-tabs {
+      margin-top: 5px;
+      margin-left: 5px;
+
+      // tab页的导航栏
+      .ant-tabs-nav {
+        margin-bottom: 0px;
+
+        .ant-tabs-nav-wrap {
+          .ant-tabs-nav-list {
+            .ant-tabs-tab {
+              background-color: var(--overlay-background);
+
+              .ant-tabs-tab-btn {
+                color: var(--overlay-font);
+              }
+            }
+
+            .ant-tabs-tab.ant-tabs-tab-active {
+              border-color: var(--overlay-primary-color);
+              .ant-tabs-tab-btn {
+                font-weight: 600;
+                color: var(--overlay-primary-font);
+              }
+            }
+          }
+        }
+
+        .ant-tabs-nav-operations {
+          .ant-tabs-nav-more {
+            svg {
+              fill: var(--overlay-font);
+            }
+          }
+        }
+      }
+
+      // 内容
+      .ant-tabs-content-holder {
+        border: 1px solid var(--overlay-border);
+        background-color: var(--overlay-background);
+        overflow-y: auto;
+
+        .ant-tabs-content {
+          .ant-tabs-tabpane {
+            color: var(--overlay-font);
+
+            // 表格自动渲染组件
+            .base-info-table-container {
+              margin: 5px 10px;
+              color: var(--overlay-font);
+
+              .column {
+                border-bottom: 1px solid var(--overlay-border);
+                box-sizing: border-box;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

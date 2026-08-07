@@ -1,0 +1,19 @@
+#gui-container {
+  #gui-header {
+    .header-right {
+      .tools {
+        .color-configuration {
+          margin-right: 10px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 25px;
+          height: 25px;
+          border-radius: 4px;
+          background-color: #ffffff;
+        }
+      }
+    }
+  }
+}

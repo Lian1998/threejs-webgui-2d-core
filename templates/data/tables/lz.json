@@ -1,0 +1,428 @@
+{
+  "bollards": [
+  {
+    "id": 1,
+    "berth": "6#泊位",
+    "site_no": "00",
+    "system_no": "LZ01",
+    "meter": 6,
+    "remark": "双小车岸桥"
+  },
+  {
+    "id": 2,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ02",
+    "meter": 24,
+    "remark": null
+  },
+  {
+    "id": 3,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ03",
+    "meter": 42,
+    "remark": null
+  },
+  {
+    "id": 4,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ04",
+    "meter": 60,
+    "remark": null
+  },
+  {
+    "id": 5,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ05",
+    "meter": 78,
+    "remark": null
+  },
+  {
+    "id": 6,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ06",
+    "meter": 96,
+    "remark": null
+  },
+  {
+    "id": 7,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ07",
+    "meter": 114,
+    "remark": null
+  },
+  {
+    "id": 8,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ08",
+    "meter": 132,
+    "remark": null
+  },
+  {
+    "id": 9,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ09",
+    "meter": 150,
+    "remark": null
+  },
+  {
+    "id": 10,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ10",
+    "meter": 168,
+    "remark": null
+  },
+  {
+    "id": 11,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ11",
+    "meter": 186,
+    "remark": null
+  },
+  {
+    "id": 12,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ12",
+    "meter": 204,
+    "remark": null
+  },
+  {
+    "id": 13,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ13",
+    "meter": 222,
+    "remark": null
+  },
+  {
+    "id": 14,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ14",
+    "meter": 240,
+    "remark": null
+  },
+  {
+    "id": 15,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ15",
+    "meter": 258,
+    "remark": null
+  },
+  {
+    "id": 16,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ16",
+    "meter": 276,
+    "remark": null
+  },
+  {
+    "id": 17,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ17",
+    "meter": 294,
+    "remark": null
+  },
+  {
+    "id": 18,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ18",
+    "meter": 312,
+    "remark": null
+  },
+  {
+    "id": 19,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ19",
+    "meter": 330,
+    "remark": null
+  },
+  {
+    "id": 20,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ20",
+    "meter": 348,
+    "remark": null
+  },
+  {
+    "id": 21,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ21",
+    "meter": 366,
+    "remark": null
+  },
+  {
+    "id": 22,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ22",
+    "meter": 384,
+    "remark": null
+  },
+  {
+    "id": 23,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ23",
+    "meter": 402,
+    "remark": null
+  },
+  {
+    "id": 24,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ24",
+    "meter": 420,
+    "remark": null
+  },
+  {
+    "id": 25,
+    "berth": "6#泊位",
+    "site_no": null,
+    "system_no": "LZ25",
+    "meter": 438,
+    "remark": null
+  },
+  {
+    "id": 26,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ26",
+    "meter": 456,
+    "remark": null
+  },
+  {
+    "id": 27,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ27",
+    "meter": 474,
+    "remark": null
+  },
+  {
+    "id": 28,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ28",
+    "meter": 492,
+    "remark": null
+  },
+  {
+    "id": 29,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ29",
+    "meter": 510,
+    "remark": null
+  },
+  {
+    "id": 30,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ30",
+    "meter": 528,
+    "remark": null
+  },
+  {
+    "id": 31,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ31",
+    "meter": 546,
+    "remark": null
+  },
+  {
+    "id": 32,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ32",
+    "meter": 564,
+    "remark": null
+  },
+  {
+    "id": 33,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ33",
+    "meter": 582,
+    "remark": null
+  },
+  {
+    "id": 34,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ34",
+    "meter": 600,
+    "remark": null
+  },
+  {
+    "id": 35,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ35",
+    "meter": 618,
+    "remark": null
+  },
+  {
+    "id": 36,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ36",
+    "meter": 636,
+    "remark": null
+  },
+  {
+    "id": 37,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ37",
+    "meter": 654,
+    "remark": null
+  },
+  {
+    "id": 38,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ38",
+    "meter": 672,
+    "remark": null
+  },
+  {
+    "id": 39,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ39",
+    "meter": 690,
+    "remark": null
+  },
+  {
+    "id": 40,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ40",
+    "meter": 708,
+    "remark": null
+  },
+  {
+    "id": 41,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ41",
+    "meter": 726,
+    "remark": null
+  },
+  {
+    "id": 42,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ42",
+    "meter": 744,
+    "remark": null
+  },
+  {
+    "id": 43,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ43",
+    "meter": 762,
+    "remark": null
+  },
+  {
+    "id": 44,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ44",
+    "meter": 780,
+    "remark": null
+  },
+  {
+    "id": 45,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ45",
+    "meter": 798,
+    "remark": null
+  },
+  {
+    "id": 46,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ46",
+    "meter": 816,
+    "remark": null
+  },
+  {
+    "id": 47,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ47",
+    "meter": 834,
+    "remark": null
+  },
+  {
+    "id": 48,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ48",
+    "meter": 852,
+    "remark": null
+  },
+  {
+    "id": 49,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ49",
+    "meter": 870,
+    "remark": null
+  },
+  {
+    "id": 50,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ50",
+    "meter": 888,
+    "remark": null
+  },
+  {
+    "id": 51,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ51",
+    "meter": 906,
+    "remark": null
+  },
+  {
+    "id": 52,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ52",
+    "meter": 924,
+    "remark": null
+  },
+  {
+    "id": 53,
+    "berth": "7#泊位",
+    "site_no": null,
+    "system_no": "LZ53",
+    "meter": 942,
+    "remark": null
+  }
+]
+}

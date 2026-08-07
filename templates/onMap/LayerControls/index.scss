@@ -1,0 +1,128 @@
+#gui-container {
+  #gui-layer-controls {
+    position: absolute;
+    right: calc(35px + 10px + 30px + 25px);
+    bottom: calc(35px + 10px + 30px + 25px + 30px);
+
+    #main-button {
+      left: 0;
+      top: 0;
+      position: relative;
+      cursor: pointer;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+
+      background-color: var(--ui-background);
+      border: 3px solid var(--ui-background-darker);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      span {
+        color: var(--ui-font);
+      }
+      svg {
+        fill: var(--ui-font);
+      }
+    }
+
+    #main-button:hover {
+      box-shadow: var(--ui-shadow);
+    }
+
+    .sub-button {
+      left: calc((70px - 60px) / 2);
+      top: calc((70px - 60px) / 2);
+      cursor: pointer;
+      width: 60px;
+      height: 60px;
+      font-size: 0.55rem;
+      border-radius: 50%;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      position: absolute;
+
+      transition-property: transform, opacity;
+      opacity: 0;
+
+      background-color: var(--ui-background);
+      border: 3px solid var(--ui-background-darker);
+
+      svg {
+        fill: var(--ui-font);
+      }
+    }
+
+    .sub-button.active {
+      opacity: 1;
+    }
+
+    .sub-button.disabled {
+      cursor: not-allowed;
+      background-color: #ff4d4f;
+      border: 4px dashed #ff0000;
+    }
+
+    // 关闭时候的默认位置
+    .sub-button:nth-child(1) {
+      transform: translate(0px, 0px) rotateZ(420.9deg);
+      transition-duration: 0.1s;
+    }
+    .sub-button:nth-child(2) {
+      transform: translate(0px, 0px) rotateZ(389.5deg);
+      transition-duration: 0.2s;
+    }
+    .sub-button:nth-child(3) {
+      transform: translate(0px, 0px) rotateZ(484.2deg);
+      transition-duration: 0.3s;
+    }
+    .sub-button:nth-child(4) {
+      transform: translate(0px, 0px) rotateZ(264.9deg);
+      transition-duration: 0.3s;
+    }
+    .sub-button:nth-child(5) {
+      transform: translate(0px, 0px) rotateZ(270.8deg);
+      transition-duration: 0.3s;
+    }
+    .sub-button:nth-child(6) {
+      transform: translate(0px, 0px) rotateZ(507.6deg);
+      transition-duration: 0.4s;
+    }
+  }
+
+  // 激活时候的位置
+  #gui-layer-controls.open {
+    #main-button {
+      box-shadow: var(--ui-shadow);
+    }
+
+    .sub-button:not(.active) {
+      opacity: 0.7;
+    }
+
+    .sub-button:nth-child(1) {
+      transform: translate(0px, -75px) rotateZ(0deg);
+    }
+    .sub-button:nth-child(2) {
+      transform: translate(-65px, -37.5px) rotateZ(0deg);
+    }
+    .sub-button:nth-child(3) {
+      transform: translate(-65px, 37.5px) rotateZ(0deg);
+    }
+    .sub-button:nth-child(4) {
+      transform: translate(-0px, 75px) rotateZ(0deg);
+    }
+    .sub-button:nth-child(5) {
+      transform: translate(65px, 37.5px) rotateZ(0deg);
+    }
+    .sub-button:nth-child(6) {
+      transform: translate(65px, -37.5px) rotateZ(0deg);
+    }
+  }
+}

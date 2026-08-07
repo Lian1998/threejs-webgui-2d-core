@@ -1,0 +1,48 @@
+.base-info-table-container {
+  .row {
+    display: flex;
+    justify-content: left;
+    flex-direction: column;
+  }
+
+  .column {
+    width: 100%;
+    display: flex;
+
+    .column-title {
+      font-weight: bold;
+    }
+
+    .column-values {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+
+      .column-value {
+        display: flex;
+
+        .wrapper {
+          display: flex;
+          align-items: center;
+
+          span {
+            word-break: break-all;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1; // 超出几行省略
+            overflow: hidden;
+          }
+        }
+      }
+    }
+  }
+
+  .column.table-title-column {
+    font-weight: bold;
+    .column-value {
+      font-weight: bold;
+    }
+  }
+}
+@import "./ext-copy.scss";

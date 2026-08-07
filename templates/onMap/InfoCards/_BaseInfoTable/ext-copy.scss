@@ -1,0 +1,23 @@
+// 弹窗中的复制按钮
+.base-info-table-container {
+  .row {
+    .column-values {
+      .column-value {
+        .wrapper {
+          svg[svgicon-name="mapui-copy"] {
+            fill: var(--overlay-font) !important;
+            width: 16px;
+            min-width: 16px;
+            cursor: pointer;
+            margin-left: 2px;
+            margin-right: 2px;
+          }
+
+          svg[svgicon-name="mapui-copy"]:hover {
+            fill: var(--overlay-primary-font) !important;
+          }
+        }
+      }
+    }
+  }
+}

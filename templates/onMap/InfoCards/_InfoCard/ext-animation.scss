@@ -1,0 +1,76 @@
+$transitionDuration: 0.18s; // 过渡效果持续时间
+$enableAntTransition: true; // 是否开启AntDesign子组件的动画
+
+.gui-infocard {
+  opacity: 0;
+  transform: translateY(-20px);
+
+  transition-property: opacity, transform, visibility;
+  transition-duration: $transitionDuration;
+  transition-timing-function: ease-out;
+}
+
+.gui-infocard.active {
+  opacity: 1;
+  transform: translateY(0);
+
+  transition-timing-function: ease-in;
+}
+
+@if $enableAntTransition {
+  .gui-infocard {
+    .ant-tabs {
+      .ant-tabs-nav {
+        .ant-tabs-nav-wrap {
+          .ant-tabs-nav-list {
+            transition: opacity $transitionDuration linear;
+
+            .ant-tabs-tab {
+              transition:
+                border-color $transitionDuration linear,
+                background-color $transitionDuration linear;
+
+              .ant-tabs-tab-btn {
+                transition:
+                  color $transitionDuration linear,
+                  font-weight $transitionDuration linear;
+              }
+            }
+          }
+        }
+        .ant-tabs-nav-wrap::before {
+          transition: opacity $transitionDuration linear;
+        }
+        .ant-tabs-nav-wrap::after {
+          transition: opacity $transitionDuration linear;
+        }
+      }
+    }
+  }
+} @else {
+  .gui-infocard {
+    .ant-tabs {
+      .ant-tabs-nav {
+        .ant-tabs-nav-wrap {
+          .ant-tabs-nav-list {
+            transition: unset;
+
+            .ant-tabs-tab {
+              transition: unset;
+
+              .ant-tabs-tab-btn {
+                transition: unset;
+              }
+            }
+          }
+        }
+        .ant-tabs-nav-wrap::before {
+          transition: unset;
+        }
+        .ant-tabs-nav-wrap::after {
+          transition: unset;
+        }
+      }
+    }
+  }
+}

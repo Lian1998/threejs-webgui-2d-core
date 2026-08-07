@@ -1,0 +1,48 @@
+#gui-container {
+  #gui-header {
+    .header-right {
+      .tools {
+        .user-dropdown {
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0 10px;
+          overflow: hidden;
+          font-size: 12px;
+
+          .ant-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            margin-right: 6px;
+          }
+
+          .truncate {
+            color: var(--ui-font);
+            font-size: 16px;
+            max-width: 80px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+}
+
+.user-dropdown-overlay {
+  .ant-dropdown-menu-item {
+    .ant-dropdown-menu-title-content {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+
+      .anticon {
+        margin-right: 6px;
+      }
+    }
+  }
+}
