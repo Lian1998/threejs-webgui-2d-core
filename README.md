@@ -1,35 +1,25 @@
 # 项目介绍
-此项目目的是构建一套工业化WebGUI项目(canvas部分)核心图形工具包
-- 使用 `vite` 作为基础脚手架
-  - 所有的主要工具和算法库都采用离线构建, 如 `earcut`, `gl-matrix`, `lodash-es`, `Spector`, `threejs`, `tiny-sdf`, `tween`
-  - 以 `theejs(webgl2)` 为图形API调用核心, 网页轻负载二维, 后续快速过渡到网页轻负载三维
-- 不断优化 `drawcall` 直至为理论最优
-- 一套标准的工业化WebGUI项目主要通过 `websocket点位` 驱动 **多种类型设备** 在canvas上运动
+此项目构建一套以`three.js-r170`为核心框架(canvas webgl2 api)的, 工业化场景下的Web端设备监控GUI项目的核心框架
+- 使用 `vite` 作为基础脚手架, 所有的主要工具库和算法库都采用离线构建, 即下载源码到本地`libs`目录再由 `vite` 的 `esbuild` 或其他打包器进行打包
+  - 以 `theejs(webgl2)` 为图形API调用核心框架, 通过webgl实现网页轻负载二维(业务上后续可以快速过渡到网页轻负载三维)
+  - 以 `tiny-sdf` 为当前二位文字贴图生成的核心框架, 先实现简单的sdf功能
+  - ...
+- 工业化WebGUI项目主要通过websocket点位驱动 **多种类型的多个设备** 在canvas上运动
+- 根据业务需要优化 `drawcall` 直至理论最优
 - 按需提供简单好用的应用端API
-- 每个需求技术点完成后会提供测试页面
-- 在涉及到需要使用到typescript的多重继承问题, 倾向使用 `对象组合` 去实现多重继承, 并且倾向于使用 `Facade` 隐藏内部调用api
+- 每个需求技术点完成后会根据需要利用vite的多页面模式提供测试页面, 最后通过某个指定顺序遍历测试页面以人工审核完整的测试链路
+- 在涉及到需要使用到typescript的多重继承问题, 倾向使用 `对象组合` 去实现多重继承, 并且倾向于使用 `Facade` 模式以隐藏其内部调用api
 
-```js
-const instance1 = QCService.getInstance<多态图元>("QC101"); 
-// 标签, 贴图(大车), 贴图(主小车), 贴图(门架小车)
-// 贴图(在线状态), 贴图(任务状态), 贴图(紧停状态), 贴图(循环方向)
-// 标签(任务持续时间)
-
-socketHelperInstance.registListener(`ECS.QC101.gantryPos`, (itemValue) => {
-  instance1.gantry<Object3DLikeAPI>.position.set(121837 + itemValue / 100.0);
-  instance1.markDirty();
-});
-```
-
-# 方便进行类属性配置调试的gui
-设计一套用于 typescript + threejs + lil-gui 方便调试的源码, 基于以下几点思路:
-1. 用 Mixin 特性将 `对象实例` 注册到容器, 当vite项目处于development开发模式时, 会自动遍历注册的 `对象实例` 完成初始化过程
-2. 初始化过程中, 通过获取typescript装饰器定义属性的内容(往往是lil-gui的面板限制参数)以初始化 lil-gui 面板
-3. 给一套title width 等 lil-gui 必要参数不指定时的默认值
+# 方便进行类属性调试
+设计一套用于 `typescript反射` + `threejs` + `lil-gui` 方便进行图元类实例属性调试, 基于以下几点思路:
+1. 用 `typescript反射` 特性将 `对象实例` 注册到容器, 当vite项目处于development开发模式时, 会自动遍历注册的 `对象实例` 完成初始化过程
+2. 以对象实例的`名字(类型)`作为 title
+3. 在初始化过程中, 通过获取 `typescript装饰器` 定义属性的内容(往往是lil-gui的面板限制参数)以初始化 lil-gui 面板的选项条件
+4. 给一套 title width 等必要参数的默认值
 
 # 基础框架生成
-包含以下基础内容(功能/图元/类?):
-1. core\Sprite2D 二维贴图精灵(XZ平面)(4个顶点, 2个三角面)
+包含以下基础内容(主要以图元的维度进行统计):
+1. `core\Sprite2D` 二维贴图精灵(XZ平面)(4个顶点, 2个三角面)
 	1. 包含一个内置的贴图Atlas管理工具, 仅初始化时请求贴图网络资源并计算生成信息, 暂时不需要动态添加/修改/压缩
 	2. 需支持以下可配置属性:
 		1. <tag>批量时锁死</tag>贴图地址, 当前精灵使用的贴图地址或是Atlas管理工具给出的贴图对应的唯一符号
