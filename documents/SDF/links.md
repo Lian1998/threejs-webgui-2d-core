@@ -1,15 +1,4 @@
-# GPUPick相关UserData字段设计(可能)
-```javascript
-Object3D.userData = {
-  __pickBaseId: Math.max(1, this.maxId + 1), // 注册了就会被分配pickId
-  __origVisible: boolean, // 遍历过程中记录object3D传入时的显示状态
-  __origMaterial: THREE.Material, // object3D传入时的材质
-  __shaderPickMaterial: THREE.Material, // 第一次遍历时 创建新的用于渲染pickBuffer的材质 (这个材质注册onBeforeCompile以完成编译前shader程序字符串替换)
-  uPickColor: THREE.Color
-}
-```
 
-# 关于SDF文字的文档和库
 https://github.com/dy/bitmap-sdf/tree/master  
 https://github.com/dy/bitmap-sdf/blob/master/index.js  
 

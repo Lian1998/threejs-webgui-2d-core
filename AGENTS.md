@@ -1,43 +1,39 @@
-
 # AGENTS.md
 
 ## Project Overview
 
-This project is a Three.js-based WebGUI rendering framework for industrial equipment monitoring. It is built with Vite and uses Three.js in offline `lib` mode.
+本项目是基于 **Three.js** 的工业化设备监控 WebGUI 核心渲染框架，使用 **Vite** 构建，Three.js 采用 **lib 离线模式** 引入。
+项目目标是沉淀一套可复用的三维渲染框架，最终将核心能力打包成 lib，供不同业务项目接入使用。
 
-The goal is to build a reusable 3D rendering framework whose core capabilities can eventually be packaged as a library for different business projects.
+目录职责：
 
-Directory responsibilities:
-
-* `/core`: Core framework source code, including reusable rendering, interaction, resource management, lifecycle handling, utilities, and public APIs.
-* `/multi-pages`: Vite multi-page test entries used to verify core modules and rendering capabilities.
-* `/source`: Simulated business application code used to validate how real projects consume `/core`, including API usability and extensibility.
+* `/core`：框架核心源码。用于沉淀可复用的渲染、交互、资源管理、生命周期、工具方法、对外 API 等能力。
+* `/multi-pages`：基于 Vite 多页面模式的测试页面。用于验证 `/core` 中核心模块和渲染能力。
+* `/source`：模拟业务应用代码。用于验证真实项目如何使用 `/core`，并检查框架 API 的易用性和扩展性。
 
 ## Code Style
 
-Only Prettier is used for formatting. Do not introduce additional formatters or lint rules.
+本项目仅使用 **Prettier** 进行代码格式化环境已配置好（不要引入额外格式化工具或 lint 规则）。
 
-Requirements:
+* 所有文件统一使用 `UTF-8 without BOM` 编码。*
 
-* Do not make unnecessary large-scale changes to existing comments.
-* Use `UTF-8 without BOM` for all files.
+## Testing Instructions
 
-## Testing
-
-After each requested change, perform only the most basic and relevant validation.
+每次根据提问完成修改后，只做最基础、最相关的验证。
 
 ## Modification Scope
 
-Limit changes to the explicit scope of the current request. If no scope is specified, use the smallest reasonable modification.
+修改范围以我本次提问中的明确要求为准。如果没有明确指定范围，默认采用最小修改范围策略
 
-## Clarification
+## Clarification Rules
 
-Ask for confirmation before making changes involving complex architecture, public API design, multi-module coordination, compatibility risks, or clear ambiguity.
+如果需求涉及复杂架构调整、公共 API 设计、多模块联动、兼容性风险，或存在明显歧义，应先向我确认理解。
 
-For small and well-scoped tasks, proceed directly using the minimum-change principle.
+如果问题较小、影响范围明确，则直接按最小修改原则完成，不需要频繁确认。
 
-## Comments
+## Comment Rules
+不要对已有注释做无意义的大量修改。
 
-Add necessary Chinese comments for complex algorithms, key rendering flows, and lifecycle logic.
+复杂算法、关键渲染流程、生命周期逻辑应补充必要中文注释。
 
-Comments should explain why something is done, not simply repeat the code. Do not delete or heavily rewrite existing comments unless they are clearly wrong or outdated.
+注释应说明“为什么这样做”，不要简单重复代码。不要删除或大幅改写已有注释，除非原注释明显错误或过时。
