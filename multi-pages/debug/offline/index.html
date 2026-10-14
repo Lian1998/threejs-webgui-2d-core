@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN"
+  ><head
+    ><link rel="stylesheet" href="/fonts/debug-ui.css" /><meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>离线工程检查</title
+    ><style>
+      body {
+        margin: 0;
+        padding: 24px;
+        background: #0b1621;
+        color: #deedf5;
+        font: 14px monospace;
+      }
+      a {
+        color: #80dce5;
+      }
+      main {
+        display: grid;
+        grid-template-columns: minmax(400px, 1fr) 300px;
+        gap: 24px;
+      }
+      #viewport {
+        height: 420px;
+      }
+      pre {
+        white-space: pre-wrap;
+        line-height: 1.6;
+      }
+    </style></head
+  ><body
+    ><a href="/debug/index.html">返回模块索引</a><h1>离线工程与基础检查</h1><main><div id="viewport"></div><div id="panel"></div></main><pre id="status">正在检查本地 r170, GLSL3 和 lil-gui...</pre
+    ><script type="module">
+      import "@core/debug/offline/index.ts";
+    </script></body
+  ></html
+>

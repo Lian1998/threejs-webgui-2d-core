@@ -40,8 +40,8 @@
       "three/src/*": [ "./libs/three-ts-types-r170/types/three/src/*" ],
       "three/examples/jsm/*": [ "./libs/three-ts-types-r170/types/three/examples/jsm/*" ],
       "three/addons/*": [ "./libs/three-ts-types-r170/types/three/examples/jsm/*" ],
-      "earcut": [  "./libs/earcut-3.0.2/src/earcut.js" ],
-      "tiny-sdf": [ "./libs/tiny-sdf-2.0.7/index.js" ]
+      "earcut": [ "./libs/earcut-3.0.2/src/index.d.ts" ],
+      "tiny-sdf": [ "./libs/tiny-sdf-2.0.7/index.d.ts" ]
     },
   },
 
@@ -50,6 +50,7 @@
     ".scripts/**/*.ts",
     "vite.config.ts",
     "core/**/*.ts",
+    "multi-pages/**/*.ts",
     "source/**/*.ts",
     ".env/vite-env.d.ts",
     "libs/three.js-r170/**/*.js",

@@ -1,0 +1,10 @@
+@font-face {
+  font-family: "WebGUIDebugUI";
+  src: url("/fonts/NotoSansSC-ui.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+body, .lil-gui { font-family: "WebGUIDebugUI", system-ui, sans-serif !important; }
+.lil-gui { --font-family: "WebGUIDebugUI", system-ui, sans-serif !important; }
+pre, code { font-family: ui-monospace, "WebGUIDebugUI", monospace !important; }

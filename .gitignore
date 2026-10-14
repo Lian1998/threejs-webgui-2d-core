@@ -20,6 +20,8 @@ lerna-debug.log*
 # Artifacts
 node_modules
 dist
+dist-debug
+dist-core
 dist-ssr
 *.local
 package-lock.json

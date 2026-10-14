@@ -1,80 +1,71 @@
 import { defineConfig } from "vite";
-import { loadEnv } from "vite";
-import path from "path";
-import { fileURLToPath } from "url";
+import vue from "@vitejs/plugin-vue";
+import vueJsx from "@vitejs/plugin-vue-jsx";
+import { readdirSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-import vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
+const projectRoot = path.dirname(fileURLToPath(import.meta.url));
+const resolveProject = (relativePath: string) => path.resolve(projectRoot, relativePath);
+const pagesRoot = resolveProject("multi-pages");
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const _p = (relativePath: string) => path.resolve(__dirname, relativePath)
+/** 调试页可嵌套且不必叫 index.html, 构建入口与开发服务器可访问的页面保持一致. */
+function collectHtmlEntries(directory: string): Record<string, string> {
+  const entries: Record<string, string> = {};
+  for (const item of readdirSync(directory, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))) {
+    const filename = path.join(directory, item.name);
+    if (item.isDirectory()) Object.assign(entries, collectHtmlEntries(filename));
+    else if (item.isFile() && item.name.endsWith(".html")) {
+      const key = path.relative(pagesRoot, filename).split(path.sep).join("/").replace(/\.html$/, "");
+      entries[key] = filename;
+    }
+  }
+  return entries;
+}
 
-// https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
-  const env = loadEnv(mode, _p("./.env/"), ""); // 加载额外的env环境文件
-
-  return {
-    root: _p("./multi-pages/"), // 多页面打包模式更改入口
-    envDir: _p( "./.env/"),
-    publicDir: _p("./public/"),
-    clearScreen: true,
-
-    // 以 `micromatch/picomatch` 规则匹配到的`import`语句 https://github.com/micromatch/picomatch#globbing-features
-    // 在资源请求时将会被标记有`enforce: "pre"`的插件提前处理掉 https://vitejs.dev/guide/api-plugin.html#plugin-ordering
-    // 通常指的是 运行/打包时匹配到的资源会被直接复制到public目录, 而不会被解析和转换
-    // https://vitejs.dev/config/shared-options.html#assetsinclude
-    // https://vitejs.dev/guide/assets.html
-    // https://github.com/vitejs/vite/blob/65ef38375045935d12ad3f4dd6da90ab5860b5cd/packages/vite/src/node/constants.ts#L98
-    assetsInclude: [
-      /\.(vs|fs|vert|frag|glsl|shader)$/i, // 使得shader程序可以?raw支持以原生字符串导入
+export default defineConfig(({ command, mode }) => ({
+  root: pagesRoot,
+  envDir: resolveProject(".env"),
+  publicDir: resolveProject("public"),
+  clearScreen: true,
+  // 自定义 mode 不改变 import.meta.env.DEV, 显式 debug 构建使用同一编译期开关.
+  define: { __WEBGUI_DEBUG__: JSON.stringify(command === "serve" || mode === "debug") },
+  assetsInclude: [/\.(vs|fs|vert|frag|glsl|shader)$/i],
+  resolve: {
+    alias: [
+      { find: "@source", replacement: resolveProject("source") },
+      { find: "@core", replacement: resolveProject("core") },
+      { find: "@libs", replacement: resolveProject("libs") },
+      { find: /^three\/addons\//, replacement: resolveProject("libs/three.js-r170/examples/jsm") + "/" },
+      { find: /^three\/examples\/jsm\//, replacement: resolveProject("libs/three.js-r170/examples/jsm") + "/" },
+      { find: /^three\/src\//, replacement: resolveProject("libs/three.js-r170/src") + "/" },
+      { find: /^three$/, replacement: resolveProject("libs/three.js-r170/src/Three.js") },
+      { find: /^earcut$/, replacement: resolveProject("libs/earcut-3.0.2/src/earcut.js") },
+      { find: /^tiny-sdf$/, replacement: resolveProject("libs/tiny-sdf-2.0.7/index.js") },
     ],
-
-    resolve: {
-      alias: {
-        "@source": _p("./source"),
-        "@core": _p("./core"),
-        "@assets": _p("./assets"),
-        "@libs": _p("./libs"),
-        "three/addons": _p("./libs/three.js-r170/examples/jsm"),
-        "three/src": _p("./libs/three.js-r170/src"),
-        "three": _p("./libs/three.js-r170/src/Three.js"),
-        "earcut":  _p("./libs/earcut-3.0.2/src/earcut.js"),
-        "tiny-sdf": _p("./libs/tiny-sdf-2.0.7/index.js"),
-      },
+  },
+  optimizeDeps: { include: ["three"] },
+  plugins: [vue(), vueJsx()],
+  server: {
+    port: 8056,
+    host: true,
+    strictPort: true,
+    watch: { ignored: ["!**/libs/**"] },
+  },
+  build: {
+    target: mode === "debug" ? "esnext" : "es2020",
+    minify: "esbuild",
+    sourcemap: true,
+    chunkSizeWarningLimit: 1024,
+    assetsDir: "assets",
+    assetsInlineLimit: 10240,
+    outDir: resolveProject(mode === "debug" ? "dist-debug" : mode === "core" ? "dist-core" : "dist"),
+    emptyOutDir: true,
+    copyPublicDir: mode !== "core",
+    lib: mode === "core" ? { entry: resolveProject("core/public.ts"), formats: ["es"], fileName: "webgui-2d" } : undefined,
+    // 常规构建保留旧 source 页面, 调试产物只在显式 build:debug 中生成.
+    rollupOptions: mode === "core" ? undefined : {
+      input: mode === "debug" ? collectHtmlEntries(resolveProject("multi-pages/debug")) : resolveProject("multi-pages/index.html"),
     },
-    
-    optimizeDeps: {
-      include: ["three", "three/addons"],
-    },
-
-    plugins: [vue(), vueJsx()],
-
-    server: {
-      port: 8056,
-      host: true,
-      strictPort: true,           // 固定端口(不会由于占用而自动顺延端口)
-
-      watch: {
-        ignored: ['!**/libs/**']
-      },
-
-      build: {
-        target: "modules", //  native ES Modules, native ESM dynamic import, import.meta
-        minify: "esbuild",
-        sourcemap: true,
-        chunkSizeWarningLimit: 1024, // 块大小(单位kB)(主要影响javascript包下载/CPU执行时间)
-        assetsDir: "assets", // 静态的资产(打包模式作为静态资产处理, 并将结果直接输出到public/assets)
-        assetsInlineLimit: 10240, // 静态资源如果小于 10mB 会被解析成 base64
-        outDir: _p("./dist/"), // 打包输出路径
-        emptyOutDir: true, // 打包清空目录
-        rollupOptions: { external: [], output: {}, },
-        // lib: {
-        //   entry: _p("./source/main.ts"),
-        //   name: "webgui2d",
-        //   formats: ["es", "cjs", "iife"], // 输出格式
-        // }
-      },
-    },
-  };
-});
+  },
+}));

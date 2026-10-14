@@ -8,6 +8,10 @@
     "format": "npx prettier . --write",
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "typecheck:core": "tsc --project tsconfig.core.json --noEmit",
+    "build:debug": "npm run typecheck:core && vite build --mode debug",
+    "build:core": "npm run typecheck:core && vite build --mode core",
+    "preview:debug": "vite preview --mode debug",
     "preview": "vite preview",
     "geojson.vertex_offset": "esno ./.scripts/geojson/exports/vertex_offset.ts",
     "v1ticks.unpackage": "node ./.scripts/v1ticks/unpackage.js"

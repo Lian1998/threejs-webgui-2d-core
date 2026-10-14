@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["vite/client", "node"]
+  },
+  "include": [
+    "core/**/*.ts",
+    "multi-pages/debug/**/*.ts",
+    "vite.config.ts",
+    ".env/vite-env.d.ts",
+    "libs/three-ts-types-r170/**/*.d.ts"
+  ]
+}
