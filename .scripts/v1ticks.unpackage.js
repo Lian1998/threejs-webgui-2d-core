@@ -3,8 +3,8 @@ import path from "node:path";
 import { once } from "node:events";
 import { createInflate } from "node:zlib";
 
-const DEFAULT_INPUT_V1TICKS = path.resolve("./assets/aimp.qinzhou.2025-06-16 18_30_00_2025-06-16 18_35_00.v1ticks");
-const DEFAULT_OUTPUT_DIR = path.resolve("./output/.scripts/v1ticks/aimp.qinzhou.2025-06-16 18_30_00_2025-06-16 18_35_00/");
+const DEFAULT_INPUT_V1TICKS = path.resolve(".scripts/assets/aimp.qinzhou.2025-06-16 18_30_00_2025-06-16 18_35_00.v1ticks");
+const DEFAULT_OUTPUT_DIR = path.resolve(".scripts/output/aimp.qinzhou.2025-06-16 18_30_00_2025-06-16 18_35_00/");
 const DEFAULT_CHUNK_SIZE = 1000;
 
 class ChunkQueueReader {

@@ -1,7 +1,7 @@
 //////////////////////////////////// 配置项 ////////////////////////////////////
 
-const INPUT_FOLDER = path.resolve("./assets/qgis.dachanwan/"); // 输入目录(包含一个或多个geojson文件的目录)
-const OUTPUT_FOLDER = path.resolve("./output/.scripts/geojson/vertex_offset/"); // 结果输出目录
+const INPUT_FOLDER = path.resolve(".scripts/assets/qgis.dachanwan/"); // 输入目录(包含一个或多个geojson文件的目录)
+const OUTPUT_FOLDER = path.resolve(".scripts/output/qgis.dachanwan/"); // 结果输出目录
 const OFFSET = [-484869.29, -2493687.04];
 
 //////////////////////////////////// 工具函数 ////////////////////////////////////
