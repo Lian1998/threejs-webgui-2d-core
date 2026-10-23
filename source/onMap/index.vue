@@ -44,12 +44,12 @@ const _onMounted = () => {
 };
 
 // 卡片
-import InfoCard from "./InfoCards/_InfoCard/index.vue";
+import InfoCard from "./InfoCards/_InfoCard/index";
 import { historyReplayInfoCardRef } from "./index";
 import HistoryReplay from "@source/onMap/InfoCards/HistoryReplay/page/index.vue";
 
 // 悬窗
-import InfoCardHover from "./InfoCards_hover/_InfoCard/index.vue";
+import InfoCardHover from "./InfoCards_hover/_InfoCard/index";
 
 // 数据订阅
 import { socketioMainModule } from "@source/data/initWebSocketData";

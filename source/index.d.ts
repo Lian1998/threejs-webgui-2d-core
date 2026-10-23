@@ -11,9 +11,11 @@ declare type Array5<T> = [T, T, T, T, T] | ArrayLike;
 
 /** 通过工具类进行索引查找 */
 declare type Findable = {
-  title?: string; // 标题内容
+  title?: string;
+  classify?: string; // 标记订阅系列
   subject?: string; // 订阅点标记索引
   description?: string; // 描述索引
+  description_i18n?: string; // 国际化之后的描述
 };
 
 /** 基础状态标签 */
@@ -38,19 +40,45 @@ declare type BaseInfoTableItem = {
   description_i18n?: string; // 国际化之后的描述
 } & Findable;
 
-/** 弹框类抽象 */
-declare interface InfoCardReference {
-  openInfoCard?: (data?: any, options?: { [string]: any }) => void; // 打开弹窗API, 用于业务逻辑调用
-  closeInfoCard?: () => void; // 关闭弹窗API
+/** 弹窗生命周期参数  */
+declare interface InfoCardOpenOptions {
+  /** 组件注册的ref(expose内容) */
+  infocardRef?: InfoCardReference;
+
+  /** 挂载到的的dom对象 */
+  rootElement?: HTMLDivElement;
+
+  /** 当前弹窗在此弹窗类型中的索引 */
+  instanceIndex?: number;
+
+  /** 悬浮窗初始指针的窗口坐标；省略时使用最近捕获的指针位置 */
+  pointer?: { clientX: number; clientY: number };
+
+  /** 用于异步任务完成后判断设备是否已切换 */
+  isCurrent?: () => boolean;
+  [key: string]: any;
 }
 
-/** 弹框类抽象 内部插槽组件的Expose类型 */
+/** 弹窗(外部脚本可控制)的函数 */
+declare interface InfoCardReference {
+  /** 打开弹窗 */
+  openInfoCard?: (data?: any, options?: InfoCardOpenOptions) => void | Promise<void>;
+
+  /** 关闭弹窗 */
+  closeInfoCard?: (instanceIndex?: number) => void;
+}
+
+/** 弹窗(用户外部指定)的生命周期函数回调 */
 declare interface InfoCardDefaultSlot {
+  /** 设置标题 */
   setTitle?: () => any;
 
-  // 打开弹窗的回调函数
-  onOpenInfoCard?: (data: any, options?: Partial<{ infocardRef: InfoCardReference; rootElement: HTMLDivElement; instanceIndex: number; [string]: any }>) => Promise<boolean> | any; // prettier-ignore
+  /** 打开弹窗时触发 */
+  onOpenInfoCard?: (data: any, options?: InfoCardOpenOptions) => any;
 
-  // 关闭窗口时的回调函数
+  /** 关闭弹窗时触发 */
   onCloseInfoCard?: () => void;
+
+  /** 缩放弹窗时触发 */
+  onResizeInfoCard?: (size: { width: number; height: number }) => void;
 }

@@ -5,4 +5,8 @@
   box-shadow: var(--ant-box-shadow-secondary);
   border-radius: calc(var(--ant-border-radius) * 1px);
   font-weight: bold;
+  opacity: 0.8;
+  padding: 5px 16px;
+  box-sizing: border-box;
+  pointer-events: none;
 }
