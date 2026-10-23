@@ -48,7 +48,8 @@ interface FontState {
   registered: boolean;
 }
 
-/** 字形缓存有页容量上限. 新字只追加, 已有字的度量与 UV 不变. */
+/** 使用 TinySDF 光栅化字形, 记录 advance/bearing/UV, 写入单通道 DataTexture.
+ * 按需追加字形并解析 fallback 字体, 页容量有上限, 已分配区域不重排. */
 export class GlyphAtlas {
   private readonly states = new Map<string, FontState>();
   private readonly pending = new Map<string, Promise<FontState>>();

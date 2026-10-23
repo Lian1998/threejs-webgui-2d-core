@@ -31,7 +31,9 @@ function target(width: number, height: number): THREE.WebGLRenderTarget {
     stencilBuffer: false,
   });
 }
-/** ID 通道共享可见覆盖计算, 只渲染查询附近的小块, 不扫描整张画布. */
+/** 把候选图元的 RGB24 ID 绘制到查询位置附近的小型 WebGLRenderTarget.
+ * 复用颜色后端的几何和覆盖 shader, 通过 readRenderTargetPixels 或异步版本读回.
+ * 返回前检查 revision/generation, 不把像素读回结果直接当作永久业务引用. */
 export class GpuPicker {
   readonly stats = { passes: 0, calls: 0, cpuMs: 0, readbackMs: 0 };
   private syncTarget = target(1, 1);
@@ -222,6 +224,7 @@ export class GpuPicker {
       r.autoClear = autoClear;
     }
   }
+  /** 从 RGB 解码 ID, 校验生命周期, 再按优先级, 像素距离和绘制顺序选择结果. */
   private result(frame: QueryFrame, buffer: Uint8Array): PickResult | undefined {
     if (frame.epoch !== this.epoch || frame.viewportRevision !== this.viewport.revision || frame.layerRevision !== this.layers.revision || frame.hitRevision !== this.registry.hitRevision) return;
     let chosen: { feature: RenderFeature; distance: number } | undefined;

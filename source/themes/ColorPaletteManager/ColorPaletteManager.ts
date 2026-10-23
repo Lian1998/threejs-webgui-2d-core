@@ -6,6 +6,9 @@ import { injectRootCssVars } from "@source/themes/injectRootCss";
 /** 调色盘插颜色管理器 */
 export class ColorPaletteManager {
   static #instance: ColorPaletteManager;
+
+  private constructor() {}
+
   public static get instance(): ColorPaletteManager {
     if (!ColorPaletteManager.#instance) {
       ColorPaletteManager.#instance = new ColorPaletteManager();
@@ -14,17 +17,17 @@ export class ColorPaletteManager {
   }
 
   /** 当前内存中的颜色配置 */
-  static itemsMap = new Map<ITEMS_DEV_KEY, string>();
+  itemsMap = new Map<ITEMS_DEV_KEY, string>();
 
   /** 初始化颜色配置管理器 */
-  async initialization() {
+  async init() {
     const rootCssObj = utils_RootCss2Obj();
 
     // 1. RootCss中的变量颜色存一份到键值表中, 项目先加载全局css变量, 在javascript颜色管理器中可以使用这些变量
-    utils_ObjMegre2Map(ColorPaletteManager.itemsMap, rootCssObj);
+    utils_ObjMegre2Map(this.itemsMap, rootCssObj);
 
     // 2. dev环境下所有配置项
-    utils_ObjMegre2Map(ColorPaletteManager.itemsMap, ITEMS_DEV, false);
+    utils_ObjMegre2Map(this.itemsMap, ITEMS_DEV, false);
 
     // 3. 主题环境下所有配置项覆盖
     const isDark = document.documentElement.getAttribute("data-theme") === "dark";
@@ -34,22 +37,22 @@ export class ColorPaletteManager {
 
     Object.keys(targetConfiguration).forEach((key: ITEMS_DEV_KEY) => {
       const value = targetConfiguration[key];
-      if (ColorPaletteManager.itemsMap.get(key) === value) return;
-      ColorPaletteManager.itemsMap.set(key, value);
+      if (this.itemsMap.get(key) === value) return;
+      this.itemsMap.set(key, value);
     });
 
     // 4. 写出 --VARS 特殊变量到 RootCss
     injectRootCssVars(
       "inmap-color-palette",
-      ColorPaletteManager.itemsMap,
+      this.itemsMap,
       (key) => key.startsWith("VARS."),
       (key, value) => [`--${key.split(".").join("-")}`, value],
     );
 
-    console.warn("当前使用的色彩配置", ColorPaletteManager.itemsMap);
+    console.warn("当前使用的色彩配置", this.itemsMap);
   }
 
-  static aEl: HTMLAnchorElement = undefined;
+  private aEl: HTMLAnchorElement = undefined;
   /** 导出一份配置模板 */
   downloadItemsTemplate() {
     const map = new Map();
@@ -57,10 +60,10 @@ export class ColorPaletteManager {
     const jsonStr = utils_Map2Json(map);
     const blob = new Blob([jsonStr], { type: "application/json;charset=utf-8" });
     const url = URL.createObjectURL(blob);
-    if (!ColorPaletteManager.aEl) ColorPaletteManager.aEl = document.createElement("a");
-    ColorPaletteManager.aEl.href = url;
-    ColorPaletteManager.aEl.download = "inMap.json";
-    ColorPaletteManager.aEl.click();
+    if (!this.aEl) this.aEl = document.createElement("a");
+    this.aEl.href = url;
+    this.aEl.download = "inMap.json";
+    this.aEl.click();
     URL.revokeObjectURL(url);
   }
 }

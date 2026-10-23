@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="zh-CN"
-  ><head
-    ><link rel="stylesheet" href="/fonts/debug-ui.css" /><meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>模块调试索引</title
-    ><style>
+<html lang="zh-CN">
+  <head>
+    <link rel="stylesheet" href="/fonts/debug-ui.css" /><meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1" /><title>模块调试索引</title>
+    <style>
       body {
         max-width: 900px;
         margin: 36px auto;
@@ -36,37 +36,40 @@
         padding: 13px;
         border-radius: 4px;
       }
-    </style></head
-  ><body
-    ><h1>Three.js 2D 模块调试</h1><p>所有新模块使用同一个可调模拟场景, 可见像素、图层过滤、插帧和统计共用实际框架 API. 每页显示对应模块名, 通过控件选择检查案例.</p><p><a href="/debug/offline/index.html">01 离线模块、GLSL3 与基础生命周期检查</a></p
-    ><ul
-      ><li><a href="/debug/refactor/viewport.html">坐标与视口</a></li
-      ><li><a href="/debug/refactor/scheduler.html">帧调度</a></li
-      ><li><a href="/debug/refactor/primitives.html">图元生命周期</a></li
-      ><li><a href="/debug/refactor/layers.html">图层与顺序</a></li
-      ><li><a href="/debug/refactor/resources.html">共享资源</a></li
-      ><li><a href="/debug/refactor/batching.html">自动批渲染</a></li
-      ><li><a href="/debug/refactor/polygons.html">多边形与孔洞</a></li
-      ><li><a href="/debug/refactor/lines.html">粗线与虚线</a></li
-      ><li><a href="/debug/refactor/sprite-atlas.html">图片图集</a></li
-      ><li><a href="/debug/refactor/sprites.html">精灵实例</a></li
-      ><li><a href="/debug/refactor/font-atlas.html">字形图集</a></li
-      ><li><a href="/debug/refactor/text.html">动态中文标签</a></li
-      ><li><a href="/debug/refactor/picking.html">精准拾取</a></li
-      ><li><a href="/debug/refactor/interaction.html">交互与选择</a></li
-      ><li><a href="/debug/refactor/motion.html">实时插帧</a></li
-      ><li><a href="/debug/refactor/composition.html">组合设备</a></li
-      ><li><a href="/debug/refactor/debug-gui.html">每实例 GUI</a></li
-      ><li><a href="/debug/refactor/performance.html">性能观察</a></li
-      ><li><a href="/debug/refactor/delivery.html">公共 API 示例</a></li></ul
-    ><details
-      ><summary>历史 debug 页面</summary
-      ><ul
-        ><li><a href="/debug/GpuPickManager/index.html">旧 GpuPickManager</a></li
-        ><li><a href="/debug/MeshLine/example.html">旧 MeshLine</a></li
-        ><li><a href="/debug/SDFText2D/tinysdf-atlas-usecase.html">旧 SDFText2D</a></li
-        ><li><a href="/debug/Sprite2D/sprite-atlas-textures.html">旧 SpriteAtlas</a></li></ul
-      ></details
-    ></body
-  ></html
->
+    </style>
+  </head>
+  <body>
+    <h1>Three.js 2D 模块调试</h1><p>每页加载独立测试入口, 只创建当前模块所需的最小对象和资源. 打开页面即执行自动检查, 无需点击. 坐标, 调度, 资源和插帧页面不创建 WebGLRenderer. 图形页面显示最小渲染场景和 PASS/FAIL 结果.</p>
+    <ul>
+      <li><a href="/debug/refactor/viewport.html">坐标与视口</a></li>
+      <li><a href="/debug/refactor/scheduler.html">帧调度</a></li>
+      <li><a href="/debug/refactor/primitives.html">图元生命周期</a></li>
+      <li><a href="/debug/refactor/layers.html">图层与顺序</a></li>
+      <li><a href="/debug/refactor/resources.html">共享资源</a></li>
+      <li><a href="/debug/refactor/batching.html">自动批渲染</a></li>
+      <li><a href="/debug/refactor/polygons.html">多边形与孔洞</a></li>
+      <li><a href="/debug/refactor/lines.html">粗线与虚线</a></li>
+      <li><a href="/debug/refactor/sprite-atlas.html">图片图集</a></li>
+      <li><a href="/debug/refactor/sprites.html">精灵实例</a></li>
+      <li><a href="/debug/refactor/font-atlas.html">字形图集</a></li>
+      <li><a href="/debug/refactor/text.html">动态中文标签</a></li>
+      <li><a href="/debug/refactor/picking.html">精准拾取</a></li>
+      <li><a href="/debug/refactor/interaction.html">交互与选择</a></li>
+      <li><a href="/debug/refactor/motion.html">实时插帧</a></li>
+      <li><a href="/debug/refactor/composition.html">组合设备</a></li>
+      <li><a href="/debug/refactor/debug-gui.html">每实例 GUI</a></li>
+      <li><a href="/debug/refactor/performance.html">性能观察</a></li>
+      <li><a href="/debug/refactor/delivery.html">公共 API 示例</a></li>
+    </ul>
+    <details>
+      <summary>历史 debug 页面 (仅开发服务或全量 debug 构建)</summary>
+      <ul>
+        <li><a href="/debug/offline/index.html">离线工程与原基础检查</a></li>
+        <li><a href="/debug/GpuPickManager/index.html">旧 GpuPickManager</a></li>
+        <li><a href="/debug/MeshLine/example.html">旧 MeshLine</a></li>
+        <li><a href="/debug/SDFText2D/tinysdf-atlas-usecase.html">旧 SDFText2D</a></li>
+        <li><a href="/debug/Sprite2D/sprite-atlas-textures.html">旧 SpriteAtlas</a></li>
+      </ul>
+    </details>
+  </body>
+</html>

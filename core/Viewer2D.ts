@@ -46,7 +46,8 @@ export interface ViewerStats {
   activeMotionCount: number;
 }
 
-/** 业务仅管理逻辑图元. renderer, 资源, 帧循环和拾取全部按 Viewer 组合与释放. */
+/** Viewer 的组合根. 创建 WebGLRenderer, 连接逻辑图元与四类渲染后端.
+ * setter 只标脏, 调度器先同步缓冲再绘制; dispose 统一收回事件, lease 和 GPU 对象. */
 export class Viewer2D {
   readonly canvas: HTMLCanvasElement;
   readonly viewport: Viewport2D;
@@ -269,6 +270,7 @@ export class Viewer2D {
   get stats(): Readonly<ViewerStats> {
     return { ...this.statsValue, frames: this.scheduler.stats.frames, pickCalls: this.picking.stats.calls };
   }
+  /** 同步消费当前状态并提交颜色帧, 供立即查询或调试使用, 常规 setter 无需主动调用. */
   flush(): void {
     this.assertAlive();
     this.scheduler.flushNow();
@@ -292,6 +294,7 @@ export class Viewer2D {
       },
     };
   }
+  /** 先停止交互和调度, 再销毁逻辑对象与批次, 最后释放图集, renderer 和 canvas. */
   dispose(): void {
     if (this.disposedValue) return;
     this.disposedValue = true;
@@ -339,6 +342,7 @@ export class Viewer2D {
     this.preloaded.set(source.id, lease);
     this.imageRequests.delete(source.id);
   }
+  /** 一帧的数据入口: 先派发合并通知, 再让 BatchManager 更新本帧使用的 GPU 缓冲. */
   private flushUpdates(): void {
     if (!this.viewport.drawable || this.contextLost) return;
     // 变更通知中的业务写入也先合入逻辑状态, 再生成本帧颜色/拾取共用的数据.
@@ -365,6 +369,7 @@ export class Viewer2D {
     this.statsValue.batchUtilization = current.utilization;
     this.statsValue.activeMotionCount = this.motion.activeCount;
   }
+  /** 唯一正常颜色提交入口, 将 BatchManager.colorScene 与视口相机交给 WebGLRenderer.render. */
   private renderColor(): void {
     if (!this.viewport.drawable || this.contextLost) {
       this.statsValue.colorCalls = 0;

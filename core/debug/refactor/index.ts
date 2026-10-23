@@ -184,6 +184,8 @@ async function loadResources(target: Viewer2D): Promise<void> {
     ...["body", "head", "ring", "dark", "dark-alpha"].map((id) => target.resources.sprites.register({ id, url: `/debug/${id}.svg` })),
   ]);
 }
+
+/** 创建场景 */
 async function createScene(): Promise<void> {
   const token = ++generation;
   stopSimulation();

@@ -15,6 +15,8 @@ interface Group {
   instances: QuadInstance[];
 }
 
+/** 先异步 layoutText, 再把背景和各字形转换为 QuadInstance, 交给 QuadBatch.
+ * 标签可能跨纹理页和多个批次, 但每个字形携带相同逻辑 pickId, 对外仍是一个 handle. */
 export class TextBatchBackend implements PrimitiveRenderBackend {
   readonly kind = "text" as const;
   readonly stats: UploadStats = { bytes: 0, ranges: 0, rebuiltBatches: 0 };

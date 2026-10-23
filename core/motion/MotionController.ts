@@ -57,7 +57,8 @@ function samplePose(sample: MotionSample): Pose {
   return { position: [...sample.position], rotation: sample.rotation };
 }
 
-/** 控制器只依赖同一 Viewer 的时钟/帧, 不为每台设备创建 RAF. */
+/** 把多个 TransformTarget 绑定到 Viewer 的同一个 FrameScheduler.
+ * 活动目标共同持有一个持续帧令牌, 最终通过 setPosition/setRotation 走普通脏更新链路. */
 export class MotionController {
   private readonly bindings = new Map<TransformTarget, MotionBinding>();
   private readonly active = new Set<MotionBinding>();
@@ -176,6 +177,7 @@ class MotionBinding implements MotionHandle {
     return this.moving ? "moving" : "idle";
   }
 
+  /** latest 从当前显示姿态过渡到新样本, timestamped 则缓冲归一化时间并延迟播放. */
   push(sample: MotionSample): void {
     this.assertAlive();
     const next = samplePose(sample);
@@ -252,6 +254,7 @@ class MotionBinding implements MotionHandle {
     this.controller.scheduler.invalidate("motion-resume");
   }
 
+  /** 由共享调度器驱动, 计算当前位置和最短角度插值, 完成后退出活动集合. */
   advance(now: number): void {
     if (this.disposed || this.paused) return;
     if (this.pose && now - this.receiptMs >= this.staleAfterMs) {

@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.core.json",
+  "include": [
+    "core/debug/units/**/*.ts",
+    ".env/vite-env.d.ts",
+    "libs/three-ts-types-r170/**/*.d.ts"
+  ]
+}

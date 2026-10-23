@@ -3,6 +3,7 @@ import type { LayerManager } from "../layers/LayerManager";
 import { BasePrimitive, type PrimitiveContext } from "./PrimitiveHandle";
 import { PrimitiveRegistry } from "./PrimitiveRegistry";
 
+/** 多边形业务 API, setGeometry/setFill 统一进入 BasePrimitive.update. */
 export class PolygonPrimitive extends BasePrimitive<PolygonOptions> implements PolygonHandle {
   setGeometry(geometry: PolygonGeometry): this {
     return this.update({ geometry });
@@ -11,6 +12,7 @@ export class PolygonPrimitive extends BasePrimitive<PolygonOptions> implements P
     return this.update({ fill });
   }
 }
+/** 路径业务 API, 线宽和路径变化交给线后端编码, 不直接操作 Three.Line. */
 export class LinePrimitive extends BasePrimitive<LineOptions> implements LineHandle {
   setPoints(points: readonly Vec2[]): this {
     return this.update({ points });
@@ -22,6 +24,7 @@ export class LinePrimitive extends BasePrimitive<LineOptions> implements LineHan
     return this.update({ width });
   }
 }
+/** 精灵业务 API, 图片资源通过 ready 等待, 实际绘制由实例化四边形完成. */
 export class SpritePrimitive extends BasePrimitive<SpriteOptions> implements SpriteHandle {
   setImage(image: string): this {
     return this.update({ image });
@@ -33,11 +36,14 @@ export class SpritePrimitive extends BasePrimitive<SpriteOptions> implements Spr
     return this.update({ tint });
   }
 }
+/** 标签业务 API, setText 触发异步布局准备, ready 代表最新准备任务完成. */
 export class TextPrimitive extends BasePrimitive<TextOptions> implements TextHandle {
   setText(text: string): this {
     return this.update({ text });
   }
 }
+/** 注入注册表, 图层验证, 资源准备和 invalidate 的创建入口.
+ * 创建 handle 后立即登记逻辑身份, 图片/文字在后端异步 prepare, 不为每个 handle 创建 Mesh. */
 export class PrimitiveFactory {
   private context: PrimitiveContext;
   constructor(

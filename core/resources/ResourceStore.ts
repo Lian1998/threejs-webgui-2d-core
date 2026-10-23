@@ -35,7 +35,8 @@ function abortError(): Error {
   return error;
 }
 
-/** 同 key 加载只发生一次, 但每个消费者拥有独立可取消的申请和 lease. */
+/** 按 key 合并异步 loader, 每个消费者获得独立的引用计数 lease.
+ * 不直接创建 Three.js 对象, 资源类型和 dispose 行为由具体 loader/disposer 注入. */
 export class ResourceStore {
   private readonly entries = new Map<string, Entry<unknown>>();
   private disposed = false;
@@ -151,6 +152,7 @@ export class ResourceStore {
     this.close(entry);
   }
 
+  /** 每个申请独立计数并提供幂等 release, 只有最后引用和等待者离开时才销毁资源. */
   private lease<T>(entry: Entry<T>): ResourceLease<T> {
     entry.refs++;
     let released = false;

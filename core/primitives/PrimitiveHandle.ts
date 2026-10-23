@@ -42,7 +42,8 @@ function sameValue(a: unknown, b: unknown): boolean {
   return keys.length === Object.keys(b).length && keys.every((key) => sameValue(a[key], b[key]));
 }
 
-/** 逻辑状态和 GPU 对象分离. 输入只在写入时复制, 高频姿态更新不复制整条路径. */
+/** 稳定的业务 handle, 保存经过校验的不可变选项, 事件和生命周期.
+ * 不拥有 Mesh. update 按字段分类脏状态, Matrix4 在渲染侧读取时才按需重算. */
 export class BasePrimitive<T extends PrimitiveOptions = PrimitiveOptions> implements PrimitiveHandle<T> {
   readonly id: string;
   readonly kind: PrimitiveKind;
@@ -97,6 +98,7 @@ export class BasePrimitive<T extends PrimitiveOptions = PrimitiveOptions> implem
   getOptions(): DeepReadonly<T> {
     return this.options as DeepReadonly<T>;
   }
+  /** 先构造并校验候选状态, 成功后才替换快照; transform/hit 合并子字段, 其余字段替换. */
   update(patch: PrimitivePatch<T>): this {
     this.assertAlive();
     if ("id" in patch) throw new Error("图元 ID 创建后不可修改.");
@@ -137,6 +139,7 @@ export class BasePrimitive<T extends PrimitiveOptions = PrimitiveOptions> implem
   setVisible(visible: boolean): this {
     return this.update({ visible } as PrimitivePatch<T>);
   }
+  /** 按需计算 parent * local, 逻辑 y 映射为 -Z, 正 rotation 对应绕 +Y 旋转. */
   getEffectiveMatrix(): THREE.Matrix4 {
     if (this.matrixDirty) {
       const t = this.transform;
@@ -166,6 +169,7 @@ export class BasePrimitive<T extends PrimitiveOptions = PrimitiveOptions> implem
     // 加载失败由 ready() 暴露, 避免用户未等待时产生未处理 rejection.
     void promise.catch(() => {});
   }
+  /** 等待最新一次图片或文字准备任务, 不代表已完成 GPU 绘制或像素读回. */
   ready(): Promise<void> {
     return this.readiness;
   }

@@ -16,7 +16,9 @@ export interface FrameSchedulerOptions {
   onError?: (error: unknown) => void;
 }
 
-/** 一个 Viewer 一个调度器, 所有动画与脏更新共用同一时钟和 RAF. */
+/** 一个 Viewer 共用一个时钟和 RAF, 合并同帧 invalidate.
+ * onFrame 更新动画, flushUpdates 同步逻辑状态, renderColor 绘制, 最后通知 afterFrame.
+ * 只有脏更新或持续帧令牌存在时继续排帧, 本类本身不依赖 Three.js. */
 export class FrameScheduler {
   private readonly listeners = new Set<(frame: FrameInfo) => void>();
   private readonly afterFrameListeners = new Set<(frame: FrameInfo) => void>();

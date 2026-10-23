@@ -43,7 +43,8 @@ interface ImageEntry {
   registered: boolean;
 }
 
-/** 页与 UV 只追加, 不重排仍被使用的区域. 注册和区域引用分别持有资源. */
+/** 加载本地图片, 分配稳定 UV 并缓存到多页 DataTexture.
+ * 注册状态和使用引用分开计数, unregister 不会立即破坏仍被图元持有的区域. */
 export class SpriteAtlas {
   private readonly entries = new Map<string, ImageEntry>();
   private readonly pages: AtlasPage[] = [];

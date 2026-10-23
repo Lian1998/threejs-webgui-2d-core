@@ -8,7 +8,8 @@ interface Batch {
   capacity: number;
   features: Map<string, { signature: string; data: VertexData; offset: number }>;
 }
-/** 合并几何保留逐图元数据范围. 姿态/颜色变化只比较并上传变更图元的范围. */
+/** 多边形和线共用的合并几何后端, 将 encode 输出拼入 BufferGeometry.
+ * 每批一个 Mesh + RawShaderMaterial, 保留逐图元范围, 内容变化时局部更新 BufferAttribute. */
 export abstract class MergedBatchBackend implements PrimitiveRenderBackend {
   abstract readonly kind: PrimitiveKind;
   readonly stats: UploadStats = { bytes: 0, ranges: 0, rebuiltBatches: 0 };
@@ -55,6 +56,7 @@ export abstract class MergedBatchBackend implements PrimitiveRenderBackend {
     if (chunk.length) chunks.push(chunk);
     return chunks.flatMap((parts, index) => this.buildChunk(`${runKey}:${index}`, parts, context));
   }
+  /** 容量不足时按 2 的幂扩容, 否则比较图元签名和偏移, 只更新发生变化的属性范围. */
   private buildChunk(runKey: string, data: { feature: RenderFeature; signature: string; data: VertexData }[], context: RenderContext): readonly RenderItem[] {
     this.used.add(runKey);
     let batch = this.batches.get(runKey);

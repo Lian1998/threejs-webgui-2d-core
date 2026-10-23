@@ -4,7 +4,6 @@ export const DOMElements: { [key: string]: HTMLElement } = {
   containerEl: undefined,
   viewportEl: undefined,
   maskEl: undefined,
-  spyEl: undefined,
 };
 
 // 元素弹窗

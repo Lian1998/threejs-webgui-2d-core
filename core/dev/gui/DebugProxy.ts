@@ -7,6 +7,7 @@ function json<T>(value: string): T {
   return JSON.parse(value) as T;
 }
 
+/** 把 GUI 字段读写转换为 handle API, 编辑姿态前暂停该目标的插帧. */
 export class CommonDebugProxy {
   constructor(
     protected readonly handle: PrimitiveHandle<any>,
@@ -132,6 +133,7 @@ export class CommonDebugProxy {
   }
 }
 
+/** 精灵的调试适配, 将图片, 尺寸, 锚点和颜色字段写回 SpriteHandle. */
 export class SpriteDebugProxy extends CommonDebugProxy {
   private get sprite(): SpriteOptions {
     return this.handle.getOptions();
@@ -173,6 +175,7 @@ export class SpriteDebugProxy extends CommonDebugProxy {
   }
 }
 
+/** 路径的调试适配, 将点列和线型控件转换为 LineHandle.update. */
 export class LineDebugProxy extends CommonDebugProxy {
   private get line(): LineOptions {
     return this.handle.getOptions();
@@ -277,6 +280,7 @@ export class LineDebugProxy extends CommonDebugProxy {
   }
 }
 
+/** 多边形的调试适配, 通过 JSON 字段编辑几何, 校验仍由图元执行. */
 export class PolygonDebugProxy extends CommonDebugProxy {
   private get polygon(): PolygonOptions {
     return this.handle.getOptions();
@@ -304,6 +308,7 @@ export class PolygonDebugProxy extends CommonDebugProxy {
   }
 }
 
+/** 标签的调试适配, 文本和布局写回后走正常异步准备链路. */
 export class TextDebugProxy extends CommonDebugProxy {
   private get textOptions(): TextOptions {
     return this.handle.getOptions();
@@ -436,6 +441,7 @@ export class TextDebugProxy extends CommonDebugProxy {
   }
 }
 
+/** 设备级调试适配, 修改 EntityView 的父变换并同步跨层部件. */
 export class EntityDebugProxy {
   constructor(
     private readonly entity: EntityView,

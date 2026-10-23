@@ -7,6 +7,8 @@ import type { PrimitiveRegistry } from "../primitives/PrimitiveRegistry";
 export function comparePaint(a: RenderFeature, b: RenderFeature): number {
   return a.paintKey.layerOrder - b.paintKey.layerOrder || a.paintKey.primitiveOrder - b.paintKey.primitiveOrder || a.paintKey.insertionSequence - b.paintKey.insertionSequence;
 }
+/** 把逻辑图元转换为 RenderFeature, 统一应用图层和父变换后排序.
+ * 仅把连续同类区段交给后端, 最终将 Mesh 按 renderOrder 放入颜色或拾取 Scene. */
 export class BatchManager {
   readonly colorScene = new THREE.Scene();
   readonly pickScene = new THREE.Scene();
@@ -25,6 +27,7 @@ export class BatchManager {
   prepare(handle: BasePrimitive<any>): Promise<void> {
     return this.backends.get(handle.kind)?.prepare(handle) ?? Promise.resolve();
   }
+  /** 将 handle 快照与图层有效值组合, 不创建几何, 拾取过滤只改变 pickable. */
   features(scale: number, query?: PickQuery): RenderFeature[] {
     return this.registry
       .list()
@@ -51,6 +54,7 @@ export class BatchManager {
       })
       .filter((feature) => feature.visible && feature.opacity > 0);
   }
+  /** 颜色按画家顺序排列, 拾取先按 priority 排列; 后端自行处理同类区段的纹理和容量拆分. */
   build(context: RenderContext, candidates?: readonly RenderFeature[]): THREE.Scene {
     const scene = context.pass === "color" ? this.colorScene : this.pickScene;
     scene.clear();

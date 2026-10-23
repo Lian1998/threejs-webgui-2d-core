@@ -1,8 +1,8 @@
 # 重构任务入口
 
-本目录是 `refactor.md` 的分批实现依据. 本轮已完成 00-20 的框架实现, 新业务入口为 [core/public.ts](../core/public.ts), 使用方法见 [README](../README.md) 与 [API](../docs/api.md), 验证结果见 [交付检查](../docs/verification.md).
+本目录是 `refactor.md` 的分批实现依据. 本轮已完成 00-20 的框架实现, 新业务入口为 [core/index.ts](../core/index.ts), 使用方法见 [README](../README.md), 当前实现链路与验证范围见 [源码导读](./documents/README.md) 和 [独立调试指南](./documents/04-debug.md).
 
-类型草案中的辅助文件按实际职责合并, 公共契约以 `core/contracts/index.ts` 为准. 各模块共用可配置的模拟场景, 独立 HTML 入口位于 `multi-pages/debug/refactor`, 索引为 `multi-pages/debug/index.html`. 2D 首期范围与下面的已确认决策保持一致.
+类型草案中的辅助文件按实际职责合并, 公共契约以 `core/contracts/index.ts` 为准. 各模块使用独立测试入口 `core/debug/units/<name>.ts`, 独立 HTML 位于 `multi-pages/debug/refactor`, 索引为 `multi-pages/debug/index.html`. 页面打开即执行本模块的最小案例, 不再统一加载模拟设备场景. 当前源码导读, API 到 Three.js 的链路及调试指南见 [documents](./documents/README.md). 2D 首期范围与下面的已确认决策保持一致.
 
 ## 已确认的决策
 

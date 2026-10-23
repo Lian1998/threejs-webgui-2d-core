@@ -6,6 +6,7 @@ export interface DebugInspectable {
   readonly label: string;
   readonly ownerId?: string;
 }
+/** 仅在 debug 开关开启时登记可检查实例, 提供搜索和增删通知, 不持有 GPU 对象. */
 export class DebugRegistry {
   private readonly instances = new Map<string, DebugInspectable>();
   private readonly listeners = new Set<() => void>();

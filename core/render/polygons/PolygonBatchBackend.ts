@@ -15,6 +15,8 @@ const fragment = /* glsl */ `${fragmentPass}
 in vec4 vColor;
 void main(){ writeColor(vColor); }
 `;
+/** 对外环和孔洞做 earcut 剖分, 再通过有效 Matrix4 编码世界坐标顶点.
+ * 继承 MergedBatchBackend 合并三角形, 一个业务多边形不对应一个独立 Mesh. */
 export class PolygonBatchBackend extends MergedBatchBackend {
   readonly kind = "polygon" as const;
   private triangulations = new WeakMap<object, Triangulation>();

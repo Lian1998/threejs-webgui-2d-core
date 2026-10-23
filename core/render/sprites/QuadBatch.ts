@@ -116,7 +116,9 @@ void main() {
 `;
 }
 
-/** 实例几何共享, 高频写只提交真正变化的 attribute 范围. */
+/** 精灵与标签共享的四边形实例批次, 使用 Mesh + InstancedBufferGeometry.
+ * aMatrix/aRect/aUv 等 InstancedBufferAttribute 保存每实例状态, RawShaderMaterial 计算覆盖.
+ * 与 Three.InstancedMesh 不同, 本类直接管理实例属性和局部上传范围. */
 export class QuadBatch {
   readonly mesh: THREE.Mesh;
   readonly material: THREE.RawShaderMaterial;
@@ -145,6 +147,7 @@ export class QuadBatch {
     this.mesh.name = key;
   }
 
+  /** 将逻辑实例顺序写入槽位, 用 instanceCount 控制有效数量, 隐藏或删除不依赖修改基础顶点. */
   sync(instances: readonly QuadInstance[], context: RenderContext): void {
     if (this.disposed) throw new Error("QuadBatch has been disposed");
     if (instances.length > MAX_QUAD_INSTANCES) throw new Error(`Quad batch exceeds ${MAX_QUAD_INSTANCES} instances`);

@@ -40,7 +40,8 @@ function clean(points: readonly Vec2[], closed: boolean): Vec2[] {
   if (closed && result.length > 1 && result[0][0] === result[result.length - 1][0] && result[0][1] === result[result.length - 1][1]) result.pop();
   return result;
 }
-/** 线宽沿变换后的路径垂直方向扩展, 模型缩放改变路径而不重复缩放指定线宽. */
+/** 把路径扩展成三角形条带并编码转角, 端点, 宽度和沿线距离.
+ * 使用 Mesh 绘制粗线, shader 根据 scale 处理屏幕线宽, 根据距离裁掉虚线间隙. */
 export class LineBatchBackend extends MergedBatchBackend {
   readonly kind = "line" as const;
   constructor() {

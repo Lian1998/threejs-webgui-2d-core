@@ -14,7 +14,9 @@
     "preview:debug": "vite preview --mode debug",
     "preview": "vite preview",
     "geojson.vertex_offset": "esno .scripts/geojson/exports/vertex_offset.ts",
-    "v1ticks.unpackage": "node .scripts/v1ticks.unpackage.js"
+    "v1ticks.unpackage": "node .scripts/v1ticks.unpackage.js",
+    "typecheck:debug-units": "tsc --project tsconfig.debug-units.json --noEmit",
+    "build:debug:units": "npm run typecheck:debug-units && vite build --mode debug-units"
   },
   "devDependencies": {
     "@commitlint/cli": "~18.6.0",

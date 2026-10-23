@@ -17,7 +17,8 @@ interface Part {
   unsubscribe: () => void;
 }
 
-/** 父变换与部件局部变换分开保存, GPU 直接消费矩阵, 不丢弃非均匀缩放产生的剪切. */
+/** 逻辑设备的部件容器, 不创建 Three.Group, 支持部件跨图层.
+ * Matrix4 父变换与部件局部变换相乘后交给渲染, ownerId/partId 单独表达业务归属. */
 export class EntityView implements TransformTarget {
   readonly id: string;
   private value: Transform2D;
@@ -53,6 +54,7 @@ export class EntityView implements TransformTarget {
     return { ...this.value, position: [...this.value.position], scale: [...this.value.scale] };
   }
 
+  /** 登记业务归属并注入父矩阵, 不改变部件图层, 同一图元只能归属一个设备. */
   addPart(name: string, handle: PrimitiveHandle<CommonOptions>): this {
     this.assertAlive();
     if (!name || this.parts.has(name)) throw new Error(`Duplicate or empty entity part: ${name}`);
@@ -81,6 +83,7 @@ export class EntityView implements TransformTarget {
     return this.parts.get(name)?.handle;
   }
 
+  /** 默认保留世界姿态后分离; 含剪切的矩阵无法用普通 TRS 表示时拒绝分离. */
   removePart(name: string, options: { dispose?: boolean } = {}): void {
     this.assertAlive();
     const part = this.parts.get(name);

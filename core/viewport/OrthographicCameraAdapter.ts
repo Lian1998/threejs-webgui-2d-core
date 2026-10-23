@@ -13,7 +13,8 @@ export interface CameraAdapter {
   worldToScreen(world: Vec2): Vec2;
 }
 
-/** 从 +Y 俯视 XZ 平面, 逻辑 y 对应 -Z, 屏幕顶部对应逻辑 +y. */
+/** 把逻辑 [x,y] 映射到 Three.js 的 (x,0,-y), 使用 OrthographicCamera 俯视 XZ 平面.
+ * screenToWorld/worldToScreen 的输入输出为 CSS 像素, 不应在业务调用处额外乘 DPR. */
 export class OrthographicCameraAdapter implements CameraAdapter {
   readonly camera: OrthographicCamera;
   private size: Vec2 = [1, 1];

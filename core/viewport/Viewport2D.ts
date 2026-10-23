@@ -26,6 +26,8 @@ function finitePair(value: Vec2): void {
   if (value.length !== 2 || !value.every(Number.isFinite)) throw new Error("Expected two finite coordinates");
 }
 
+/** 维护 CSS 尺寸, DPR, 中心和每米像素数, 并处理平移缩放.
+ * 相机换算交给 CameraAdapter, renderer 的实际 drawing buffer 尺寸由 onResize 同步. */
 export class Viewport2D {
   readonly adapter: CameraAdapter;
   readonly camera: Camera;

@@ -2,6 +2,7 @@ import type { DeepReadonly, LayerOptions } from "../contracts";
 import { copyValue, finite } from "../primitives/PrimitiveHandle";
 import type { PrimitiveRegistry } from "../primitives/PrimitiveRegistry";
 
+/** 单层状态的受控入口, 更新后让 LayerManager 提升 revision 并触发重绘. */
 export class LayerHandle {
   private disposed = false;
   constructor(
@@ -42,6 +43,8 @@ function validateLayer(o: LayerOptions): void {
     }
   if (o.minScale !== undefined && o.maxScale !== undefined && o.minScale >= o.maxScale) throw new Error("图层 scale 区间无效.");
 }
+/** 逻辑图层索引, 计算显隐, LOD, 透明度和画家顺序.
+ * 图层不是 Three.Group, order 也不编码为物理高度, 由 BatchManager 统一排序. */
 export class LayerManager {
   private layers = new Map<string, LayerHandle>();
   private listeners = new Set<() => void>();

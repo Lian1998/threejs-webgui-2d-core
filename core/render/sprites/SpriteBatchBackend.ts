@@ -7,6 +7,8 @@ interface PreparedSprite {
   imageId: string;
   lease: ResourceLease<SpriteRegion>;
 }
+/** 将已就绪的 SpriteRegion 和 handle 状态转为 QuadInstance, 按连续纹理页分批.
+ * prepare 用请求 token 丢弃迟到图片, build 复用 QuadBatch, remove 释放区域 lease. */
 export class SpriteBatchBackend implements PrimitiveRenderBackend {
   readonly kind = "sprite" as const;
   readonly stats: UploadStats = { bytes: 0, ranges: 0, rebuiltBatches: 0 };

@@ -29,7 +29,7 @@ export default defineConfig(({ command, mode }) => ({
   publicDir: resolveProject("public"),
   clearScreen: true,
   // 自定义 mode 不改变 import.meta.env.DEV, 显式 debug 构建使用同一编译期开关.
-  define: { __WEBGUI_DEBUG__: JSON.stringify(command === "serve" || mode === "debug") },
+  define: { __WEBGUI_DEBUG__: JSON.stringify(command === "serve" || mode === "debug" || mode === "debug-units") },
   assetsInclude: [/\.(vs|fs|vert|frag|glsl|shader)$/i],
   resolve: {
     alias: [
@@ -53,19 +53,23 @@ export default defineConfig(({ command, mode }) => ({
     watch: { ignored: ["!**/libs/**"] },
   },
   build: {
-    target: mode === "debug" ? "esnext" : "es2020",
+    target: mode.startsWith("debug") ? "esnext" : "es2020",
     minify: "esbuild",
     sourcemap: true,
     chunkSizeWarningLimit: 1024,
     assetsDir: "assets",
     assetsInlineLimit: 10240,
-    outDir: resolveProject(mode === "debug" ? "dist-debug" : mode === "core" ? "dist-core" : "dist"),
+    outDir: resolveProject(mode === "debug-units" ? "dist-debug-units" : mode === "debug" ? "dist-debug" : mode === "core" ? "dist-core" : "dist"),
     emptyOutDir: true,
     copyPublicDir: mode !== "core",
     lib: mode === "core" ? { entry: resolveProject("core/public.ts"), formats: ["es"], fileName: "webgui-2d" } : undefined,
     // 常规构建保留旧 source 页面, 调试产物只在显式 build:debug 中生成.
     rollupOptions: mode === "core" ? undefined : {
-      input: mode === "debug" ? collectHtmlEntries(resolveProject("multi-pages/debug")) : resolveProject("multi-pages/index.html"),
+      // 独立单元产物只包含新 refactor 页面和索引, 遗留示例仍保留原构建入口.
+      input: mode === "debug-units" ? {
+        "debug/index": resolveProject("multi-pages/debug/index.html"),
+        ...collectHtmlEntries(resolveProject("multi-pages/debug/refactor")),
+      } : mode === "debug" ? collectHtmlEntries(resolveProject("multi-pages/debug")) : resolveProject("multi-pages/index.html"),
     },
   },
 }));

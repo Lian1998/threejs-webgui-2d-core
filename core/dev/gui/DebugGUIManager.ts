@@ -14,7 +14,8 @@ interface Binding {
   controllers: Controller[];
 }
 
-/** 只为当前实例建立控件, 更新独立 panel model, 不修改逻辑状态快照或启动 listen RAF. */
+/** 根据 DebugField 元数据为当前实例建立 lil-gui 控件.
+ * 控件编辑的是独立 panel model, setter 经代理调用图元 API, 不直接修改冻结的状态快照. */
 export class DebugGUIManager {
   readonly gui: GUI;
   private readonly selectorModel = { search: "", instance: "" };

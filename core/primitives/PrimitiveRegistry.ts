@@ -6,6 +6,8 @@ export interface PrimitiveChange {
   version: number;
   dirty: ReadonlySet<DirtyKind>;
 }
+/** 维护逻辑 ID, RGB24 拾取 ID 和 handle 的双向索引, 并合并待通知的脏字段.
+ * pickId 可回收, generation 区分不同生命周期, 防止异步读回误命中新对象. */
 export class PrimitiveRegistry {
   private handles = new Map<string, BasePrimitive<any>>();
   private pickMap = new Map<number, BasePrimitive<any>>();
@@ -72,6 +74,7 @@ export class PrimitiveRegistry {
   dirtyFor(id: string): ReadonlySet<DirtyKind> {
     return this.pending.get(id) ?? new Set();
   }
+  /** 先换出 pending 队列, 回调中产生的新变更进入下一批通知, 避免遍历时修改当前集合. */
   flushChanges(): void {
     const pending = this.pending;
     this.pending = new Map();

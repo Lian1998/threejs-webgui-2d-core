@@ -15,7 +15,8 @@ function finitePair(value: Vec2, name: string): void {
   if (value.length !== 2 || !value.every(Number.isFinite)) throw new Error(`${name} must contain two finite coordinates`);
 }
 
-/** 大坐标在 CPU double 下先减原点, 只有局部米坐标进入 GPU float32. */
+/** 外部业务坐标到局部米坐标的显式适配器, 不自动挂接到图元工厂.
+ * 在 CPU double 精度下减原点并换算单位, 避免大坐标直接进入 GPU float32. */
 export class LocalCoordinateAdapter implements CoordinateAdapter {
   readonly origin: Vec2;
   readonly unitsPerMeter: number;

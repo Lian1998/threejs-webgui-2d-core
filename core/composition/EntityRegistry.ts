@@ -1,6 +1,7 @@
 import type { PrimitiveHandle } from "../contracts";
 import { EntityView, type EntityOptions } from "./EntityView";
 
+/** 按设备 ID 管理 EntityView 与部件归属, 为 Viewer 和 GUI 提供查询与生命周期通知. */
 export class EntityRegistry {
   private readonly values = new Map<string, EntityView>();
   private readonly ownership = new WeakMap<PrimitiveHandle, EntityView>();

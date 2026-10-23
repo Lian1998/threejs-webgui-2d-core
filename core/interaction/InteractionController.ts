@@ -43,7 +43,8 @@ function copyHit(hit: PickResult): PickResult {
   return { ...hit, screen: [...hit.screen], world: [...hit.world] };
 }
 
-/** 拾取只返回事实, 交互在 Viewer 内维护悬浮/选择与真实 handle 生命周期. */
+/** 在 Viewer 范围维护 hover 和 selection, 将拾取事实转换为图元事件.
+ * hover 合并异步请求, click 获取当次结果, 默认以 ownerId 合并设备部件的选择状态. */
 export class InteractionController {
   private hoverHit?: PickResult;
   private hoverHandle?: BasePrimitive<any>;

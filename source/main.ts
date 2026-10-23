@@ -6,8 +6,22 @@ import Antd from "ant-design-vue";
 import { ColorPaletteManager } from "@source/themes/ColorPaletteManager/";
 import App from "@source/onMap/index.vue";
 
-export const initialization = async () => {
-  ColorPaletteManager.instance.initialization(); // 初始化调色盘插件
+// dayjs汉化
+import dayjs from "dayjs";
+import "dayjs/locale/zh-cn";
+dayjs.locale("zh-cn");
+
+export const init = async () => {
+  ColorPaletteManager.instance.init(); // 初始化调色盘插件
+  console.warn(
+    "按下'P'键下载当前的颜色盘配置...",
+    (() => {
+      window.addEventListener("keydown", (e) => {
+        if (e.code === "KeyP") ColorPaletteManager.instance.downloadItemsTemplate();
+      });
+      return ColorPaletteManager.instance.itemsMap;
+    })(),
+  );
 
   // 挂载vue以及vue的插件
   const app = createApp(App);
@@ -16,9 +30,4 @@ export const initialization = async () => {
 };
 
 // 初始化WebGUI函数, 找到对应的viewport, 挂载threejs画布
-initialization();
-
-window.addEventListener("keyup", (e) => {
-  if (e.code !== "KeyP") return;
-  ColorPaletteManager.instance.downloadItemsTemplate(); // 导出当前的颜色盘配置
-});
+init();

@@ -1,0 +1,47 @@
+body {
+  margin: 0;
+  background: #10202c;
+  color: #deedf4;
+  font: 14px system-ui;
+}
+header {
+  padding: 16px 24px;
+}
+h1 {
+  font-size: 22px;
+}
+a {
+  color: #8bdae5;
+}
+main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 16px;
+  padding: 0 24px 24px;
+}
+#stage {
+  height: 70vh;
+  min-height: 360px;
+  position: relative;
+  background: #142638;
+  overflow: hidden;
+}
+aside {
+  min-width: 0;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+canvas {
+  max-width: 100%;
+}
+h2 {
+  font-size: 16px;
+}
+@media (max-width: 800px) {
+  main {
+    grid-template-columns: 1fr;
+  }
+}

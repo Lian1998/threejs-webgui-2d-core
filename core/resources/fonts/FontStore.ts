@@ -17,7 +17,8 @@ export interface LoadedFont {
 }
 let storeSequence = 0;
 
-/** 每个 Viewer 使用独立内部 family, 相同业务字体名不会互相覆盖 document.fonts. */
+/** 借助 ResourceStore 加载 FontFace, 按 Viewer 隔离内部 family 并注册到 document.fonts.
+ * 提供字体和 coverage 声明, 字形光栅化由 GlyphAtlas 负责. */
 export class FontStore {
   private readonly sources = new Map<string, FontSource>();
   private readonly familyPrefix = `webgui_${++storeSequence}_`;
