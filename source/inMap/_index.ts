@@ -35,6 +35,6 @@ export const init = async () => {
       weight: "400",
       coverage,
     }),
-    ...["body", "head", "ring", "dark", "dark-alpha"].map((id) => view.resources.sprites.register({ id, url: `/debug/${id}.svg` })),
+    // ...["body", "head", "ring", "dark", "dark-alpha"].map((id) => view.resources.sprites.register({ id, url: `/debug/${id}.svg` })),
   ]);
 };

@@ -97,7 +97,7 @@ export class Viewer2D {
     const container = options.container;
     if (!container) throw new Error("Viewer2D 需要有效 container.");
     this.canvas = container.ownerDocument.createElement("canvas");
-    this.canvas.style.cssText = "display:block;width:100%;height:100%;touch-action:none;border:0;outline:none";
+    this.canvas.style.cssText = "display:block;width:100%;height:100%;touch-action:none;border:0;outline:none"; // 默认threejs提供的canvas永远占满容器
     this.canvas.tabIndex = 0;
     // 构造途中失败时按相反顺序释放已创建模块, 不遗留 canvas, observer 或 RAF.
     const initialized: (() => void)[] = [];
@@ -118,7 +118,7 @@ export class Viewer2D {
       own(this.renderer);
       container.appendChild(this.canvas);
       this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-      this.renderer.setClearColor(options.background ?? "#17242b", 1);
+      this.renderer.setClearColor(options.background ?? "#ffffff", 1);
       this.renderer.info.autoReset = false;
       const invalidate = () => {
         if (!this.disposedValue) this.scheduler?.invalidate("viewer");
@@ -393,7 +393,7 @@ export class Viewer2D {
       if (this.disposedValue) return;
       this.contextLost = false;
       // r170 重建 WebGLBackground 后 clearColor 回到默认值, 恢复 Viewer 的业务背景.
-      this.renderer.setClearColor(this.options.background ?? "#17242b", 1);
+      this.renderer.setClearColor(this.options.background ?? "#ffffff", 1);
       this.batches.contextRestored();
       this.picking.contextRestored();
       this.scheduler.setPaused(this.canvas.ownerDocument.hidden);

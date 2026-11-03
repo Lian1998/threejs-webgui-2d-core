@@ -6,16 +6,20 @@ export interface PrimitiveChange {
   version: number;
   dirty: ReadonlySet<DirtyKind>;
 }
-/** 维护逻辑 ID, RGB24 拾取 ID 和 handle 的双向索引, 并合并待通知的脏字段.
+/**
+ * 图元注册中心:
+ * 负责管理图元的身份(id, pickId), 索引(Map), 生命周期, 状态变更和事件通知.
+ *
+ * 维护 id, pickId(RGB24≈1677.7w) 和 handle 的双向索引, 并合并待通知的脏字段.
  * pickId 可回收, generation 区分不同生命周期, 防止异步读回误命中新对象. */
 export class PrimitiveRegistry {
   private handles = new Map<string, BasePrimitive<any>>();
   private pickMap = new Map<number, BasePrimitive<any>>();
-  private freed: number[] = [];
+  private freed: number[] = []; // 回收pickId
   private pickGenerations = new Map<number, number>();
   private nextPick = 1;
   private sequence = 0;
-  private pending = new Map<string, Set<DirtyKind>>();
+  private pending = new Map<string, Set<DirtyKind>>(); // 脏状态管理, 避免每次图元变化都立即通知所有系统
   private added = new Set<(handle: BasePrimitive<any>) => void>();
   private removed = new Set<(handle: BasePrimitive<any>) => void>();
   private changed = new Set<(change: PrimitiveChange) => void>();
@@ -23,6 +27,7 @@ export class PrimitiveRegistry {
   hitRevision = 0;
   revision = 0;
   constructor(private onError: (error: unknown) => void = (error) => console.error(error)) {}
+  /** 申请 id, pickId, generation */
   identity(id?: string): { id: string; sequence: number; pickId: number; generation: number } {
     if (this.disposed) throw new Error("图元注册表已销毁.");
     let sequence = ++this.sequence,
@@ -35,13 +40,14 @@ export class PrimitiveRegistry {
     if (!logicalId || this.handles.has(logicalId)) throw new Error(`图元 ID 重复或无效: ${logicalId}`);
     const pickId = this.freed.pop() ?? this.nextPick++;
     if (pickId > 0xffffff) throw new Error("GPU 拾取 ID 已耗尽.");
-    const generation = (this.pickGenerations.get(pickId) ?? 0) + 1;
+    const generation = (this.pickGenerations.get(pickId) ?? 0) + 1; // pickId如果被回收, gneration+1
     this.pickGenerations.set(pickId, generation);
     return { id: logicalId, sequence, pickId, generation };
   }
   releaseIdentity(identity: { pickId: number }): void {
     if (!this.pickMap.has(identity.pickId)) this.freed.push(identity.pickId);
   }
+  /** 注册图元, 标记初始脏状态, 触发 added */
   add(handle: BasePrimitive<any>): void {
     if (this.disposed) throw new Error("图元注册表已销毁.");
     this.handles.set(handle.id, handle);
@@ -62,6 +68,7 @@ export class PrimitiveRegistry {
   findByOwner(id: EntityId): readonly BasePrimitive<any>[] {
     return this.list().filter((handle) => handle.getOptions().ownerId === id);
   }
+  /** 图元发生变化, 此方法会合并脏字段 */
   mark(handle: BasePrimitive<any>, dirty: ReadonlySet<DirtyKind>): void {
     if (this.disposed) return;
     const pending = this.pending.get(handle.id) ?? new Set<DirtyKind>();
@@ -74,9 +81,9 @@ export class PrimitiveRegistry {
   dirtyFor(id: string): ReadonlySet<DirtyKind> {
     return this.pending.get(id) ?? new Set();
   }
-  /** 先换出 pending 队列, 回调中产生的新变更进入下一批通知, 避免遍历时修改当前集合. */
+  /** 一次性通知订阅者, 批量触发 changed (供渲染器等订阅者处理) */
   flushChanges(): void {
-    const pending = this.pending;
+    const pending = this.pending; // 先换出 pending 队列, 回调中产生的新变更进入下一批通知, 避免遍历时修改当前集合.
     this.pending = new Map();
     for (const [id, dirty] of pending) {
       const handle = this.handles.get(id);
@@ -85,6 +92,7 @@ export class PrimitiveRegistry {
       this.notify(this.changed, change);
     }
   }
+  /** 移除 id, 回收 pickId, 触发 removed */
   remove(handle: BasePrimitive<any>): void {
     if (this.handles.get(handle.id) !== handle) return;
     this.handles.delete(handle.id);
@@ -121,6 +129,7 @@ export class PrimitiveRegistry {
       }
     }
   }
+  /** 销毁注册表, 释放图元和监听器 */
   dispose(): void {
     if (this.disposed) return;
     this.disposed = true;

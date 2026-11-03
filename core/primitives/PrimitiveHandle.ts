@@ -2,6 +2,7 @@ import * as THREE from "three";
 import type { CommonOptions, DeepReadonly, DirtyKind, HitPolicy, PrimitiveEvent, PrimitiveEventType, PrimitiveHandle, PrimitiveKind, PrimitiveOptions, PrimitivePatch, Transform2D, Vec2 } from "../contracts";
 import { triangulatePolygonGeometry } from "./polygons/triangulate";
 
+/** 图元的上下文接口, 用于生成工厂类实例 */
 export interface PrimitiveContext {
   validateLayer(id: string): void;
   changed(handle: BasePrimitive<any>, dirty: ReadonlySet<DirtyKind>): void;
@@ -110,7 +111,7 @@ export class BasePrimitive<T extends PrimitiveOptions = PrimitiveOptions> implem
       transform: { ...this.options.transform, ...copyValue(patch.transform ?? {}) },
       hit: { ...this.options.hit, ...copyValue(patch.hit ?? {}) },
     } as T;
-    this.validate(candidate, keys);
+    this.validate(candidate, keys); // 对新update的属性进行校验
     const changed = [...keys].filter((key) => !sameValue(this.options[key], candidate[key]));
     if (!changed.length) return this;
     this.options = freezeValue(candidate) as T;
@@ -220,6 +221,7 @@ export class BasePrimitive<T extends PrimitiveOptions = PrimitiveOptions> implem
     this.listeners.clear();
     this.parentMatrix = null;
   }
+  /** 确认图元还没有被销毁 */
   private assertAlive(): void {
     if (this.disposed) throw new Error(`图元 ${this.id} 已销毁.`);
   }
