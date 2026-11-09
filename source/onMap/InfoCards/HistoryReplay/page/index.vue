@@ -135,68 +135,59 @@ const on_tickFileExport_wrapped = async () => {
   }, 100);
 };
 
-let opened = false;
+import { once } from "lodash-es";
+/** 首次打开页面时初始化历史回放UI */
+const initialize = once((rootElement: HTMLDivElement) => {
+  // 添加一个sliderTrack, 用于现实当前帧加载情况
+  const sliderDom = sliderRef.value as HTMLDivElement;
+  const sliderTrack = sliderDom.querySelector(".ant-slider-track") as HTMLDivElement;
+  const sliderTrackAdd = document.createElement("div");
+  extraDoms.sliderTrackAdd = sliderTrackAdd;
+  sliderTrackAdd.style.left = "0%";
+  sliderTrackAdd.style.right = "auto";
+  sliderTrackAdd.style.width = "0%";
+  sliderTrackAdd.style.backgroundColor = "#FFD3B6FF"; // #FFD3B6FF #DCEDC1FF
+  sliderTrackAdd.style.height = "4px";
+  sliderTrack.after(sliderTrackAdd);
+
+  // 添加一个Tooltip, 用于实现hover提示
+  const sliderRail = sliderDom.querySelector(".ant-slider") as HTMLDivElement;
+  let sliderRailLeft = 0.0;
+  let sliderRailWidth = 0.0;
+  const resizeCallback = debounce(
+    () => {
+      const boundingRect = sliderRail.getBoundingClientRect();
+      sliderRailLeft = boundingRect.left;
+      sliderRailWidth = boundingRect.width;
+    },
+    100,
+    { trailing: true },
+  );
+  resizeCallback();
+  window.addEventListener("resize", resizeCallback);
+  const tooltipAdd = document.createElement("div");
+  extraDoms.tooltipAdd = tooltipAdd;
+  sliderDom.appendChild(tooltipAdd);
+  tooltipAdd.classList.add("tooltip-add");
+  tooltipAdd.style.display = "none";
+  let mouseEnterFlag = false;
+  sliderRail.addEventListener("mouseenter", () => (mouseEnterFlag = true));
+  sliderRail.addEventListener("mouseleave", () => {
+    mouseEnterFlag = false;
+    tooltipAdd.style.display = "none";
+  });
+  sliderRail.addEventListener("mousemove", (e) => {
+    if (!historyReplayStatus.pickTimeConfirmed) return;
+    if (historyReplayStatus.playing) return;
+    if (!mouseEnterFlag) return;
+    tooltipAdd.style.display = "block";
+    on_sliderRailHover(e.clientX - sliderRailLeft, sliderRailWidth);
+  });
+});
+
 defineExpose({
-  onOpenInfoCard: async (data: any) => {
-    if (!opened) {
-      opened = true;
-      const father = (pageRef.value as HTMLDivElement).parentNode as HTMLDivElement;
-
-      // 去除弹框头的移动监听
-      const headerElement: HTMLDivElement = father.firstElementChild as HTMLDivElement;
-      if (headerElement["callback_mousedown"]) {
-        headerElement.style.cursor = "unset";
-        headerElement.removeEventListener("mousedown", headerElement["callback_mousedown"]);
-        headerElement["callback_mousedown"] = undefined;
-      }
-      extraDoms.headerCloseBtn = headerElement.querySelector(".close-button");
-
-      // 添加一个sliderTrack, 用于现实当前帧加载情况
-      const sliderDom = sliderRef.value as HTMLDivElement;
-      const sliderTrack = sliderDom.querySelector(".ant-slider-track") as HTMLDivElement;
-      const sliderTrackAdd = document.createElement("div");
-      extraDoms.sliderTrackAdd = sliderTrackAdd;
-      sliderTrackAdd.style.left = "0%";
-      sliderTrackAdd.style.right = "auto";
-      sliderTrackAdd.style.width = "0%";
-      sliderTrackAdd.style.backgroundColor = "#FFD3B6FF"; // #FFD3B6FF #DCEDC1FF
-      sliderTrackAdd.style.height = "4px";
-      sliderTrack.after(sliderTrackAdd);
-
-      // 添加一个Tooltip, 用于实现hover提示
-      const sliderRail = sliderDom.querySelector(".ant-slider") as HTMLDivElement;
-      let sliderRailLeft = 0.0;
-      let sliderRailWidth = 0.0;
-      const resizeCallback = debounce(
-        () => {
-          const boundingRect = sliderRail.getBoundingClientRect();
-          sliderRailLeft = boundingRect.left;
-          sliderRailWidth = boundingRect.width;
-        },
-        100,
-        { trailing: true },
-      );
-      resizeCallback();
-      window.addEventListener("resize", resizeCallback);
-      const tooltipAdd = document.createElement("div");
-      extraDoms.tooltipAdd = tooltipAdd;
-      sliderDom.appendChild(tooltipAdd);
-      tooltipAdd.classList.add("tooltip-add");
-      tooltipAdd.style.display = "none";
-      let mouseEnterFlag = false;
-      sliderRail.addEventListener("mouseenter", () => (mouseEnterFlag = true));
-      sliderRail.addEventListener("mouseleave", () => {
-        mouseEnterFlag = false;
-        tooltipAdd.style.display = "none";
-      });
-      sliderRail.addEventListener("mousemove", (e) => {
-        if (!historyReplayStatus.pickTimeConfirmed) return;
-        if (historyReplayStatus.playing) return;
-        if (!mouseEnterFlag) return;
-        tooltipAdd.style.display = "block";
-        on_sliderRailHover(e.clientX - sliderRailLeft, sliderRailWidth);
-      });
-    }
+  onOpenInfoCard: async (data: any, { rootElement }) => {
+    initialize(rootElement);
   },
   onCloseInfoCard: () => {},
   setTitle: () => "历史回放",

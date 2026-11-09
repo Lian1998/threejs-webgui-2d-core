@@ -2,7 +2,7 @@
   <!-- 点击弹窗内部时放到最前面展示 -->
   <div v-for="(_, index) in instances.length" :key="index" :ref="(el) => (instances[index].element = el as HTMLDivElement)" class="gui-infocard" @pointerdown="bringToFront(index)">
     <!-- 点击弹窗的header时触发拖拽 -->
-    <div class="gui-infocard-header" @pointerdown="startDrag($event, index)">
+    <div class="gui-infocard-header" :style="{ cursor: dragable && 'move' }" @pointerdown="dragable && startDrag($event, index)">
       <div class="title">
         <!-- 如果setTitile传递的是一个渲染函数 -->
         <component v-if="typeof instances[index].title.value === 'function'" :is="instances[index].title.value" />
@@ -11,9 +11,7 @@
         <!-- 直接展示setTitle的传递内容 -->
         <template v-else>{{ instances[index].title.value }}</template>
       </div>
-      <button class="close-button" aria-label="关闭弹窗" @pointerdown.stop @click="closeInfoCard(index)">
-        <CloseOutlined />
-      </button>
+      <a-button class="close-button" :icon="h(CloseOutlined)" ghost @pointerdown.stop @click="closeInfoCard(index)" />
     </div>
 
     <!-- 渲染弹窗内容 -->
@@ -23,12 +21,16 @@
     </div>
 
     <!-- 右下角挂载拖拽弹窗大小的组件 -->
-    <div v-if="resizable" class="gui-infocard-resizer" role="separator" aria-label="调整弹窗大小" @pointerdown.stop="startResize($event, index)" />
+    <div v-if="props.resizable" class="gui-infocard-resizer" @pointerdown.stop="startResize($event, index)">
+      <ArrowsAltOutlined style="transform: rotate(90deg)" />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import "./index.scss";
+import { h } from "vue";
 import { onBeforeUnmount, shallowRef, type Component } from "vue";
+import { CloseOutlined, ArrowsAltOutlined } from "@ant-design/icons-vue";
 import InstanceContent from "./InstanceContent.vue";
 import { context } from "./index";
 
@@ -54,6 +56,9 @@ const props = withDefaults(
 
     /** 最小高度 */
     minHeight?: number;
+
+    /** 是否支持拖拽 */
+    dragable?: boolean;
   }>(),
   {
     instanceCount: 1,
@@ -62,6 +67,7 @@ const props = withDefaults(
     resizable: true,
     minWidth: 320,
     minHeight: 180,
+    dragable: true,
   },
 );
 

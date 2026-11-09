@@ -7,7 +7,7 @@
       <!-- 视口 -->
       <div id="gui-viewport" />
 
-      <InfoCard ref="historyReplayInfoCardRef" :instanceComponent="HistoryReplay" :instanceTitle="'历史回放'" />
+      <InfoCard ref="historyReplayInfoCardRef" :min-width="1000" :instanceComponent="HistoryReplay" :instanceTitle="'历史回放'" :dragable="false" :resizable="false" />
     </div>
   </a-config-provider>
 </template>

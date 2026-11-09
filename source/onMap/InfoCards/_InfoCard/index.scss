@@ -16,9 +16,6 @@
     border-radius: calc(var(--ant-border-radius) * 1px) calc(var(--ant-border-radius) * 1px) 0 0;
     display: flex;
     align-items: center;
-    background-color: var(--ant-color-bg-layout);
-    cursor: move;
-    border-bottom: 1px solid var(--ant-color-border);
     min-height: var(--ant-control-height);
     padding: calc(var(--ant-padding-content-vertical) * 1px) calc(var(--ant-padding-content-horizontal) * 1px);
 
@@ -29,9 +26,34 @@
 
     .close-button {
       margin-left: auto;
-      cursor: pointer;
-      color: var(--ant-color-text);
+      color: var(--ant-color-text-tertiary);
     }
+    .close-button:hover {
+      color: var(--ant-color-text);
+      background: var(--ant-color-fill-secondary);
+      border-color: var(--ant-color-border-bg);
+    }
+  }
+
+  .gui-infocard-resizer {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    cursor: nwse-resize;
+    touch-action: none;
+  }
+}
+
+.gui-infocard.resized {
+  width: 100%;
+  height: 100%;
+
+  .gui-infocard-body {
+    flex: 1;
+  }
+  .gui-infocard-container {
+    width: 100% !important;
+    max-width: 100%;
   }
 }
 
