@@ -40,12 +40,14 @@ export class OrthographicCameraAdapter implements CameraAdapter {
     this.camera.updateMatrixWorld(true);
   }
 
+  /** 屏幕坐标转换到世界坐标 */
   screenToWorld(screen: Vec2): Vec2 {
     this.point.set((screen[0] / this.size[0]) * 2 - 1, 1 - (screen[1] / this.size[1]) * 2, 0);
     this.point.unproject(this.camera);
     return [this.point.x, -this.point.z];
   }
 
+  /** 世界坐标转换到屏幕坐标 */
   worldToScreen(world: Vec2): Vec2 {
     this.point.set(world[0], 0, -world[1]).project(this.camera);
     return [((this.point.x + 1) / 2) * this.size[0], ((1 - this.point.y) / 2) * this.size[1]];

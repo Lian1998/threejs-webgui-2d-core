@@ -16,9 +16,14 @@ export interface FrameSchedulerOptions {
   onError?: (error: unknown) => void;
 }
 
-/** 一个 Viewer 共用一个时钟和 RAF, 合并同帧 invalidate.
- * onFrame 更新动画, flushUpdates 同步逻辑状态, renderColor 绘制, 最后通知 afterFrame.
- * 只有脏更新或持续帧令牌存在时继续排帧, 本类本身不依赖 Three.js. */
+/**
+ * 帧调度器(不依赖 Three.js)  
+ * GUI制作时存在相机变化(MotionController.invalidate), 模型/状态变化(PrimitiveFactory.invalidate)时才进行渲染操作, 避免重复渲染(静态查看时不会持续消耗GPU)  
+ * 保证一个 Viewer 共用一个 Clock 和 RAF, 在同一次 RAF 中合并标脏(invalidate)  
+ *
+ * run函数中:  
+ * 优先运行 onFrame 接口以同步动画更新, flushUpdates(绑定上下文中注册)同步所有的逻辑状态, renderColor执行绘制, 最后调用afterFrame.  
+ * 脏更新或持续帧令牌存在时继续排帧 */
 export class FrameScheduler {
   private readonly listeners = new Set<(frame: FrameInfo) => void>();
   private readonly afterFrameListeners = new Set<(frame: FrameInfo) => void>();
@@ -50,6 +55,7 @@ export class FrameScheduler {
     return this.clock();
   }
 
+  /** 标脏 */
   invalidate(_reason?: string): void {
     if (this.disposed) return;
     this.dirty = true;
@@ -73,8 +79,15 @@ export class FrameScheduler {
     };
   }
 
+  /**
+   * 连续渲染
+   * ```javascript
+   * const stopBlinking = scheduler.acquireContinuous("blink");
+   * stopBlinking();
+   * ``` */
   acquireContinuous(_reason: string): () => void {
     if (this.disposed) throw new Error("FrameScheduler has been disposed");
+    // 申请一个连续渲染令牌, 只要令牌存在, 帧调度器每一帧结束后就会继续调度下一帧
     const token = Symbol();
     this.continuous.add(token);
     this.invalidate("continuous");
@@ -90,7 +103,10 @@ export class FrameScheduler {
     };
   }
 
-  /** 点击等操作需要立即同步当前姿态, 不重复消费已经排队的帧. */
+  /** 立即渲染
+   * 正常情况需要等待浏览器的下一次 RAF  
+   * 但某些操作需要立即更新画面: 点击后立即同步当前画面(Interaction) 拖拽前更新相机姿态 确保渲染完成后再执行下一步同步逻辑(拾取)  
+   */
   flushNow(): void {
     if (this.disposed || this.paused) return;
     if (this.running) {
@@ -102,11 +118,12 @@ export class FrameScheduler {
     this.run(this.now());
   }
 
+  /** 暂停与恢复 */
   setPaused(paused: boolean): void {
     if (this.disposed || this.paused === paused) return;
-    this.paused = paused;
+    this.paused = paused; // 停止调度新帧
     if (paused) {
-      if (this.rafId !== undefined) this.cancelFrame(this.rafId);
+      if (this.rafId !== undefined) this.cancelFrame(this.rafId); // 取消已经排队的 RAF
       this.rafId = undefined;
     } else {
       // 保留真实时间间隔, 插帧在恢复时按绝对时间追到当前状态.
@@ -138,6 +155,7 @@ export class FrameScheduler {
     this.dirty = false;
   }
 
+  /** 排帧 */
   private schedule(): void {
     if (this.disposed || this.paused || this.running || this.rafId !== undefined) return;
     this.rafId = this.requestFrame(() => {
@@ -151,6 +169,7 @@ export class FrameScheduler {
     });
   }
 
+  /** 核心执行逻辑: 浏览器通知开始新的一帧, 更新动画/相机/时间的相关状态, 同步所有待处理的逻辑更新, 绘制当前场景, 执行渲染完成之后的回调函数, 通知观察者 */
   private run(nowMs: number): void {
     if (this.disposed || this.paused) return;
     this.running = true;

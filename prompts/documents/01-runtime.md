@@ -1,12 +1,12 @@
 # 从用户 API 到一帧提交
 
-## Viewer2D 是组合入口
+## 组合入口
 
-[Viewer2D.ts](../../core/Viewer2D.ts) 的构造器创建 canvas 和 `THREE.WebGLRenderer`, 设置输出色彩空间和背景. 随后组装如下对象:
+[Viewer2D.ts](../../core/Viewer2D.ts) 创建 canvas 和 `THREE.WebGLRenderer`, 设置输出色彩空间和背景. 随后组装如下对象:
 
-1. `Viewport2D` 维护尺寸, 中心和 scale. resize 回调调用 renderer 的 `setPixelRatio` 与 `setSize`.
-2. `LayerManager`, `PrimitiveRegistry`, `ResourceStore` 保存当前 Viewer 的逻辑状态和资源索引.
-3. `SpriteAtlas` 和 `GlyphAtlas(FontStore)` 提供图片或字形区域.
+1. `Viewport2D` 主维护 视口尺寸(size), 视口中心(center) 和 视口缩放(scale).
+2. `LayerManager`, `PrimitiveRegistry`, `ResourceStore` 需要保存当前 Viewer 的逻辑状态, 资源索引等. 提供图层管理, 图元原理, 
+3. `SpriteAtlas` 和 `GlyphAtlas(FontStore)` 需要保存当前 Viewer 的 ResourceStore 索引, 提供 精灵图片 以及 字形区域
 4. `BatchManager` 注册 Polygon, Line, Sprite, Text 四种 backend.
 5. `FrameScheduler` 接收 flushUpdates/renderColor/afterRender 管线.
 6. `PrimitiveFactory` 把变更通知接到 registry, prepare 和 invalidate.
@@ -49,7 +49,8 @@ Sprite/Text 创建还会进入 backend.prepare. 图片或文字没有准备好�
 
 ```mermaid
 flowchart TD
-  API[setPosition / update / setText] --> State[BasePrimitive 校验并替换选项]
+  API[setPosition/update/setText...] 
+  API--> State[BasePrimitive 校验并替换选项]
   State --> Dirty[PrimitiveFactory.changed / Registry.mark]
   Dirty --> RAF[FrameScheduler.invalidate]
   RAF --> Motion[onFrame 更新插帧]
@@ -61,9 +62,12 @@ flowchart TD
   Draw --> After[Interaction.afterFrame / 帧统计]
 ```
 
-`BasePrimitive.update` 先生成候选选项, 校验通过才替换状态. 普通字段替换, `transform` 与 `hit` 合并子字段. 无实际变化不增加 version. 选项快照递归冻结, 外部不能绕过 API 修改状态.
-
-脏类型包括 transform, style, geometry, resource, order 和 visibility. 例如 setPosition 标记矩阵变化, setText 标记布局变化, setImage 标记资源变化. Registry 合并同一图元的通知; 后端同时根据 version 和内容签名避免不必要上传.
+`BasePrimitive.update`  
+1. 获取 更新的内容, 先生成候选选项, 进行校验校验(图元还没有被销毁等校验), 确定有实际变化的才增加version, 替换状态. 
+2. 在将 更新的内容 转换到 dirty 处理时, 根据更新数据的 key 进行 dirty 类型判断(geometry, resource, order, visibility).
+3. BasePrimitive 的 options 属性进行递归冻结, 外部不能绕过 API 修改状态.
+ 
+> 脏类型包括 transform, style, geometry, resource, order 和 visibility. 例如 setPosition 标记矩阵变化, setText 标记布局变化, setImage 标记资源变化. Registry 合并同一图元的通知; 后端同时根据 version 和内容签名避免不必要上传.
 
 `FrameScheduler.invalidate` 只排一个 RAF. `run` 先通知动画 listener, 再 flushUpdates, 再 renderColor. 动画 listener 写入的状态在同一帧消费. `acquireContinuous` 返回释放函数, 最后一个动画令牌释放且无脏状态后不再继续排帧.
 

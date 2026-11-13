@@ -150,6 +150,7 @@ export interface TextHandle extends PrimitiveHandle<TextOptions> {
   ready(): Promise<void>;
 }
 export type PrimitiveOptions = PolygonOptions | LineOptions | SpriteOptions | TextOptions;
+
 export interface ResourceLease<T> {
   readonly value: T;
   release(): void;

@@ -53,7 +53,7 @@ export class Viewport2D {
   ) {
     this.container = options.container ?? canvas.parentElement ?? canvas;
     this.minScale = options.minScale ?? 0.01;
-    this.maxScale = options.maxScale ?? 10_000;
+    this.maxScale = options.maxScale ?? 10_000; // 数字分隔符 10_000 = 10000
     this.dprLimit = options.dprLimit ?? 2;
     if (![this.minScale, this.maxScale, this.dprLimit].every(Number.isFinite) || this.minScale <= 0 || this.maxScale < this.minScale || this.dprLimit <= 0) {
       throw new Error("Invalid viewport scale or DPR limits");
@@ -63,7 +63,7 @@ export class Viewport2D {
     const scale = options.scale ?? 10;
     if (!Number.isFinite(scale) || scale <= 0) throw new Error("View scale must be positive");
     this.view = { center: [...center], scale: this.clampScale(scale) };
-    this.adapter = options.cameraAdapter ?? new OrthographicCameraAdapter(options.cameraHeight);
+    this.adapter = options.cameraAdapter ?? new OrthographicCameraAdapter(options.cameraHeight); // 默认使用正交投影相机
     this.camera = this.adapter.camera;
     try {
       if (typeof ResizeObserver !== "undefined") {
@@ -145,6 +145,7 @@ export class Viewport2D {
     return this.adapter.worldToScreen(world);
   }
 
+  /** 获取某点的屏幕归一坐标 */
   clientToScreen(client: Vec2): Vec2 {
     finitePair(client);
     const rect = this.canvas.getBoundingClientRect();
@@ -160,14 +161,17 @@ export class Viewport2D {
     };
   }
 
+  /** 触发事件获取视口容器宽高  */
   resize(): void {
     if (this.disposed) return;
     const width = this.container.clientWidth;
     const height = this.container.clientHeight;
     const dpr = Math.min(this.dprLimit, this.canvas.ownerDocument.defaultView?.devicePixelRatio ?? 1);
     if (width === this.size[0] && height === this.size[1] && dpr === this.pixelRatio) return;
+    // 同步状态
     this.size = [width, height];
     this.pixelRatio = dpr;
+    // 触发外部注册函数. 往往是设置渲染上下文状态, renderSize等
     this.options.onResize?.(this.cssSize, dpr);
     this.changed();
   }
@@ -182,6 +186,7 @@ export class Viewport2D {
     this.listeners.clear();
   }
 
+  /** 更新 camera, 更新 cameraRevision, 更新 listeners */
   private changed(): void {
     this.adapter.update(this.view, this.size);
     this.revisionValue++;

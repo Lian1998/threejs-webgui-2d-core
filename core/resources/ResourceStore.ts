@@ -6,14 +6,23 @@ interface Waiter<T> {
   unlisten: () => void;
 }
 
+/** 资源实体 */
 interface Entry<T> {
+  /** 标识符 */
   key: string;
+  /** 资源加载任务的取消控制器 */
   controller: AbortController;
+  /** 资源加载状态 */
   state: "pending" | "ready";
+  /** 资源实例 */
   value?: T;
+  /** 正在使用资源的消费者(lease)数量 */
   refs: number;
+  /** 正在等待资源完成的消费者(等待同一加载任务) */
   waiters: Set<Waiter<T>>;
+  /** 资源销毁函数 */
   disposer: (value: T) => void;
+  /** 是否已永久关闭 */
   closed: boolean;
 }
 
@@ -35,14 +44,17 @@ function abortError(): Error {
   return error;
 }
 
-/** 按 key 合并异步 loader, 每个消费者获得独立的引用计数 lease.
- * 不直接创建 Three.js 对象, 资源类型和 dispose 行为由具体 loader/disposer 注入. */
+/** 异步资源管理器
+ * 通过 Entry(资源自身的生命周期) + Waiter(消费者等待加载的生命周期) + Lease(消费者使用资源的生命周期) 三层结构, 将资源的生命周期拆成三个独立维度
+ * 同 key 并发加载共享, 消费者等待可独立取消, 资源使用权独立计数, 最后一个引用释放后自动销毁, 迟到的异步结果不会重新激活已关闭的资源  */
 export class ResourceStore {
+  /** 保证异步加载去重(同key值只执行一次loader) */
   private readonly entries = new Map<string, Entry<unknown>>();
   private disposed = false;
 
   constructor(private readonly options: ResourceStoreOptions = {}) {}
 
+  /** 获取资源使用权 */
   acquire<T>(key: string, loader: (signal: AbortSignal) => Promise<T>, disposer: (value: T) => void, options: ResourceStoreAcquireOptions = {}): Promise<ResourceLease<T>> {
     if (this.disposed) return Promise.reject(new Error("ResourceStore has been disposed"));
     if (!key) return Promise.reject(new Error("Resource key must not be empty"));
@@ -152,8 +164,9 @@ export class ResourceStore {
     this.close(entry);
   }
 
-  /** 每个申请独立计数并提供幂等 release, 只有最后引用和等待者离开时才销毁资源. */
+  /** 获取独立租约 */
   private lease<T>(entry: Entry<T>): ResourceLease<T> {
+    // 每个申请独立计数并提供幂等 release
     entry.refs++;
     let released = false;
     return {
@@ -166,6 +179,7 @@ export class ResourceStore {
         released = true;
         if (entry.closed) return;
         entry.refs--;
+        // 只有最后引用和等待者离开时才销毁资源
         if (!entry.refs && !entry.waiters.size) this.close(entry);
       },
     };
