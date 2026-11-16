@@ -46,7 +46,8 @@ export interface ViewerStats {
   activeMotionCount: number;
 }
 
-/** Viewer 的组合根. 创建 WebGLRenderer, 连接逻辑图元与四类渲染后端.
+/** Viewer 的组合根
+ * 创建 WebGLRenderer, 连接逻辑图元与四类渲染后端.
  * setter 只标脏, 调度器先同步缓冲再绘制; dispose 统一收回事件, lease 和 GPU 对象. */
 export class Viewer2D {
   readonly canvas: HTMLCanvasElement;

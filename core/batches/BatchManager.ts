@@ -7,11 +7,17 @@ import type { PrimitiveRegistry } from "../primitives/PrimitiveRegistry";
 export function comparePaint(a: RenderFeature, b: RenderFeature): number {
   return a.paintKey.layerOrder - b.paintKey.layerOrder || a.paintKey.primitiveOrder - b.paintKey.primitiveOrder || a.paintKey.insertionSequence - b.paintKey.insertionSequence;
 }
-/** 把逻辑图元转换为 RenderFeature, 统一应用图层和父变换后排序.
- * 仅把连续同类区段交给后端, 最终将 Mesh 按 renderOrder 放入颜色或拾取 Scene. */
+/** 二维图元批处理管理器
+ * 将业务层(前端)的逻辑图元转换为可渲染的数据，按照绘制顺序(Layer)组织批次，交给对应的渲染机(后端)生成 Mesh，最终分别构建 colorScene 和 pickScene
+ *
+ * 1. 组织 RenderFeature 时, 统一应用图层和父变换后排序.
+ * 2. 仅把连续同类区段的Mesh交给后端, 最终将 Mesh 按 renderOrder 放入颜色或拾取 Scene. */
 export class BatchManager {
+  /** 视频输出场景树 */
   readonly colorScene = new THREE.Scene();
+  /** 拾取输出场景树 */
   readonly pickScene = new THREE.Scene();
+
   private backends = new Map<PrimitiveKind, PrimitiveRenderBackend>();
   private unsubscribe: () => void;
   constructor(
