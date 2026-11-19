@@ -1,6 +1,6 @@
 import type { Viewer2D } from "../Viewer2D";
 import type { EntityView } from "../composition/EntityView";
-import type { LineHandle, MotionHandle, PolygonHandle, SpriteHandle, TextHandle, TransformTarget, Vec2 } from "../public";
+import type { LineHandle, MotionHandle, PolygonHandle, SpriteHandle, TextHandle, TransformTarget, Vec2 } from "../";
 
 /** 组合设备用法示例, 把多个图元连接到 EntityView 和 MotionController.
  * 业务示例不属于底层渲染机制, 独立模块调试不需要加载完整设备场景. */

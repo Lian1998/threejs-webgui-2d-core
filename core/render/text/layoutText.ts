@@ -1,5 +1,5 @@
 import type { DeepReadonly, ResourceLease, TextOptions, Vec2 } from "../../contracts";
-import { GlyphAtlas, type GlyphRegion } from "../../resources/fonts/GlyphAtlas";
+import { GlyphAtlas, type GlyphRegion } from "../../resources/GlyphAtlas";
 
 export interface LayoutGlyph {
   region: GlyphRegion;

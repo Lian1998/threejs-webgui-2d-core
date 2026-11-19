@@ -1,5 +1,5 @@
 import type { PrimitiveHandle, PrimitiveRenderBackend, RenderContext, RenderFeature, RenderItem, RenderPassKind, ResourceLease, SpriteOptions, UploadStats } from "../../contracts";
-import { SpriteAtlas, type SpriteRegion } from "../../resources/sprites/SpriteAtlas";
+import { SpriteAtlas, type SpriteRegion } from "../../resources/SpriteAtlas";
 import { colorComponents, pickComponents } from "../shared/material";
 import { MAX_QUAD_INSTANCES, QuadBatch, type QuadInstance } from "./QuadBatch";
 

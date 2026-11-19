@@ -1,5 +1,5 @@
-import type { ResourceLease } from "../../contracts";
-import { ResourceStore } from "../ResourceStore";
+import type { ResourceLease } from "../contracts";
+import { ResourceStore } from "./ResourceStore";
 
 export interface FontSource {
   id: string;

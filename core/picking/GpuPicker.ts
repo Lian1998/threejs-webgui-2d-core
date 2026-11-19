@@ -1,9 +1,9 @@
 import * as THREE from "three";
-import type { PickQuery, PickResult, RenderFeature, Vec2 } from "../contracts";
-import { BatchManager, comparePaint } from "../batches/BatchManager";
-import type { LayerManager } from "../layers/LayerManager";
-import type { PrimitiveRegistry } from "../primitives/PrimitiveRegistry";
-import type { Viewport2D } from "../viewport/Viewport2D";
+import type { PickQuery, PickResult, RenderFeature, Vec2 } from "../contracts/";
+import { BatchManager, comparePaint } from "../batches/";
+import type { LayerManager } from "../layers/";
+import type { PrimitiveRegistry } from "../primitives/";
+import type { Viewport2D } from "../viewport/";
 
 interface QueryFrame {
   features: RenderFeature[];

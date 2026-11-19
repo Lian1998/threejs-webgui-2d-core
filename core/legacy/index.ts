@@ -7,4 +7,4 @@ export * from "./MeshPolygon/";
 export * from "./GpuPickManager/";
 export * from "./RenderScheduler/";
 export * from "./Batching/";
-export * from "../ECS";
+export * from "./ECS";

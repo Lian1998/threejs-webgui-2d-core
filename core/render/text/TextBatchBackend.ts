@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import type { PrimitiveHandle, PrimitiveRenderBackend, RenderContext, RenderFeature, RenderItem, RenderPassKind, TextOptions, UploadStats } from "../../contracts";
-import { GlyphAtlas } from "../../resources/fonts/GlyphAtlas";
+import { GlyphAtlas } from "../../resources/GlyphAtlas";
 import { colorComponents, pickComponents } from "../shared/material";
 import { MAX_QUAD_INSTANCES, QuadBatch, type QuadInstance } from "../sprites/QuadBatch";
 import { layoutSignature, layoutText, type TextLayout } from "./layoutText";

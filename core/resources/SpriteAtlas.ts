@@ -1,6 +1,6 @@
 import * as THREE from "three";
-import type { ResourceLease, Vec2 } from "../../contracts";
-import { ResourceStore } from "../ResourceStore";
+import type { ResourceLease, Vec2 } from "../contracts";
+import { ResourceStore } from "./ResourceStore";
 
 export interface SpriteImageSource {
   id: string;

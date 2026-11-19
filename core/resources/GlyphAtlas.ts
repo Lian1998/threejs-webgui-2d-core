@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import TinySDF from "tiny-sdf";
-import type { ResourceLease, Vec2 } from "../../contracts";
+import type { ResourceLease, Vec2 } from "../contracts";
 import { FontStore, type FontSource, type LoadedFont } from "./FontStore";
 
 export interface GlyphRegion {

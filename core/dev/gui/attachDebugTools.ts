@@ -1,8 +1,7 @@
-import type { PrimitiveRegistry } from "../../primitives/PrimitiveRegistry";
-import type { PrimitiveHandle } from "../../contracts";
-import type { InteractionController } from "../../interaction/InteractionController";
-import type { MotionController } from "../../motion/MotionController";
-import type { EntityRegistry } from "../../composition/EntityRegistry";
+import type { PrimitiveRegistry, PrimitiveHandle } from "@core/index";
+import type { InteractionController } from "@core/index";
+import type { MotionController } from "@core/index";
+import type { EntityRegistry } from "@core/index";
 import { DebugRegistry } from "./DebugRegistry";
 import { DebugGUIManager, type DebugGUIOptions } from "./DebugGUIManager";
 import { createDebugProxy, EntityDebugProxy } from "./DebugProxy";
