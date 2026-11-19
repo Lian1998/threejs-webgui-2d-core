@@ -32,7 +32,7 @@
     "strictFunctionTypes": false,       // 函数返回类型和参数类型的的协变与逆变
 
     "paths": {
-      "@source/*": [ "./source/*" ],
+      "@/*": [ "./src/*" ],
       "@core/*": [ "./core/*" ],
       "@assets/*": [ "./assets/*" ],
       "@libs/*": [ "./libs/*" ],

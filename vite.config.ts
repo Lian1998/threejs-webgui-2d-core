@@ -33,7 +33,7 @@ export default defineConfig(({ command, mode }) => ({
   assetsInclude: [/\.(vs|fs|vert|frag|glsl|shader)$/i],
   resolve: {
     alias: [
-      { find: "@source", replacement: resolveProject("source") },
+      { find: "@", replacement: resolveProject("src") },
       { find: "@core", replacement: resolveProject("core") },
       { find: "@libs", replacement: resolveProject("libs") },
       { find: /^three\/addons\//, replacement: resolveProject("libs/three.js-r170/examples/jsm") + "/" },
