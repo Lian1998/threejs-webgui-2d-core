@@ -1,6 +1,6 @@
 import TinySDF from "tiny-sdf";
-import { makeRGBAImageData } from "@core/utils/canvas2d_buffers";
-import { DEBUG_SDF_GEN_BUFFER_RENDER_PERFORMANCE } from "@core/SDFText2D/index";
+import { makeRGBAImageData } from "../../../utils/canvas2d_buffers";
+import { DEBUG_SDF_GEN_BUFFER_RENDER_PERFORMANCE } from "../../../SDFText2D/";
 
 /** 缓存通过TinySDF生成过的字形 */
 export const glyphsCache = new Map<string, ReturnType<TinySDF["draw"]>>();

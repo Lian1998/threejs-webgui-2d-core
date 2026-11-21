@@ -1,9 +1,8 @@
 import * as THREE from "three";
-import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
+import { GpuPickFeature } from "../interfaces/GpuPickFeature";
 import { trans2PickBufferMaterial } from "./trans2PickBufferMaterial";
-import { DEBUG_PICK_BUFFER_FRAME } from "./index";
-import { DEBUG_PICK_BUFFER_RENDER_PERFORMANCE } from "./index";
-import { channel } from "./debug/";
+import { DEBUG_PICK_BUFFER_FRAME, DEBUG_PICK_BUFFER_RENDER_PERFORMANCE } from "./index";
+import { channel } from "./debug/visualization";
 
 export type GpuPickMaterialMode = "uniform" | "attribute";
 

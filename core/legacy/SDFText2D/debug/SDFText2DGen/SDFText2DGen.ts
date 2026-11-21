@@ -1,12 +1,11 @@
 import * as THREE from "three";
 
-import { SpriteXZRectGeometry } from "@core/Sprite2D/index";
+import { SpriteXZRectGeometry } from "../../../Sprite2D/";
 import { SDFText2DGenMaterial } from "./SDFText2DGenMaterial";
 
-import { SDF_FONT_SIZE } from "@core/SDFText2D/TinySdfAtlas";
-import { tinySdfInstance } from "@core/SDFText2D/TinySdfAtlas";
+import { SDF_FONT_SIZE, tinySdfInstance } from "../../../SDFText2D/TinySdfAtlas";
 
-import { gen as genTinySDFCanvas2D } from "@core/SDFText2D/debug/gen/TinySDF.Canvas2D";
+import { gen as genTinySDFCanvas2D } from "../../..//SDFText2D/debug/gen/TinySDF.Canvas2D";
 
 const canvasCache = new Map<string, HTMLCanvasElement>(); // 缓存文字字符串生成过的贴图
 

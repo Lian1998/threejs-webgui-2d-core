@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { WithClassInstanceMap } from "@core/Mixins/";
+import { WithClassInstanceMap } from "../Mixins/";
 import { MapControls } from "three/addons/controls/MapControls.js";
 
 type Viewport = {

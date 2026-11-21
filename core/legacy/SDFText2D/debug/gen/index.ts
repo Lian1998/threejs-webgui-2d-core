@@ -21,7 +21,7 @@ export const tinySdfInstance = new TinySDF({
   cutoff: SDF_CUTOFF,
 });
 
-import { makeRGBAImageData } from "@core/utils/canvas2d_buffers";
+import { makeRGBAImageData } from "../../../utils/canvas2d_buffers";
 import { gen as genTinySDFCanvas2D, glyphsCache } from "./TinySDF.Canvas2D";
 import { gen as genTinySDFWebGL2 } from "../gen/TinySDF.WebGL2";
 

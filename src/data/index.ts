@@ -48,7 +48,7 @@ export const ASCMap = new Map<
   }
 >();
 
-import { BLOCK_DEFS } from "@source/data/handleYardData";
+import { BLOCK_DEFS } from "@/data/handleYardData";
 export const YardMap = new Map<
   string,
   {

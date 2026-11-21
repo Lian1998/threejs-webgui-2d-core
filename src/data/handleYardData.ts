@@ -1,4 +1,4 @@
-import { YardMap } from "@source/data/index";
+import { YardMap } from "@/data/index";
 
 // 左上角坐标值小, 右下角坐标值大
 

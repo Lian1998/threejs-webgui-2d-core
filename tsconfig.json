@@ -51,7 +51,8 @@
     "vite.config.ts",
     "core/**/*.ts",
     "multi-pages/**/*.ts",
-    "source/**/*.ts",
+    "src/**/*.ts",
+    "src/**/*.vue",
     ".env/vite-env.d.ts",
     "libs/three.js-r170/**/*.js",
     "libs/three-ts-types-r170/**/*.d.ts"

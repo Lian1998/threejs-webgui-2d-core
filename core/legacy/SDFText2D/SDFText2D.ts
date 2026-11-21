@@ -1,9 +1,7 @@
 import * as THREE from "three";
-import type { SDFText2DGeometryParameters } from "./SDFText2DGeometry";
-import { SDFText2DGeometry } from "./SDFText2DGeometry";
-import type { SDFText2DMaterialParameters } from "./SDFText2DMaterial";
-import { SDFText2DMaterial } from "./SDFText2DMaterial";
-import { DebugGUI, WithDebugGUI } from "@core/Mixins";
+import { type SDFText2DGeometryParameters, SDFText2DGeometry } from "./SDFText2DGeometry";
+import { type SDFText2DMaterialParameters, SDFText2DMaterial } from "./SDFText2DMaterial";
+import { DebugGUI, WithDebugGUI } from "../Mixins/";
 
 type SDFText2DStyleParameters = Pick<SDFText2DMaterialParameters, "uTextColor" | "uOutlineColor" | "uBackgroundColor" | "uBackgroundAlpha" | "uBackgroundRadius" | "uThreshold" | "uOutlineThreshold" | "uSmoothing" | "uOpacity" | "uVisible">;
 

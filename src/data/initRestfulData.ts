@@ -4,7 +4,7 @@ import { AGVMap } from ".";
 import { YardMap } from ".";
 import { PreDefBlockMap } from ".";
 
-import { handleYardData } from "@source/data/handleYardData";
+import { handleYardData } from "@/data/handleYardData";
 
 /** 初始化所有地图加载需要的Restful接口 */
 export const initRestfulData = async () => {

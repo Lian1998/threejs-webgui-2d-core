@@ -3,12 +3,8 @@ import * as THREE from "three";
 import vertexShader from "./shaders/sdfText2d.vs?raw";
 import fragmentShader from "./shaders/sdfText2d.fs?raw";
 
-import { tinySDFAtlas } from "@core/SDFText2D/TinySdfAtlas";
-import { ATLAS_TEXTURE_SIZE } from "@core/SDFText2D/TinySdfAtlas";
-import { SDF_FONT_SIZE } from "@core/SDFText2D/TinySdfAtlas";
-import { SDF_BUFFER } from "@core/SDFText2D/TinySdfAtlas";
-import { SDF_SIZE } from "@core/SDFText2D/TinySdfAtlas";
-import { DebugGUI, WithDebugGUI } from "@core/Mixins";
+import { tinySDFAtlas, ATLAS_TEXTURE_SIZE, SDF_FONT_SIZE, SDF_BUFFER, SDF_SIZE } from "../SDFText2D/TinySdfAtlas";
+import { DebugGUI, WithDebugGUI } from "../Mixins";
 
 export interface SDFText2DMaterialParameters extends THREE.ShaderMaterialParameters {
   /** 字体颜色, 默认为黑 */

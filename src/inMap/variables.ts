@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { GpuPickManager } from "@core/index";
+import { GpuPickManager } from "@core/legacy/index";
 
 export const ThreejsGroups = {
   BaseMap: new THREE.Group(),

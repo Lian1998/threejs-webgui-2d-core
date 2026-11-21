@@ -3,17 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- http://localhost:8056/debug/GpuPickManager/index.html -->
     <title>DEBUG GpuPickManager</title>
-
     <!-- 对GpuPickManager的PickBuffer展示以便于调试 -->
   </head>
   <body>
     <canvas id="viewport"></canvas>
     <script type="module">
       import "normalize.css";
-      import { initialization } from "@core/GpuPickManager/debug/";
+      import { initialization } from "@core/legacy/GpuPickManager/debug/";
       initialization();
     </script>
   </body>

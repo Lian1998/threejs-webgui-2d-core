@@ -1,17 +1,15 @@
-import { GpuPickCommonListener, ViewportResizeDispatcher } from "@core/index";
-import { DebugGUIManager } from "@core/Mixins";
-import { tinySDFAtlas } from "@core/SDFText2D/TinySdfAtlas";
-import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
-import { ThreejsGroups } from "@source/inMap/variables";
-import { boudingViewport } from "@source/inMap/viewport";
-import { ensureWebGL2Available } from "@source/inMap/utils/common";
-import { initBaseMap } from "@source/inMap/baseMap";
-import { initRestfulData } from "@source/data/initRestfulData";
-import { socketioSubModule_map } from "@source/data/initWebSocketData";
+import { GpuPickCommonListener, ViewportResizeDispatcher } from "@core/legacy/index";
+import { DebugGUIManager } from "@core/legacy/Mixins";
+import { tinySDFAtlas } from "@core/legacy/SDFText2D/TinySdfAtlas";
+import { spriteAtlas } from "@core/legacy/Sprite2D/Sprite2DAtlas";
+import { ThreejsGroups } from "@/inMap/variables";
+import { boudingViewport } from "@/inMap/viewport";
+import { ensureWebGL2Available } from "@/inMap/utils/common";
+import { initBaseMap } from "@/inMap/baseMap";
+import { initRestfulData } from "@/data/initRestfulData";
+import { socketioSubModule_map } from "@/data/initWebSocketData";
 
-void initializeInMap();
-
-async function initializeInMap() {
+export async function init() {
   // 检测当前浏览器是否支持WebGL2
   ensureWebGL2Available();
 

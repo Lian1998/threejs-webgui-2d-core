@@ -3,9 +3,9 @@ import * as THREE from "three";
 import vertexShader from "./shaders/sprite2d.vs?raw";
 import fragmentShader from "./shaders/sprite2d.fs?raw";
 
-import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
-import { ATLAS_TEXTURE_SIZE } from "@core/Sprite2D/Sprite2DAtlas";
-import { DebugGUI, WithDebugGUI } from "@core/Mixins";
+import { spriteAtlas } from "../Sprite2D/Sprite2DAtlas";
+import { ATLAS_TEXTURE_SIZE } from "../Sprite2D/Sprite2DAtlas";
+import { DebugGUI, WithDebugGUI } from "../Mixins";
 
 export const Sprite2DBlendMode = {
   multiply: 0,

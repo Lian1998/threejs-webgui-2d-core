@@ -1,5 +1,5 @@
 import "normalize.css";
-import { tinySDFAtlas } from "@core/SDFText2D/TinySdfAtlas";
+import { tinySDFAtlas } from "../../../SDFText2D/TinySdfAtlas";
 
 window.addEventListener("load", () => {
   tinySDFAtlas.prepareGlyph();

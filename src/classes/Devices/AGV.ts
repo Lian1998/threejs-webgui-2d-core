@@ -1,11 +1,11 @@
 import * as THREE from "three";
-import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
-import { GpuPickManager } from "@core/GpuPickManager/";
-import { SDFText2D, Sprite2D } from "@core/index";
-import { ThreejsRenderOrder } from "@source/inMap/variables";
-import { calculateMpp } from "@source/inMap/utils/ratio";
-import { orthoCamera, MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
-import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
+import { GpuPickFeature } from "@core/legacy/interfaces/GpuPickFeature";
+import { GpuPickManager } from "@core/legacy/GpuPickManager/";
+import { SDFText2D, Sprite2D } from "@core/legacy/index";
+import { ThreejsRenderOrder } from "@/inMap/variables";
+import { calculateMpp } from "@/inMap/utils/ratio";
+import { orthoCamera, MAP_DEFAULT_ZOOM } from "@/inMap/viewport";
+import { getColorRuntime } from "@/themes/ColorPaletteManager/index";
 
 const spriteUrls = {
   AGV_Base: "/resource/sprites/AGV_Base.png",

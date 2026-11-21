@@ -1,10 +1,6 @@
 import * as THREE from "three";
 
-import { tinySDFAtlas } from "@core/SDFText2D/TinySdfAtlas";
-import { ATLAS_TEXTURE_SIZE } from "@core/SDFText2D/TinySdfAtlas";
-import { SDF_FONT_SIZE } from "@core/SDFText2D/TinySdfAtlas";
-import { SDF_BUFFER } from "@core/SDFText2D/TinySdfAtlas";
-import { SDF_SIZE } from "@core/SDFText2D/TinySdfAtlas";
+import { tinySDFAtlas, ATLAS_TEXTURE_SIZE, SDF_FONT_SIZE, SDF_BUFFER, SDF_SIZE } from "../SDFText2D/TinySdfAtlas";
 
 export interface SDFText2DGeometryParameters {
   text: string;

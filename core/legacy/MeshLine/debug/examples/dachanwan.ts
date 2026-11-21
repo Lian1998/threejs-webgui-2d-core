@@ -15,7 +15,7 @@ renderer.setClearColor(0xffffff, 0.0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 viewport.appendChild(renderer.domElement);
 
-import { ViewportResizeDispatcher } from "@core/index";
+import { ViewportResizeDispatcher } from "../../../EventDispathcers/ViewportResizeDispatcher";
 new ViewportResizeDispatcher(renderer);
 
 const viewSize = MAP_VIEW_SIZE;
@@ -64,11 +64,11 @@ const scene = new THREE.Scene();
 import type { FeatureCollection } from "geojson";
 import type { LineString } from "geojson";
 
-import { MeshLineGeometry } from "@core/MeshLine/";
-import { MeshLineMaterial } from "@core/MeshLine/";
+import { MeshLineGeometry } from "../../../MeshLine/";
+import { MeshLineMaterial } from "../../../MeshLine/";
 
-import { MeshPolygonGeometry } from "@core/MeshPolygon/";
-import { MeshPolygonMaterial } from "@core/MeshPolygon/";
+import { MeshPolygonGeometry } from "../../../MeshPolygon/";
+import { MeshPolygonMaterial } from "../../../MeshPolygon/";
 
 const group0 = new THREE.Group();
 group0.layers.set(0);
@@ -162,7 +162,7 @@ scene.add(group0);
 }
 
 //////////////////////////////////////// 坐标定位 ////////////////////////////////////////
-import { getXZPosition } from "@source/inMap/utils/pointerCoordinates";
+import { getXZPosition } from "@/inMap/utils/pointerCoordinates";
 {
   const coordinatesEl = document.querySelector("#coordinates");
   ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>().viewportElement.addEventListener("mousemove", (e) => {

@@ -3,12 +3,12 @@ import { iticksMap } from "./index_core";
 import { dbticksMap } from "./index_core";
 import { dispatchResponsesBatch } from "./index_core";
 
-import { SocketioMainModule } from "@source/classes/SocketioHelper";
+import { SocketioMainModule } from "@/classes/SocketioHelper";
 import { sliderValue } from "./index_ui";
 
-import { socketioSubModule_infocard_igv } from "@source/data/initWebSocketData";
-import { socketioSubModule_infocard_qc } from "@source/data/initWebSocketData";
-import { socketioSubModule_infocard_yc } from "@source/data/initWebSocketData";
+import { socketioSubModule_infocard_igv } from "@/data/initWebSocketData";
+import { socketioSubModule_infocard_qc } from "@/data/initWebSocketData";
+import { socketioSubModule_infocard_yc } from "@/data/initWebSocketData";
 
 export const _socketioMainModule = new SocketioMainModule({ autoConnect: false, autoListenMessageReal: false });
 

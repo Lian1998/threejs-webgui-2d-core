@@ -1,5 +1,5 @@
 import "normalize.css";
-import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
+import { spriteAtlas } from "../../Sprite2D/Sprite2DAtlas";
 
 window.addEventListener("load", async () => {
   await spriteAtlas.prepareSprite([

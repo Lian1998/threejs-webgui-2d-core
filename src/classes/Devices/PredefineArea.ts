@@ -1,17 +1,17 @@
 import * as THREE from "three";
 
-import { Sprite2D } from "@core/index";
-import { SDFText2D } from "@core/index";
-import { MeshPolygonGeometry } from "@core/index";
-import { MeshPolygonMaterial } from "@core/index";
-import { MeshLineGeometry } from "@core/index";
-import { MeshLineMaterial } from "@core/index";
-import { GpuPickManager } from "@core/GpuPickManager";
-import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
+import { Sprite2D } from "@core/legacy/index";
+import { SDFText2D } from "@core/legacy/index";
+import { MeshPolygonGeometry } from "@core/legacy/index";
+import { MeshPolygonMaterial } from "@core/legacy/index";
+import { MeshLineGeometry } from "@core/legacy/index";
+import { MeshLineMaterial } from "@core/legacy/index";
+import { GpuPickManager } from "@core/legacy/GpuPickManager";
+import { GpuPickFeature } from "@core/legacy/interfaces/GpuPickFeature";
 
-import { ThreejsGroups } from "@source/inMap/variables";
-import { ThreejsLayers } from "@source/inMap/variables";
-import { ThreejsRenderOrder } from "@source/inMap/variables";
+import { ThreejsGroups } from "@/inMap/variables";
+import { ThreejsLayers } from "@/inMap/variables";
+import { ThreejsRenderOrder } from "@/inMap/variables";
 
 type PreDefBlockItem = {
   areaName: string;

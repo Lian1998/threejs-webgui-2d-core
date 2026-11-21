@@ -22,9 +22,9 @@ export const tinySdfInstance = new TinySDF({
   cutoff: SDF_CUTOFF,
 });
 
-import { makeRGBAImageData } from "@core/utils/canvas2d_buffers";
+import { makeRGBAImageData } from "../utils/canvas2d_buffers";
 
-import { DEBUG_SDF_ATLAS_BUFFER_RENDER_PERFORMANCE } from "@core/SDFText2D/index";
+import { DEBUG_SDF_ATLAS_BUFFER_RENDER_PERFORMANCE } from "../SDFText2D/";
 
 /** atlas 基本属性 */
 type SDFAtlasProperty = {

@@ -1,8 +1,7 @@
 import * as THREE from "three";
-import type { FeatureCollection, GeometryCollection } from "geojson";
-import type { LineString } from "geojson";
+import type { FeatureCollection, GeometryCollection, LineString } from "geojson";
 
-import { convert2Vertex2D } from "@core/utils/vertex";
+import { convert2Vertex2D } from "../utils/vertex";
 
 /**
  * 在 CPU 阶段计算必要参数:

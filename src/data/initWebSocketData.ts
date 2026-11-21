@@ -1,6 +1,5 @@
-import { socketioMainModule } from "@source/classes/SocketioHelper";
-import { SocketioSubModule } from "@source/classes/SocketioHelper";
-import { getTimeStampForSocketReq } from "@source/classes/SocketioHelper";
+import { socketioMainModule } from "@/classes/SocketioHelper";
+import { SocketioSubModule } from "@/classes/SocketioHelper";
 
 export const socketioSubModule_map = new SocketioSubModule(socketioMainModule);
 export const socketioSubModule_datascreen = new SocketioSubModule(socketioMainModule);

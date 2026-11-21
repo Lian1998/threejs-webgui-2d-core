@@ -4,12 +4,8 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- http://localhost:8056/debug/MeshLine/example.html?project=dachanwan -->
     <title>mapshaper-geojson-example</title>
-
     <!-- 项目geojson使用最新threejs的MeshLine和MeshPolygon渲染展示 -->
-
     <style>
       body {
         overflow: hidden;
@@ -37,7 +33,7 @@
       const { project } = queryObject;
 
       /** 根据query中的project名字找到对应的模块 */
-      const modules = import.meta.glob("@core/MeshLine/debug/examples/*.ts");
+      const modules = import.meta.glob("@core/legacy/MeshLine/debug/examples/*.ts");
       const modules_keys = Object.keys(modules);
       const loadModule = async (name) => {
         let foundModule = undefined;

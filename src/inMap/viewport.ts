@@ -9,7 +9,7 @@ const viewport = document.querySelector<HTMLDivElement>("#viewport") ?? document
 const { width, height } = viewport.getBoundingClientRect();
 const aspect = width / height;
 
-const orthoCamera = new THREE.OrthographicCamera(-MAP_VIEW_SIZE * aspect, MAP_VIEW_SIZE * aspect, MAP_VIEW_SIZE, -MAP_VIEW_SIZE, 0.1, 5000);
+export const orthoCamera = new THREE.OrthographicCamera(-MAP_VIEW_SIZE * aspect, MAP_VIEW_SIZE * aspect, MAP_VIEW_SIZE, -MAP_VIEW_SIZE, 0.1, 5000);
 
 import { MapControls } from "three/addons/controls/MapControls.js";
 const center = new THREE.Vector3(MAP_CENTER[0], 0, MAP_CENTER[1]);
@@ -56,7 +56,7 @@ export { MAP_CENTER };
 export { MAP_VIEW_SIZE };
 export { MAP_DEFAULT_ZOOM };
 
-import { ViewportResizeDispatcher } from "@core/EventDispathcers/ViewportResizeDispatcher";
+import { ViewportResizeDispatcher } from "@core/legacy/EventDispathcers/ViewportResizeDispatcher";
 export const boudingViewport = () => {
   // 当前项目仅有一个视口
   const viewport = document.querySelector<HTMLDivElement>("#viewport") ?? document.querySelector<HTMLDivElement>("#gui-viewport");

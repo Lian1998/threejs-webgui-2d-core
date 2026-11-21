@@ -19,8 +19,8 @@ import { theme } from "ant-design-vue";
 import zhCN from "ant-design-vue/es/locale/zh_CN";
 
 // 将 Ant-Design-Vue 计算的颜色变量注入到RootCss
-import { injectRootCssVars } from "@source/themes/injectRootCss";
-import { getAntDesignVueCurrentToken } from "@source/themes/getAntDesignVueThemeToken";
+import { injectRootCssVars } from "@/themes/injectRootCss";
+import { getAntDesignVueCurrentToken } from "@/themes/getAntDesignVueThemeToken";
 injectRootCssVars("ant-design-vue-theme-token", getAntDesignVueCurrentToken());
 
 import { DOMElements } from "./index";
@@ -35,7 +35,7 @@ const _onMounted = () => {
   DOMElements.viewportEl = viewportEl;
   DOMElements.maskEl = maskEl;
 
-  import("@source/inMap/_index").then(({ init }) => {
+  import("@/inMap/index").then(({ init }) => {
     init().finally(() => {
       // 演示项目自动打开历史回放
       historyReplayInfoCardRef.value.openInfoCard();
@@ -46,13 +46,13 @@ const _onMounted = () => {
 // 卡片
 import InfoCard from "./InfoCards/_InfoCard/index";
 import { historyReplayInfoCardRef } from "./index";
-import HistoryReplay from "@source/onMap/InfoCards/HistoryReplay/page/index.vue";
+import HistoryReplay from "@/onMap/InfoCards/HistoryReplay/page/index.vue";
 
 // 悬窗
 import InfoCardHover from "./InfoCards_hover/_InfoCard/index";
 
 // 数据订阅
-import { socketioMainModule } from "@source/data/initWebSocketData";
+import { socketioMainModule } from "@/data/initWebSocketData";
 const _onUnmounted = () => {
   socketioMainModule.disconnect();
   socketioMainModule.dispose();

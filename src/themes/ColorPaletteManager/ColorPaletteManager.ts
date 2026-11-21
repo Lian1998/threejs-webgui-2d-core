@@ -1,7 +1,7 @@
 import { CopyFilled } from "@ant-design/icons-vue";
 import { ITEMS_DEV } from "./ColorItems";
 import type { ITEMS_DEV_KEY } from "./ColorItems";
-import { injectRootCssVars } from "@source/themes/injectRootCss";
+import { injectRootCssVars } from "@/themes/injectRootCss";
 
 /** 调色盘插颜色管理器 */
 export class ColorPaletteManager {
@@ -32,8 +32,8 @@ export class ColorPaletteManager {
     // 3. 主题环境下所有配置项覆盖
     const isDark = document.documentElement.getAttribute("data-theme") === "dark";
     let targetConfiguration = undefined;
-    if (isDark) targetConfiguration = (await import("@source/themes/dark/inMap.json")).default;
-    else targetConfiguration = (await import("@source/themes/light/inMap.json")).default;
+    if (isDark) targetConfiguration = (await import("@/themes/dark/inMap.json")).default;
+    else targetConfiguration = (await import("@/themes/light/inMap.json")).default;
 
     Object.keys(targetConfiguration).forEach((key: ITEMS_DEV_KEY) => {
       const value = targetConfiguration[key];

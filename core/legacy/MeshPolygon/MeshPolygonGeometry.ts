@@ -1,11 +1,7 @@
 import * as THREE from "three";
-import type { FeatureCollection } from "geojson";
-import type { LineString } from "geojson";
+import type { FeatureCollection, LineString } from "geojson";
 
-import { convert2Vertex2D } from "@core/utils/vertex";
-
-import earcut from "earcut";
-import { flatten } from "earcut";
+import earcut, { flatten } from "earcut";
 
 export class MeshPolygonGeometry extends THREE.BufferGeometry {
   constructor() {

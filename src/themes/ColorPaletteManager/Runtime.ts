@@ -17,7 +17,7 @@ const ColorItemsRuntime = new Map<
 
 export const getColorRuntime = (key: ITEMS_DEV_KEY): MapTypeV<typeof ColorItemsRuntime> => {
   if (!ColorItemsRuntime.get(key)) {
-    const value = ColorPaletteManager.itemsMap.get(key) ?? DEFAULT_COLOR;
+    const value = ColorPaletteManager.instance.itemsMap.get(key) ?? DEFAULT_COLOR;
     const tinyColor = Tinycolor(value);
     const { r, g, b, a } = tinyColor.toRgb();
     const colorItems = {

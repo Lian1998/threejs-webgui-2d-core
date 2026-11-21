@@ -1,10 +1,10 @@
 import * as THREE from "three";
 
-import { WithClassInstanceMap } from "@core/Mixins/";
-import { GpuPickManager } from "@core/GpuPickManager";
-import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
-import { GpuPickEvent } from "@core/interfaces/GpuPickFeature";
-import throttle from "@libs/lodash/src/throttle";
+import { WithClassInstanceMap } from "../Mixins/";
+import { GpuPickManager } from "../GpuPickManager";
+import { GpuPickFeature } from "../interfaces/GpuPickFeature";
+import { GpuPickEvent } from "../interfaces/GpuPickFeature";
+import throttle from "lodash-es/throttle";
 
 /**
  * GpuPickCommonListener
@@ -187,7 +187,7 @@ export class GpuPickCommonListener extends WithClassInstanceMap(Object) {
     // 计算局部 canvas 坐标 (相对于 canvas 左上角)
     this.mousePosition.x = e.clientX;
     this.mousePosition.y = e.clientY;
-    this.onDetect(e);
+    this.onDetect();
   };
 
   private _clickEvent = undefined;

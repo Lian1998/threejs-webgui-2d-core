@@ -1,17 +1,17 @@
 import * as THREE from "three";
 
-import { ViewportResizeDispatcher } from "@core/index";
+import { ViewportResizeDispatcher } from "@core/legacy/index";
 
 import type { FeatureCollection } from "geojson";
 import type { LineString } from "geojson";
 
-import { MeshLineGeometry } from "@core/MeshLine/";
-import { MeshLineMaterial } from "@core/MeshLine/";
+import { MeshLineGeometry } from "@core/legacy/MeshLine/";
+import { MeshLineMaterial } from "@core/legacy/MeshLine/";
 
-import { MeshPolygonGeometry } from "@core/MeshPolygon/";
-import { MeshPolygonMaterial } from "@core/MeshPolygon/";
+import { MeshPolygonGeometry } from "@core/legacy/MeshPolygon/";
+import { MeshPolygonMaterial } from "@core/legacy/MeshPolygon/";
 
-import { ThreejsGroups } from "@source/inMap/variables";
+import { ThreejsGroups } from "@/inMap/variables";
 
 /** 初始化WebGUI底图 */
 export const initBaseMap = () => {

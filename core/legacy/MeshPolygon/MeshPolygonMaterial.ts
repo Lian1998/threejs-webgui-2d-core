@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import vertexShader from "./shaders/mesh-polygon.vs?raw";
 import fragmentShader from "./shaders/mesh-polygon.fs?raw";
-import { DebugGUI, WithDebugGUI } from "@core/Mixins";
+import { DebugGUI, WithDebugGUI } from "../Mixins/";
 
 export interface MeshPolygonMaterialParameters extends THREE.ShaderMaterialParameters {
   /** 线条颜色 */

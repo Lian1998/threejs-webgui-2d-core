@@ -1,7 +1,7 @@
-import type { SocketioDispatchEvent } from "@source/classes/SocketioHelper";
-import { SocketioMainModule } from "@source/classes/SocketioHelper";
-import { socketioMainModule } from "@source/classes/SocketioHelper";
-import { getTimeStampForSocketReq } from "@source/classes/SocketioHelper";
+import type { SocketioDispatchEvent } from "@/classes/SocketioHelper";
+import { SocketioMainModule } from "@/classes/SocketioHelper";
+import { socketioMainModule } from "@/classes/SocketioHelper";
+import { getTimeStampForSocketReq } from "@/classes/SocketioHelper";
 import dayjs from "dayjs";
 import { reactive } from "vue";
 import { historyReplayDefine_doms } from "./define_doms";

@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import vertexShader from "./shaders/mesh-line.vs?raw";
 import fragmentShader from "./shaders/mesh-line.fs?raw";
-import { DebugGUI, WithDebugGUI } from "@core/Mixins";
+import { DebugGUI, WithDebugGUI } from "../Mixins/";
 
 // 参考项目: https://github.com/spite/THREE.MeshLine
 

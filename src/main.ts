@@ -3,8 +3,8 @@ import "normalize.css";
 import { createApp } from "vue";
 import Antd from "ant-design-vue";
 
-import { ColorPaletteManager } from "@source/themes/ColorPaletteManager/";
-import App from "@source/onMap/index.vue";
+import { ColorPaletteManager } from "@/themes/ColorPaletteManager/";
+import App from "@/onMap/index.vue";
 
 // dayjs汉化
 import dayjs from "dayjs";

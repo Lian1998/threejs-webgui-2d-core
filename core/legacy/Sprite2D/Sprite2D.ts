@@ -2,8 +2,8 @@ import * as THREE from "three";
 import { SpriteXZRectGeometry } from "./SpriteXZRectGeometry";
 import { Sprite2DMaterial, Sprite2DBlendMode } from "./Sprite2DMaterial";
 import type { Sprite2DBlendModeName } from "./Sprite2DMaterial";
-import { spriteAtlas } from "@core/Sprite2D/Sprite2DAtlas";
-import { DebugGUI, WithDebugGUI } from "@core/Mixins";
+import { spriteAtlas } from "../Sprite2D/Sprite2DAtlas";
+import { DebugGUI, WithDebugGUI } from "../Mixins";
 
 export interface Sprite2DParameters {
   /** Atlas url/key. */

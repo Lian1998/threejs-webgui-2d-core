@@ -1,23 +1,20 @@
 import * as THREE from "three";
 import Tinycolor from "tinycolor2";
-import { WithClassInstanceMap } from "@core/Mixins/";
-import { IActor } from "@core/interfaces/IActor";
-import { GpuPickFeature } from "@core/interfaces/GpuPickFeature";
-import { GpuBatchFeature } from "@core/interfaces/GpuBatchFeature";
-import { Sprite2D } from "@core/index";
-import { SDFText2D } from "@core/index";
+import { WithClassInstanceMap } from "@core/legacy/Mixins/";
+import { GpuPickFeature } from "@core/legacy/interfaces/GpuPickFeature";
+import { Sprite2D } from "@core/legacy/index";
+import { SDFText2D } from "@core/legacy/index";
 
-import { ThreejsGroups } from "@source/inMap/variables";
-import { ThreejsRenderOrder } from "@source/inMap/variables";
-import { calculateMpp } from "@source/inMap/utils/ratio";
-import { orthoCamera } from "@source/inMap/viewport";
-import { getColorRuntime } from "@source/themes/ColorPaletteManager/index";
-import { MAP_DEFAULT_ZOOM } from "@source/inMap/viewport";
+import { ThreejsGroups } from "@/inMap/variables";
+import { ThreejsRenderOrder } from "@/inMap/variables";
+import { calculateMpp } from "@/inMap/utils/ratio";
+import { orthoCamera } from "@/inMap/viewport";
+import { getColorRuntime } from "@/themes/ColorPaletteManager/index";
+import { MAP_DEFAULT_ZOOM } from "@/inMap/viewport";
 
 /** Ship-to-Shore Crane 岸边集装箱起重机 */
-export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature, GpuBatchFeature, IActor {
+export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature {
   isGpuPickFeature: true = true;
-  isGpuBatchFeature: true = true;
   primitives: Record<string, { ava: THREE.Object3D; mesh: THREE.Object3D }> = undefined;
   primitiveKeys: string[];
 
@@ -97,7 +94,7 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
 
   onInit() {
     // 挂载根代表
-    ThreejsGroups.Void.add(this.primitives.stsGantry.ava);
+    ThreejsGroups.Meshes.add(this.primitives.stsGantry.ava);
 
     // 添加所有 mesh 到场景
     for (const key of this.primitiveKeys) {
@@ -165,13 +162,5 @@ export class STS extends WithClassInstanceMap(Object) implements GpuPickFeature,
     if (STS.codeSelected !== this.code) {
       this.unfocused();
     }
-  }
-
-  static batchInit() {
-    // 1. 取classInstanceMap中第一个实例的所有primitives
-    // 2. 每个primitives生成一个InstancedMesh, 几何就用第一个实例对应的
-    // 3. Sprite2D的属性全都在buffer中
-    // 4. SDFText2D取第一个实例对应的uniform, 再生成一个浮动的去盖
-    // 4.1 SDFText2D的属性也全部都写到buffer中
   }
 }

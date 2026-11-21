@@ -2,8 +2,7 @@ import "normalize.css";
 import * as THREE from "three";
 
 //  准备atlas贴图, 并将atlas贴图展示到网页上
-import { tinySDFAtlas } from "@core/SDFText2D/TinySdfAtlas";
-import { ATLAS_TEXTURE_SIZE } from "@core/SDFText2D/TinySdfAtlas";
+import { tinySDFAtlas, ATLAS_TEXTURE_SIZE } from "../../../SDFText2D/TinySdfAtlas";
 
 tinySDFAtlas.prepareGlyph("你好世界!岸桥场桥:装船卸船移箱集装箱主小车门架小车任务指令状态数值％角度°速度故障模式~，。（）-繁华声遁入空门折煞了世人");
 const canvasEls = tinySDFAtlas.getAllPages();
@@ -37,9 +36,7 @@ textureArray.magFilter = THREE.LinearFilter;
 textureArray.generateMipmaps = false;
 textureArray.needsUpdate = true;
 
-import { SDF_FONT_SIZE } from "@core/SDFText2D/TinySdfAtlas";
-import { SDF_BUFFER } from "@core/SDFText2D/TinySdfAtlas";
-import { SDF_SIZE } from "@core/SDFText2D/TinySdfAtlas";
+import { SDF_FONT_SIZE, SDF_BUFFER, SDF_SIZE } from "../../../SDFText2D/TinySdfAtlas";
 
 /**
  * 创建材质 (确保 #version 300 es + glslVersion: THREE.GLSL3)
