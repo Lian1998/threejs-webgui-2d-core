@@ -33,13 +33,13 @@ export interface DebugGUIMountOptions {
 
 /**
  * 装饰器元数据挂在构造函数上, 使用 Symbol.for 可以避免普通属性名冲突,
- * 同时在 HMR/多 bundle 场景下也能复用同一个 key。
+ * 同时在 HMR/多 bundle 场景下也能复用同一个 key
  */
 const DEBUG_GUI_METADATA = Symbol.for("webgui.debugGui.metadata");
 
 const isDevMode = () => Boolean(import.meta.env?.DEV);
 
-/** 只读取/创建当前类自己的元数据数组, 不直接混入父类, 继承合并由 getDebugGUIMetadata 统一处理。 */
+/** 只读取/创建当前类自己的元数据数组, 不直接混入父类, 继承合并由 getDebugGUIMetadata 统一处理 */
 const getOwnMeta = (ctor: Function): DebugGUIControlMeta[] => {
   if (!Object.prototype.hasOwnProperty.call(ctor, DEBUG_GUI_METADATA)) {
     Object.defineProperty(ctor, DEBUG_GUI_METADATA, { value: [], enumerable: false });
@@ -48,9 +48,9 @@ const getOwnMeta = (ctor: Function): DebugGUIControlMeta[] => {
 };
 
 /**
- * 收集实例或类上的 GUI 元数据。
+ * 收集实例或类上的 GUI 元数据
  * 从父类到子类依次合并, 这样 Mixin/继承链上的调试字段都能显示,
- * 子类同名字段也能覆盖或避免重复显示。
+ * 子类同名字段也能覆盖或避免重复显示
  */
 export const getDebugGUIMetadata = (instanceOrCtor: object | Function): DebugGUIControlMeta[] => {
   const ctor = typeof instanceOrCtor === "function" ? instanceOrCtor : instanceOrCtor.constructor;
@@ -80,7 +80,7 @@ export const getDebugGUIMetadata = (instanceOrCtor: object | Function): DebugGUI
   return result.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
 };
 
-/** 生成属性/方法装饰器, 装饰器本身只登记元数据, 不创建 lil-gui 控件。 */
+/** 生成属性/方法装饰器, 装饰器本身只登记元数据, 不创建 lil-gui 控件 */
 const createDecorator = (kind: DebugGUIControlKind, options: DebugGUIControlOptions = {}): PropertyDecorator & MethodDecorator => {
   return (target: object, propertyKey: string | symbol) => {
     const ctor = target.constructor;
@@ -94,7 +94,7 @@ const createDecorator = (kind: DebugGUIControlKind, options: DebugGUIControlOpti
   };
 };
 
-/** 对外暴露一组语义化装饰器, 使用时比手写 kind 字符串更直观。 */
+/** 对外暴露一组语义化装饰器, 使用时比手写 kind 字符串更直观 */
 export const DebugGUI = {
   number: (options?: DebugGUIControlOptions) => createDecorator("number", options),
   boolean: (options?: DebugGUIControlOptions) => createDecorator("boolean", options),
@@ -118,15 +118,15 @@ export const GuiVector4 = DebugGUI.vector4;
 export const GuiAction = DebugGUI.action;
 
 /**
- * 开发环境实例注册容器。
- * 注意这里不负责实例生命周期业务逻辑, 只记录“可以被 GUI 扫描”的对象引用。
+ * 开发环境实例注册容器
+ * 注意这里不负责实例生命周期业务逻辑, 只记录 "可以被 GUI 扫描" 的对象引用
  */
 export class DebugGUIRegistry {
   private static readonly instances = new Set<object>();
   private static readonly listeners = new Set<(instance: object) => void>();
 
   static register(instance: object): void {
-    // 生产环境不保存实例引用, 避免调试系统影响内存和打包后的行为。
+    // 生产环境不保存实例引用, 避免调试系统影响内存和打包后的行为
     if (!isDevMode() || !instance) return;
     if (this.instances.has(instance)) return;
     this.instances.add(instance);
@@ -148,8 +148,8 @@ export class DebugGUIRegistry {
 }
 
 /**
- * Mixin: 构造对象时自动注册到 DebugGUIRegistry。
- * 适合 Material、Mesh、业务设备类这类希望开发期自动出现在面板里的对象。
+ * Mixin: 构造对象时自动注册到 DebugGUIRegistry
+ * 适合 Material Mesh 业务设备类这类希望开发期自动出现在面板里的对象
  */
 export const WithDebugGUI = <TBase extends Constructor>(Base: TBase) => {
   abstract class WithDebugGUIClass extends Base {
@@ -167,8 +167,8 @@ export const WithDebugGUI = <TBase extends Constructor>(Base: TBase) => {
 };
 
 /**
- * lil-gui 面板管理器。
- * 它负责把“装饰器元数据 + 已注册实例”转换成真实 GUI 控件。
+ * lil-gui 面板管理器
+ * 它负责把 "装饰器元数据 + 已注册实例" 转换成真实 GUI 控件
  */
 export class DebugGUIManager {
   static readonly instance = new DebugGUIManager();
@@ -182,7 +182,7 @@ export class DebugGUIManager {
     if (!isDevMode()) return this;
     if (this.gui) return this;
 
-    // 动态导入让 lil-gui 只在开发期需要时加载, 避免主包固定携带调试 UI。
+    // 动态导入让 lil-gui 只在开发期需要时加载, 避免主包固定携带调试 UI
     const { GUI } = await import("three/addons/libs/lil-gui.module.min.js");
     this.gui = new GUI({
       title: options.title ?? "WebGUI Debug",
@@ -193,7 +193,7 @@ export class DebugGUIManager {
 
     if (options.closed ?? false) this.gui.close();
 
-    // mount 前已经创建的对象补建面板, mount 后创建的对象通过 onRegister 增量加入。
+    // mount 前已经创建的对象补建面板, mount 后创建的对象通过 onRegister 增量加入
     for (const instance of DebugGUIRegistry.getInstances()) this.addInstance(instance);
     this.unsubscribeRegister = DebugGUIRegistry.onRegister((instance) => this.addInstance(instance));
 
@@ -209,7 +209,7 @@ export class DebugGUIManager {
     this.gui = undefined;
   }
 
-  /** 当装饰器元数据或实例显示名发生变化时, 可以重建单个实例的控件树。 */
+  /** 当装饰器元数据或实例显示名发生变化时, 可以重建单个实例的控件树 */
   refresh(instance: object): void {
     const folder = this.rootFolders.get(instance);
     if (folder) {
@@ -226,20 +226,20 @@ export class DebugGUIManager {
     if (metadata.length === 0) return;
 
     const label = this.getInstanceLabel(instance);
-    const folder = this.gui.addFolder(label);
-    this.rootFolders.set(instance, folder);
+    const rootFolder = this.gui.addFolder(label);
+    this.rootFolders.set(instance, rootFolder);
 
-    for (const meta of metadata) this.addControl(folder, instance, meta);
+    for (const meta of metadata) this.addControl(rootFolder, instance, meta);
   }
 
   private getInstanceLabel(instance: object): string {
-    const ctorName = instance.constructor?.name || "Object";
+    const labelName = (instance as any).userData?.name || instance.constructor?.name || "Object";
     const sequenceGetter = (instance as any).getSequence;
     const sequence = typeof sequenceGetter === "function" ? sequenceGetter.call(instance) : undefined;
-    return Number.isInteger(sequence) && sequence >= 0 ? `${ctorName} #${sequence}` : ctorName;
+    return Number.isInteger(sequence) && sequence >= 0 ? `${labelName} #${sequence}` : labelName;
   }
 
-  /** 支持 "Material/Line" 这种路径写法, 自动创建并缓存嵌套 folder。 */
+  /** 支持 "Material/Line" 这种路径写法, 自动创建并缓存嵌套 folder */
   private getFolder(parent: GuiFolder, path?: string): GuiFolder {
     if (!path) return parent;
 
@@ -267,8 +267,9 @@ export class DebugGUIManager {
     return cursor;
   }
 
-  private addControl(root: GuiFolder, instance: object, meta: DebugGUIControlMeta): void {
-    const folder = this.getFolder(root, meta.folder);
+  private addControl(rootFolder: GuiFolder, instance: object, meta: DebugGUIControlMeta): void {
+    const folder = this.getFolder(rootFolder, meta.folder);
+    folder.close(); // 调试对象子目录默认关闭
     const name = meta.name ?? meta.property;
     let controller: GuiController | undefined;
 
@@ -280,7 +281,7 @@ export class DebugGUIManager {
       } else if (meta.kind === "action") {
         controller = folder.add(instance, meta.property).name(name);
       } else if (meta.kind === "vector2" || meta.kind === "vector3" || meta.kind === "vector4") {
-        // Vector 类对象本身不是 lil-gui 的基础类型, 拆成 x/y/z/w 子字段更便于调试。
+        // Vector 类对象本身不是 lil-gui 的基础类型, 拆成 x/y/z/w 子字段更便于调试
         this.addVectorControls(folder, instance, meta, name);
         return;
       } else if (meta.kind === "number") {

@@ -29,23 +29,8 @@ export async function init() {
   // 初始化渲染器挂载视口
   boudingViewport(); // 这里插入客户端逻辑, 如何绑定相机和世界的逻辑
   const resizeDispatcher = ViewportResizeDispatcher.getClassInstance(0) as ViewportResizeDispatcher; // 创建对viewport视口的监听器
-  console.log(resizeDispatcher);
+  console.warn("ViewportResizeDispatcher", resizeDispatcher);
   const { renderer, camera: orthoCamera, controls: mapControls } = resizeDispatcher;
-
-  const animate = () => {
-    renderer.render(ThreejsGroups.BaseMap, orthoCamera);
-
-    renderer.autoClear = false;
-    renderer.autoClearColor = false;
-    renderer.autoClearDepth = true;
-    renderer.autoClearStencil = true;
-
-    renderer.render(ThreejsGroups.Meshes, orthoCamera);
-    requestAnimationFrame(animate);
-  };
-
-  // dev模式时启动调试面板
-  if (import.meta.env.DEV) void DebugGUIManager.instance.mount({ title: "WebGUI Debug", width: 340, closed: true });
 
   const gpuPickCommonListener = new GpuPickCommonListener(renderer, ThreejsGroups.Meshes, orthoCamera);
   gpuPickCommonListener.enabled = true;
@@ -54,6 +39,9 @@ export async function init() {
 
   // 初始化底图
   initBaseMap();
+
+  // dev模式时启动调试面板
+  if (import.meta.env.DEV) void DebugGUIManager.instance.mount({ title: "WebGUI Debug", width: 340, closed: true });
 
   initRestfulData().then(() => {
     socketioSubModule_map.registerListener<{
@@ -68,5 +56,16 @@ export async function init() {
     socketioSubModule_map.subReal(undefined, `DF.VMS.V001.AhtRealStatus`);
   });
 
+  const animate = () => {
+    renderer.render(ThreejsGroups.BaseMap, orthoCamera);
+
+    renderer.autoClear = false;
+    renderer.autoClearColor = false;
+    renderer.autoClearDepth = true;
+    renderer.autoClearStencil = true;
+
+    renderer.render(ThreejsGroups.Meshes, orthoCamera);
+    requestAnimationFrame(animate);
+  };
   animate();
 }
