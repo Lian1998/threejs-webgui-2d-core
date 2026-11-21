@@ -51,7 +51,7 @@ declare interface InfoCardOpenOptions {
   /** 当前弹窗在此弹窗类型中的索引 */
   instanceIndex?: number;
 
-  /** 悬浮窗初始指针的窗口坐标；省略时使用最近捕获的指针位置 */
+  /** 悬浮窗初始指针的窗口坐标; 省略时使用最近捕获的指针位置 */
   pointer?: { clientX: number; clientY: number };
 
   /** 用于异步任务完成后判断设备是否已切换 */

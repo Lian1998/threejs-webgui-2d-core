@@ -57,7 +57,7 @@ const _openInfoCard = debounce(async (data: any, options: InfoCardOpenOptions, t
     closeInfoCard();
     return;
   }
-  // 等待内容更新后测量；定位完成前保持不可见，避免首次显示在默认位置。
+  // 等待内容更新后测量; 定位完成前保持不可见, 避免首次显示在默认位置
   await nextTick();
   if (token !== generation) return;
   element.style.display = "block";
@@ -65,7 +65,7 @@ const _openInfoCard = debounce(async (data: any, options: InfoCardOpenOptions, t
   positionInfoCard();
 }, 200);
 
-/** 支持通过 options.pointer 显式指定初始指针坐标。 */
+/** 支持通过 options.pointer 显式指定初始指针坐标 */
 const openInfoCard = (data: any, options: InfoCardOpenOptions = {}) => {
   closeInfoCard();
   if (options.pointer) pointer = { clientX: options.pointer.clientX, clientY: options.pointer.clientY };
@@ -86,7 +86,7 @@ const closeInfoCard = () => {
 
 const api: InfoCardReference = { openInfoCard, closeInfoCard };
 onMounted(() => {
-  // 捕获阶段记录本次指针，早于地图的 movein 回调，包括进入项目后的第一次悬浮。
+  // 捕获阶段记录本次指针, 早于地图的 movein 回调, 包括进入项目后的第一次悬浮
   window.addEventListener("pointermove", mouseMoveEvent, true);
   window.addEventListener("mousemove", mouseMoveEvent, true);
   resizeObserver = new ResizeObserver(positionInfoCard);
