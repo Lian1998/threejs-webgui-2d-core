@@ -9,12 +9,16 @@ import { initBaseMap } from "@/inMap/baseMap";
 import { initRestfulData } from "@/data/initRestfulData";
 import { socketioSubModule_map } from "@/data/initWebSocketData";
 
+import { AGV } from "@/classes/Devices/AGV";
+
 export async function init() {
   // 检测当前浏览器是否支持WebGL2
   ensureWebGL2Available();
 
   // 初始化字形
   tinySDFAtlas.prepareGlyph("你好世界岸桥场桥装船卸船移箱集装箱主小车门架小车任务指令状态数值角度速度故障模式禁行区预定义区域ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:，。（）");
+
+  // 初始化贴图
   await spriteAtlas.prepareSprite([
     "/resource/sprites/AGV_Base.png",
     "/resource/sprites/AGV_Header.png",
@@ -43,12 +47,17 @@ export async function init() {
   // dev模式时启动调试面板
   if (import.meta.env.DEV) void DebugGUIManager.instance.mount({ title: "WebGUI Debug", width: 340, closed: true });
 
+  const igvInstance = new AGV("V001");
+
+  ThreejsGroups.Meshes.add(igvInstance.pool.agvBase);
+  igvInstance.pool.agvBase.position.set(565816.5, 0.0, -2397680.7);
+
   initRestfulData().then(() => {
     socketioSubModule_map.registerListener<{
-      updated: number;
-      AGVX: number;
-      AGVY: number;
-      Heading: number;
+      updated: number; // 1750300090863
+      AGVX: number; // 20600
+      AGVY: number; // 23600
+      Heading: number; // 9000
     }>(`DF.VMS.V001.AhtRealStatus`, (itemValue, response) => {
       console.log(`DF.VMS.V001.AhtRealStatus`, itemValue, response);
     });
