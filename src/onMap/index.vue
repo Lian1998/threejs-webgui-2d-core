@@ -8,6 +8,8 @@
       <div id="gui-viewport" />
 
       <InfoCard ref="historyReplayInfoCardRef" :min-width="1000" :instanceComponent="HistoryReplay" :instanceTitle="'历史回放'" :dragable="false" :resizable="false" />
+
+      <div id="gui-footer-position" />
     </div>
   </a-config-provider>
 </template>
@@ -24,8 +26,10 @@ import { getAntDesignVueCurrentToken } from "@/themes/getAntDesignVueThemeToken"
 injectRootCssVars("ant-design-vue-theme-token", getAntDesignVueCurrentToken());
 
 import { DOMElements } from "./index";
-import { onMounted } from "vue";
-import { onUnmounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
+import { listen } from "@/inMap/utils/coordinatePointer";
+import { coordinateTrans } from "@/inMap/utils/coordinateTrans";
+import { ViewportResizeDispatcher } from "@core/legacy/index";
 const _onMounted = () => {
   const containerEl = document.getElementById("gui-container");
   const viewportEl = document.getElementById("gui-viewport");
@@ -39,6 +43,15 @@ const _onMounted = () => {
     init().finally(() => {
       // 演示项目自动打开历史回放
       historyReplayInfoCardRef.value.openInfoCard();
+
+      const positionEl = document.querySelector("#gui-footer-position");
+      const canvas = viewportEl.querySelector("canvas");
+      const { camera, renderer } = ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>(0);
+      canvas.addEventListener("pointermove", (e) => {
+        const { x, z } = listen(e, camera, renderer);
+        const [x1, z1] = coordinateTrans(x, z);
+        positionEl.innerHTML = `EPSG:3857 ${x.toFixed(1)},${z.toFixed(1)}, Logic ${x1.toFixed(1)}, ${z1.toFixed(1)}`;
+      });
     });
   });
 };

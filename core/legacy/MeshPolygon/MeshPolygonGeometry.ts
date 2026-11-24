@@ -19,10 +19,9 @@ export class MeshPolygonGeometry extends THREE.BufferGeometry {
    * ``
    * @param data FeatureCollection<LineString> 类型数据结构
    */
-  setFromMapShaperFeatureCollection(data: FeatureCollection<LineString>): void {
+  setFromMapShaperFeatureCollection(data: FeatureCollection<LineString>, flipY: boolean = true): void {
     this.dispose();
 
-    const hanldeWrapper = (p: [number, number, number]): number[] => [p[0], -p[2]];
     const _triangles = []; // 三角面数据
     for (let i = 0; i < data.features.length; i++) {
       const feature = data.features[i];
@@ -34,7 +33,7 @@ export class MeshPolygonGeometry extends THREE.BufferGeometry {
       const _flatten = flatten([featureGeometryCoordinates]);
       const _earcut = earcut(_flatten.vertices, _flatten.holes, _flatten.dimensions);
       for (const index of _earcut) {
-        _triangles.push([_flatten.vertices[index * _flatten.dimensions], 0.0, -_flatten.vertices[index * _flatten.dimensions + 1]]);
+        _triangles.push([_flatten.vertices[index * _flatten.dimensions], 0.0, flipY ? -_flatten.vertices[index * _flatten.dimensions + 1] : _flatten.vertices[index * _flatten.dimensions + 1]]);
       }
     }
 

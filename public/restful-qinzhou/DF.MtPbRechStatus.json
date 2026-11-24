@@ -1,0 +1,2688 @@
+{
+    "itemName": "DF.MtPbRechStatus",
+    "itemValue": [
+        {
+            "name": "PB.PB064",
+            "value": {
+                "location": "PB.PB064",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 578000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB131",
+            "value": {
+                "location": "PB.PB131",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 980000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB182",
+            "value": {
+                "location": "PB.PB182",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1286000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB023",
+            "value": {
+                "location": "PB.PB023",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 332000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB169",
+            "value": {
+                "location": "PB.PB169",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1208000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB081",
+            "value": {
+                "location": "PB.PB081",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 680000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB069",
+            "value": {
+                "location": "PB.PB069",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 608000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB186",
+            "value": {
+                "location": "PB.PB186",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1310000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB191",
+            "value": {
+                "location": "PB.PB191",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1340000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB065",
+            "value": {
+                "location": "PB.PB065",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 584000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB190",
+            "value": {
+                "location": "PB.PB190",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1334000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB120",
+            "value": {
+                "location": "PB.PB120",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 914000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB079",
+            "value": {
+                "location": "PB.PB079",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 668000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "LPB.PB009",
+            "value": {
+                "location": "LPB.PB009",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1625000,
+                "y": 620000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB016",
+            "value": {
+                "location": "PB.PB016",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 290000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB075",
+            "value": {
+                "location": "PB.PB075",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 644000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB152",
+            "value": {
+                "location": "PB.PB152",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1106000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB109",
+            "value": {
+                "location": "PB.PB109",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 848000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB055",
+            "value": {
+                "location": "PB.PB055",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 524000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C123",
+            "value": {
+                "location": "RECH.C123",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 848000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "PB.PB013",
+            "value": {
+                "location": "PB.PB013",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 272000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "MT.MT01",
+            "value": {
+                "location": "MT.MT01",
+                "x": 204800,
+                "y": 286000
+            }
+        },
+        {
+            "name": "PB.PB050",
+            "value": {
+                "location": "PB.PB050",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 494000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB121",
+            "value": {
+                "location": "PB.PB121",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 920000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C103",
+            "value": {
+                "location": "RECH.C103",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 734000,
+                "y": 285750,
+                "updated": "2024-12-19 15:13:23"
+            }
+        },
+        {
+            "name": "PB.PB176",
+            "value": {
+                "location": "PB.PB176",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1250000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB110",
+            "value": {
+                "location": "PB.PB110",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 854000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB156",
+            "value": {
+                "location": "PB.PB156",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1130000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB172",
+            "value": {
+                "location": "PB.PB172",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1226000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB030",
+            "value": {
+                "location": "PB.PB030",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 374000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB124",
+            "value": {
+                "location": "PB.PB124",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 938000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB025",
+            "value": {
+                "location": "PB.PB025",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 344000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB197",
+            "value": {
+                "location": "PB.PB197",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1376000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB140",
+            "value": {
+                "location": "PB.PB140",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1034000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB073",
+            "value": {
+                "location": "PB.PB073",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 632000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB091",
+            "value": {
+                "location": "PB.PB091",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 740000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB053",
+            "value": {
+                "location": "PB.PB053",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 512000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB077",
+            "value": {
+                "location": "PB.PB077",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 656000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB106",
+            "value": {
+                "location": "PB.PB106",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 830000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB145",
+            "value": {
+                "location": "PB.PB145",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1064000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB136",
+            "value": {
+                "location": "PB.PB136",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1010000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB188",
+            "value": {
+                "location": "PB.PB188",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1322000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB128",
+            "value": {
+                "location": "PB.PB128",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 962000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB104",
+            "value": {
+                "location": "PB.PB104",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 818000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB153",
+            "value": {
+                "location": "PB.PB153",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1112000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB048",
+            "value": {
+                "location": "PB.PB048",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 482000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB165",
+            "value": {
+                "location": "PB.PB165",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1184000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB185",
+            "value": {
+                "location": "PB.PB185",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1304000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB195",
+            "value": {
+                "location": "PB.PB195",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1364000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "LPB.PB012",
+            "value": {
+                "location": "LPB.PB012",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1625000,
+                "y": 740000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C202",
+            "value": {
+                "location": "RECH.C202",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 1292000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "PB.PB005",
+            "value": {
+                "location": "PB.PB005",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 224000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB158",
+            "value": {
+                "location": "PB.PB158",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1142000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "LPB.PB010",
+            "value": {
+                "location": "LPB.PB010",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1625000,
+                "y": 660000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB058",
+            "value": {
+                "location": "PB.PB058",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 542000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C102",
+            "value": {
+                "location": "RECH.C102",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 728000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "LPB.PB011",
+            "value": {
+                "location": "LPB.PB011",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1625000,
+                "y": 700000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "MT.MT02",
+            "value": {
+                "location": "MT.MT02",
+                "x": 210800,
+                "y": 286000
+            }
+        },
+        {
+            "name": "PB.PB062",
+            "value": {
+                "location": "PB.PB062",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 566000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB063",
+            "value": {
+                "location": "PB.PB063",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 572000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB133",
+            "value": {
+                "location": "PB.PB133",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 992000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB181",
+            "value": {
+                "location": "PB.PB181",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1280000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB031",
+            "value": {
+                "location": "PB.PB031",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 380000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB039",
+            "value": {
+                "location": "PB.PB039",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 428000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB143",
+            "value": {
+                "location": "PB.PB143",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1052000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB084",
+            "value": {
+                "location": "PB.PB084",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 698000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB112",
+            "value": {
+                "location": "PB.PB112",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 866000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C201",
+            "value": {
+                "location": "RECH.C201",
+                "enable": "NO",
+                "inService": "NO",
+                "x": 1286000,
+                "y": 285750,
+                "updated": "2024-12-19 15:13:23"
+            }
+        },
+        {
+            "name": "PB.PB132",
+            "value": {
+                "location": "PB.PB132",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 986000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C162",
+            "value": {
+                "location": "RECH.C162",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 1064000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "PB.PB163",
+            "value": {
+                "location": "PB.PB163",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1172000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB024",
+            "value": {
+                "location": "PB.PB024",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 338000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C081",
+            "value": {
+                "location": "RECH.C081",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 608000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "PB.PB154",
+            "value": {
+                "location": "PB.PB154",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1118000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB130",
+            "value": {
+                "location": "PB.PB130",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 974000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C062",
+            "value": {
+                "location": "RECH.C062",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 500000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "MT.MT04",
+            "value": {
+                "location": "MT.MT04",
+                "x": 222800,
+                "y": 286000
+            }
+        },
+        {
+            "name": "LPB.PB006",
+            "value": {
+                "location": "LPB.PB006",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1625000,
+                "y": 500000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB170",
+            "value": {
+                "location": "PB.PB170",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1214000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB127",
+            "value": {
+                "location": "PB.PB127",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 956000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB116",
+            "value": {
+                "location": "PB.PB116",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 890000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB118",
+            "value": {
+                "location": "PB.PB118",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 902000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB037",
+            "value": {
+                "location": "PB.PB037",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 416000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB161",
+            "value": {
+                "location": "PB.PB161",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1160000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB187",
+            "value": {
+                "location": "PB.PB187",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1316000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB011",
+            "value": {
+                "location": "PB.PB011",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 260050,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C021",
+            "value": {
+                "location": "RECH.C021",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 272000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "PB.PB076",
+            "value": {
+                "location": "PB.PB076",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 650000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB041",
+            "value": {
+                "location": "PB.PB041",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 440000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB171",
+            "value": {
+                "location": "PB.PB171",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1220000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB107",
+            "value": {
+                "location": "PB.PB107",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 836000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB204",
+            "value": {
+                "location": "PB.PB204",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1418000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB113",
+            "value": {
+                "location": "PB.PB113",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 872000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB177",
+            "value": {
+                "location": "PB.PB177",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1256000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB092",
+            "value": {
+                "location": "PB.PB092",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 746000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C082",
+            "value": {
+                "location": "RECH.C082",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 614000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "RECH.C023",
+            "value": {
+                "location": "RECH.C023",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 284000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "PB.PB180",
+            "value": {
+                "location": "PB.PB180",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1274000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "LPB.PB013",
+            "value": {
+                "location": "LPB.PB013",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1625000,
+                "y": 780000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB098",
+            "value": {
+                "location": "PB.PB098",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 782000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB035",
+            "value": {
+                "location": "PB.PB035",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 404000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB089",
+            "value": {
+                "location": "PB.PB089",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 728000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB105",
+            "value": {
+                "location": "PB.PB105",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 824000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB020",
+            "value": {
+                "location": "PB.PB020",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 314000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB086",
+            "value": {
+                "location": "PB.PB086",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 710000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB160",
+            "value": {
+                "location": "PB.PB160",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1154000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB201",
+            "value": {
+                "location": "PB.PB201",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1400000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB111",
+            "value": {
+                "location": "PB.PB111",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 860000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB173",
+            "value": {
+                "location": "PB.PB173",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1232000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB061",
+            "value": {
+                "location": "PB.PB061",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 560000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB042",
+            "value": {
+                "location": "PB.PB042",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 446000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB085",
+            "value": {
+                "location": "PB.PB085",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 704000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB200",
+            "value": {
+                "location": "PB.PB200",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1394000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C022",
+            "value": {
+                "location": "RECH.C022",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 278000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "PB.PB034",
+            "value": {
+                "location": "PB.PB034",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 398000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "LPB.PB007",
+            "value": {
+                "location": "LPB.PB007",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1625000,
+                "y": 540000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB040",
+            "value": {
+                "location": "PB.PB040",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 434000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB193",
+            "value": {
+                "location": "PB.PB193",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1352000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB129",
+            "value": {
+                "location": "PB.PB129",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 968000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "LPB.PB005",
+            "value": {
+                "location": "LPB.PB005",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1625000,
+                "y": 460000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB167",
+            "value": {
+                "location": "PB.PB167",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1196000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB147",
+            "value": {
+                "location": "PB.PB147",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1076000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB093",
+            "value": {
+                "location": "PB.PB093",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 752000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB017",
+            "value": {
+                "location": "PB.PB017",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 296000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB082",
+            "value": {
+                "location": "PB.PB082",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 686000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB139",
+            "value": {
+                "location": "PB.PB139",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1028000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB068",
+            "value": {
+                "location": "PB.PB068",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 602000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C181",
+            "value": {
+                "location": "RECH.C181",
+                "enable": "NO",
+                "inService": "NO",
+                "x": 1172000,
+                "y": 285750,
+                "updated": "2024-12-19 15:13:23"
+            }
+        },
+        {
+            "name": "PB.PB114",
+            "value": {
+                "location": "PB.PB114",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 878000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB108",
+            "value": {
+                "location": "PB.PB108",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 842000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "LPB.PB008",
+            "value": {
+                "location": "LPB.PB008",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1625000,
+                "y": 580000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB027",
+            "value": {
+                "location": "PB.PB027",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 356000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB137",
+            "value": {
+                "location": "PB.PB137",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1016000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB019",
+            "value": {
+                "location": "PB.PB019",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 308000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB007",
+            "value": {
+                "location": "PB.PB007",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 236050,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB012",
+            "value": {
+                "location": "PB.PB012",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 266000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB008",
+            "value": {
+                "location": "PB.PB008",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 242050,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB189",
+            "value": {
+                "location": "PB.PB189",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1328000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB099",
+            "value": {
+                "location": "PB.PB099",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 788000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB006",
+            "value": {
+                "location": "PB.PB006",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 230000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB101",
+            "value": {
+                "location": "PB.PB101",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 800000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB002",
+            "value": {
+                "location": "PB.PB002",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 206000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "LPB.PB004",
+            "value": {
+                "location": "LPB.PB004",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1625000,
+                "y": 420000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB021",
+            "value": {
+                "location": "PB.PB021",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 320000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C101",
+            "value": {
+                "location": "RECH.C101",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 722000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "PB.PB157",
+            "value": {
+                "location": "PB.PB157",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1136000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB155",
+            "value": {
+                "location": "PB.PB155",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1124000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB097",
+            "value": {
+                "location": "PB.PB097",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 776000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C122",
+            "value": {
+                "location": "RECH.C122",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 842000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "PB.PB090",
+            "value": {
+                "location": "PB.PB090",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 734000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB083",
+            "value": {
+                "location": "PB.PB083",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 692000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB142",
+            "value": {
+                "location": "PB.PB142",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1046000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB070",
+            "value": {
+                "location": "PB.PB070",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 614000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB141",
+            "value": {
+                "location": "PB.PB141",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1040000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB149",
+            "value": {
+                "location": "PB.PB149",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1088000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB125",
+            "value": {
+                "location": "PB.PB125",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 944000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB144",
+            "value": {
+                "location": "PB.PB144",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1058000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB018",
+            "value": {
+                "location": "PB.PB018",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 302000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C061",
+            "value": {
+                "location": "RECH.C061",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 494000,
+                "y": 285750,
+                "updated": "2024-12-19 15:13:23"
+            }
+        },
+        {
+            "name": "PB.PB150",
+            "value": {
+                "location": "PB.PB150",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1094000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB119",
+            "value": {
+                "location": "PB.PB119",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 908000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB138",
+            "value": {
+                "location": "PB.PB138",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1022000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB192",
+            "value": {
+                "location": "PB.PB192",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1346000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB194",
+            "value": {
+                "location": "PB.PB194",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1358000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB095",
+            "value": {
+                "location": "PB.PB095",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 764000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB199",
+            "value": {
+                "location": "PB.PB199",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1388000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB164",
+            "value": {
+                "location": "PB.PB164",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1178000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB010",
+            "value": {
+                "location": "PB.PB010",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 254050,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB094",
+            "value": {
+                "location": "PB.PB094",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 758000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB148",
+            "value": {
+                "location": "PB.PB148",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1082000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB134",
+            "value": {
+                "location": "PB.PB134",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 998000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB184",
+            "value": {
+                "location": "PB.PB184",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1298000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB038",
+            "value": {
+                "location": "PB.PB038",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 422000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB056",
+            "value": {
+                "location": "PB.PB056",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 530000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB196",
+            "value": {
+                "location": "PB.PB196",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1370000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB096",
+            "value": {
+                "location": "PB.PB096",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 770000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB047",
+            "value": {
+                "location": "PB.PB047",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 476000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB066",
+            "value": {
+                "location": "PB.PB066",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 590000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB166",
+            "value": {
+                "location": "PB.PB166",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1190000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB135",
+            "value": {
+                "location": "PB.PB135",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1004000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB029",
+            "value": {
+                "location": "PB.PB029",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 368000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB014",
+            "value": {
+                "location": "PB.PB014",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 278000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB059",
+            "value": {
+                "location": "PB.PB059",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 548000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB036",
+            "value": {
+                "location": "PB.PB036",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 410000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB123",
+            "value": {
+                "location": "PB.PB123",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 932000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB052",
+            "value": {
+                "location": "PB.PB052",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 506000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB022",
+            "value": {
+                "location": "PB.PB022",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 326000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB057",
+            "value": {
+                "location": "PB.PB057",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 536000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB174",
+            "value": {
+                "location": "PB.PB174",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1238000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB183",
+            "value": {
+                "location": "PB.PB183",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1292000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB122",
+            "value": {
+                "location": "PB.PB122",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 926000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB146",
+            "value": {
+                "location": "PB.PB146",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1070000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C161",
+            "value": {
+                "location": "RECH.C161",
+                "enable": "NO",
+                "inService": "NO",
+                "x": 1058000,
+                "y": 285750,
+                "updated": "2024-12-19 15:13:23"
+            }
+        },
+        {
+            "name": "LPB.PB003",
+            "value": {
+                "location": "LPB.PB003",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1625000,
+                "y": 380000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB003",
+            "value": {
+                "location": "PB.PB003",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 212000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB009",
+            "value": {
+                "location": "PB.PB009",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 248050,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "MT.MT03",
+            "value": {
+                "location": "MT.MT03",
+                "x": 216800,
+                "y": 286000
+            }
+        },
+        {
+            "name": "RECH.C183",
+            "value": {
+                "location": "RECH.C183",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 1184000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "PB.PB203",
+            "value": {
+                "location": "PB.PB203",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1412000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "LPB.PB002",
+            "value": {
+                "location": "LPB.PB002",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1625000,
+                "y": 340000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB179",
+            "value": {
+                "location": "PB.PB179",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1268000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB044",
+            "value": {
+                "location": "PB.PB044",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 458000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB046",
+            "value": {
+                "location": "PB.PB046",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 470000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "LPB.PB001",
+            "value": {
+                "location": "LPB.PB001",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1625000,
+                "y": 300000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB072",
+            "value": {
+                "location": "PB.PB072",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 626000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB103",
+            "value": {
+                "location": "PB.PB103",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 812000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB060",
+            "value": {
+                "location": "PB.PB060",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 554000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C083",
+            "value": {
+                "location": "RECH.C083",
+                "enable": "NO",
+                "inService": "NO",
+                "x": 620000,
+                "y": 285750,
+                "updated": "2024-12-19 15:13:23"
+            }
+        },
+        {
+            "name": "PB.PB080",
+            "value": {
+                "location": "PB.PB080",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 674000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB175",
+            "value": {
+                "location": "PB.PB175",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1244000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB043",
+            "value": {
+                "location": "PB.PB043",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 452000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB115",
+            "value": {
+                "location": "PB.PB115",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 884000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB071",
+            "value": {
+                "location": "PB.PB071",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 620000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB117",
+            "value": {
+                "location": "PB.PB117",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 896000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB151",
+            "value": {
+                "location": "PB.PB151",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1100000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB078",
+            "value": {
+                "location": "PB.PB078",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 662000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C163",
+            "value": {
+                "location": "RECH.C163",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 1070000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "RECH.C182",
+            "value": {
+                "location": "RECH.C182",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 1178000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "PB.PB015",
+            "value": {
+                "location": "PB.PB015",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 284000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB033",
+            "value": {
+                "location": "PB.PB033",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 392000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB028",
+            "value": {
+                "location": "PB.PB028",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 362000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C121",
+            "value": {
+                "location": "RECH.C121",
+                "enable": "NO",
+                "inService": "NO",
+                "x": 836000,
+                "y": 285750,
+                "updated": "2024-12-19 15:13:23"
+            }
+        },
+        {
+            "name": "PB.PB051",
+            "value": {
+                "location": "PB.PB051",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 500000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB045",
+            "value": {
+                "location": "PB.PB045",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 464000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB198",
+            "value": {
+                "location": "PB.PB198",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1382000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB087",
+            "value": {
+                "location": "PB.PB087",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 716000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB168",
+            "value": {
+                "location": "PB.PB168",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1202000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB004",
+            "value": {
+                "location": "PB.PB004",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 218000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB074",
+            "value": {
+                "location": "PB.PB074",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 638000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB162",
+            "value": {
+                "location": "PB.PB162",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1166000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB032",
+            "value": {
+                "location": "PB.PB032",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 386000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB126",
+            "value": {
+                "location": "PB.PB126",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 950000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB202",
+            "value": {
+                "location": "PB.PB202",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1406000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB054",
+            "value": {
+                "location": "PB.PB054",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 518000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB159",
+            "value": {
+                "location": "PB.PB159",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1148000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB102",
+            "value": {
+                "location": "PB.PB102",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 806000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C063",
+            "value": {
+                "location": "RECH.C063",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 506000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "PB.PB088",
+            "value": {
+                "location": "PB.PB088",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 722000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "RECH.C203",
+            "value": {
+                "location": "RECH.C203",
+                "enable": "YES",
+                "inService": "NO",
+                "x": 1298000,
+                "y": 285750,
+                "updated": "2026-11-24 14:59:53"
+            }
+        },
+        {
+            "name": "PB.PB067",
+            "value": {
+                "location": "PB.PB067",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 596000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB001",
+            "value": {
+                "location": "PB.PB001",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 200000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB178",
+            "value": {
+                "location": "PB.PB178",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 1262000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB026",
+            "value": {
+                "location": "PB.PB026",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 350000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB049",
+            "value": {
+                "location": "PB.PB049",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 488000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        },
+        {
+            "name": "PB.PB100",
+            "value": {
+                "location": "PB.PB100",
+                "enable": "YES",
+                "inService": "YES",
+                "x": 794000,
+                "y": 236000,
+                "type": "PARK"
+            }
+        }
+    ]
+}

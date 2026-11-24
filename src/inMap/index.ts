@@ -32,7 +32,7 @@ export async function init() {
 
   // 初始化渲染器挂载视口
   boudingViewport(); // 这里插入客户端逻辑, 如何绑定相机和世界的逻辑
-  const resizeDispatcher = ViewportResizeDispatcher.getClassInstance(0) as ViewportResizeDispatcher; // 创建对viewport视口的监听器
+  const resizeDispatcher = ViewportResizeDispatcher.getClassInstance<ViewportResizeDispatcher>(0); // 创建对viewport视口的监听器
   console.warn("ViewportResizeDispatcher", resizeDispatcher);
   const { renderer, camera: orthoCamera, controls: mapControls } = resizeDispatcher;
 

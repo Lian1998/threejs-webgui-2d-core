@@ -1,0 +1,29 @@
+[
+    {
+        "itemName": "DF.BMS.YC091.AscContainerAll",
+        "itemValue": [
+            {
+                "name": "container1"
+            }
+        ]
+    },
+    {
+        "itemName": "DF.BMS.YC091.DeviceStatus",
+        "itemValue": {
+            "cheId": "YC091",
+            "deviceStatus": "NORMAL"
+        }
+    },
+    {
+        "itemName": "DF.BMS.YC091.OperationalStatus",
+        "itemValue": "AUTOMATIC"
+    },
+    {
+        "itemName": "UA_BMS.BMS.YC091.Gantr1_PositionFb",
+        "itemValue": 220
+    },
+    {
+        "itemName": "UA_BMS.BMS.YC091.Trolly_PositionFb",
+        "itemValue": 9.88
+    }
+]

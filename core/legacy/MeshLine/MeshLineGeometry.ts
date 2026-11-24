@@ -211,10 +211,10 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
    * ``
    * @param data FeatureCollection<LineString> 类型数据结构
    */
-  setFromMapShaperFeatureCollection(data: FeatureCollection<LineString>) {
+  setFromMapShaperFeatureCollection(data: FeatureCollection<LineString>, flipY: boolean = true) {
     this.dispose();
 
-    const hanldeWrapper = (p: [number, number, number]): number[] => [p[0], 0.0, -p[2]]; // cad => qgis => mapshaper => geojson y(z)轴需要翻转一下
+    const hanldeWrapper = (p: [number, number, number]): number[] => [p[0], 0.0, flipY ? -p[2] : p[2]]; // cad => qgis => mapshaper => geojson y(z)轴需要翻转一下
     const _coordinates = [];
     for (let i = 0; i < data.features.length; i++) {
       const feature = data.features[i];
@@ -241,9 +241,9 @@ export class MeshLineGeometry extends THREE.BufferGeometry {
    * ``
    * @param data GeometryCollection<LineString> 类型数据结构
    */
-  setFromMapShaperGeometryCollection(data: GeometryCollection<LineString>) {
+  setFromMapShaperGeometryCollection(data: GeometryCollection<LineString>, flipY: boolean = true) {
     this.dispose();
-    const hanldeWrapper = (p: [number, number, number]): number[] => [p[0], 0.0, -p[2]]; // cad => qgis => mapshaper => geojson y(z)轴需要翻转一下
+    const hanldeWrapper = (p: [number, number, number]): number[] => [p[0], 0.0, flipY ? -p[2] : p[2]]; // cad => qgis => mapshaper => geojson y(z)轴需要翻转一下
     const _coordinates = [];
     for (let i = 0; i < data.geometries.length; i++) {
       const feature = data.geometries[i];

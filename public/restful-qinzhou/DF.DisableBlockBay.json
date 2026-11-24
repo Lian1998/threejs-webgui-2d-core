@@ -1,0 +1,70 @@
+[
+    {
+        "itemName": "DF.DisableBlockBay",
+        "itemValue": [
+            {
+                "name": "B21",
+                "value": {
+                    "blockNo": "B21",
+                    "areas": [
+                        {
+                            "startBayNo": "004",
+                            "endBayNo": "060",
+                            "startX": 1353250,
+                            "endX": 1327750,
+                            "startBayY": 312220,
+                            "endBayY": 496330,
+                            "enable": true,
+                            "infoBayFrom": "004",
+                            "infoBayTo": "060",
+                            "reason": "",
+                            "create": "2026-11-05 14:49:09"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "B02",
+                "value": {
+                    "blockNo": "B02",
+                    "areas": [
+                        {
+                            "startBayNo": "000",
+                            "endBayNo": "006",
+                            "startX": 293150,
+                            "endX": 259450,
+                            "startBayY": 287500,
+                            "endBayY": 321910,
+                            "enable": false,
+                            "infoBayFrom": "000",
+                            "infoBayTo": "006",
+                            "reason": "",
+                            "create": "2026-11-04 17:24:02"
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "B01",
+                "value": {
+                    "blockNo": "B01",
+                    "areas": [
+                        {
+                            "startBayNo": "046",
+                            "endBayNo": "076",
+                            "startX": 227650,
+                            "endX": 202450,
+                            "startBayY": 548010,
+                            "endBayY": 651370,
+                            "enable": false,
+                            "infoBayFrom": "045",
+                            "infoBayTo": "077",
+                            "reason": "",
+                            "create": "2026-11-04 16:05:57"
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+]

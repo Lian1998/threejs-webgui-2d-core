@@ -1,0 +1,84 @@
+[
+    {
+        "itemName": "DF.QCMS.QC071.QcContainer",
+        "itemValue": [
+            {
+                "name": "PT_L"
+            },
+            {
+                "name": "PT_R"
+            },
+            {
+                "name": "MT_WS_L"
+            },
+            {
+                "name": "MT_WS_R"
+            },
+            {
+                "name": "MT_LS_L"
+            },
+            {
+                "name": "MT_LS_R"
+            },
+            {
+                "name": "PF_WS_L"
+            },
+            {
+                "name": "PF_WS_R"
+            },
+            {
+                "name": "PF_LS_L"
+            },
+            {
+                "name": "PF_LS_R"
+            }
+        ]
+    },
+    {
+        "itemName": "DF.QCMS.QC071.DeviceStatus",
+        "itemValue": {
+            "cheId": "QC071",
+            "deviceStatus": "NORMAL"
+        }
+    },
+    {
+        "itemName": "DF.QCMS.QC071.Communication",
+        "itemValue": 1
+    },
+    {
+        "itemName": "DF.QCMS.QC071.MtWorkMode",
+        "itemValue": "AUTOMATIC"
+    },
+    {
+        "itemName": "DF.QCMS.QC071.CraneColligation",
+        "itemValue": 0
+    },
+    {
+        "itemName": "DF.QCMS.QC071.GantryAnchor",
+        "itemValue": 0
+    },
+    {
+        "itemName": "DF.QCMS.QC071.MtTrolleyAnchor",
+        "itemValue": 0
+    },
+    {
+        "itemName": "DF.QCMS.QC071.EmergencyStop",
+        "itemValue": 0
+    },
+    {
+        "itemName": "DF.QCMS.QC071.TechnicalStatus",
+        "itemValue": "GREEN"
+    },
+    {
+        "itemName": "UA_QCMS.QCMS.QC071.PLC_OPC.GantryPos",
+        "itemValue": 25000
+    },
+    {
+        "itemName": "UA_QCMS.QCMS.QC071.PLC_OPC.MtTrolleyPos",
+        "itemValue": 6000
+    },
+    {
+        "itemName": "UA_QCMS.QCMS.QC071.PLC_OPC.PtTrolleyPos",
+        "itemValue": 1000
+    }
+]

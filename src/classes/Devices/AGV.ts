@@ -57,14 +57,12 @@ export class AGV implements GpuPickFeature {
 
     agvBase.add(agvHeader);
     agvBase.add(agvLabel);
-    agvBase.geometry.computeBoundingBox();
-    agvHeader.geometry.boundingBox = agvBase.geometry.boundingBox.clone();
-    agvLabel.geometry.boundingBox = agvBase.geometry.boundingBox.clone();
 
     this.pool.agvBase = agvBase;
     this.pool.agvHeader = agvHeader;
     this.pool.agvLabel = agvLabel;
 
+    // 注册拾取
     for (const key of Object.keys(this.pool)) GpuPickManager.register(this.pool[key], this);
   }
 

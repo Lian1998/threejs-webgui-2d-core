@@ -1,0 +1,547 @@
+[
+    {
+        "itemName": "DF.QctpPosition",
+        "itemValue": [
+            {
+                "name": "QCTP.QC093.B",
+                "value": {
+                    "location": "QCTP.QC093.B",
+                    "x": 850000,
+                    "y": 204000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC121.A",
+                "value": {
+                    "location": "QCTP.QC121.A",
+                    "x": 1641000,
+                    "y": 0,
+                    "enabled": "NO",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC092.E",
+                "value": {
+                    "location": "QCTP.QC092.E",
+                    "x": 800000,
+                    "y": 216000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC122.A",
+                "value": {
+                    "location": "QCTP.QC122.A",
+                    "x": 1641000,
+                    "y": 0,
+                    "enabled": "NO",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC081.C",
+                "value": {
+                    "location": "QCTP.QC081.C",
+                    "x": 400000,
+                    "y": 208000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC113.C",
+                "value": {
+                    "location": "QCTP.QC113.C",
+                    "x": 1641000,
+                    "y": 0,
+                    "enabled": "NO",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC091.C",
+                "value": {
+                    "location": "QCTP.QC091.C",
+                    "x": 750000,
+                    "y": 208000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC104.C",
+                "value": {
+                    "location": "QCTP.QC104.C",
+                    "x": 940290,
+                    "y": 208000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC101.C",
+                "value": {
+                    "location": "QCTP.QC101.C",
+                    "x": 1050000,
+                    "y": 208000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC105.B",
+                "value": {
+                    "location": "QCTP.QC105.B",
+                    "x": 1250000,
+                    "y": 204000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC105.C",
+                "value": {
+                    "location": "QCTP.QC105.C",
+                    "x": 1250000,
+                    "y": 208000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC093.E",
+                "value": {
+                    "location": "QCTP.QC093.E",
+                    "x": 850000,
+                    "y": 216000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC122.C",
+                "value": {
+                    "location": "QCTP.QC122.C",
+                    "x": 1641000,
+                    "y": 0,
+                    "enabled": "NO",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC111.C",
+                "value": {
+                    "location": "QCTP.QC111.C",
+                    "x": 1641000,
+                    "y": 0,
+                    "enabled": "NO",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC111.A",
+                "value": {
+                    "location": "QCTP.QC111.A",
+                    "x": 1641000,
+                    "y": 0,
+                    "enabled": "NO",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC112.C",
+                "value": {
+                    "location": "QCTP.QC112.C",
+                    "x": 1641000,
+                    "y": 0,
+                    "enabled": "NO",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC101.E",
+                "value": {
+                    "location": "QCTP.QC101.E",
+                    "x": 1050000,
+                    "y": 216000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC105.E",
+                "value": {
+                    "location": "QCTP.QC105.E",
+                    "x": 1250000,
+                    "y": 216000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC103.E",
+                "value": {
+                    "location": "QCTP.QC103.E",
+                    "x": 1150000,
+                    "y": 216000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC103.B",
+                "value": {
+                    "location": "QCTP.QC103.B",
+                    "x": 1150000,
+                    "y": 204000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC082.B",
+                "value": {
+                    "location": "QCTP.QC082.B",
+                    "x": 450000,
+                    "y": 204000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC093.C",
+                "value": {
+                    "location": "QCTP.QC093.C",
+                    "x": 850000,
+                    "y": 208000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC123.A",
+                "value": {
+                    "location": "QCTP.QC123.A",
+                    "x": 1641000,
+                    "y": 0,
+                    "enabled": "NO",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC102.E",
+                "value": {
+                    "location": "QCTP.QC102.E",
+                    "x": 1100000,
+                    "y": 216000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC072.E",
+                "value": {
+                    "location": "QCTP.QC072.E",
+                    "x": 300000,
+                    "y": 216000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC092.C",
+                "value": {
+                    "location": "QCTP.QC092.C",
+                    "x": 800000,
+                    "y": 208000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC081.B",
+                "value": {
+                    "location": "QCTP.QC081.B",
+                    "x": 400000,
+                    "y": 204000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC073.B",
+                "value": {
+                    "location": "QCTP.QC073.B",
+                    "x": 350000,
+                    "y": 204000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC101.B",
+                "value": {
+                    "location": "QCTP.QC101.B",
+                    "x": 1050000,
+                    "y": 204000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC104.E",
+                "value": {
+                    "location": "QCTP.QC104.E",
+                    "x": 940290,
+                    "y": 216000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC072.B",
+                "value": {
+                    "location": "QCTP.QC072.B",
+                    "x": 300000,
+                    "y": 204000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC092.B",
+                "value": {
+                    "location": "QCTP.QC092.B",
+                    "x": 800000,
+                    "y": 204000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC094.C",
+                "value": {
+                    "location": "QCTP.QC094.C",
+                    "x": 900000,
+                    "y": 208000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC102.C",
+                "value": {
+                    "location": "QCTP.QC102.C",
+                    "x": 1100000,
+                    "y": 208000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC102.B",
+                "value": {
+                    "location": "QCTP.QC102.B",
+                    "x": 1100000,
+                    "y": 204000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC112.A",
+                "value": {
+                    "location": "QCTP.QC112.A",
+                    "x": 1641000,
+                    "y": 0,
+                    "enabled": "NO",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC104.B",
+                "value": {
+                    "location": "QCTP.QC104.B",
+                    "x": 940290,
+                    "y": 204000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC082.C",
+                "value": {
+                    "location": "QCTP.QC082.C",
+                    "x": 450000,
+                    "y": 208000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC073.C",
+                "value": {
+                    "location": "QCTP.QC073.C",
+                    "x": 350000,
+                    "y": 208000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC072.C",
+                "value": {
+                    "location": "QCTP.QC072.C",
+                    "x": 300000,
+                    "y": 208000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC091.B",
+                "value": {
+                    "location": "QCTP.QC091.B",
+                    "x": 750000,
+                    "y": 204000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC081.E",
+                "value": {
+                    "location": "QCTP.QC081.E",
+                    "x": 400000,
+                    "y": 216000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC123.C",
+                "value": {
+                    "location": "QCTP.QC123.C",
+                    "x": 1641000,
+                    "y": 0,
+                    "enabled": "NO",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC071.B",
+                "value": {
+                    "location": "QCTP.QC071.B",
+                    "x": 250000,
+                    "y": 204000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC071.E",
+                "value": {
+                    "location": "QCTP.QC071.E",
+                    "x": 250000,
+                    "y": 216000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC082.E",
+                "value": {
+                    "location": "QCTP.QC082.E",
+                    "x": 450000,
+                    "y": 216000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC113.A",
+                "value": {
+                    "location": "QCTP.QC113.A",
+                    "x": 1641000,
+                    "y": 0,
+                    "enabled": "NO",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC071.C",
+                "value": {
+                    "location": "QCTP.QC071.C",
+                    "x": 250000,
+                    "y": 208000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC094.E",
+                "value": {
+                    "location": "QCTP.QC094.E",
+                    "x": 900000,
+                    "y": 216000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC091.E",
+                "value": {
+                    "location": "QCTP.QC091.E",
+                    "x": 750000,
+                    "y": 216000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC073.E",
+                "value": {
+                    "location": "QCTP.QC073.E",
+                    "x": 350000,
+                    "y": 216000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC121.C",
+                "value": {
+                    "location": "QCTP.QC121.C",
+                    "x": 1641000,
+                    "y": 0,
+                    "enabled": "NO",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC094.B",
+                "value": {
+                    "location": "QCTP.QC094.B",
+                    "x": 900000,
+                    "y": 204000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            },
+            {
+                "name": "QCTP.QC103.C",
+                "value": {
+                    "location": "QCTP.QC103.C",
+                    "x": 1150000,
+                    "y": 208000,
+                    "enabled": "YES",
+                    "inService": "YES"
+                }
+            }
+        ]
+    }
+]

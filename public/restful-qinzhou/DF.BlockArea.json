@@ -1,0 +1,1102 @@
+[
+    {
+        "itemName": "DF.BlockArea",
+        "itemValue": [
+            {
+                "name": "4433729",
+                "value": {
+                    "id": 4433729,
+                    "x": 776000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433788",
+                "value": {
+                    "id": 4433788,
+                    "x": 656000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433771",
+                "value": {
+                    "id": 4433771,
+                    "x": 230000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433749",
+                "value": {
+                    "id": 4433749,
+                    "x": 602000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433778",
+                "value": {
+                    "id": 4433778,
+                    "x": 734000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433715",
+                "value": {
+                    "id": 4433715,
+                    "x": 662000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433859",
+                "value": {
+                    "id": 4433859,
+                    "x": 929000,
+                    "y": 570620,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433735",
+                "value": {
+                    "id": 4433735,
+                    "x": 512000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433745",
+                "value": {
+                    "id": 4433745,
+                    "x": 674000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433751",
+                "value": {
+                    "id": 4433751,
+                    "x": 572000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433762",
+                "value": {
+                    "id": 4433762,
+                    "x": 584000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433791",
+                "value": {
+                    "id": 4433791,
+                    "x": 1238000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433720",
+                "value": {
+                    "id": 4433720,
+                    "x": 728000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433772",
+                "value": {
+                    "id": 4433772,
+                    "x": 254000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433725",
+                "value": {
+                    "id": 4433725,
+                    "x": 578000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433744",
+                "value": {
+                    "id": 4433744,
+                    "x": 1262000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433769",
+                "value": {
+                    "id": 4433769,
+                    "x": 686000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433784",
+                "value": {
+                    "id": 4433784,
+                    "x": 1034000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433790",
+                "value": {
+                    "id": 4433790,
+                    "x": 1232000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433770",
+                "value": {
+                    "id": 4433770,
+                    "x": 326000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433722",
+                "value": {
+                    "id": 4433722,
+                    "x": 260050,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433870",
+                "value": {
+                    "id": 4433870,
+                    "x": 1124000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "3839272",
+                "value": {
+                    "id": 3839272,
+                    "x": 248050,
+                    "y": 824667,
+                    "hl": 8000,
+                    "hw": 5500,
+                    "degree": 0,
+                    "type": 9,
+                    "modifiable": true,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433757",
+                "value": {
+                    "id": 4433757,
+                    "x": 1358000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433776",
+                "value": {
+                    "id": 4433776,
+                    "x": 518000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433737",
+                "value": {
+                    "id": 4433737,
+                    "x": 1334000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433773",
+                "value": {
+                    "id": 4433773,
+                    "x": 1178000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433133",
+                "value": {
+                    "id": 4433133,
+                    "x": 842000,
+                    "y": 285750,
+                    "hl": 7500,
+                    "hw": 7500,
+                    "degree": 0,
+                    "type": 9,
+                    "modifiable": true,
+                    "state": 4,
+                    "createTime": 1793861190000,
+                    "updateTime": 1793861190000,
+                    "createUser": "振华01",
+                    "remark": "A.RE.C122"
+                }
+            },
+            {
+                "name": "4433132",
+                "value": {
+                    "id": 4433132,
+                    "x": 1029500,
+                    "y": 308990,
+                    "hl": 2000,
+                    "hw": 9690,
+                    "degree": 0,
+                    "type": 9,
+                    "modifiable": true,
+                    "state": 4,
+                    "createTime": 1793861179000,
+                    "updateTime": 1793861179000,
+                    "createUser": "振华01",
+                    "remark": "A.B15.006"
+                }
+            },
+            {
+                "name": "4433764",
+                "value": {
+                    "id": 4433764,
+                    "x": 470000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433731",
+                "value": {
+                    "id": 4433731,
+                    "x": 536000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433755",
+                "value": {
+                    "id": 4433755,
+                    "x": 1370000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433741",
+                "value": {
+                    "id": 4433741,
+                    "x": 1310000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433719",
+                "value": {
+                    "id": 4433719,
+                    "x": 680000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433724",
+                "value": {
+                    "id": 4433724,
+                    "x": 1364000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433758",
+                "value": {
+                    "id": 4433758,
+                    "x": 1328000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433863",
+                "value": {
+                    "id": 4433863,
+                    "x": 1040000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433732",
+                "value": {
+                    "id": 4433732,
+                    "x": 464000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433733",
+                "value": {
+                    "id": 4433733,
+                    "x": 1352000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433718",
+                "value": {
+                    "id": 4433718,
+                    "x": 596000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433743",
+                "value": {
+                    "id": 4433743,
+                    "x": 1226000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433756",
+                "value": {
+                    "id": 4433756,
+                    "x": 668000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433872",
+                "value": {
+                    "id": 4433872,
+                    "x": 650000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433727",
+                "value": {
+                    "id": 4433727,
+                    "x": 236050,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433821",
+                "value": {
+                    "id": 4433821,
+                    "x": 824000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433765",
+                "value": {
+                    "id": 4433765,
+                    "x": 458000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433738",
+                "value": {
+                    "id": 4433738,
+                    "x": 1322000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433775",
+                "value": {
+                    "id": 4433775,
+                    "x": 554000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433726",
+                "value": {
+                    "id": 4433726,
+                    "x": 692000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433857",
+                "value": {
+                    "id": 4433857,
+                    "x": 1028000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433018",
+                "value": {
+                    "id": 4433018,
+                    "x": 1231749,
+                    "y": 372404,
+                    "hl": 38269,
+                    "hw": 46634,
+                    "degree": 0,
+                    "type": 1,
+                    "modifiable": true,
+                    "state": 4,
+                    "createTime": 1793166146000,
+                    "updateTime": 1793166146000,
+                    "createUser": "振华01",
+                    "reason": "岸桥维护",
+                    "remark": "333"
+                }
+            },
+            {
+                "name": "4433763",
+                "value": {
+                    "id": 4433763,
+                    "x": 1340000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433767",
+                "value": {
+                    "id": 4433767,
+                    "x": 266000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433739",
+                "value": {
+                    "id": 4433739,
+                    "x": 476000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433789",
+                "value": {
+                    "id": 4433789,
+                    "x": 1166000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433787",
+                "value": {
+                    "id": 4433787,
+                    "x": 1160000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433730",
+                "value": {
+                    "id": 4433730,
+                    "x": 566000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433768",
+                "value": {
+                    "id": 4433768,
+                    "x": 374000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433871",
+                "value": {
+                    "id": 4433871,
+                    "x": 929000,
+                    "y": 338060,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433752",
+                "value": {
+                    "id": 4433752,
+                    "x": 560000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433742",
+                "value": {
+                    "id": 4433742,
+                    "x": 1274000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433761",
+                "value": {
+                    "id": 4433761,
+                    "x": 1316000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433760",
+                "value": {
+                    "id": 4433760,
+                    "x": 1268000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433753",
+                "value": {
+                    "id": 4433753,
+                    "x": 548000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433867",
+                "value": {
+                    "id": 4433867,
+                    "x": 1076000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433131",
+                "value": {
+                    "id": 4433131,
+                    "x": 1178000,
+                    "y": 285750,
+                    "hl": 7500,
+                    "hw": 7500,
+                    "degree": 0,
+                    "type": 9,
+                    "modifiable": true,
+                    "state": 4,
+                    "createTime": 1793861174000,
+                    "updateTime": 1793861174000,
+                    "createUser": "振华01",
+                    "remark": "A.RE.C182"
+                }
+            },
+            {
+                "name": "4433853",
+                "value": {
+                    "id": 4433853,
+                    "x": 962000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433714",
+                "value": {
+                    "id": 4433714,
+                    "x": 248050,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433786",
+                "value": {
+                    "id": 4433786,
+                    "x": 1172000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433716",
+                "value": {
+                    "id": 4433716,
+                    "x": 608000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433721",
+                "value": {
+                    "id": 4433721,
+                    "x": 590000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433777",
+                "value": {
+                    "id": 4433777,
+                    "x": 542000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433754",
+                "value": {
+                    "id": 4433754,
+                    "x": 524000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433766",
+                "value": {
+                    "id": 4433766,
+                    "x": 242000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433785",
+                "value": {
+                    "id": 4433785,
+                    "x": 1346000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433774",
+                "value": {
+                    "id": 4433774,
+                    "x": 530000,
+                    "y": 236000,
+                    "hl": 7600,
+                    "hw": 1600,
+                    "degree": 90,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            },
+            {
+                "name": "4433747",
+                "value": {
+                    "id": 4433747,
+                    "x": 740000,
+                    "y": 236000,
+                    "hl": 8500,
+                    "hw": 1700,
+                    "degree": 270,
+                    "type": 2,
+                    "modifiable": false,
+                    "state": 4
+                }
+            }
+        ]
+    }
+]

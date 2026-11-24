@@ -5,7 +5,6 @@ import { GpuPickManager } from "@core/legacy/GpuPickManager/";
 import { SDFText2D, Sprite2D } from "@core/legacy/index";
 import { ThreejsRenderOrder } from "@/inMap/variables";
 import { calculateMpp } from "@/inMap/utils/ratio";
-import { orthoCamera, MAP_DEFAULT_ZOOM } from "@/inMap/viewport";
 import { getColorRuntime } from "@/themes/ColorPaletteManager/index";
 
 const spriteUrls = {
@@ -24,17 +23,18 @@ export class ASC implements GpuPickFeature {
   constructor(code: string) {
     this.code = code;
 
+    // 生成关系
     const normalColor = getColorRuntime("VARS.DEVICE_STATUS.NORMAL");
+
+    const ascMtPviot = new THREE.Object3D();
+    ascMtPviot.position.x = -26.0;
+
     const ascGantry = new Sprite2D({
       url: spriteUrls.ASC_Gantry,
       mpp: calculateMpp(54, 6594),
       renderOrder: ThreejsRenderOrder.ASC_GANTRY,
       multiplyColor: normalColor.threejsColor,
     });
-
-    const ascMtPviot = new THREE.Object3D();
-    ascMtPviot.position.x = -26.0;
-
     const ascMT = new Sprite2D({
       url: spriteUrls.ASC_Trolley,
       mpp: calculateMpp(18, 87),
@@ -49,22 +49,16 @@ export class ASC implements GpuPickFeature {
       text: this.code,
       renderOrder: ThreejsRenderOrder.ASC_LABEL,
     });
-    ascLabelPviot.add(ascLabel);
-    ascLabel.onBeforeRender = () => {
-      const scale = MAP_DEFAULT_ZOOM / orthoCamera.zoom;
-      const scalar = THREE.MathUtils.clamp(scale, 1.0, 1.5);
-      ascLabel.scale.setScalar(scalar);
-    };
 
+    ascLabelPviot.add(ascLabel);
     ascGantry.add(ascMtPviot);
     ascGantry.add(ascLabelPviot);
-    ascGantry.geometry.computeBoundingBox();
-    ascMT.geometry.boundingBox = ascGantry.geometry.boundingBox.clone();
 
     this.pool.ascGantry = ascGantry;
     this.pool.ascMT = ascMT;
     this.pool.ascLabel = ascLabel;
 
+    // 注册拾取
     for (const key of Object.keys(this.pool)) GpuPickManager.register(this.pool[key], this);
   }
 
