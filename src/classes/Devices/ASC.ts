@@ -7,11 +7,6 @@ import { ThreejsRenderOrder } from "@/inMap/variables";
 import { calculateMpp } from "@/inMap/utils/ratio";
 import { getColorRuntime } from "@/themes/ColorPaletteManager/index";
 
-const spriteUrls = {
-  ASC_Gantry: "/resource/sprites/ASC_Gantry.png",
-  ASC_Trolley: "/resource/sprites/STS_Trolley.png",
-};
-
 /** Automated Stacking Crane. */
 export class ASC implements GpuPickFeature {
   static codeSelected = undefined;
@@ -30,13 +25,13 @@ export class ASC implements GpuPickFeature {
     ascMtPviot.position.x = -26.0;
 
     const ascGantry = new Sprite2D({
-      url: spriteUrls.ASC_Gantry,
+      url: "/resource/sprites/ASC_Gantry.png",
       mpp: calculateMpp(54, 6594),
       renderOrder: ThreejsRenderOrder.ASC_GANTRY,
       multiplyColor: normalColor.threejsColor,
     });
     const ascMT = new Sprite2D({
-      url: spriteUrls.ASC_Trolley,
+      url: "/resource/sprites/STS_Trolley.png",
       mpp: calculateMpp(18, 87),
       renderOrder: ThreejsRenderOrder.ASC_TROLLEY,
       multiplyColor: new THREE.Color(Tinycolor(normalColor.tinyColor.getOriginalInput()).darken(10).toHexString()),

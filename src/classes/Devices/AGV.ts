@@ -7,11 +7,6 @@ import { calculateMpp } from "@/inMap/utils/ratio";
 import { orthoCamera, MAP_DEFAULT_ZOOM } from "@/inMap/viewport";
 import { getColorRuntime } from "@/themes/ColorPaletteManager/index";
 
-const spriteUrls = {
-  AGV_Base: "/resource/sprites/AGV_Base.png",
-  AGV_Header: "/resource/sprites/AGV_Header.png",
-};
-
 /** Automated Guided Vehicle. */
 export class AGV implements GpuPickFeature {
   static codeSelected = undefined;
@@ -24,14 +19,14 @@ export class AGV implements GpuPickFeature {
     this.code = code;
 
     const agvBase = new Sprite2D({
-      url: spriteUrls.AGV_Base,
+      url: "/resource/sprites/AGV_Base.png",
       mpp: calculateMpp(15, 2330),
       renderOrder: ThreejsRenderOrder.AGV_BASE,
       multiplyColor: getColorRuntime("VARS.DEVICE_STATUS.NORMAL").threejsColor,
     });
 
     const agvHeader = new Sprite2D({
-      url: spriteUrls.AGV_Header,
+      url: "/resource/sprites/AGV_Header.png",
       mpp: calculateMpp(15, 2330),
       renderOrder: ThreejsRenderOrder.AGV_HEADER,
     });
